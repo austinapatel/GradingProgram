@@ -29,7 +29,7 @@ public class DatabaseManager
 			System.exit(0);
 		}
 		System.out.println("Opened database successfully");
-		System.out.println("hello");
+		System.out.println("test 2");
 	}
 
 }
