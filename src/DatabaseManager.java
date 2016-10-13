@@ -30,6 +30,7 @@ public class DatabaseManager
 		}
 		System.out.println("Opened database successfully");
 		System.out.println("test 2");
+		System.out.println("we");
 	}
 
 }
