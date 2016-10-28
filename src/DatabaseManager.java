@@ -15,7 +15,7 @@ public class DatabaseManager
 	
 	public static void init()
 	{
-		
+
 	}
 
 }
