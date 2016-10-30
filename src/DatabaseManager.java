@@ -1,11 +1,3 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.util.Scanner;
-
-
-
-
 
 // Austin Patel & Jason Morris
 // APCS
@@ -13,6 +5,11 @@ import java.util.Scanner;
 // 10/13/16
 // DatabaseManager.java
 //mysql data setup help from mysql tutorial by Steven Byrne
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.Scanner;
 
 public class DatabaseManager
 {
@@ -22,6 +19,7 @@ public class DatabaseManager
 		init();
 		getPassword();
 		createTable();
+		post();
 	}
 	
 	public static void init()
@@ -47,7 +45,6 @@ public class DatabaseManager
 			String username = "cheetahgod";
 			Class.forName(driver);
 			Connection conn = DriverManager.getConnection(url, username, password);
-			password = "";
 			System.out.println("Connected");
 			return conn;
 		
@@ -84,7 +81,7 @@ public class DatabaseManager
 		try
 		{
 			Connection con = getConnection();
-			PreparedStatement posted = con.prepareStatement("INSERT INTO tablename (first, last) VALUES ('"+var1+"', '"+var2+"')");
+			PreparedStatement posted = con.prepareStatement("INSERT INTO tablename (first, lastname) VALUES ('"+var1+"', '"+var2+"')");
 			posted.executeUpdate();
 		}catch (Exception e)
 		{
