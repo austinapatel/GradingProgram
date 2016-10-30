@@ -75,5 +75,26 @@ public class DatabaseManager
 			System.out.println("Function completed");
 		}
 	}
+	
+	public static void post() throws Exception
+	{
+		final String var1 = "John";
+		final String var2 = "Miller";
+		
+		try
+		{
+			Connection con = getConnection();
+			PreparedStatement posted = con.prepareStatement("INSERT INTO tablename (first, last) VALUES ('"+var1+"', '"+var2+"')");
+			posted.executeUpdate();
+		}catch (Exception e)
+		{
+			System.out.println(e);
+		}
+		finally
+		{
+			System.out.println("Insert Completed");
+		}
+		
+	}
 
 }
