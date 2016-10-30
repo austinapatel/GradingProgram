@@ -3,7 +3,7 @@
 // APCS
 // Redwood High School
 // 10/13/16
-// Main.java
+// Interface.java
 
 import java.awt.Toolkit;
 import javax.swing.JFrame;
