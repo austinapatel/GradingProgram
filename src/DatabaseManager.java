@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.util.Scanner;
 
 
 
@@ -15,15 +16,25 @@ import java.sql.PreparedStatement;
 
 public class DatabaseManager
 {
-
+	private static String password = "";
 	public static void main(String[] args) throws Exception
 	{
 		init();
+		getPassword();
 		createTable();
 	}
 	
 	public static void init()
 	{
+
+	}
+	
+	public static void getPassword()
+	{
+		Scanner input = new Scanner(System.in);
+		System.out.print("Enter database password:   ");
+		password = input.nextLine();
+		input.close();
 
 	}
 	
@@ -34,9 +45,9 @@ public class DatabaseManager
 			String driver = "com.mysql.jdbc.Driver";
 			String url = "jdbc:mysql://db4free.net:3306/gradingprogram?autoReconnect=true&useSSL=false";
 			String username = "cheetahgod";
-			String password = "youurmom";
 			Class.forName(driver);
 			Connection conn = DriverManager.getConnection(url, username, password);
+			password = "";
 			System.out.println("Connected");
 			return conn;
 		
