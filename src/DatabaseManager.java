@@ -2,6 +2,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -12,10 +13,6 @@ import java.util.Scanner;
 // DatabaseManager.java
 //mysql data setup help from mysql tutorial by Steven Byrne
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.util.Scanner;
 
 public class DatabaseManager
 {
@@ -24,7 +21,15 @@ public class DatabaseManager
 	{
 		getPassword();
 		createTable();
-		post();
+		
+
+		String[][] names = {{"Austin", "P"}, {"Jason", "M"}, {"fred" , "jones"}, {"Ben", "Dover"}};	
+		
+		
+		for (String[] name: names)
+		{
+			post(name[0], name[1]);
+		}
 	}
 	
 	public static void getPassword()
@@ -73,16 +78,17 @@ public class DatabaseManager
 		}
 	}
 	
-	public static void post() throws Exception
+	public static void post(String var1, String var2) throws Exception
 	{
-		final String var1 = "John";
-		final String var2 = "Miller";
+		//final String var1 = "John";
+		//final String var2 = "Miller";
 		
 		try
 		{
 			Connection con = getConnection();
 			PreparedStatement posted = con.prepareStatement("INSERT INTO tablename (first, lastname) VALUES ('"+var1+"', '"+var2+"')");
 			posted.executeUpdate();
+			
 		}catch (Exception e)
 		{
 			System.out.println(e);
