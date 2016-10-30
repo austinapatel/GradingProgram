@@ -3,10 +3,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.Scanner;
 
-
-
-
-
 // Austin Patel & Jason Morris
 // APCS
 // Redwood High School
@@ -19,15 +15,9 @@ public class DatabaseManager
 	private static String password = "";
 	public static void main(String[] args) throws Exception
 	{
-		init();
 		getPassword();
 		createTable();
 		post();
-	}
-	
-	public static void init()
-	{
-
 	}
 	
 	public static void getPassword()
