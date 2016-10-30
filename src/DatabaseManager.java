@@ -1,7 +1,9 @@
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.Scanner;
+
 
 // Austin Patel & Jason Morris
 // APCS
@@ -9,6 +11,11 @@ import java.util.Scanner;
 // 10/13/16
 // DatabaseManager.java
 //mysql data setup help from mysql tutorial by Steven Byrne
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.Scanner;
 
 public class DatabaseManager
 {
