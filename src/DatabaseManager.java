@@ -22,6 +22,7 @@ public class DatabaseManager
 		init();
 		getPassword();
 		createTable();
+		post();
 	}
 	
 	public static void init()
@@ -47,7 +48,6 @@ public class DatabaseManager
 			String username = "cheetahgod";
 			Class.forName(driver);
 			Connection conn = DriverManager.getConnection(url, username, password);
-			password = "";
 			System.out.println("Connected");
 			return conn;
 		
@@ -84,7 +84,7 @@ public class DatabaseManager
 		try
 		{
 			Connection con = getConnection();
-			PreparedStatement posted = con.prepareStatement("INSERT INTO tablename (first, last) VALUES ('"+var1+"', '"+var2+"')");
+			PreparedStatement posted = con.prepareStatement("INSERT INTO tablename (first, lastname) VALUES ('"+var1+"', '"+var2+"')");
 			posted.executeUpdate();
 		}catch (Exception e)
 		{
