@@ -2,6 +2,8 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -22,7 +24,6 @@ public class DatabaseManager
 		getPassword();
 		createTable();
 		
-
 		String[][] names = {{"Austin", "P"}, {"Jason", "M"}, {"fred" , "jones"}, {"Ben", "Dover"}};	
 		
 		
@@ -30,6 +31,7 @@ public class DatabaseManager
 		{
 			post(name[0], name[1]);
 		}
+		get();
 	}
 	
 	public static void getPassword()
@@ -39,6 +41,32 @@ public class DatabaseManager
 		password = input.nextLine();
 		input.close();
 
+	}
+	
+	public static ArrayList<String> get() throws Exception
+	{
+		try
+		{
+			Connection con = getConnection();
+			PreparedStatement statement = con.prepareStatement("SELECT first,lastname FROM tablename"); //SELECT *
+			
+			ResultSet result = statement.executeQuery();
+			
+			ArrayList<String> array = new ArrayList<String>();
+			while(result.next())
+			{
+				System.out.print(result.getString("first"));
+				System.out.print(" ");
+				System.out.println(result.getString("lastname"));
+				array.add(result.getString("lastname"));
+			}
+			System.out.println("All records have been selected");
+			return array;
+		}catch (Exception e)
+		{
+			System.out.println(e);
+		}
+		return null;
 	}
 	
 	public static Connection getConnection() throws Exception
