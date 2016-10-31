@@ -40,7 +40,7 @@ public class DatabaseManager
 	
 	public static void getPassword()
 	{
-		JPasswordFieldDemo password = new JPasswordFieldDemo();
+		
 	}
 	
 	public static ArrayList<String> getStudent(String var1) throws Exception
