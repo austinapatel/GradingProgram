@@ -1,4 +1,6 @@
 
+import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,13 +9,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+
 
 // Austin Patel & Jason Morris
 // APCS
 // Redwood High School
 // 10/13/16
 // DatabaseManager.java
-//mysql data setup help from mysql tutorial by Steven Byrne
+
 
 
 public class DatabaseManager
@@ -22,27 +30,23 @@ public class DatabaseManager
 	public static void main(String[] args) throws Exception
 	{
 		getPassword();
-		createTable();
-		
-		String[][] names = {{"Carl", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
-		
-		
-		for (String[] name: names)
-		{
-			post(name[0], name[1]);
-		}
-		
+//		createTable();
+//		
+//		String[][] names = {{"Carl", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
+//		
+//		
+//		for (String[] name: names)
+//		{
+//			post(name[0], name[1]);
+//		}
+//		
 		//System.out.println(Arrays.toString(getStudent("Austin").toArray()));
 		
 	}
 	
 	public static void getPassword()
 	{
-		Scanner input = new Scanner(System.in);
-		System.out.print("Enter database password:   ");
-		password = input.nextLine();
-		input.close();
-
+		JPasswordFieldDemo password = new JPasswordFieldDemo();
 	}
 	
 	public static ArrayList<String> getStudent(String var1) throws Exception
