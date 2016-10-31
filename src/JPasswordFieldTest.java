@@ -22,6 +22,7 @@ public class JPasswordFieldTest extends JFrame {
     frame.add(userNameField);
     frame.add(label2);
     frame.add(passwordField);
+    frame.setResizable(false);
     frame.setSize(200, 70);
     frame.setVisible(true);
   }
