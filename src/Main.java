@@ -1,3 +1,4 @@
+import java.io.Console;
 
 // Austin Patel & Jason Morris 
 // APCS
@@ -10,7 +11,15 @@ public class Main
 
 	public static void main(String[] args)
 	{
-		new Interface();
+		
+		Console console = System.console();
+
+      String enteredPassword =
+          new String(console.readPassword("Please enter your password: "));
+      
+      System.out.println(enteredPassword);
+      
+//		new Interface();
 	}
 
 }
