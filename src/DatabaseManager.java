@@ -1,57 +1,54 @@
 
-import java.awt.BorderLayout;
-import java.awt.event.WindowAdapter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
-
-
 // Austin Patel & Jason Morris
 // APCS
 // Redwood High School
 // 10/13/16
 // DatabaseManager.java
 
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class DatabaseManager
 {
 	private static String password = "";
+	private static Connection connection;
+	
 	public static void main(String[] args) throws Exception
 	{
-		getPassword();
-//		createTable();
-//		
-//		String[][] names = {{"Carl", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
-//		
-//		
-//		for (String[] name: names)
-//		{
-//			post(name[0], name[1]);
-//		}
-//		
-		//System.out.println(Arrays.toString(getStudent("Austin").toArray()));
+		password = getPassword();
+		connection = getConnection();
 		
+		createTable();
+		
+		String[][] names = {{"Carl", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
+		
+		// Put all the names in the database
+		for (String[] name: names)
+			post(name[0], name[1]);
+		
+		System.out.println(getStudent("Carl"));
 	}
 	
-	public static void getPassword()
+	public static String getPassword()
 	{
-		JPasswordFieldDemo password = new JPasswordFieldDemo();
+		System.out.print("Enter password:  ");
+		
+		Scanner scanner = new Scanner(System.in);
+		return scanner.nextLine();
 	}
 	
 	public static ArrayList<String> getStudent(String var1) throws Exception
 	{
 		try
 		{
-			Connection con = getConnection();
 			//PreparedStatement statement = con.prepareStatement("SELECT first,lastname FROM tablename LIMIT 1"); 
 			/// SELECT * FROM tablename, table2 WHERE tablename.first = table2.first AND ... OR
 			//PreparedStatement statement = con.prepareStatement("SELECT * FROM tablename, table2 ORDER BY lastname ASC");
-			PreparedStatement statement = con.prepareStatement("SELECT * FROM tablename WHERE first = '"+var1+"' LIMIT 1");
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM tablename WHERE first = '"+var1+"' LIMIT 1");
 			
 			ResultSet result = statement.executeQuery();
 			
@@ -97,8 +94,7 @@ public class DatabaseManager
 	{
 		try
 		{
-			Connection con = getConnection();
-			PreparedStatement create = con.prepareStatement("CREATE TABLE IF NOT EXISTS tablename(id int NOT NULL AUTO_INCREMENT, first varchar(255), lastname varchar(255), PRIMARY KEY (id))");
+			PreparedStatement create = connection.prepareStatement("CREATE TABLE IF NOT EXISTS tablename(id int NOT NULL AUTO_INCREMENT, first varchar(255), lastname varchar(255), PRIMARY KEY (id))");
 			create.executeUpdate();
 		}catch (Exception e)
 		{
@@ -119,8 +115,7 @@ public class DatabaseManager
 		
 		try
 		{
-			Connection con = getConnection();
-			PreparedStatement posted = con.prepareStatement("INSERT INTO tablename (first, lastname) VALUES ('"+var1+"', '"+var2+"')");
+			PreparedStatement posted = connection.prepareStatement("INSERT INTO tablename (first, lastname) VALUES ('"+var1+"', '"+var2+"')");
 			posted.executeUpdate();
 			
 		}catch (Exception e)
