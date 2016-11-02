@@ -24,7 +24,7 @@ public class DatabaseManager
 		getPassword();
 		createTable();
 		
-		String[][] names = {{"Carl", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
+		String[][] names = {{"Austin", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
 		
 		
 		for (String[] name: names)
@@ -32,7 +32,7 @@ public class DatabaseManager
 			post(name[0], name[1]);
 		}
 		
-		//System.out.println(Arrays.toString(getStudent("Austin").toArray()));
+		System.out.println(Arrays.toString(getStudent("Austin").toArray()));
 		
 	}
 	
