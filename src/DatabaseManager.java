@@ -22,7 +22,7 @@ public class DatabaseManager
 		password = getPassword();
 		connection = getConnection();
 		
-		createTable();
+		createDB();
 		
 		String[][] names = {{"Carl", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
 		
@@ -33,7 +33,7 @@ public class DatabaseManager
 		System.out.println(getStudent("Carl"));
 	}
 	
-	public static String getPassword()
+	private static String getPassword()
 	{
 		System.out.print("Enter password:  ");
 		
@@ -41,7 +41,7 @@ public class DatabaseManager
 		return scanner.nextLine();
 	}
 	
-	public static ArrayList<String> getStudent(String var1) throws Exception
+	private static ArrayList<String> getStudent(String var1) throws Exception
 	{
 		try
 		{
@@ -70,7 +70,7 @@ public class DatabaseManager
 	}
 
 	
-	public static Connection getConnection() throws Exception
+	private static Connection getConnection() throws Exception
 	{
 		try
 		{
@@ -90,7 +90,7 @@ public class DatabaseManager
 		return null;
 	}
 	
-	public static void createTable() throws Exception
+	private static void createDB() throws Exception
 	{
 		try
 		{
@@ -106,9 +106,13 @@ public class DatabaseManager
 		}
 	}
 	
+	/**Executes a mySQL command.*/
+	private static void execute()
+	{
+		
+	}
 	
-	
-	public static void post(String var1, String var2) throws Exception
+	private static void post(String var1, String var2) throws Exception
 	{
 		//final String var1 = "John";
 		//final String var2 = "Miller";
