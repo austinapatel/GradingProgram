@@ -1,11 +1,17 @@
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 // Austin Patel & Jason Morris
@@ -18,10 +24,35 @@ import java.util.Scanner;
 
 public class DatabaseManager
 {
-	private static String password = "";
+	
+	
+   private static String url;
+   private static String username;
+   private static String passwd;
 	public static void main(String[] args) throws Exception
 	{
-		getPassword();
+		
+		 
+		
+		WritePropertiesFile.write();
+		
+		Properties props = new Properties();
+       FileInputStream in = null;
+     
+       try {
+           in = new FileInputStream("db.properties");
+           props.load(in);
+
+       } catch (Exception e) {
+
+
+       }
+       
+        url = props.getProperty("db.url");
+        username = props.getProperty("db.user");
+        passwd = props.getProperty("db.passwd");
+		
+		
 		createTable();
 		
 		String[][] names = {{"Austin", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
@@ -40,7 +71,7 @@ public class DatabaseManager
 	{
 		Scanner input = new Scanner(System.in);
 		System.out.print("Enter database password:   ");
-		password = input.nextLine();
+		//password = input.nextLine();
 		input.close();
 
 	}
@@ -80,11 +111,10 @@ public class DatabaseManager
 		try
 		{
 			String driver = "com.mysql.jdbc.Driver";
-			String url = "jdbc:mysql://db4free.net:3306/gradingprogram?autoReconnect=true&useSSL=false";
-			String url2 = "jdbc:mysql://98.248.155.100:3306/gradingprogram?autoReconnect=true&useSSL=false";
-			String username = "cheetahgod";
+			//String url = "jdbc:mysql://db4free.net:3306/gradingprogram?autoReconnect=true&useSSL=false";
+			//String url2 = "jdbc:mysql://98.248.155.100:3306/gradingprogram?autoReconnect=true&useSSL=false";
 			Class.forName(driver);
-			Connection conn = DriverManager.getConnection(url2, username, password);
+			Connection conn = DriverManager.getConnection(url, username, passwd);
 			System.out.println("Connected");
 			return conn;
 		
