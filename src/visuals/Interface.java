@@ -11,6 +11,8 @@ import javax.swing.ImageIcon;
 
 import java.awt.BorderLayout;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -47,6 +49,19 @@ public class Interface extends JFrame
 		//				setVisible(true);
 		//			}
 		//		});
+		
+		
+		JScrollPane scrollPane = new JScrollPane(new JButton("Apply Changes")
+		{
+			{
+				setLocation(150, 0);
+				setSize(150, 50);
+				setVisible(true);
+				
+			}
+		});
+		
+		add(scrollPane, BorderLayout.SOUTH);
 
 		addTable();
 	}
