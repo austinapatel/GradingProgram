@@ -1,4 +1,11 @@
 
+// Austin Patel & Jason Morris
+// APCS
+// Redwood High School
+// 10/13/16
+// DatabaseManager.java
+//mysql data setup help from mysql tutorial by Steven Byrne
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,17 +21,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-// Austin Patel & Jason Morris
-// APCS
-// Redwood High School
-// 10/13/16
-// DatabaseManager.java
-//mysql data setup help from mysql tutorial by Steven Byrne
-
-
 public class DatabaseManager
 {
-	
 	
    private static String url;
    private static String username;
