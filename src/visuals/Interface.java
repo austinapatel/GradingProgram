@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JTable;
 
 @SuppressWarnings("serial")
 public class Interface extends JFrame
@@ -21,29 +22,51 @@ public class Interface extends JFrame
 	public Interface()
 	{
 		// Set up the frame's preferences
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png")));
+		//		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png")));
 		setSize(WIDTH, HEIGHT);
 		setTitle("Grading Program");
 		setVisible(true);
 
 		// Add elements to the screen
-		add(new JButton("View Grades")
-		{
-			{
-				setLocation(0, 0);
-				setSize(150, 50);
-				setVisible(true);
-			}
-		});
+//		add(new JButton("View Grades")
+//		{
+//			{
+//				setLocation(0, 0);
+//				setSize(150, 50);
+//				setVisible(true);
+//			}
+//		});
+//
+//		add(new JButton("Add Assignment")
+//		{
+//			{
+//				setLocation(150, 0);
+//				setSize(150, 50);
+//				setVisible(true);
+//			}
+//		});
 
-		add(new JButton("Add Assignment")
+		addTable();
+	}
+
+	private void addTable()
+	{
+		String[] columnNames = {"First Name", "Last Name", "Sport", "# of Years", "Vegetarian"};
+
+		Object[][] data = {{"Kathy", "Smith", "Snowboarding", new Integer(5), new Boolean(false)},
+					{"John", "Doe", "Rowing", new Integer(3), new Boolean(true)},
+					{"Sue", "Black", "Knitting", new Integer(2), new Boolean(false)},
+					{"Jane", "White", "Speed reading", new Integer(20), new Boolean(true)},
+					{"Joe", "Brown", "Pool", new Integer(10), new Boolean(false)}};
+
+		add(new JTable(data, columnNames)
 		{
 			{
-				setLocation(150, 0);
-				setSize(150, 50);
+				setSize(500,500);
+				setLocation(0,0);
 				setVisible(true);
 			}
 		});
 	}
-	
+
 }
