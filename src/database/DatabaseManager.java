@@ -24,28 +24,13 @@ public class DatabaseManager
    private static String url;
    private static String username;
    private static String passwd;
-   
+   private static Connection con;
 	public static void main(String[] args) throws Exception
 	{
-		WritePropertiesFile.write();
-		
-		Properties props = new Properties();
-       FileInputStream in = null;
-     
-       try {
-           in = new FileInputStream("db.properties");
-           props.load(in);
 
-       } catch (Exception e) {
-
-
-       }
-       
-        url = props.getProperty("db.url");
-        username = props.getProperty("db.user");
-        passwd = props.getProperty("db.passwd");
 		
-		
+		GetConnection connect = new GetConnection();
+		con = connect.getConnection();
 		createDB();
 		
 		String[][] names = {{"Austin", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
@@ -73,7 +58,6 @@ public class DatabaseManager
 	{
 		try
 		{
-			Connection con = getConnection();
 			//PreparedStatement statement = con.prepareStatement("SELECT first,lastname FROM tablename LIMIT 1"); 
 			/// SELECT * FROM tablename, table2 WHERE tablename.first = table2.first AND ... OR
 			//PreparedStatement statement = con.prepareStatement("SELECT * FROM tablename, table2 ORDER BY lastname ASC");
@@ -99,31 +83,11 @@ public class DatabaseManager
 	}
 
 	
-	private static Connection getConnection() throws Exception
-	{
-		try
-		{
-			String driver = "com.mysql.jdbc.Driver";
-			//String url = "jdbc:mysql://db4free.net:3306/gradingprogram?autoReconnect=true&useSSL=false";
-			//String url2 = "jdbc:mysql://98.248.155.100:3306/gradingprogram?autoReconnect=true&useSSL=false";
-			Class.forName(driver);
-			Connection conn = DriverManager.getConnection(url, username, passwd);
-			System.out.println("Connected");
-			return conn;
-		
-		}catch (Exception e)
-		{
-			System.out.print(e);
-		}
-		
-		return null;
-	}
 	
 	private static void createDB() throws Exception
 	{
 		try
 		{
-			Connection con = getConnection();
 			PreparedStatement create = con.prepareStatement("CREATE TABLE IF NOT EXISTS tablename(id int NOT NULL AUTO_INCREMENT, first varchar(255), lastname varchar(255), PRIMARY KEY (id))");
 			create.executeUpdate();
 		}catch (Exception e)
@@ -149,7 +113,7 @@ public class DatabaseManager
 		
 		try
 		{
-			Connection con = getConnection();
+
 			PreparedStatement posted = con.prepareStatement("INSERT INTO tablename (first, lastname) VALUES ('"+var1+"', '"+var2+"')");
 			posted.executeUpdate();
 			
