@@ -4,11 +4,11 @@
 // Redwood High School
 // 10/13/16
 // DatabaseManager.java
-//mysql data setup help from mysql tutorial by Steven Byrne
+// mysql data setup help from mysql tutorial by Steven Byrne
+
+package database;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 
 public class DatabaseManager
 {
@@ -139,11 +136,11 @@ public class DatabaseManager
 		}
 	}
 	
-	/**Executes a mySQL command.*/
-	private static void execute()
-	{
-		
-	}
+//	/**Executes a mySQL command.*/
+//	private static void execute()
+//	{
+//		
+//	}
 	
 	private static void post(String var1, String var2) throws Exception
 	{

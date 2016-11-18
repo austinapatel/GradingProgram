@@ -5,7 +5,11 @@
 // 10/13/16
 // Interface.java
 
+package visuals;
+
 import java.awt.Toolkit;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 @SuppressWarnings("serial")
@@ -21,6 +25,25 @@ public class Interface extends JFrame
 		setSize(WIDTH, HEIGHT);
 		setTitle("Grading Program");
 		setVisible(true);
-	}
 
+		// Add elements to the screen
+		add(new JButton("View Grades")
+		{
+			{
+				setLocation(0, 0);
+				setSize(150, 50);
+				setVisible(true);
+			}
+		});
+
+		add(new JButton("Add Assignment")
+		{
+			{
+				setLocation(150, 0);
+				setSize(150, 50);
+				setVisible(true);
+			}
+		});
+	}
+	
 }
