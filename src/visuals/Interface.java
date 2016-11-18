@@ -7,6 +7,7 @@
 
 package visuals;
 
+import javax.swing.ImageIcon;
 
 import java.awt.BorderLayout;
 
@@ -67,13 +68,10 @@ public class Interface extends JFrame
 
 	private void addTable()
 	{
-		String[] columnNames = {"First Name", "Last Name", "Sport", "# of Years", "Vegetarian"};
+		String[] columnNames = {"First Name", "Last Name", "Gender", "Student ID", "Notes"};
 
-		Object[][] data = {{"Kathy", "Smith", "Snowboarding", new Integer(5), new Boolean(false)},
-					{"John", "Doe", "Rowing", new Integer(3), new Boolean(true)},
-					{"Sue", "Black", "Knitting", new Integer(2), new Boolean(false)},
-					{"Jane", "White", "Speed reading", new Integer(20), new Boolean(true)},
-					{"Joe", "Brown", "Pool", new Integer(10), new Boolean(false)}};
+		Object[][] data = {{"Jason", "Morris", true, 110999, "No Note"}, {"Austin", "Patel", true, 110473, "No Note"},
+					{"Achinthya", "Poduval", true, 110549, "No Note"}, {"Drew", "Carlisle", false, 110945, "No Note"}};
 
 		JScrollPane scrollPane = new JScrollPane((new JTable(data, columnNames)
 		{
@@ -83,7 +81,7 @@ public class Interface extends JFrame
 				setVisible(true);
 			}
 		}));
-		
+
 		add(scrollPane, BorderLayout.CENTER);
 		setSize(300, 150);
 		setVisible(true);
