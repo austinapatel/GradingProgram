@@ -7,11 +7,11 @@
 
 package visuals;
 
+import javax.swing.ImageIcon;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -69,19 +69,12 @@ public class Interface extends JFrame
 
 	private void addTable()
 	{
-		String[] columnNames = {"First Name", "Last Name", "Sport", "# of Years", "Vegetarian"};
-
-		Object[][] data = {{"Kathy", "Smith", "Snowboarding", new Integer(5), new Boolean(false)},
-					{"John", "Doe", "Rowing", new Integer(3), new Boolean(true)},
-					{"Sue", "Black", "Knitting", new Integer(2), new Boolean(false)},
-					{"Jane", "White", "Speed reading", new Integer(20), new Boolean(true)},
-					{"Austin", "Patel", "Being Trash", new Integer(100), new Boolean(false)},
-					{"Daniel", "Winston", "None", new Integer(0), new Boolean(false)},
-					{"Jack", "IDK", "Club Penguin", new Integer(15), new Boolean(false)},
-					{"Joe", "Brown", "Pool", new Integer(10), new Boolean(false)}};
+		String[] columnNames = {"First Name", "Last Name", "Gender", "Student ID", "Notes"};
 		
-		JTable table = new JTable(data, columnNames);
+		Object[][] data = {{"Jason", "Morris", true, 110999, "No Note"}, {"Austin", "Patel", true, 110473, "No Note"},
+					{"Achinthya", "Poduval", true, 110549, "No Note"}, {"Drew", "Carlisle", false, 110945, "No Note"}};
 
+		JTable table = new JTable(data, columnNames);
 		JScrollPane scrollPane = new JScrollPane(table); 
 			scrollPane.setSize(500, 500);
 			scrollPane.setLocation(0, 0);
@@ -91,7 +84,6 @@ public class Interface extends JFrame
 		for (int count = 0; count < table.getRowCount(); count++){
 			  averageYears.add((int)table.getValueAt(count, 0));
 			}
-		
 		add(scrollPane, BorderLayout.CENTER);
 	}
 
