@@ -17,11 +17,7 @@ public class ComponentPane extends JComponent
 	
 	public ComponentPane(int width, int height, JComponent[] components)
 	{
-		this.width = width;
-		this.height = height;
 		this.components = components;
-		
-		setsiz
 	}
 	
 }
