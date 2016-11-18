@@ -10,7 +10,6 @@ package visuals;
 import javax.swing.ImageIcon;
 
 import java.awt.BorderLayout;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,7 +21,6 @@ public class Interface extends JFrame
 {
 
 	private static final int WIDTH = 800, HEIGHT = 600;
-	ArrayList<Integer> averageYears = new ArrayList<>();
 
 	public Interface()
 	{
@@ -69,10 +67,10 @@ public class Interface extends JFrame
 
 	private void addTable()
 	{
-		String[] columnNames = {"First Name", "Last Name", "Gender", "Student ID", "Notes"};
+		String[] columnNames = {"First Name", "Last Name", "Student ID", "Grade", "Notes"};
 		
-		Object[][] data = {{"Jason", "Morris", true, 110999, "No Note"}, {"Austin", "Patel", true, 110473, "No Note"},
-					{"Achinthya", "Poduval", true, 110549, "No Note"}, {"Drew", "Carlisle", false, 110945, "No Note"}};
+		Object[][] data = {{"Jason", "Morris", 110999, "B-", "No Note"}, {"Austin", "Patel", 110473, "C+", "No Note"},
+					{"Achinthya", "Poduval", 110549, "D-", "No Note"}, {"Drew", "Carlisle", 110945, "F", "No Note"}};
 
 		JTable table = new JTable(data, columnNames);
 		JScrollPane scrollPane = new JScrollPane(table); 
@@ -80,10 +78,6 @@ public class Interface extends JFrame
 			scrollPane.setLocation(0, 0);
 			scrollPane.setVisible(true);
 			
-		
-		for (int count = 0; count < table.getRowCount(); count++){
-			  averageYears.add((int)table.getValueAt(count, 0));
-			}
 		add(scrollPane, BorderLayout.CENTER);
 	}
 
