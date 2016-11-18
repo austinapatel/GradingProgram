@@ -22,7 +22,7 @@ public class Interface extends JFrame
 	public Interface()
 	{
 		// Set up the frame's preferences
-		//		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("icon.png"));
 		setSize(WIDTH, HEIGHT);
 		setTitle("Grading Program");
 		setVisible(true);
