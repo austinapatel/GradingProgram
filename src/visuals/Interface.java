@@ -7,10 +7,11 @@
 
 package visuals;
 
+import java.awt.BorderLayout;
 import java.awt.Toolkit;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 @SuppressWarnings("serial")
@@ -28,23 +29,23 @@ public class Interface extends JFrame
 		setVisible(true);
 
 		// Add elements to the screen
-//		add(new JButton("View Grades")
-//		{
-//			{
-//				setLocation(0, 0);
-//				setSize(150, 50);
-//				setVisible(true);
-//			}
-//		});
-//
-//		add(new JButton("Add Assignment")
-//		{
-//			{
-//				setLocation(150, 0);
-//				setSize(150, 50);
-//				setVisible(true);
-//			}
-//		});
+		//		add(new JButton("View Grades")
+		//		{
+		//			{
+		//				setLocation(0, 0);
+		//				setSize(150, 50);
+		//				setVisible(true);
+		//			}
+		//		});
+		//
+		//		add(new JButton("Add Assignment")
+		//		{
+		//			{
+		//				setLocation(150, 0);
+		//				setSize(150, 50);
+		//				setVisible(true);
+		//			}
+		//		});
 
 		addTable();
 	}
@@ -59,14 +60,18 @@ public class Interface extends JFrame
 					{"Jane", "White", "Speed reading", new Integer(20), new Boolean(true)},
 					{"Joe", "Brown", "Pool", new Integer(10), new Boolean(false)}};
 
-		add(new JTable(data, columnNames)
+		JScrollPane scrollPane = new JScrollPane((new JTable(data, columnNames)
 		{
 			{
-				setSize(500,500);
-				setLocation(0,0);
+				setSize(500, 500);
+				setLocation(0, 0);
 				setVisible(true);
 			}
-		});
+		}));
+		
+		add(scrollPane, BorderLayout.CENTER);
+		setSize(300, 150);
+		setVisible(true);
 	}
 
 }
