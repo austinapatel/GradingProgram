@@ -7,9 +7,7 @@
 
 package visuals;
 
-import java.awt.Toolkit;
-
-import javax.swing.JButton;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 
@@ -22,7 +20,7 @@ public class Interface extends JFrame
 	public Interface()
 	{
 		// Set up the frame's preferences
-		setIconImage(Toolkit.getDefaultToolkit().getImage("icon.png"));
+		setIconImage(new ImageIcon("icon.png").getImage());
 		setSize(WIDTH, HEIGHT);
 		setTitle("Grading Program");
 		setVisible(true);
