@@ -44,8 +44,6 @@ public class GetConnection
 		try
 		{
 			String driver = "com.mysql.jdbc.Driver";
-			//String url = "jdbc:mysql://db4free.net:3306/gradingprogram?autoReconnect=true&useSSL=false";
-			//String url2 = "jdbc:mysql://98.248.155.100:3306/gradingprogram?autoReconnect=true&useSSL=false";
 			Class.forName(driver);
 			Connection conn = DriverManager.getConnection(url, username, passwd);
 			System.out.println("Connected");
