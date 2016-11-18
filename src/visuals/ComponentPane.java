@@ -9,7 +9,6 @@ package visuals;
 
 import javax.swing.JComponent;
 
-/***/
 public class ComponentPane extends JComponent
 {
 	
@@ -18,6 +17,8 @@ public class ComponentPane extends JComponent
 	public ComponentPane(int width, int height, JComponent[] components)
 	{
 		this.components = components;
+		
+		setSize(width, height);
 	}
 	
 }
