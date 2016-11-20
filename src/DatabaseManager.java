@@ -26,14 +26,15 @@ public class DatabaseManager
 		
 		String[][] names = {{"Austin", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
 		
-		
-		for (String[] name: names)
+		for (int i =0; i < 100; i++)
 		{
-			post(name[0], name[1]);
+			for (String[] name: names)
+			{
+				post(name[0], name[1]);
+			}
+			
+			System.out.println(Arrays.toString(getStudent("Austin").toArray()));
 		}
-		
-		System.out.println(Arrays.toString(getStudent("Austin").toArray()));
-		
 	}
 	
 	public static void getPassword()
