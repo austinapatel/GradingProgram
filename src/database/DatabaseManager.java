@@ -4,7 +4,6 @@
 // Redwood High School
 // 10/13/16
 // DatabaseManager.java
-// mySQL data setup help from mysql tutorial by Steven Byrne
 
 package database;
 
