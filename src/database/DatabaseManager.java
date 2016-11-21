@@ -1,10 +1,10 @@
 
-// Austin Patel & Jason Morris
+// Austin Patel & Jason Morris & Lex VonKlark
 // APCS
 // Redwood High School
 // 10/13/16
 // DatabaseManager.java
-// mysql data setup help from mysql tutorial by Steven Byrne
+// mySQL data setup help from mysql tutorial by Steven Byrne
 
 package database;
 
@@ -15,19 +15,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**Abstracts mySQL database management operations.*/
 public class DatabaseManager
 {
-	
-   private static String url;
-   private static String username;
-   private static String passwd;
    private static Connection con;
+   
 	public static void main(String[] args) throws Exception
 	{
-
-		
-		GetConnection connect = new GetConnection();
-		con = connect.getConnection();
+		Connection con = GetConnection.getConnection();
 		createDB();
 		
 		String[][] names = {{"Austin", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
