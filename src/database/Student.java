@@ -1,5 +1,13 @@
+
+// Austin Patel & Jason Morris & Lex VonKlark
+// APCS
+// Redwood High School
+// 11/18/16
+// Student.java
+
 package database;
 
+/**Data encapsulation class for "Student" table in database.*/
 public class Student
 {
 	private boolean gender;

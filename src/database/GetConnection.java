@@ -1,8 +1,9 @@
 
-// Austin Patel & Jason Morris
+// Austin Patel & Jason Morris & Lex VonKlark
 // APCS
 // Redwood High School
 // 10/13/16
+// GetConnection.java
 
 package database;
 
@@ -10,15 +11,20 @@ import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
-import java.util.Scanner;
 
+/**Opens the connection to the remote mySQL database.*/
 public class GetConnection
 {
 	private static String url;
 	private static String username;
 	private static String passwd;
 	
-	public Connection getConnection()
+	private GetConnection() throws Exception
+	{
+		throw new Exception("Do not instantiate this class.");
+	}
+	
+	public static Connection getConnection()
 	{
 		
 		WritePropertiesFile.write();

@@ -1,5 +1,5 @@
 
-// Austin Patel & Jason Morris
+// Austin Patel & Jason Morris & Lex VonKlark
 // APCS
 // Redwood High School
 // 10/13/16
@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+/**Interface for the program.*/
 @SuppressWarnings("serial")
 public class Interface extends JFrame
 {
