@@ -8,21 +8,27 @@
 
 package database;
 
+import java.io.FileInputStream;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.Scanner;
 
 /**Abstracts mySQL database management operations.*/
 public class DatabaseManager
 {
    private static Connection con;
+   private static String url;
+	private static String username;
+	private static String passwd;
    
 	public static void main(String[] args) throws Exception
 	{
-		Connection con = GetConnection.getConnection();
+		con = getConnection();
 		createDB();
 		
 		String[][] names = {{"Austin", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
@@ -44,6 +50,46 @@ public class DatabaseManager
 		//password = input.nextLine();
 		input.close();
 
+	}
+	
+	private static Connection getConnection()
+	{
+		
+		WritePropertiesFile.write();
+
+		Properties props = new Properties();
+		FileInputStream in = null;
+
+		try
+		{
+			in = new FileInputStream("db.properties");
+			props.load(in);
+
+		}
+		catch (Exception e)
+		{
+
+		}
+
+		url = props.getProperty("db.url");
+		username = props.getProperty("db.user");
+		passwd = props.getProperty("db.passwd");
+		
+		Connection conn = null;
+		
+		try
+		{
+			String driver = "com.mysql.jdbc.Driver";
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url, username, passwd);
+			System.out.println("Connected");
+		}
+		catch (Exception e)
+		{
+			System.out.print(e);
+		}
+
+		return conn;
 	}
 	
 	private static ArrayList<String> getStudent(String var1) throws Exception
@@ -71,6 +117,7 @@ public class DatabaseManager
 		{
 			System.out.println(e);
 		}
+		
 		return null;
 	}
 
