@@ -126,7 +126,7 @@ public class DatabaseManager
 		try
 		{
 			PreparedStatement create = con.prepareStatement(
-						"CREATE TABLE IF NOT EXISTS tablename(id int NOT NULL AUTO_INCREMENT, first varchar(255), lastname varchar(255), PRIMARY KEY (id))");
+						"CREATE TABLE IF NOT EXISTS tablename(id int NOT NULL, name varchar(255), gender varchar(255), notes text(255), PRIMARY KEY (id))");
 			create.executeUpdate();
 		}
 		catch (Exception e)
