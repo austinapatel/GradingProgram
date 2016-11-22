@@ -10,27 +10,16 @@ package database;
 /**Data encapsulation class for "Student" table in database.*/
 public class Student
 {
-	private boolean gender;
-	private String last, first, notes;
+	private String last, first, notes, gender;
 	private int student_id;
 	
-	public Student(boolean gender, String last, String first, String notes, Integer student_id)
+	public Student(String gender, String last, String first, String notes, Integer student_id)
 	{
 		this.gender = gender;
 		this.last = last;
 		this.first = first; 
 		this.notes = notes;
 		this.student_id = student_id;
-	}
-
-	public boolean isGender()
-	{
-		return gender;
-	}
-
-	public void setGender(boolean gender)
-	{
-		this.gender = gender;
 	}
 
 	public String getLast()
@@ -46,6 +35,16 @@ public class Student
 	public String getFirst()
 	{
 		return first;
+	}
+	
+	public String getGender()
+	{
+		return gender;
+	}
+
+	public void setGender(String gender)
+	{
+		this.gender = gender;
 	}
 
 	public void setFirst(String first)
