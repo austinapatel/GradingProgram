@@ -21,13 +21,17 @@ import java.util.Scanner;
 public class DatabaseManager
 {
 	private static Connection con;
-	private static String url;
-	private static String username;
-	private static String passwd;
-
-	public static void main(String[] args) throws Exception
+	private static String url, username, passwd;
+	
+	public static void main(String[] args)
+	{
+		init();
+	}
+	
+	public static void init()
 	{
 		con = getConnection();
+		
 		createDB();
 
 		String[][] names = {{"Austin", "K"}, {"Zach", "J"}, {"Frank", "B"}, {"Ken", "Mark"}};
@@ -38,7 +42,11 @@ public class DatabaseManager
 		}
 
 		System.out.println(Arrays.toString(getStudent("Austin").toArray()));
-
+	}
+	
+	public static void write()
+	{
+		
 	}
 
 	public static void getPassword()
@@ -90,7 +98,7 @@ public class DatabaseManager
 		return conn;
 	}
 
-	private static ArrayList<String> getStudent(String var1) throws Exception
+	private static ArrayList<String> getStudent(String var1)
 	{
 		try
 		{
@@ -121,7 +129,7 @@ public class DatabaseManager
 		return null;
 	}
 
-	private static void createDB() throws Exception
+	private static void createDB()
 	{
 		try
 		{

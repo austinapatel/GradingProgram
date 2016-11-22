@@ -8,7 +8,7 @@
 package database;
 
 /**Data encapsulation class for "Student" table in database.*/
-public class Student
+public class Student extends Table
 {
 	private String last, first, notes, gender;
 	private int student_id;
