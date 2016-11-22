@@ -111,6 +111,7 @@ public class DatabaseManager
 				array.add(result.getString("lastname"));
 			}
 			System.out.println("All records have been selected");
+			
 			return array;
 		}
 		catch (Exception e)
@@ -126,8 +127,20 @@ public class DatabaseManager
 		try
 		{
 			PreparedStatement create = con.prepareStatement(
-						"CREATE TABLE IF NOT EXISTS tablename(id int NOT NULL, name varchar(255), gender varchar(255), notes text(255), PRIMARY KEY (id))");
+						"CREATE TABLE IF NOT EXISTS T_STUDENT(id int NOT NULL, name varchar(255), gender varchar(255), notes text(255), PRIMARY KEY (id))");
 			create.executeUpdate();
+			PreparedStatement create2 = con.prepareStatement(
+						"CREATE TABLE IF NOT EXISTS T_CLASS(id int NOT NULL, name varchar(255), PRIMARY KEY (id))");
+			create2.executeUpdate();
+			
+			PreparedStatement create3 = con.prepareStatement(
+						"CREATE TABLE IF NOT EXISTS T_ENTROLLMENT(id int NOT NULL, period int NOT NULL, notes text(255), PRIMARY KEY (id))");
+			create3.executeUpdate();
+		
+			PreparedStatement create4 = con.prepareStatement(
+						"CREATE TABLE IF NOT EXISTS T_ENTROLLMENT(id int NOT NULL, period int NOT NULL, notes text(255), PRIMARY KEY (id))");
+			
+			
 		}
 		catch (Exception e)
 		{
