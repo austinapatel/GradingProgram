@@ -11,172 +11,100 @@ import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Properties;
-import java.util.Scanner;
 
 /**Abstracts mySQL database management operations.*/
-public class DatabaseManager
-{
-	private static Connection con;
-	private static String url, username, passwd;
+public class DatabaseManager {
 	
-	public static void main(String[] args)
-	{
-		init();
+	private static Connection connection;
+	private static HashMap<String, String> tableColumns;
+
+	/**Tests the class's various operation.*/
+	public static void main(String[] args) {
+		@SuppressWarnings("serial")
+		final HashMap<String, String> tableColumns = new HashMap<String, String>() {
+			{
+				put("Students",
+						"id INT NOT NULL UNIQUE, firstName VARCHAR(20) NOT NULL, lastName VARCHAR(20) NOT NULL,"
+								+ " notes VARCHAR(255), gender VARCHAR(1), studentID INT NOT NULL,"
+								+ "gradeLevel INT NOT NULL, PRIMARY KEY (id)");
+				put("Classes",
+						"id INT NOT NULL UNIQUE, name VARCHAR(20) NOT NULL, PRIMARY KEY (id)");
+			}
+		};
+
+		DatabaseManager.init(tableColumns);
 	}
-	
-	public static void init()
-	{
-		con = getConnection();
+
+	/**Initializes the tables and sets up the Database to be ready for use.*/
+	public static void init(HashMap<String, String> tableColumns) {		
+		DatabaseManager.tableColumns = tableColumns;
 		
-		createDB();
-
-		String[][] names = {{"Austin", "K"}, {"Zach", "J"}, {"Frank", "B"}, {"Ken", "Mark"}};
-
-		for (String[] name : names)
-		{
-			addStudent(false, name[0], name[1], "No notes", 12345);
-		}
-
-		System.out.println(Arrays.toString(getStudent("Austin").toArray()));
-	}
-	
-	public static void write()
-	{
-		
+		DatabaseManager.connectToRemote();
+		DatabaseManager.createTables();
 	}
 
-	public static void getPassword()
-	{
-		Scanner input = new Scanner(System.in);
-		System.out.print("Enter database password:   ");
-		//password = input.nextLine();
-		input.close();
-
+	/**Writes a value to a specific table, row and column.
+	 * Returns true if operation was successful.*/
+	public static boolean writeCell(String table, int primaryKey, String column,
+			String value) {
+		String statement = "UPDATE " + table + " SET " + column
+				+ "='" + value + "' WHERE" + primaryKey + "= 7;";
+		try {
+			DatabaseManager.getSQLStatement(statement).executeUpdate();
+			
+			return true;
+		} catch (SQLException e) {
+			System.out.println("Failed to perform write operation.");
+			e.printStackTrace();
+			
+			return false;
+		}
 	}
 
-	private static Connection getConnection()
-	{
+	/**Opens the remote connection to the database.*/
+	private static void connectToRemote() {
+		String url = PropertiesManager.read("db", "url");
+		String username = PropertiesManager.read("db", "username");
+		String password = PropertiesManager.read("db", "password");
 
-		WritePropertiesFile.write();
-
-		Properties props = new Properties();
-		FileInputStream in = null;
-
-		try
-		{
-			in = new FileInputStream("db.properties");
-			props.load(in);
-
-		}
-		catch (Exception e)
-		{
-
-		}
-
-		url = props.getProperty("db.url");
-		username = props.getProperty("db.user");
-		passwd = props.getProperty("db.passwd");
-
-		Connection conn = null;
-
-		try
-		{
+		try {
 			String driver = "com.mysql.jdbc.Driver";
 			Class.forName(driver);
-			conn = DriverManager.getConnection(url, username, passwd);
-			System.out.println("Connected");
-		}
-		catch (Exception e)
-		{
+			connection = DriverManager.getConnection(url, username, password);
+			System.out.println("Successfully connected to database.");
+		} catch (Exception e) {
 			System.out.print(e);
 		}
-
-		return conn;
 	}
 
-	private static ArrayList<String> getStudent(String var1)
-	{
-		try
-		{
-			//PreparedStatement statement = con.prepareStatement("SELECT first,lastname FROM tablename LIMIT 1"); 
-			/// SELECT * FROM tablename, table2 WHERE tablename.first = table2.first AND ... OR
-			//PreparedStatement statement = con.prepareStatement("SELECT * FROM tablename, table2 ORDER BY lastname ASC");
-			PreparedStatement statement = con
-						.prepareStatement("SELECT * FROM tablename WHERE first = '" + var1 + "' LIMIT 1");
+	/**Returns the mySQL prepared table given a command.*/
+	private static PreparedStatement getSQLStatement(String mySQLCommand) {
+		try {
+			return connection.prepareStatement(mySQLCommand);
+		} catch (SQLException e) {
+			System.out.println("The operation " + mySQLCommand + " failed.");
+			e.printStackTrace();
 
-			ResultSet result = statement.executeQuery();
-
-			ArrayList<String> array = new ArrayList<String>();
-			while (result.next())
-			{
-				System.out.print(result.getString("first"));
-				System.out.print(" ");
-				System.out.println(result.getString("lastname"));
-				array.add(result.getString("lastname"));
-			}
-			System.out.println("All records have been selected");
-			
-			return array;
-		}
-		catch (Exception e)
-		{
-			System.out.println(e);
-		}
-
-		return null;
-	}
-
-	private static void createDB()
-	{
-		try
-		{
-			PreparedStatement create = con.prepareStatement(
-						"CREATE TABLE IF NOT EXISTS T_STUDENT(id int NOT NULL, name varchar(255), gender varchar(255), notes text(255), PRIMARY KEY (id))");
-			create.executeUpdate();
-			PreparedStatement create2 = con.prepareStatement(
-						"CREATE TABLE IF NOT EXISTS T_CLASS(id int NOT NULL, name varchar(255), PRIMARY KEY (id))");
-			create2.executeUpdate();
-			
-			PreparedStatement create3 = con.prepareStatement(
-						"CREATE TABLE IF NOT EXISTS T_ENTROLLMENT(id int NOT NULL, period int NOT NULL, notes text(255), PRIMARY KEY (id))");
-			create3.executeUpdate();
-		
-			PreparedStatement create4 = con.prepareStatement(
-						"CREATE TABLE IF NOT EXISTS T_ENTROLLMENT(id int NOT NULL, period int NOT NULL, notes text(255), PRIMARY KEY (id))");
-			
-			
-		}
-		catch (Exception e)
-		{
-			System.out.println(e);
-		}
-		finally
-		{
-			System.out.println("Function completed");
+			return null;
 		}
 	}
 
-	private static void addStudent(boolean gender, String last, String first, String notes, int student_id)
-	{
-		try
-		{
-			PreparedStatement posted = con
-						.prepareStatement("INSERT INTO tablename (first, lastname) VALUES ('" + first + "', '" + last + "')");
-			posted.executeUpdate();
-		}
-		catch (Exception e)
-		{
+	/**Creates a table for each table.*/
+	private static void createTables() {
+		try {
+			// Go through each key is the "tableColumns" and
+			// create the table with the necessary information
+			for (String key : tableColumns.keySet())
+				DatabaseManager.getSQLStatement("CREATE TABLE IF NOT EXISTS " + key
+						+ "(" + tableColumns.get(key) + ")").executeUpdate();
+		} catch (Exception e) {
 			System.out.println(e);
+		} finally {
+			System.out.println("Database table creation completed.");
 		}
-		finally
-		{
-			System.out.println("Insert Completed");
-		}
-
 	}
 
 }

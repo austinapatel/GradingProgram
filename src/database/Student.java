@@ -10,31 +10,40 @@ package database;
 /**Data encapsulation class for "Student" table in database.*/
 public class Student extends Table
 {
-	private String last, first, notes, gender;
-	private int student_id;
+	private String lastName, firstName, notes, gender;
+	private int student_id, gradeLevel;
 	
-	public Student(String gender, String last, String first, String notes, Integer student_id)
+	public Student(String first, String last, String notes, String gender, int student_id, int gradeLevel)
 	{
 		this.gender = gender;
-		this.last = last;
-		this.first = first; 
+		this.lastName = last;
+		this.firstName = first; 
 		this.notes = notes;
 		this.student_id = student_id;
+		this.gradeLevel = gradeLevel;
+	}
+	
+	public int getGradeLevel() {
+		return gradeLevel;
 	}
 
-	public String getLast()
-	{
-		return last;
+	public void setGradeLevel(int gradeLevel) {
+		this.gradeLevel = gradeLevel;
 	}
 
-	public void setLast(String last)
+	public String getLastName()
 	{
-		this.last = last;
+		return lastName;
 	}
 
-	public String getFirst()
+	public void setLastName(String last)
 	{
-		return first;
+		this.lastName = last;
+	}
+
+	public String getFirstName()
+	{
+		return firstName;
 	}
 	
 	public String getGender()
@@ -47,9 +56,9 @@ public class Student extends Table
 		this.gender = gender;
 	}
 
-	public void setFirst(String first)
+	public void setFirstName(String first)
 	{
-		this.first = first;
+		this.firstName = first;
 	}
 
 	public String getNotes()
