@@ -34,14 +34,14 @@ public class DatabaseManager
 		
 		createDB();
 
-		String[][] names = {{"Austin", "K"}, {"Zach", "J"}, {"Frank", "B"}, {"Ken", "Mark"}};
-
-		for (String[] name : names)
-		{
-			addStudent(false, name[0], name[1], "No notes", 12345);
-		}
-
-		System.out.println(Arrays.toString(getStudent("Austin").toArray()));
+//		String[][] names = {{"Austin", "K"}, {"Zach", "J"}, {"Frank", "B"}, {"Ken", "Mark"}};
+//
+//		for (String[] name : names)
+//		{
+//			addStudent(false, name[0], name[1], "No notes", 12345);
+//		}
+//
+//		System.out.println(Arrays.toString(getStudent("Austin").toArray()));
 	}
 	
 	public static void write()
@@ -134,21 +134,20 @@ public class DatabaseManager
 	{
 		try
 		{
-			PreparedStatement create = con.prepareStatement(
-						"CREATE TABLE IF NOT EXISTS T_STUDENT(id int NOT NULL, name varchar(255), gender varchar(255), notes text(255), PRIMARY KEY (id))");
-			create.executeUpdate();
-			PreparedStatement create2 = con.prepareStatement(
-						"CREATE TABLE IF NOT EXISTS T_CLASS(id int NOT NULL, name varchar(255), PRIMARY KEY (id))");
-			create2.executeUpdate();
 			
-			PreparedStatement create3 = con.prepareStatement(
-						"CREATE TABLE IF NOT EXISTS T_ENTROLLMENT(id int NOT NULL, period int NOT NULL, notes text(255), PRIMARY KEY (id))");
-			create3.executeUpdate();
-		
-			PreparedStatement create4 = con.prepareStatement(
-						"CREATE TABLE IF NOT EXISTS T_ENTROLLMENT(id int NOT NULL, period int NOT NULL, notes text(255), PRIMARY KEY (id))");
+			ArrayList<PreparedStatement> state = new ArrayList();
+			
+			state.add(con.prepareStatement("CREATE TABLE IF NOT EXISTS T_STUDENT(studentId int NOT NULL, name varchar(255), gender char(1), notes text(255), graduation date, PRIMARY KEY (studentId))"));
+			state.add(con.prepareStatement("CREATE TABLE IF NOT EXISTS T_CLASS(classId int NOT NULL, name varchar(255), PRIMARY KEY (ClassId))"));
+			state.add(con.prepareStatement("CREATE TABLE IF NOT EXISTS T_ENTROLLMENT(classId int NOT NULL, studentId int NOT NULL, peroid int, year date, PRIMARY KEY (classId))"));
+			state.add(con.prepareStatement("CREATE TABLE IF NOT EXISTS T_ASSIGNMENT(assignId int NOT NULL, classId int NOT NULL, catId int NOT NULL, points int, PRIMARY KEY (assignId))"));
+			state.add(con.prepareStatement("CREATE TABLE IF NOT EXISTS T_GRADES(studentId int NOT NULL, points int NOT NULL, assignId int NOT NULL, PRIMARY KEY (studentId))"));
+			state.add(con.prepareStatement("CREATE TABLE IF NOT EXISTS T_CATEGORY(catId int NOT NULL, weight int NOT NULL, name varchar(255), PRIMARY KEY (catId))"));
 			
 			
+			for (PreparedStatement q: state)
+				q.executeUpdate();
+					
 		}
 		catch (Exception e)
 		{
