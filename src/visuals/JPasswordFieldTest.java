@@ -7,43 +7,60 @@
 
 package visuals;
 
-import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 /**Password entry prompt for database credentials.*/
 public class JPasswordFieldTest extends JFrame
 {
+	JButton submit = new JButton("Submit");
 	
 	public JPasswordFieldTest()
 	{
+		setLayout(null);
 		setIconImage(new ImageIcon("icon.png").getImage());
 		setResizable(false);
-		setSize(180, 70);
-		setVisible(true);
+		setSize(200, 200);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Enter Credentials");
 		
-		setLayout(new GridLayout(2, 2));
-		
-		JLabel label = new JLabel("User Name:  ", SwingConstants.RIGHT);
-		JLabel label2 = new JLabel("Password:  ", SwingConstants.RIGHT);
+		JLabel label = new JLabel("User Name:  ");
+		JLabel label2 = new JLabel("Password:  ");
 		JTextField userNameField = new JTextField(20);
 		JPasswordField passwordField = new JPasswordField();
 		
-		add(label);
-		add(userNameField);
-		add(label2);
-		add(passwordField);
+		Box box = Box.createVerticalBox();    // vertical box
+			box.add(label);
+		    box.add(userNameField);
+		    box.add(label2);
+		    box.add(passwordField);
+		box.setSize(200, 120);
+		add(box);  
+		
+		submit.setSize(200, 40);
+		submit.setLocation(0, 140);
+		add(submit);
+		
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
-
-	public static void main(String[] args)
-	{
-		new JPasswordFieldTest();
+	
+	public void setToOpen() {
+		submit.addActionListener(new ActionListener() {         
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				dispose();
+			    new Interface();
+			}
+		}); 
 	}
 }

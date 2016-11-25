@@ -8,6 +8,7 @@
 package main;
 
 import visuals.Interface;
+import visuals.JPasswordFieldTest;
 
 /**Driver class for entire program.*/
 public class Main
@@ -15,7 +16,8 @@ public class Main
 
 	public static void main(String[] args)
 	{      
-		new Interface();
+		JPasswordFieldTest passTest = new JPasswordFieldTest();
+		passTest.setToOpen();
 	}
 
 }
