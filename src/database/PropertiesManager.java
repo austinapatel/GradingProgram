@@ -37,23 +37,21 @@ public class PropertiesManager {
 		}
 
 	}
-	
-	/**Reads a values in a with a given key and property file name.*/
-	public static String read(String fileName, String key)
-	{
+
+	/** Reads a values in a with a given key and property file name. */
+	public static String read(String fileName, String key) {
 		fileName += ".properties";
 
-		try
-		{
+		try {
 			Properties properties = new Properties();
-			FileInputStream in =  new FileInputStream(fileName);
+			FileInputStream in = new FileInputStream(fileName);
 			properties.load(in);
-			
+
 			return properties.getProperty(key);
 		} catch (Exception e) {
 			System.out.println("Failed to read from to properties file.");
 			e.printStackTrace();
-			
+
 			return null;
 		}
 	}

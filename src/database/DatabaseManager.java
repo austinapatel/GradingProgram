@@ -7,64 +7,76 @@
 
 package database;
 
-import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Properties;
 
-/**Abstracts mySQL database management operations.*/
+/** Abstracts mySQL database management operations. */
 public class DatabaseManager {
-	
+
 	private static Connection connection;
-	private static HashMap<String, String> tableColumns;
+	private static Table[] tables;
 
-	/**Tests the class's various operation.*/
+	/** Tests the class's various operation. */
 	public static void main(String[] args) {
-		@SuppressWarnings("serial")
-		final HashMap<String, String> tableColumns = new HashMap<String, String>() {
-			{
-				put("Students",
-						"id INT NOT NULL UNIQUE, firstName VARCHAR(20) NOT NULL, lastName VARCHAR(20) NOT NULL,"
-								+ " notes VARCHAR(255), gender VARCHAR(1), studentID INT NOT NULL,"
-								+ "gradeLevel INT NOT NULL, PRIMARY KEY (id)");
-				put("Classes",
-						"id INT NOT NULL UNIQUE, name VARCHAR(20) NOT NULL, PRIMARY KEY (id)");
-			}
-		};
+		final Table[] tables = new Table[] {
+				new Table("Students", "studentID", new TableColumn[] {
+						new TableColumn("studentID", "INT NOT NULL UNIQUE"),
+						new TableColumn("firstName", "VARCHAR(20) NOT NULL"),
+						new TableColumn("lastName", "VARCHAR(20) NOT NULL"),
+						new TableColumn("notes", "VARCHAR(255)"),
+						new TableColumn("gender", "CHAR(1)"),
+						new TableColumn("gradeLevel", "INT NOT NULL") }),
+				new Table("Classes", "id", new TableColumn[] {
+						new TableColumn("id", "INT NOT NULL UNIQUE"),
+						new TableColumn("name", "VARCHAR(20) NOT NULL"), }) };
+		
+		
 
-		DatabaseManager.init(tableColumns);
+		DatabaseManager.init(tables);
+	}
+	
+	public static void DeleteTable(String tableName) {
+		try {
+			DatabaseManager.getSQLStatement("DROP TABLE " + tableName).executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Failed to delete table \"" + tableName + "\".");
+		} finally {
+			System.out.println("Sucessfully deleted table \"" + tableName + "\".");
+		}
 	}
 
-	/**Initializes the tables and sets up the Database to be ready for use.*/
-	public static void init(HashMap<String, String> tableColumns) {		
-		DatabaseManager.tableColumns = tableColumns;
-		
+	/** Initializes the tables and sets up the Database to be ready for use. */
+	public static void init(Table[] tables) {
+		DatabaseManager.tables = tables;
+
 		DatabaseManager.connectToRemote();
 		DatabaseManager.createTables();
 	}
 
-	/**Writes a value to a specific table, row and column.
-	 * Returns true if operation was successful.*/
+	/**
+	 * Writes a value to a specific table, row and column. Returns true if
+	 * operation was successful.
+	 */
 	public static boolean writeCell(String table, int primaryKey, String column,
 			String value) {
-		String statement = "UPDATE " + table + " SET " + column
-				+ "='" + value + "' WHERE" + primaryKey + "= 7;";
+		String statement = "UPDATE " + table + " SET " + column + "='" + value
+				+ "' WHERE" + primaryKey + "= 7;";
 		try {
 			DatabaseManager.getSQLStatement(statement).executeUpdate();
-			
+
 			return true;
 		} catch (SQLException e) {
 			System.out.println("Failed to perform write operation.");
 			e.printStackTrace();
-			
+
 			return false;
 		}
 	}
 
-	/**Opens the remote connection to the database.*/
+	/** Opens the remote connection to the database. */
 	private static void connectToRemote() {
 		String url = PropertiesManager.read("db", "url");
 		String username = PropertiesManager.read("db", "username");
@@ -80,7 +92,7 @@ public class DatabaseManager {
 		}
 	}
 
-	/**Returns the mySQL prepared table given a command.*/
+	/** Returns the mySQL prepared table given a command. */
 	private static PreparedStatement getSQLStatement(String mySQLCommand) {
 		try {
 			return connection.prepareStatement(mySQLCommand);
@@ -92,18 +104,27 @@ public class DatabaseManager {
 		}
 	}
 
-	/**Creates a table for each table.*/
+	/** Creates a table for each table. */
 	private static void createTables() {
 		try {
-			// Go through each key is the "tableColumns" and
-			// create the table with the necessary information
-			for (String key : tableColumns.keySet())
-				DatabaseManager.getSQLStatement("CREATE TABLE IF NOT EXISTS " + key
-						+ "(" + tableColumns.get(key) + ")").executeUpdate();
+			for (Table table : tables) {
+				String columnInfo = "";
+				TableColumn[] columns = table.getColumns();
+
+				for (TableColumn column : columns)
+					columnInfo += column.getName() + ' ' + column.getType() + ", ";
+
+				columnInfo += "PRIMARY KEY(" + table.getPrimaryKey() + ")";
+
+				DatabaseManager
+						.getSQLStatement("CREATE TABLE IF NOT EXISTS "
+								+ table.getName() + "(" + columnInfo + ")")
+						.executeUpdate();
+				
+				System.out.println("Sucessfully created table \"" + table.getName() + "\".");
+			}
 		} catch (Exception e) {
-			System.out.println(e);
-		} finally {
-			System.out.println("Database table creation completed.");
+			System.out.println("Failed to create table.");
 		}
 	}
 
