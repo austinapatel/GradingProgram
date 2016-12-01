@@ -22,19 +22,43 @@ public class DatabaseManager {
 	/** Tests the class's various operation. */
 	public static void main(String[] args) {
 		final Table[] tables = new Table[] {
-				new Table("Students", "studentID", new TableColumn[] {
-						new TableColumn("studentID", "INT NOT NULL UNIQUE"),
+				new Table("Students", "id", new TableColumn[] {
+						new TableColumn("id", "INT NOT NULL UNIQUE"),
 						new TableColumn("firstName", "VARCHAR(20) NOT NULL"),
 						new TableColumn("lastName", "VARCHAR(20) NOT NULL"),
 						new TableColumn("notes", "VARCHAR(255)"),
 						new TableColumn("gender", "CHAR(1)"),
 						new TableColumn("gradeLevel", "INT NOT NULL") }),
-				new Table("Classes", "id", new TableColumn[] {
+				
+					new Table("Courses", "id", new TableColumn[] {
 						new TableColumn("id", "INT NOT NULL UNIQUE"),
-						new TableColumn("name", "VARCHAR(20) NOT NULL"), }) };
+						new TableColumn("name", "VARCHAR(20) NOT NULL")}),
+					
+					new Table("Assignments", "id", new TableColumn[] {
+								new TableColumn("id", "INT NOT NULL UNIQUE"),
+								new TableColumn("name", "VARCHAR(20) NOT NULL"),
+								new TableColumn("courseid", "INT NOT NULL"),
+								new TableColumn("value", "DOUBLE NOT NULL"),
+								new TableColumn("categoryid", "DOUBLE NOT NULL")}),
+					
+					new Table("Category", "id", new TableColumn[] {
+								new TableColumn("id", "INT NOT NULL UNIQUE"),
+								new TableColumn("name", "VARCHAR(20) NOT NULL"),
+								new TableColumn("weight", "DOUBLE NOT NULL")}),
+					
+					new Table("Enrollment", "id", new TableColumn[] {
+								new TableColumn("id", "INT NOT NULL AUTO_INCREMENT"),
+								new TableColumn("studentid", "INT NOT NULL"),
+								new TableColumn("classid", "INT NOT NULL"),
+								new TableColumn("year", "DATE NOT NULL")}),
 		
+					new Table("Grades", "id", new TableColumn[] {
+								new TableColumn("id", "INT NOT NULL AUTO_INCREMENT"),
+								new TableColumn("studentid", "INT NOT NULL"),
+								new TableColumn("assignmentid", "INT NOT NULL"),
+								new TableColumn("value", "DOUBLE NOT NULL")}) };
+					
 		
-
 		DatabaseManager.init(tables);
 	}
 	
@@ -123,7 +147,8 @@ public class DatabaseManager {
 				
 				System.out.println("Sucessfully created table \"" + table.getName() + "\".");
 			}
-		} catch (Exception e) {
+		} catch (Exception e) 
+		{
 			System.out.println("Failed to create table.");
 		}
 	}
