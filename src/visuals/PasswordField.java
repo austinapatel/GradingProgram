@@ -20,21 +20,28 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**Password entry prompt for database credentials.*/
-public class JPasswordFieldTest extends JFrame
+public class PasswordField extends JFrame
 {
-	JButton submit = new JButton("Submit");
+	private final int WIDTH = 800, HEIGHT = 350;
 	
-	public JPasswordFieldTest()
+	private JButton submit = new JButton("Submit");
+	
+	public PasswordField()
 	{
 		setLayout(null);
 		setIconImage(new ImageIcon("icon.png").getImage());
 		setResizable(false);
-		setSize(200, 200);
+		setSize(WIDTH, HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Enter Credentials");
+		setLayout(null);
 		
-		JLabel label = new JLabel("User Name:  ");
-		JLabel label2 = new JLabel("Password:  ");
+		JLabel label = new JLabel("User Name:");
+		JLabel label2 = new JLabel("Password:");
+		
+		label.setHorizontalAlignment(JLabel.CENTER);
+		label2.setHorizontalAlignment(JLabel.CENTER);
+		
 		JTextField userNameField = new JTextField(20);
 		JPasswordField passwordField = new JPasswordField();
 		
@@ -43,11 +50,11 @@ public class JPasswordFieldTest extends JFrame
 		    box.add(userNameField);
 		    box.add(label2);
 		    box.add(passwordField);
-		box.setSize(200, 120);
+		box.setSize(WIDTH, 200);
 		add(box);  
 		
-		submit.setSize(200, 40);
-		submit.setLocation(0, 140);
+		submit.setSize(WIDTH, 75);
+		submit.setLocation(0, 220);
 		add(submit);
 		
 		setLocationRelativeTo(null);

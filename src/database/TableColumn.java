@@ -11,10 +11,13 @@ package database;
 public class TableColumn {
 
 	private String name, type;
+	private boolean isText;
 
 	public TableColumn(String name, String type) {
 		this.name = name;
 		this.type = type;
+		
+		isText = type.contains("VARCHAR") || type.contains("CHAR");
 	}
 
 	public String getName() {
@@ -23,6 +26,10 @@ public class TableColumn {
 
 	public String getType() {
 		return type;
+	}
+	
+	public boolean isText() {
+		return isText;
 	}
 
 }

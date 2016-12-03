@@ -8,11 +8,13 @@
 package database;
 
 /** Data encapsulation class for "Student" table in database. */
-public class Student {
-	private String lastName, firstName, notes, gender;
-	private int student_id, gradeLevel;
+public class Student extends TableRow {
 
-	public Student(String first, String last, String notes, String gender,
+	private String lastName, firstName, notes;
+	private char gender;
+	private int student_id, gradeLevel;
+	
+	public Student(String first, String last, String notes, char gender,
 			int student_id, int gradeLevel) {
 		this.gender = gender;
 		this.lastName = last;
@@ -42,11 +44,11 @@ public class Student {
 		return firstName;
 	}
 
-	public String getGender() {
+	public char getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(char gender) {
 		this.gender = gender;
 	}
 
