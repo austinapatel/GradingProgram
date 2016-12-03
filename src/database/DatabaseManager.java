@@ -1,132 +1,239 @@
 
-// Austin Patel & Jason Morris
+// Austin Patel & Jason Morris & Lex VonKlark
 // APCS
 // Redwood High School
 // 10/13/16
 // DatabaseManager.java
-// mysql data setup help from mysql tutorial by Steven Byrne
 
 package database;
 
-import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.HashMap;
 
-public class DatabaseManager
-{
-	
-   private static String url;
-   private static String username;
-   private static String passwd;
-   private static Connection con;
-	public static void main(String[] args) throws Exception
-	{
+/** Abstracts mySQL database management operations. */
+public class DatabaseManager {
 
+	private static Connection connection;
+	private static Table[] tables;
+
+	/** Tests the class's various operation. */
+	public static void main(String[] args) {
 		
-		GetConnection connect = new GetConnection();
-		con = connect.getConnection();
-		createDB();
-		
-		String[][] names = {{"Austin", "K"}, {"Zach", "J"}, {"Frank" , "B"}, {"Ken", "Mark"}};	
-		
-		for (int i =0; i < 100; i++)
-		{
-			for (String[] name: names)
-			{
-				post(name[0], name[1]);
-			}
-			
-			System.out.println(Arrays.toString(getStudent("Austin").toArray()));
-		}
-	}
-	
-	public static void getPassword()
-	{
-		Scanner input = new Scanner(System.in);
-		System.out.print("Enter database password:   ");
-		//password = input.nextLine();
-		input.close();
+		// TableData studentsTable = new TableData("Student", "id",
+		// new TableColumn[] {
+		// new TableColumn("id", "INT NOT NULL UNIQUE"),
+		// new TableColumn("firstName", "VARCHAR(20) NOT NULL"),
+		// new TableColumn("lastName", "VARCHAR(20) NOT NULL"),
+		// new TableColumn("notes", "VARCHAR(255)"),
+		// new TableColumn("gender", "CHAR(1)"),
+		// new TableColumn("gradeLevel", "INT NOT NULL") });
+		//
+		// TableData coursesTable = new TableData("Course", "id",
+		// new TableColumn[] {
+		// new TableColumn("id", "INT NOT NULL UNIQUE"),
+		// new TableColumn("name", "VARCHAR(20) NOT NULL") });
+		//
+		// TableData assignmentsTable = new TableData("Assignment", "id",
+		// new TableColumn[] {
+		// new TableColumn("id", "INT NOT NULL UNIQUE"),
+		// new TableColumn("name", "VARCHAR(20) NOT NULL"),
+		// new TableColumn("courseid", "INT NOT NULL"),
+		// new TableColumn("value", "DOUBLE NOT NULL"),
+		// new TableColumn("categoryid", "DOUBLE NOT NULL") });
+		//
+		// TableData categoryTable = new TableData("Category", "id",
+		// new TableColumn[] {
+		// new TableColumn("id", "INT NOT NULL UNIQUE"),
+		// new TableColumn("name", "VARCHAR(20) NOT NULL"),
+		// new TableColumn("weight", "DOUBLE NOT NULL") });
+		//
+		// TableData enrollmentTable = new TableData("Enrollment", "id",
+		// new TableColumn[] {
+		// new TableColumn("id", "INT NOT NULL AUTO_INCREMENT"),
+		// new TableColumn("studentid", "INT NOT NULL"),
+		// new TableColumn("classid", "INT NOT NULL"),
+		// new TableColumn("year", "DATE NOT NULL") });
+		//
+		// TableData gradeTable = new TableData("Grade", "id",
+		// new TableColumn[] {
+		// new TableColumn("id", "INT NOT NULL AUTO_INCREMENT"),
+		// new TableColumn("studentid", "INT NOT NULL"),
+		// new TableColumn("assignmentid", "INT NOT NULL"),
+		// new TableColumn("value", "DOUBLE NOT NULL") });
+		//
+		// final TableData[] tables = new TableData[] { studentsTable,
+		// coursesTable, assignmentsTable, categoryTable, enrollmentTable,
+		// gradeTable };
 
-	}
-	
-	private static ArrayList<String> getStudent(String var1) throws Exception
-	{
-		try
-		{
-			//PreparedStatement statement = con.prepareStatement("SELECT first,lastname FROM tablename LIMIT 1"); 
-			/// SELECT * FROM tablename, table2 WHERE tablename.first = table2.first AND ... OR
-			//PreparedStatement statement = con.prepareStatement("SELECT * FROM tablename, table2 ORDER BY lastname ASC");
-			PreparedStatement statement = con.prepareStatement("SELECT * FROM tablename WHERE first = '"+var1+"' LIMIT 1");
-			
-			ResultSet result = statement.executeQuery();
-			
-			ArrayList<String> array = new ArrayList<String>();
-			while(result.next())
-			{
-				System.out.print(result.getString("first"));
-				System.out.print(" ");
-				System.out.println(result.getString("lastname"));
-				array.add(result.getString("lastname"));
-			}
-			System.out.println("All records have been selected");
-			return array; 
-		}catch (Exception e)
-		{
-			System.out.println(e);
-		}
-		return null;
+		Table[] tables = new Table[] { new Students() };
+
+		DatabaseManager.init(tables);
+		
+		Students students = (Students) tables[0];
+		
+//		students.add
 	}
 
-	
-	
-	private static void createDB() throws Exception
-	{
-		try
-		{
-			PreparedStatement create = con.prepareStatement("CREATE TABLE IF NOT EXISTS tablename(id int NOT NULL AUTO_INCREMENT, first varchar(255), lastname varchar(255), PRIMARY KEY (id))");
-			create.executeUpdate();
-		}catch (Exception e)
-		{
-			System.out.println(e);
-		}
-		finally
-		{
-			System.out.println("Function completed");
+	public static void deleteTable(String tableName) {
+		try {
+			DatabaseManager.getSQLStatement("DROP TABLE " + tableName)
+					.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Failed to delete table \"" + tableName + "\".");
+		} finally {
+			System.out.println(
+					"Sucessfully deleted table \"" + tableName + "\".");
 		}
 	}
-	
-//	/**Executes a mySQL command.*/
-//	private static void execute()
-//	{
-//		
+
+	/** Initializes the tables and sets up the Database to be ready for use. */
+	public static void init(Table[] tables) {
+		DatabaseManager.tables = tables;
+
+		DatabaseManager.connectToRemote();
+		// DatabaseManager.createTables();
+	}
+
+	/**
+	 * Writes a value to a specific table, row and column. Returns true if
+	 * operation was successful.
+	 */
+//	public static boolean writeCell(TableData table, int primaryKey,
+//			TableColumn column, String value) {
+//		String statement = "UPDATE " + table.getName() + " SET "
+//				+ column.getName() + "='" + value + "' WHERE" + primaryKey
+//				+ "= 7;";
+//		try {
+//			DatabaseManager.getSQLStatement(statement).executeUpdate();
+//
+//			return true;
+//		} catch (SQLException e) {
+//			System.out.println("Failed to perform write operation.");
+//			e.printStackTrace();
+//
+//			return false;
+//		}
 //	}
-	
-	private static void post(String var1, String var2) throws Exception
-	{
-		//final String var1 = "John";
-		//final String var2 = "Miller";
-		
-		try
-		{
 
-			PreparedStatement posted = con.prepareStatement("INSERT INTO tablename (first, lastname) VALUES ('"+var1+"', '"+var2+"')");
-			posted.executeUpdate();
-			
-		}catch (Exception e)
-		{
-			System.out.println(e);
+	/** Returns a row from a given table and a primary key id. */
+	public static HashMap<String, Object> getRow(Table table, int id) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		ResultSet resultSet = null;
+
+		try {
+			resultSet = DatabaseManager.getSQLStatement("SELECT * FROM"
+					+ table.getName() + "WHERE id = '" + id + "' LIMIT 1")
+					.executeQuery();
+		} catch (SQLException e) {
+			System.out.println("Failed to read a row from the table: "
+					+ table.getName() + '.');
+
+			return null;
 		}
-		finally
-		{
-			System.out.println("Insert Completed");
+
+		try {
+			for (TableColumn column : table.getColumns())
+				result.put(column.getName(),
+						resultSet.getObject(column.getName()));
+		} catch (SQLException e) {
+			System.out.println("Failed to get objects from column in table: "
+					+ table.getName());
 		}
-		
+
+		return result;
+	}
+
+//	/** Adds a row to a table. */
+//	public static void addRow(TableData table, Object... values) {
+//		String data = "";
+//		TableColumn[] columns = table.getColumns();
+//		TableColumn curColumn;
+//
+//		for (int i = 0; i < values.length; i++) {
+//			curColumn = columns[i];
+//
+//			String quoteChar = (curColumn.isText()) ? "\'" : "";
+//			data += quoteChar + String.valueOf(values[i]) + quoteChar + ',';
+//		}
+//
+//		// Removes extra ',' from end
+//		data = data.substring(0, data.length() - 1);
+//
+//		DatabaseManager.getSQLStatement(
+//				"INSERT INTO" + table.getName() + "VALUES(" + values + ")");
+//	}
+
+	// /** Returns the correct result from a ResultSet given a type. */
+	// private static Object getDataFromResult(ResultSet resultSet,
+	// TableColumn column, String type) {
+	// // int char string double
+	//
+	// try {
+	// if (type.contains("INT"))
+	// return resultSet.getInt(column.getName());
+	// // else if (type.contains("CHAR"))
+	// // return resultSet.getOb
+	// } catch (SQLException e) {
+	// System.out.println("Failed to get value from ResultSet.");
+	// }
+	//
+	// return null;
+	// }
+
+	/** Opens the remote connection to the database. */
+	private static void connectToRemote() {
+		String url = PropertiesManager.read("db", "url");
+		String username = PropertiesManager.read("db", "username");
+		String password = PropertiesManager.read("db", "password");
+
+		try {
+			String driver = "com.mysql.jdbc.Driver";
+			Class.forName(driver);
+			connection = DriverManager.getConnection(url, username, password);
+			System.out.println("Successfully connected to database.");
+		} catch (Exception e) {
+			System.out.print(e);
+		}
+	}
+
+	/** Returns the mySQL prepared table given a command. */
+	private static PreparedStatement getSQLStatement(String mySQLCommand) {
+		try {
+			return connection.prepareStatement(mySQLCommand);
+		} catch (SQLException e) {
+			System.out.println("The operation " + mySQLCommand + " failed.");
+			e.printStackTrace();
+
+			return null;
+		}
+	}
+
+	/** Creates a single table. */
+	public static void createTable(Table table) {
+
+		String columnInfo = "";
+
+		for (TableColumn column : table.getColumns())
+			columnInfo += column.getName() + ' ' + column.getType() + ", ";
+
+		columnInfo += "PRIMARY KEY(" + table.getPrimaryKey() + ")";
+
+		try {
+			DatabaseManager
+					.getSQLStatement("CREATE TABLE IF NOT EXISTS "
+							+ table.getName() + "(" + columnInfo + ")")
+					.executeUpdate();
+
+			System.out.println(
+					"Sucessfully created table \"" + table.getName() + "\".");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

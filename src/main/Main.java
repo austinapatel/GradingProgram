@@ -1,5 +1,5 @@
 
-// Austin Patel & Jason Morris 
+// Austin Patel & Jason Morris & Lex VonKlark
 // APCS
 // Redwood High School
 // 10/13/16
@@ -8,13 +8,16 @@
 package main;
 
 import visuals.Interface;
+import visuals.PasswordField;
 
+/**Driver class for entire program.*/
 public class Main
 {
 
 	public static void main(String[] args)
 	{      
-		new Interface();
+		PasswordField passTest = new PasswordField();
+		passTest.setToOpen();
 	}
 
 }
