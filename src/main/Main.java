@@ -5,6 +5,10 @@
 // 10/13/16
 // Main.java
 
+package main;
+
+import visuals.Interface;
+
 public class Main
 {
 
