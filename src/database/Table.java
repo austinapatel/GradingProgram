@@ -7,6 +7,7 @@
 
 package database;
 
+import java.sql.PreparedStatement;
 import java.util.HashMap;
 
 /**
@@ -23,6 +24,7 @@ public abstract class Table {
 			String[][] columnInfo) {
 		this.name = name;
 		this.columns = initColumns(columnInfo);
+		this.primaryKey = primaryKey;
 
 		createTable();
 	}
@@ -60,6 +62,24 @@ public abstract class Table {
 		return primaryKey;
 	}
 	
-	
+	/**Returns the row with the PreparedStatement that needs to have values added to it.*/
+	protected PreparedStatement addRow()
+	{
+		String columnNames = "";
+		String values = "";
+		
+		for (TableColumn column : columns)
+		{
+			columnNames += column.getName() + ',';
+			values += "?,";
+		}
+				
+		columnNames = columnNames.substring(0, columnNames.length() - 1);
+		values = values.substring(0, values.length() - 1);
+		
+		String sql = "INSERT INTO " + name + " (" + columnNames + ") VALUES(" + values + ");";
+		
+		return DatabaseManager.getSQLStatement(sql);
+	}
 
 }
