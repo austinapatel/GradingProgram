@@ -41,8 +41,15 @@ public abstract class Table {
 	}
 
 	/** Gets raw data for a row from the table. */
-	protected HashMap<String, Object> getRowData(int primaryKey) {
-		return DatabaseManager.getRow(this, primaryKey);
+	protected Object[] getRowData(int primaryKey) {
+		HashMap<String, Object> rawRowData = DatabaseManager.getRow(this, primaryKey);
+		
+		Object[] objects = new Object[columns.length];
+		
+		for (int i = 0; i < objects.length; i++)
+			objects[i] = rawRowData.get(columns[i].getName());
+		
+		return objects;
 	}
 	
 	/** Creates the table. */
