@@ -50,8 +50,7 @@ public class Students extends Table {
 		
 //		String lastname = (rawRowData.get("lastName");
 		
-		
-		
+		double ih = (double) 1;
 		
 		
 		
