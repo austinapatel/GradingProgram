@@ -8,68 +8,91 @@
 package database;
 
 /** Data encapsulation class for "Student" table in database. */
-public class Student extends TableRow {
+public class Student extends TableRow
+{
 
 	private String lastName, firstName, notes;
 	private char gender;
 	private int student_id, gradeLevel;
-	
-	public Student(Object first, Object last, Object notes, Object gender,
-				Object student_id, Object gradeLevel) {
-		
-		this.gender = (Character) gender;
-		this.lastName = (String) last;
-		this.firstName = (String) first;
-		this.notes = (String) notes;
-		this.student_id = ((Integer) student_id).intValue();
-		this.gradeLevel = ((Integer) gradeLevel).intValue();
+
+	public Student(Object[] objects)
+	{
+		this.student_id = ((Integer) objects[0]).intValue();
+		this.firstName = (String) objects[1];
+		this.lastName = (String) objects[2];
+
+		this.notes = (String) objects[3];
+		this.gender = ((Character) objects[4]).charValue();
+		this.gradeLevel = ((Integer) objects[5]).intValue();
 	}
 
-	public int getGradeLevel() {
-		return gradeLevel;
-	}
-
-	public void setGradeLevel(int gradeLevel) {
+	public Student(int student_id, String first, String last, String notes, char gender, int gradeLevel)
+	{
+		this.student_id = student_id;
+		this.firstName = first;
+		this.lastName = last;
+		this.notes = notes;
+		this.gender = gender;
 		this.gradeLevel = gradeLevel;
 	}
 
-	public String getLastName() {
+	public int getGradeLevel()
+	{
+		return gradeLevel;
+	}
+
+	public void setGradeLevel(int gradeLevel)
+	{
+		this.gradeLevel = gradeLevel;
+	}
+
+	public String getLastName()
+	{
 		return lastName;
 	}
 
-	public void setLastName(String last) {
+	public void setLastName(String last)
+	{
 		this.lastName = last;
 	}
 
-	public String getFirstName() {
+	public String getFirstName()
+	{
 		return firstName;
 	}
 
-	public char getGender() {
+	public char getGender()
+	{
 		return gender;
 	}
 
-	public void setGender(char gender) {
+	public void setGender(char gender)
+	{
 		this.gender = gender;
 	}
 
-	public void setFirstName(String first) {
+	public void setFirstName(String first)
+	{
 		this.firstName = first;
 	}
 
-	public String getNotes() {
+	public String getNotes()
+	{
 		return notes;
 	}
 
-	public void setNotes(String notes) {
+	public void setNotes(String notes)
+	{
 		this.notes = notes;
 	}
 
-	public int getStudent_id() {
+	public int getStudent_id()
+	{
 		return student_id;
 	}
 
-	public void setStudent_id(int student_id) {
+	public void setStudent_id(int student_id)
+	{
 		this.student_id = student_id;
 	}
 }

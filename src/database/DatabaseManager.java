@@ -26,10 +26,10 @@ public class DatabaseManager {
 		Table[] tables = new Table[] { new Students() };
 		Students students = (Students) tables[0];
 		
-		students.addStudent(new Student("Austin", "Patel", "Is very cool!", 'M', 110123, 10));
-		students.addStudent(new Student("Austin2", "Patel", "Is very cool!", 'M', 110124, 10));
-		students.addStudent(new Student("Dave", "Goldsmith", "Has two cats!", 'M', 123456, 50));
-		students.addStudent(new Student("Drew", "Carlisle", "Is a man!", 'O', 654321, 12));
+		students.addStudent(new Student(110123, "Austin", "Patel", "Is very cool!", 'M', 10));
+		students.addStudent(new Student(110124,"Austin2", "Patel", "Is very cool!", 'M',  10));
+		students.addStudent(new Student(123456,"Dave", "Goldsmith", "Has two cats!", 'M',  50));
+		students.addStudent(new Student(654321,"Drew", "Carlisle", "Is a man!", 'O',  12));
 		
 		Student student = students.getRow(654321);
 		
@@ -63,7 +63,6 @@ public class DatabaseManager {
 
 			return null;
 		}
-		
 
 		try {
 			if (resultSet.next())
