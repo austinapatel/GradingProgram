@@ -42,10 +42,11 @@ public class Students extends Table {
 		
 		//System.out.println(types[0].getName());
 		//System.out.println(types[0].cSast(rawRowData.get("lastName")));
-		System.out.println(types[0].cast(rawRowData.get("lastName")).getClass());
+//		System.out.println(rawRowData.get("lastName").getClass() == );
 		
+//		Class<T> s = "";
 		
-		System.out.println(rawRowData.get("lastName") instanceof String);
+//		System.out.println(rawRowData.get("lastName") instanceof String);
 		
 		
 //		String lastname = (rawRowData.get("lastName");
@@ -56,11 +57,11 @@ public class Students extends Table {
 		
 		
 		Student student = new Student((String) rawRowData.get("firstName"),
-				(String) rawRowData.get("lastName"),
-				(String) rawRowData.get("notes"),
+				rawRowData.get("lastName"),
+				rawRowData.get("notes"),
 				((String) rawRowData.get("gender")).charAt(0),
-				((Integer) rawRowData.get("id")).intValue(),
-				((Integer) rawRowData.get("gradeLevel")).intValue());
+				rawRowData.get("id"),
+				rawRowData.get("gradeLevel"));
 	
 		return student;
 	}

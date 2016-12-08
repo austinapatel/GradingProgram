@@ -14,14 +14,15 @@ public class Student extends TableRow {
 	private char gender;
 	private int student_id, gradeLevel;
 	
-	public Student(String first, String last, String notes, char gender,
-			int student_id, int gradeLevel) {
-		this.gender = gender;
-		this.lastName = last;
-		this.firstName = first;
-		this.notes = notes;
-		this.student_id = student_id;
-		this.gradeLevel = gradeLevel;
+	public Student(Object first, Object last, Object notes, Object gender,
+				Object student_id, Object gradeLevel) {
+		
+		this.gender = (Character) gender;
+		this.lastName = (String) last;
+		this.firstName = (String) first;
+		this.notes = (String) notes;
+		this.student_id = ((Integer) student_id).intValue();
+		this.gradeLevel = ((Integer) gradeLevel).intValue();
 	}
 
 	public int getGradeLevel() {
