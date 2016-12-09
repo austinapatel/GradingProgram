@@ -61,25 +61,45 @@ public class Students extends Table
 	}
 
 	/**Adds a student to the students table.*/
-	public void addStudent(Student student)
+	public void addStudent(int id, String first, String last, String notes, String gender, int gradeLevel)
 	{
-		PreparedStatement statement = super.addRow();
-
 		try
 		{
-			statement.setInt(1, student.getIntProperty(Student.PROPERTY_ID));
-			statement.setString(2, student.getStringProperty(Student.PROPERTY_FIRST_NAME));
-			statement.setString(3, student.getStringProperty(Student.PROPERTY_LAST_NAME));
-			statement.setString(4, student.getStringProperty(Student.PROPERTY_NOTES));
-			statement.setString(5, student.getStringProperty(Student.PROPERTY_GENDER));
-			statement.setInt(6, student.getIntProperty(Student.PROPERTY_GRADE_LEVEL));
-
-			statement.executeUpdate();
+			if (resultSet.getConcurrency() == ResultSet.CONCUR_UPDATABLE)
+			{
+				resultSet.moveToInsertRow();
+				resultSet.updateInt(1, id);
+				resultSet.updateString(2, first); 
+				resultSet.updateString(3, last);
+				resultSet.updateString(4, notes); 
+				resultSet.updateString(5, gender); 
+				resultSet.updateInt(6, gradeLevel);
+				resultSet.insertRow();
+				resultSet.moveToCurrentRow();
+			}
 		}
-		catch (Exception error)
+		catch (SQLException error)
 		{
-			System.out.println("Failed to insert student into table.");
+			System.out.println("Failed to add row to database.");
 		}
+		
+//		PreparedStatement statement = super.addRow();
+//
+//		try
+//		{
+//			statement.setInt(1, student.getIntProperty(Student.PROPERTY_ID));
+//			statement.setString(2, student.getStringProperty(Student.PROPERTY_FIRST_NAME));
+//			statement.setString(3, student.getStringProperty(Student.PROPERTY_LAST_NAME));
+//			statement.setString(4, student.getStringProperty(Student.PROPERTY_NOTES));
+//			statement.setString(5, student.getStringProperty(Student.PROPERTY_GENDER));
+//			statement.setInt(6, student.getIntProperty(Student.PROPERTY_GRADE_LEVEL));
+//
+//			statement.executeUpdate();
+//		}
+//		catch (Exception error)
+//		{
+//			System.out.println("Failed to insert student into table.");
+//		}
 	}
 
 }

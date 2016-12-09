@@ -20,6 +20,7 @@ public abstract class Table
 
 	private String name, primaryKey;
 	private TableColumn[] columns;
+	protected ResultSet resultSet;
 
 	/** Initializes variables. */
 	public Table(String name, String primaryKey, String[][] columnInfo)
@@ -28,6 +29,8 @@ public abstract class Table
 		this.columns = initColumns(columnInfo);
 		this.primaryKey = primaryKey;
 
+		resultSet = DatabaseManager.getTable(this);
+		
 		createTable();
 	}
 
@@ -75,6 +78,11 @@ public abstract class Table
 	{
 		return primaryKey;
 	}
+	
+//	protected ResultSet getResultSet()
+//	{
+//		return DatabaseManager.getTable(this);
+//	}
 
 	/**Returns the row with the PreparedStatement that needs to have values added to it.*/
 	protected PreparedStatement addRow()

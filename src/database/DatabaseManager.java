@@ -12,7 +12,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 /** Abstracts mySQL database management operations. */
 public class DatabaseManager
@@ -28,13 +27,13 @@ public class DatabaseManager
 		Table[] tables = new Table[] {new Students()};
 		Students students = (Students) tables[0];
 
-//		students.addStudent(new Student(110123, "Austin", "Patel", "Is very cool!", 'M', 10));
-//
-//		students.addStudent(new Student(110124, "Austin2", "Patel", "Is very cool!", 'M', 10));
-//		students.addStudent(new Student(123456, "Dave", "Goldsmith", "Has two cats!", 'M', 50));
-//		students.addStudent(new Student(654321, "Drew", "Carlisle", "Is a man!", 'O', 12));
-//
-//		Student student = students.getRow(654321);
+		//		students.addStudent(new Student(110123, "Austin", "Patel", "Is very cool!", 'M', 10));
+		//
+		//		students.addStudent(new Student(110124, "Austin2", "Patel", "Is very cool!", 'M', 10));
+		//		students.addStudent(new Student(123456, "Dave", "Goldsmith", "Has two cats!", 'M', 50));
+		//		students.addStudent(new Student(654321, "Drew", "Carlisle", "Is a man!", 'O', 12));
+		//
+		//		Student student = students.getRow(654321);
 
 	}
 
@@ -74,6 +73,7 @@ public class DatabaseManager
 
 	}
 
+	/**Returns the ResultSet for a given table.*/
 	public static ResultSet getTable(Table table)
 	{
 
