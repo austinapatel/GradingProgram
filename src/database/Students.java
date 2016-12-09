@@ -14,9 +14,10 @@ public class Students extends Table
 {
 
 	private static final String TABLE_NAME = "Students", PRIMARY_KEY = "id";
-	public static final String[][] COLUMN_INFO = new String[][] {{"id", "INT NOT NULL UNIQUE"},
-				{"firstName", "VARCHAR(20) NOT NULL"}, {"lastName", "VARCHAR(20) NOT NULL"}, {"notes", "VARCHAR(255)"},
-				{"gender", "CHAR(1)"}, {"gradeLevel", "INT NOT NULL"}};
+	public static final String[][] COLUMN_INFO = new String[][] {{Student.PROPERTY_ID, "INT NOT NULL UNIQUE"},
+				{Student.PROPERTY_FIRST_NAME, "VARCHAR(20) NOT NULL"}, {Student.PROPERTY_LAST_NAME, "VARCHAR(20) NOT NULL"},
+				{Student.PROPERTY_NOTES, "VARCHAR(255)"}, {Student.PROPERTY_GENDER, "CHAR(1)"},
+				{Student.PROPERTY_GRADE_LEVEL, "INT NOT NULL"}};
 
 	public Students()
 	{
@@ -36,12 +37,12 @@ public class Students extends Table
 
 		try
 		{
-//			statement.setInt(1, student.getStudent_id());
-//			statement.setString(2, student.getFirstName());
-//			statement.setString(3, student.getLastName());
-//			statement.setString(4, student.getNotes());
-//			statement.setString(5, String.valueOf(student.getGender()));
-//			statement.setInt(6, student.getGradeLevel());
+			statement.setInt(1, student.getIntProperty(Student.PROPERTY_ID));
+			statement.setString(2, student.getStringProperty(Student.PROPERTY_FIRST_NAME));
+			statement.setString(3, student.getStringProperty(Student.PROPERTY_LAST_NAME));
+			statement.setString(4, student.getStringProperty(Student.PROPERTY_NOTES));
+			statement.setString(5, student.getStringProperty(Student.PROPERTY_GENDER));
+			statement.setInt(6, student.getIntProperty(Student.PROPERTY_GRADE_LEVEL));
 
 			statement.executeUpdate();
 		}

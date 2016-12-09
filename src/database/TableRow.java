@@ -7,21 +7,48 @@
 
 package database;
 
-/** Superclass for a specific row in a database table. */
-public abstract class TableRow {
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-	public TableRow() {
-		
-	}
-	
-	public String getStringProperty()
+/** Superclass for a specific row in a database table. */
+public abstract class TableRow
+{
+
+	protected ResultSet resultSet;
+
+	public TableRow(ResultSet resultSet)
 	{
-		return null;
+		this.resultSet = resultSet;
 	}
-	
-	public int getIntProperty()
+
+	/**Returns a String property from a table row.*/
+	public String getStringProperty(String property)
 	{
-		return 0;
+		try
+		{
+			return resultSet.getString(property);
+		}
+		catch (SQLException error)
+		{
+			System.out.println("Failed to read String property: " + property);
+
+			return null;
+		}
+	}
+
+	/**Returns an Integer property from a table row.*/
+	public int getIntProperty(String property)
+	{
+		try
+		{
+			return resultSet.getInt(property);
+		}
+		catch (SQLException error)
+		{
+			System.out.println("Failed to read Integer property: " + property);
+
+			return -1;
+		}
 	}
 
 }
