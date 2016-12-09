@@ -63,7 +63,6 @@ public class DatabaseManager
 		{
 			String sql = "SELECT * FROM " + table.getName() + " WHERE id = '" + id + "'";	
 			Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);	
-			PreparedStatement q = DatabaseManager.getSQLStatement(sql);	
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			return rs;
