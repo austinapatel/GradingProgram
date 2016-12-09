@@ -79,10 +79,12 @@ public class DatabaseManager
 	public static ResultSet getTable(Table table)
 	{
 
-		String sql = "SELECT * FROM " + table.getName();
 		try
 		{
-			return DatabaseManager.getSQLStatement(sql).executeQuery();
+			String sql = "SELECT * FROM " + table.getName();	
+			Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);	
+			ResultSet rs = stmt.executeQuery(sql);
+			return rs;
 		}
 		catch (Exception e)
 		{
