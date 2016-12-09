@@ -29,20 +29,19 @@ public class Students extends Table
 
 		students = new ArrayList();
 		ResultSet results = super.getTable();
+
 		try
 		{
 			while (results.next())
 			{
-
 				try
 				{
-
 					students.add(new Student(results));
 					results.next();
 				}
 				catch (SQLException error)
 				{
-
+					System.out.println("Failed to read students");
 				}
 
 			}
