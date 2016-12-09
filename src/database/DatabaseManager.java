@@ -36,7 +36,6 @@ public class DatabaseManager
 
 		Student student = students.getRow(654321);
 
-
 	}
 
 	public static void deleteTable(String tableName)
@@ -58,15 +57,13 @@ public class DatabaseManager
 	/** Returns a row from a given table and a primary key id. */
 	public static ResultSet getRow(Table table, int id)
 	{
-		HashMap<String, Object> result = new HashMap<String, Object>();
-		ResultSet resultSet = null;
 
 		try
 		{
 			String sql = "SELECT * FROM " + table.getName() + " WHERE id = '" + id + "'";
 
-			resultSet = DatabaseManager.getSQLStatement(sql).executeQuery();
-			return resultSet;
+			return DatabaseManager.getSQLStatement(sql).executeQuery();
+
 		}
 		catch (Exception e)
 		{
@@ -74,7 +71,23 @@ public class DatabaseManager
 
 			return null;
 		}
-		
+
+	}
+
+	public static ResultSet getTable(Table table)
+	{
+
+		String sql = "SELECT * FROM " + table.getName();
+		try
+		{
+			return DatabaseManager.getSQLStatement(sql).executeQuery();
+		}
+		catch (Exception e)
+		{
+
+		}
+		return null;
+
 	}
 
 	/** Opens the remote connection to the database. */

@@ -49,17 +49,16 @@ public abstract class Table
 		return DatabaseManager.getRow(this, primaryKey);
 	}
 
-	protected ResultSet getTable(String tableName)
+	protected ResultSet getTable()
 	{
-
-		return null;
-
+		return DatabaseManager.getTable(this);
 	}
 
 	/** Creates the table. */
 	private void createTable()
 	{
 		DatabaseManager.createTable(this);
+		
 	}
 
 	public String getName()
