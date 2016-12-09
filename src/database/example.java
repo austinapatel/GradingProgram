@@ -1,5 +1,5 @@
 //package database;
-//
+// http://www.xyzws.com/javafaq/how-to-use-updatable-resultset-in-jdbc/179
 //public class example
 //import java.sql.Connection;
 //import java.sql.DriverManager;
