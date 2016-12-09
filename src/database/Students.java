@@ -8,11 +8,15 @@
 package database;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /** Holds data for the Students table in the database. */
 public class Students extends Table
 {
 
+	private static ArrayList<Student> students;
 	private static final String TABLE_NAME = "Students", PRIMARY_KEY = "id";
 	public static final String[][] COLUMN_INFO = new String[][] {{"id", "INT NOT NULL UNIQUE"},
 				{"firstName", "VARCHAR(20) NOT NULL"}, {"lastName", "VARCHAR(20) NOT NULL"}, {"notes", "VARCHAR(255)"},
@@ -21,6 +25,33 @@ public class Students extends Table
 	public Students()
 	{
 		super(TABLE_NAME, PRIMARY_KEY, COLUMN_INFO);
+
+		students = new ArrayList();
+		ResultSet results = super.getTable();
+		try
+		{
+			while (results.next())
+			{
+
+				try
+				{
+
+					students.add(new Student(results));
+					results.next();
+				}
+				catch (SQLException error)
+				{
+
+				}
+
+			}
+		}
+		catch (SQLException error)
+		{
+			// TODO Auto-generated catch block
+			error.printStackTrace();
+		}
+
 	}
 
 	/** Returns a Student given a primaryKey. */
@@ -36,12 +67,12 @@ public class Students extends Table
 
 		try
 		{
-//			statement.setInt(1, student.getStudent_id());
-//			statement.setString(2, student.getFirstName());
-//			statement.setString(3, student.getLastName());
-//			statement.setString(4, student.getNotes());
-//			statement.setString(5, String.valueOf(student.getGender()));
-//			statement.setInt(6, student.getGradeLevel());
+			//			statement.setInt(1, student.getStudent_id());
+			//			statement.setString(2, student.getFirstName());
+			//			statement.setString(3, student.getLastName());
+			//			statement.setString(4, student.getNotes());
+			//			statement.setString(5, String.valueOf(student.getGender()));
+			//			statement.setInt(6, student.getGradeLevel());
 
 			statement.executeUpdate();
 		}

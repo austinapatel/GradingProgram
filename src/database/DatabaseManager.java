@@ -84,7 +84,7 @@ public class DatabaseManager
 		}
 		catch (Exception e)
 		{
-
+			System.out.println(e.getMessage());
 		}
 		return null;
 
