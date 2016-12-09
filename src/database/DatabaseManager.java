@@ -29,22 +29,14 @@ public class DatabaseManager
 		Students students = (Students) tables[0];
 
 		students.addStudent(new Student(110123, "Austin", "Patel", "Is very cool!", 'M', 10));
-<<<<<<< HEAD
+
 		students.addStudent(new Student(110124, "Austin2", "Patel", "Is very cool!", 'M', 10));
 		students.addStudent(new Student(123456, "Dave", "Goldsmith", "Has two cats!", 'M', 50));
 		students.addStudent(new Student(654321, "Drew", "Carlisle", "Is a man!", 'O', 12));
 
 		Student student = students.getRow(654321);
 
-		System.out.println(student.getFirstName());
-=======
-		students.addStudent(new Student(110124,"Austin2", "Patel", "Is very cool!", 'M',  10));
-		students.addStudent(new Student(123456,"Dave", "Goldsmith", "Has two cats!", 'M',  50));
-		students.addStudent(new Student(654321,"Drew", "Carlisle", "Is a man!", 'O',  12));
-				
-		Student student = students.getRow(654321);
-		
->>>>>>> 0b7e6dc448caaa26f308e4fd652ddb7e72fc14ff
+
 	}
 
 	public static void deleteTable(String tableName)

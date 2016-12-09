@@ -19,9 +19,7 @@ public class Student
 	private char gender;
 	private int student_id, gradeLevel;
 
-	
 	private ResultSet data;
-
 
 	private ResultSet resultSet;
 
@@ -36,9 +34,6 @@ public class Student
 		this.gradeLevel = ((Integer) objects[5]).intValue();
 	}
 	
-
-
-
 	public Student(int student_id, String first, String last, String notes, char gender, int gradeLevel)
 	{
 		this.student_id = student_id;
