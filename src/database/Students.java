@@ -8,11 +8,15 @@
 package database;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /** Holds data for the Students table in the database. */
 public class Students extends Table
 {
 
+	private static ArrayList<Student> students;
 	private static final String TABLE_NAME = "Students", PRIMARY_KEY = "id";
 	public static final String[][] COLUMN_INFO = new String[][] {{Student.PROPERTY_ID, "INT NOT NULL UNIQUE"},
 				{Student.PROPERTY_FIRST_NAME, "VARCHAR(20) NOT NULL"}, {Student.PROPERTY_LAST_NAME, "VARCHAR(20) NOT NULL"},
@@ -22,6 +26,33 @@ public class Students extends Table
 	public Students()
 	{
 		super(TABLE_NAME, PRIMARY_KEY, COLUMN_INFO);
+
+		students = new ArrayList();
+		ResultSet results = super.getTable();
+		try
+		{
+			while (results.next())
+			{
+
+				try
+				{
+
+					students.add(new Student(results));
+					results.next();
+				}
+				catch (SQLException error)
+				{
+
+				}
+
+			}
+		}
+		catch (SQLException error)
+		{
+			// TODO Auto-generated catch block
+			error.printStackTrace();
+		}
+
 	}
 
 	/** Returns a Student given a primaryKey. */
