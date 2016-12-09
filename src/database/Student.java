@@ -7,13 +7,18 @@
 
 package database;
 
+import java.sql.ResultSet;
+
 /** Data encapsulation class for "Student" table in database. */
-public class Student extends TableRow
+public class Student
 {
 
+	public final static String PROPERTY_ID = "id";
+	
 	private String lastName, firstName, notes;
 	private char gender;
 	private int student_id, gradeLevel;
+	private ResultSet resultSet;
 
 	public Student(Object[] objects)
 	{
@@ -25,6 +30,11 @@ public class Student extends TableRow
 		this.gender = ((Character) objects[4]).charValue();
 		this.gradeLevel = ((Integer) objects[5]).intValue();
 	}
+	
+	public Student(ResultSet resultSet)
+	{
+		this.resultSet = resultSet;
+	}
 
 	public Student(int student_id, String first, String last, String notes, char gender, int gradeLevel)
 	{
@@ -35,64 +45,5 @@ public class Student extends TableRow
 		this.gender = gender;
 		this.gradeLevel = gradeLevel;
 	}
-
-	public int getGradeLevel()
-	{
-		return gradeLevel;
-	}
-
-	public void setGradeLevel(int gradeLevel)
-	{
-		this.gradeLevel = gradeLevel;
-	}
-
-	public String getLastName()
-	{
-		return lastName;
-	}
-
-	public void setLastName(String last)
-	{
-		this.lastName = last;
-	}
-
-	public String getFirstName()
-	{
-		return firstName;
-	}
-
-	public char getGender()
-	{
-		return gender;
-	}
-
-	public void setGender(char gender)
-	{
-		this.gender = gender;
-	}
-
-	public void setFirstName(String first)
-	{
-		this.firstName = first;
-	}
-
-	public String getNotes()
-	{
-		return notes;
-	}
-
-	public void setNotes(String notes)
-	{
-		this.notes = notes;
-	}
-
-	public int getStudent_id()
-	{
-		return student_id;
-	}
-
-	public void setStudent_id(int student_id)
-	{
-		this.student_id = student_id;
-	}
+	
 }

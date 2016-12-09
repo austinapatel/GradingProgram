@@ -30,10 +30,9 @@ public class DatabaseManager {
 		students.addStudent(new Student(110124,"Austin2", "Patel", "Is very cool!", 'M',  10));
 		students.addStudent(new Student(123456,"Dave", "Goldsmith", "Has two cats!", 'M',  50));
 		students.addStudent(new Student(654321,"Drew", "Carlisle", "Is a man!", 'O',  12));
-		
+				
 		Student student = students.getRow(654321);
 		
-		System.out.println(student.getFirstName());
 	}
 
 	public static void deleteTable(String tableName) {
