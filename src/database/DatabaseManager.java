@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 
 /** Abstracts mySQL database management operations. */
@@ -60,10 +61,12 @@ public class DatabaseManager
 
 		try
 		{
-			String sql = "SELECT * FROM " + table.getName() + " WHERE id = '" + id + "'";
-
-			return DatabaseManager.getSQLStatement(sql).executeQuery();
-
+			String sql = "SELECT * FROM " + table.getName() + " WHERE id = '" + id + "'";	
+			Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);	
+			PreparedStatement q = DatabaseManager.getSQLStatement(sql);	
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			return rs;
 		}
 		catch (Exception e)
 		{
@@ -113,6 +116,7 @@ public class DatabaseManager
 	/** Returns the mySQL prepared table given a command. */
 	public static PreparedStatement getSQLStatement(String mySQLCommand)
 	{
+		
 		try
 		{
 			return connection.prepareStatement(mySQLCommand);
