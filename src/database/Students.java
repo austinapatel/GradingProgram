@@ -14,7 +14,7 @@ public class Students extends Table
 {
 
 	private static final String TABLE_NAME = "Students", PRIMARY_KEY = "id";
-	private static final String[][] COLUMN_INFO = new String[][] {{"id", "INT NOT NULL UNIQUE"},
+	public static final String[][] COLUMN_INFO = new String[][] {{"id", "INT NOT NULL UNIQUE"},
 				{"firstName", "VARCHAR(20) NOT NULL"}, {"lastName", "VARCHAR(20) NOT NULL"}, {"notes", "VARCHAR(255)"},
 				{"gender", "CHAR(1)"}, {"gradeLevel", "INT NOT NULL"}};
 
@@ -36,12 +36,12 @@ public class Students extends Table
 
 		try
 		{
-			statement.setInt(1, student.getStudent_id());
-			statement.setString(2, student.getFirstName());
-			statement.setString(3, student.getLastName());
-			statement.setString(4, student.getNotes());
-			statement.setString(5, String.valueOf(student.getGender()));
-			statement.setInt(6, student.getGradeLevel());
+//			statement.setInt(1, student.getStudent_id());
+//			statement.setString(2, student.getFirstName());
+//			statement.setString(3, student.getLastName());
+//			statement.setString(4, student.getNotes());
+//			statement.setString(5, String.valueOf(student.getGender()));
+//			statement.setInt(6, student.getGradeLevel());
 
 			statement.executeUpdate();
 		}

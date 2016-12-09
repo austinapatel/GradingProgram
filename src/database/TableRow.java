@@ -13,5 +13,15 @@ public abstract class TableRow {
 	public TableRow() {
 		
 	}
+	
+	public String getStringProperty()
+	{
+		return null;
+	}
+	
+	public int getIntProperty()
+	{
+		return 0;
+	}
 
 }
