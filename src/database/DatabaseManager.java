@@ -78,7 +78,7 @@ public class DatabaseManager
 	/**Returns the ResultSet for a given table.*/
 	public static ResultSet getTable(Table table)
 	{
-
+		connectToRemote();
 		try
 		{
 			String sql = "SELECT * FROM " + table.getName();	

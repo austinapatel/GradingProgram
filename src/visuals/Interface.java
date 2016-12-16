@@ -16,6 +16,10 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import database.DatabaseManager;
+import database.Students;
+import net.proteanit.sql.DbUtils;
+
 /**Interface for the program.*/
 @SuppressWarnings("serial")
 public class Interface extends JFrame
@@ -73,7 +77,12 @@ public class Interface extends JFrame
 		Object[][] data = {{"Jason", "Morris", 110999, "B-", "No Note"}, {"Austin", "Patel", 110473, "C+", "No Note"},
 					{"Achinthya", "Poduval", 110549, "D-", "No Note"}, {"Drew", "Carlisle", 110945, "F", "No Note"}};
 
-		JTable table = new JTable(data, columnNames);
+		JTable table = new JTable();
+		table.setModel(DbUtils.resultSetToTableModel(DatabaseManager.getTable(new Students())));
+		///DbUtils.resultSetToTableModel();
+		
+		
+		
 		JScrollPane scrollPane = new JScrollPane(table); 
 			scrollPane.setSize(500, 500);
 			scrollPane.setLocation(0, 0);
