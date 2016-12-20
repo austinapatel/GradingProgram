@@ -29,9 +29,9 @@ public class Table
 		this.name = name;
 		this.primaryKey = Properties.ID;
 		
-		resultSet = DatabaseManager.getTable(this);
-		
 		createTable();
+		
+		resultSet = DatabaseManager.getTable(this);
 	}
 
 	/** Gets raw data for a row from the table. */

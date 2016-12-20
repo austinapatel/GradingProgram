@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class TableRow
 {
 
-	protected ResultSet resultSet;
+	private ResultSet resultSet;
 
 	public TableRow(ResultSet resultSet)
 	{
@@ -50,6 +50,11 @@ public class TableRow
 
 			return -1;
 		}
+	}
+	
+	/**Returns the ResultSet for the current row.*/
+	public ResultSet getResultSet() {
+		return resultSet;
 	}
 
 }

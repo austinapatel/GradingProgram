@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import database.TypeConverter.DataType;
 import main.Main;
 
 /** Abstracts mySQL database management operations. "init() must be called before use."*/
@@ -26,23 +27,26 @@ public class DatabaseManager {
 		DatabaseManager.init();
 		Main.setUpTables();
 		
-//		Table studentsTable = TableManager.getTable(Properties.STUDENTS_TABLE_NAME);
-//
-//		studentsTable.add(new Object[] { 110789, "Austin", "Patel", "is cool?",
-//				"M", 10 });
-//
-//		TableRow austin = studentsTable.getRow(110789);
-//
-//		System.out.println(
-//				austin.getStringProperty(Properties.NOTES));
+		Table studentsTable = TableManager.getTable(Properties.STUDENTS_TABLE_NAME);
+
+		studentsTable.add(new Object[] { 110789, "Austin", "Patel", "is cool?",
+				"M", 10 });
+
+		TableRow austin = studentsTable.getRow(110789);
+
+		System.out.println(
+				austin.getStringProperty(Properties.NOTES));
 		
 		Table coursesTable = TableManager.getTable(Properties.COURSES_TABLE_NAME);
 		
+		coursesTable.add(new Object[] {7, "Test"});
+		coursesTable.add(new Object[] {6, "AP Computer Science2"});
 		coursesTable.add(new Object[] {1, "AP Computer Science"});
+		coursesTable.add(new Object[] {100, "Testing 123"});
 		coursesTable.add(new Object[] {2, "Geometry"});
-		coursesTable.add(new Object[] {3, "Computer Programming 3-4"});
-		coursesTable.add(new Object[] {4, "Computer Programming 1-2"});
-
+		
+		System.out.println(coursesTable.getRow(6).getStringProperty(Properties.NAME));
+		
 	}
 	
 	public static void init() {
@@ -134,19 +138,21 @@ public class DatabaseManager {
 
 		}
 	}
-
+	
 	/** Adds a value of the correct type to a table row ResultSet. */
 	public static void addToRow(Table table, Object value, int columnIndex) {
 
-		String type = DatabaseManager
+		DataType type = DatabaseManager
 				.getSQLType(table.getTableColumns()[columnIndex].getType());
 		ResultSet resultSet = table.getResultSet();
 
+		columnIndex++; // columnIndex starts at 1, not 0
+		
 		try {
-			if (type.equals("String"))
+			if (type == DataType.String)
 				resultSet.updateString(columnIndex,
 						TypeConverter.toString(value));
-			else if (type.equals("Integer"))
+			else if (type == DataType.Integer)
 				resultSet.updateInt(columnIndex, TypeConverter.toInt(value));
 		} catch (SQLException e) {
 			System.out.println("Unable to add value " + value.toString()
@@ -159,13 +165,13 @@ public class DatabaseManager {
 	 * Returns the name of the data type from a String containing a mySQL data
 	 * type.
 	 */
-	private static String getSQLType(String name) {
+	public static DataType getSQLType(String name) {
 		if (name.contains("VARCHAR") || name.contains("CHAR"))
-			return "String";
+			return DataType.String;
 		else if (name.contains("INT"))
-			return "Integer";
+			return DataType.Integer;
 		else
-			return "SQL type unable to be handled";
+			return null;
 	}
 
 	/** Opens the remote connection to the database. */

@@ -10,6 +10,11 @@ package database;
 /**Converts objects to their actual types.*/
 public class TypeConverter {
 	
+	public enum DataType {
+		Integer,
+		String
+	}
+	
 	public TypeConverter() {
 		
 	}
