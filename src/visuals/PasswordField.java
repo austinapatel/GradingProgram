@@ -66,7 +66,7 @@ public class PasswordField extends JFrame
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				dispose();
-			    new Interface();
+			    new TableInterface();
 			}
 		}); 
 	}

@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /** Superclass for a specific row in a database table. */
-public abstract class TableRow
+public class TableRow
 {
 
 	protected ResultSet resultSet;
@@ -28,8 +28,9 @@ public abstract class TableRow
 		{
 			return resultSet.getString(property);
 		}
-		catch (SQLException error)
+		catch (SQLException e)
 		{
+			e.printStackTrace();
 			System.out.println("Failed to read String property: " + property);
 
 			return null;
