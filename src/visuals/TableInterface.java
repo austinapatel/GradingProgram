@@ -166,13 +166,13 @@ public class TableInterface extends JFrame {
 				int columnIndex = jTable.getColumnModel().getColumnIndex(
 						jTable.getColumn(jTable.getColumnName(evt.getColumn()))
 								.getIdentifier()) + 1;
-				// System.out.println(jTable.getColumnName(evt.getColumn()));
 
 				try {
-					if (dataType == DataType.Integer)
+					if (dataType == DataType.Integer) {
+						newValue = Integer.parseInt(TypeConverter.toString(newValue));
 						rowResultSet.updateInt(columnIndex,
 								TypeConverter.toInt(newValue));
-					else if (dataType == DataType.String)
+					} else if (dataType == DataType.String)
 						rowResultSet.updateString(columnIndex,
 								TypeConverter.toString(newValue));
 					
