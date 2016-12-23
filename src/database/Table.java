@@ -7,7 +7,6 @@
 
 package database;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
@@ -32,17 +31,6 @@ public class Table
 		createTable();
 		
 		resultSet = DatabaseManager.getTable(this);
-	}
-
-	/** Gets raw data for a row from the table. */
-	public TableRow getRow(int primaryKey)
-	{
-		return new TableRow(DatabaseManager.getRow(this, primaryKey));
-	}
-
-	private ResultSet getTable()
-	{
-		return DatabaseManager.getTable(this);
 	}
 
 	/** Creates the table. */
@@ -77,6 +65,9 @@ public class Table
 	 */
 	public void add(Object[] data) {
 		DatabaseManager.beginRowInsert(this);
+		
+		if (data == null)
+			data = new Object[getTableColumns().length];
 
 		for (int i = 0; i < data.length; i++)
 			DatabaseManager.addToRow(this, data[i], i);

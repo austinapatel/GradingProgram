@@ -8,28 +8,23 @@
 package visuals;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 
-import database.DatabaseManager;
-import database.Properties;
+import database.DatabaseTableModel;
 import database.Table;
 import database.TableManager;
-import database.TypeConverter;
-import database.TypeConverter.DataType;
-import net.proteanit.sql.DbUtils;
 
 /** Interface for the program. */
 @SuppressWarnings("serial")
@@ -37,31 +32,51 @@ public class TableInterface extends JFrame {
 
 	private static final int WIDTH = 800, HEIGHT = 600;
 	private JTable jTable;
-	private JPanel topContainer;
+	private JPanel tableContainer;
 	private JScrollPane tableScrollPane;
-	private Table currentTable;
+	private Table table;
 
 	public TableInterface() {
-		// Set up the frame's preferences
-		setIconImage(new ImageIcon("icon.png").getImage());
-		setSize(WIDTH, HEIGHT);
-		setTitle("Grading Program");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		currentTable = null;
+		initFrame();
 
 		initTopContainer();
 		initTablePicker();
 		initTable();
+		initAddRowButton();
 
 		setVisible(true);
 	}
 
+	/** Initializes properties of the JFrame. */
+	private void initFrame() {
+		setIconImage(new ImageIcon("icon.png").getImage());
+		setSize(WIDTH, HEIGHT);
+		setTitle("Grading Program");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	/** Sets up the add row button. */
+	private void initAddRowButton() {
+		tableContainer.add(new JButton() {
+			{
+				setText("Add Row");
+				addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						table.add(null);
+						
+						setTable(table);
+					}
+				});
+			}
+		}, BorderLayout.SOUTH);
+	}
+
 	/** Sets up the top container. */
 	private void initTopContainer() {
-		topContainer = new JPanel();
-		topContainer.setLayout(new BorderLayout());
-		add(topContainer, BorderLayout.CENTER);
+		tableContainer = new JPanel();
+		tableContainer.setLayout(new BorderLayout());
+		add(tableContainer, BorderLayout.CENTER);
 	}
 
 	/** Displays the table picker on the frame. */
@@ -72,13 +87,13 @@ public class TableInterface extends JFrame {
 		for (int i = 0; i < tables.length; i++)
 			tableNames[i] = tables[i].getName();
 
-		topContainer.add(new JList<String>(tableNames) {
+		add(new JList<String>(tableNames) {
 			{
 				setSelectionMode(
 						ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 				setLayoutOrientation(JList.HORIZONTAL_WRAP);
 				setVisibleRowCount(tables.length);
-				setBackground(topContainer.getBackground());
+				setBackground(tableContainer.getBackground());
 
 				addMouseListener(new MouseAdapter() {
 					@Override
@@ -86,79 +101,23 @@ public class TableInterface extends JFrame {
 						setTable(TableManager.getTable(getSelectedValue()));
 					}
 				});
-
-				setVisible(true);
 			}
 		}, BorderLayout.WEST);
 	}
 
 	private void initTable() {
 		jTable = new JTable();
-		jTable.setVisible(true);
-
 		tableScrollPane = new JScrollPane(jTable);
-		tableScrollPane.setVisible(true);
 
-		topContainer.add(tableScrollPane, BorderLayout.CENTER);
+		tableContainer.add(tableScrollPane, BorderLayout.CENTER);
 
 		setTable(TableManager.getAllTables()[0]);
 	}
 
 	private void setTable(Table table) {
-		currentTable = table;
-
-		jTable.setModel(
-				DbUtils.resultSetToTableModel(DatabaseManager.getTable(table)));
-
-		jTable.getModel().addTableModelListener(new TableModelListener() {
-
-			@Override
-			public void tableChanged(TableModelEvent evt) {
-
-				int idColumnIndex = 0;
-
-				for (int i = 0; i < jTable.getColumnCount(); i++)
-					if (jTable.getColumnName(i).equals(Properties.ID)) {
-						idColumnIndex = i;
-						break;
-					}
-				
-				int id = TypeConverter.toInt(jTable.getValueAt(evt.getFirstRow(), idColumnIndex));
-				System.out.println("id = " + id);
-
-				DataType dataType = DatabaseManager.getSQLType(
-						currentTable.getTableColumns()[evt.getColumn()]
-								.getType());
-
-				Object newValue = jTable.getValueAt(evt.getFirstRow(),
-						evt.getColumn());
-
-				System.out.println("New value in row: " + id + ": " + newValue
-						+ " location: (" + evt.getFirstRow() + ", "
-						+ evt.getColumn() + ")" + " data type: " + dataType);
-
-				ResultSet rowResultSet = currentTable.getRow(id).getResultSet();
-				System.out.println(
-						jTable.getModel().getColumnName(evt.getColumn()));
-
-				int columnIndex = jTable.getColumnModel().getColumnIndex(
-						jTable.getColumn(jTable.getColumnName(evt.getColumn()))
-								.getIdentifier()) + 1;
-
-				try {
-					if (dataType == DataType.Integer) {
-						rowResultSet.updateInt(columnIndex,
-								TypeConverter.toInt(newValue));
-					} else if (dataType == DataType.String)
-						rowResultSet.updateString(columnIndex,
-								TypeConverter.toString(newValue));
-					
-					rowResultSet.updateRow();
-				} catch (SQLException e) {
-					System.out.println("Failed to update value in database.");
-				}
-			}
-		});
+		this.table = table;
+		
+		jTable.setModel(new DatabaseTableModel(table));
 	}
 
 }

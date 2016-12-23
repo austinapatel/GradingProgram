@@ -15,39 +15,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import database.TypeConverter.DataType;
-import main.Main;
 
 /** Abstracts mySQL database management operations. "init() must be called before use."*/
 public class DatabaseManager {
 
 	private static Connection connection;
-
-	/** Tests the class's various operation. */
-	public static void main(String[] args) {
-		DatabaseManager.init();
-		Main.setUpTables();
-		
-		Table studentsTable = TableManager.getTable(Properties.STUDENTS_TABLE_NAME);
-
-		studentsTable.add(new Object[] { 110789, "Austin", "Patel", "is cool?",
-				"M", 10 });
-
-		TableRow austin = studentsTable.getRow(110789);
-
-		System.out.println(
-				austin.getStringProperty(Properties.NOTES));
-		
-		Table coursesTable = TableManager.getTable(Properties.COURSES_TABLE_NAME);
-		
-		coursesTable.add(new Object[] {7, "Test"});
-		coursesTable.add(new Object[] {6, "AP Computer Science2"});
-		coursesTable.add(new Object[] {1, "AP Computer Science"});
-		coursesTable.add(new Object[] {100, "Testing 123"});
-		coursesTable.add(new Object[] {2, "Geometry"});
-		
-		System.out.println(coursesTable.getRow(6).getStringProperty(Properties.NAME));
-		
-	}
 	
 	public static void init() {
 		DatabaseManager.connectToRemote();
@@ -86,7 +58,7 @@ public class DatabaseManager {
 					ResultSet.CONCUR_UPDATABLE);
 			ResultSet rs = stmt.executeQuery(sql);
 			rs.next();
-
+			
 			return rs;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -149,11 +121,17 @@ public class DatabaseManager {
 		columnIndex++; // columnIndex starts at 1, not 0
 		
 		try {
-			if (type == DataType.String)
+			if (type == DataType.String) {
+				if (value == null)
+					value = "";
 				resultSet.updateString(columnIndex,
 						TypeConverter.toString(value));
-			else if (type == DataType.Integer)
+			}
+			else if (type == DataType.Integer) {
+				if (value == null)
+					value = 0;
 				resultSet.updateInt(columnIndex, TypeConverter.toInt(value));
+			}
 		} catch (SQLException e) {
 			System.out.println("Unable to add value " + value.toString()
 					+ " to " + table.getName() + ".");
@@ -184,6 +162,7 @@ public class DatabaseManager {
 			String driver = "com.mysql.jdbc.Driver";
 			Class.forName(driver);
 			connection = DriverManager.getConnection(url, username, password);
+			
 			System.out.println("Successfully connected to database.");
 		} catch (Exception e) {
 			System.out.print(e);
