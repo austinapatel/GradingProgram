@@ -8,9 +8,8 @@
 package database;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
-import database.TypeConverter.DataType;
+import database.TableColumn.DataType;
 
 /**
  * Adds an item to a row given a column and value. Using a Runnable increases

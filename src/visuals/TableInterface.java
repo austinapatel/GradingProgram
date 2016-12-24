@@ -8,10 +8,14 @@
 package visuals;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,19 +36,27 @@ public class TableInterface extends JFrame {
 
 	private static final int WIDTH = 800, HEIGHT = 600;
 	private JTable jTable;
-	private JPanel tableContainer;
+	private JPanel tableContainer, bottomContainer;
 	private JScrollPane tableScrollPane;
 	private Table table;
+	private DatabaseTableModel model;
 
 	public TableInterface() {
 		initFrame();
 
 		initTopContainer();
+		initBottomContainer();
 		initTablePicker();
 		initTable();
-		initAddRowButton();
+		initBottomButtons();
 
 		setVisible(true);
+	}
+	
+	private void initBottomContainer() {
+		bottomContainer = new JPanel();
+		bottomContainer.setLayout(new GridLayout());
+		tableContainer.add(bottomContainer, BorderLayout.SOUTH);
 	}
 
 	/** Initializes properties of the JFrame. */
@@ -55,21 +67,49 @@ public class TableInterface extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	/** Sets up the add row button. */
-	private void initAddRowButton() {
-		tableContainer.add(new JButton() {
+	private void initBottomButtons() {
+		bottomContainer.add(new JButton() {
 			{
 				setText("Add Row");
 				addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						table.add(null);
+						table.addRow(null);
 						
 						setTable(table);
 					}
 				});
 			}
-		}, BorderLayout.SOUTH);
+		});
+		
+		bottomContainer.add(new JButton() {
+			{
+				setText("Delete Row(s)");
+				addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						ResultSet resultSet = table.getResultSet();
+						
+						int[] selectedRows = jTable.getSelectedRows();
+						int[] selectedRowsReverse = new int[selectedRows.length];
+						
+						for (int i = selectedRows.length - 1; i >= 0; i--)
+							selectedRowsReverse[selectedRows.length - 1 - i] = selectedRows[i];
+																		
+						for (int row : selectedRowsReverse) {
+							try {
+								resultSet.absolute(row + 1);							
+								resultSet.deleteRow();
+							} catch (SQLException e1) {
+								System.out.println("Failed to delete row from database.");
+							}
+						}
+						
+						setTable(table);
+					}
+				});
+			}
+		});
 	}
 
 	/** Sets up the top container. */
@@ -114,10 +154,12 @@ public class TableInterface extends JFrame {
 		setTable(TableManager.getAllTables()[0]);
 	}
 
+	/**Updates the JTable to display a specific table.*/
 	private void setTable(Table table) {
 		this.table = table;
+		this.model = new DatabaseTableModel(table);
 		
-		jTable.setModel(new DatabaseTableModel(table));
+		jTable.setModel(model);
 	}
 
 }

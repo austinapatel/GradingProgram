@@ -9,10 +9,8 @@ package database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javax.swing.table.AbstractTableModel;
-
-import database.TypeConverter.DataType;
+import database.TableColumn.DataType;
 
 /** Relates a mySQL database to a JTable TableModel. */
 @SuppressWarnings("serial")
@@ -55,9 +53,9 @@ public class DatabaseTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int row, int column) {
-		try {		
+		try {
 			resultSet.absolute(row + 1);
-			
+
 			return resultSet.getObject(column + 1);
 		} catch (SQLException e) {
 			System.out.println(
@@ -71,18 +69,18 @@ public class DatabaseTableModel extends AbstractTableModel {
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
 		DataType dataType = DatabaseManager
 				.getSQLType(table.getTableColumns()[columnIndex].getType());
-		
-		new Thread(new UpdateDatabaseItemRunnable(columnIndex + 1, rowIndex + 1, value,
-				dataType, resultSet)).start();		
+
+		new Thread(new UpdateDatabaseItemRunnable(columnIndex + 1, rowIndex + 1,
+				value, dataType, resultSet)).start();
 	}
 
 	@Override
 	public boolean isCellEditable(int row, int col) {
 		return true;
 	}
-	
+
 	@Override
 	public String getColumnName(int col) {
-	    return table.getTableColumns()[col].getName();
+		return table.getTableColumns()[col].getName();
 	}
 }

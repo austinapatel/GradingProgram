@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import database.TypeConverter.DataType;
+import database.TableColumn.DataType;
 
 /** Abstracts mySQL database management operations. "init() must be called before use."*/
 public class DatabaseManager {
@@ -23,17 +23,6 @@ public class DatabaseManager {
 	
 	public static void init() {
 		DatabaseManager.connectToRemote();
-	}
-
-	public static void deleteRow(String tableName, int id) {
-		try {
-			DatabaseManager.getSQLStatement("DELETE FROM " + tableName
-					+ " WHERE " + Table.PROPERTY_ID + " = " + id)
-					.executeUpdate();
-		} catch (SQLException error) {
-			System.out.println("Failed to delete row where ID = " + id);
-			error.printStackTrace();
-		}
 	}
 
 	public static void deleteTable(String tableName) {
@@ -124,13 +113,14 @@ public class DatabaseManager {
 			if (type == DataType.String) {
 				if (value == null)
 					value = "";
-				resultSet.updateString(columnIndex,
-						TypeConverter.toString(value));
+				
+				resultSet.updateString(columnIndex, value.toString());
 			}
 			else if (type == DataType.Integer) {
 				if (value == null)
 					value = 0;
-				resultSet.updateInt(columnIndex, TypeConverter.toInt(value));
+				
+				resultSet.updateInt(columnIndex, Integer.class.cast(value));
 			}
 		} catch (SQLException e) {
 			System.out.println("Unable to add value " + value.toString()
@@ -154,9 +144,9 @@ public class DatabaseManager {
 
 	/** Opens the remote connection to the database. */
 	private static void connectToRemote() {
-		String url = PropertiesManager.read("db", "url");
-		String username = PropertiesManager.read("db", "username");
-		String password = PropertiesManager.read("db", "password");
+		String url = DatabasePropertiesManager.read("db", "url");
+		String username = DatabasePropertiesManager.read("db", "username");
+		String password = DatabasePropertiesManager.read("db", "password");
 
 		try {
 			String driver = "com.mysql.jdbc.Driver";

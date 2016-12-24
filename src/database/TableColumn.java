@@ -12,6 +12,11 @@ public class TableColumn {
 
 	private String name, type;
 	private boolean isText;
+	
+	public enum DataType {
+		String,
+		Integer
+	}
 
 	public TableColumn(String name, String type) {
 		this.name = name;

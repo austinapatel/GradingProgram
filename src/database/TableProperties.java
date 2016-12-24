@@ -1,9 +1,16 @@
+
+// Austin Patel & Jason Morris & Lex VonKlark
+// APCS
+// Redwood High School
+// 12/23/16
+// TableProperties.java
+
 package database;
 
 /** Contains the names of properties of table columns for the database. */
-public class Properties {
+public class TableProperties {
 
-	public Properties() {
+	public TableProperties() {
 		
 	}
 	

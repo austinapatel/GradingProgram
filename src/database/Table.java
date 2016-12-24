@@ -13,59 +13,52 @@ import java.sql.ResultSet;
  * Lets tables utilize the operations in the DatabaseManager class and adds
  * common methods for all tables.
  */
-public class Table
-{
+public class Table {
 	public final static String PROPERTY_ID = "id";
 
 	private String name, primaryKey;
 	private TableColumn[] tableColumns;
 	private ResultSet resultSet;
-	
-	public Table(String name, TableColumn[] tableColumns)
-	{
+
+	public Table(String name, TableColumn[] tableColumns) {
 		this.tableColumns = tableColumns;
-		
+
 		this.name = name;
-		this.primaryKey = Properties.ID;
-		
+		this.primaryKey = TableProperties.ID;
+
 		createTable();
-		
+
 		resultSet = DatabaseManager.getTable(this);
 	}
 
 	/** Creates the table. */
-	private void createTable()
-	{
+	private void createTable() {
 		DatabaseManager.createTable(this);
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
-	
-	public String getPrimaryKey()
-	{
+
+	public String getPrimaryKey() {
 		return primaryKey;
 	}
-	
-	public ResultSet getResultSet()
-	{
+
+	public ResultSet getResultSet() {
 		return resultSet;
 	}
-	
-	public TableColumn[] getTableColumns()
-	{
+
+	public TableColumn[] getTableColumns() {
 		return tableColumns;
 	}
-	
+
 	/**
 	 * Adds a row to the table. "data" parameter should have data in same order
 	 * as "COLUMN_INFO" variable.
 	 */
-	public void add(Object[] data) {
+	public void addRow(Object[] data) {
 		DatabaseManager.beginRowInsert(this);
-		
+
 		if (data == null)
 			data = new Object[getTableColumns().length];
 

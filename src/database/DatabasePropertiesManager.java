@@ -13,7 +13,7 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 
 /** Stores the database credential information to a file. */
-public class PropertiesManager {
+public class DatabasePropertiesManager {
 
 	/** Writes an array of keys and values to a properties file. */
 	public static void write(String fileName, String[] keys, String[] values) {
