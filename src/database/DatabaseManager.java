@@ -21,6 +21,10 @@ public class DatabaseManager {
 
 	private static Connection connection;
 	
+	public DatabaseManager() {
+		
+	}
+	
 	public static void init() {
 		DatabaseManager.connectToRemote();
 	}

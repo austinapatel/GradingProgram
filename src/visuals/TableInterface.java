@@ -165,6 +165,7 @@ public class TableInterface extends JFrame {
 	/** Initializes a JTable (and its container) and the table model. */
 	private void initTable() {
 		jTable = new JTable();
+		jTable.setAutoCreateRowSorter(true);
 		tableScrollPane = new JScrollPane(jTable);
 		tableContainer.add(tableScrollPane, BorderLayout.CENTER);
 
