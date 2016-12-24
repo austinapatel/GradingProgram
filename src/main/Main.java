@@ -9,6 +9,8 @@ package main;
 
 import database.DatabaseManager;
 import database.TableProperties;
+import database.ValueParameter;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import database.Table;
 import database.TableColumn;
 import database.TableManager;
@@ -29,16 +31,31 @@ public class Main
 	
 	public static void setUpTables() {		
 		TableColumn[] studentsTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE"),
-				new TableColumn(TableProperties.FIRST_NAME, "VARCHAR(20) NOT NULL"),
-				new TableColumn(TableProperties.LAST_NAME, "VARCHAR(20) NOT NULL"),
-				new TableColumn(TableProperties.NOTES, "VARCHAR(255)"),
-				new TableColumn(TableProperties.GENDER, "CHAR(1)"),
-				new TableColumn(TableProperties.GRADE_LEVEL, "INT NOT NULL") };
+				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE", new ValueParameter(){{
+					setValueRange(1, Integer.MAX_VALUE);
+					setValueLengthRange(6, 6);
+				}}),
+				new TableColumn(TableProperties.FIRST_NAME, "VARCHAR(50) NOT NULL", new ValueParameter() {{
+					setValueLengthRange(0, 50);
+				}}),
+				new TableColumn(TableProperties.LAST_NAME, "VARCHAR(50) NOT NULL", new ValueParameter() {{
+					setValueLengthRange(0, 50);
+				}}),
+				new TableColumn(TableProperties.NOTES, "VARCHAR(255)", new ValueParameter() {{
+					setValueLengthRange(0, 255);
+				}}),
+				new TableColumn(TableProperties.GENDER, "CHAR(1)", new ValueParameter() {{
+					setValueLengthRange(1, 1);
+				}}),
+				new TableColumn(TableProperties.GRADE_LEVEL, "INT NOT NULL", new ValueParameter() {{
+					setValueRange(1, 12);
+				}}) };
 		
 		TableColumn[] coursesTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE"),
-				new TableColumn(TableProperties.NAME, "VARCHAR(20) NOT NULL")};
+				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE", null),
+				new TableColumn(TableProperties.NAME, "VARCHAR(50) NOT NULL", new ValueParameter() {{
+					setValueLengthRange(0, 50);
+				}})};
 
 		TableManager.addTable(new Table(database.TableProperties.STUDENTS_TABLE_NAME, studentsTableColumns));
 		TableManager.addTable(new Table(database.TableProperties.COURSES_TABLE_NAME, coursesTableColumns));

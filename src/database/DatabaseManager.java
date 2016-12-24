@@ -25,39 +25,6 @@ public class DatabaseManager {
 		DatabaseManager.connectToRemote();
 	}
 
-	public static void deleteTable(String tableName) {
-		try {
-			DatabaseManager.getSQLStatement("DROP TABLE " + tableName)
-					.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println("Failed to delete table \"" + tableName + "\".");
-		} finally {
-			System.out.println(
-					"Sucessfully deleted table \"" + tableName + "\".");
-		}
-	}
-
-	/** Returns a row from a given table and a primary key id. */
-	public static ResultSet getRow(Table table, int id) {
-		try {
-			String sql = "SELECT * FROM " + table.getName() + " WHERE id = '"
-					+ id + "'";
-			Statement stmt = connection.createStatement(
-					ResultSet.TYPE_SCROLL_SENSITIVE,
-					ResultSet.CONCUR_UPDATABLE);
-			ResultSet rs = stmt.executeQuery(sql);
-			rs.next();
-			
-			return rs;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Failed to read a row from the table: "
-					+ table.getName() + '.');
-
-			return null;
-		}
-	}
-
 	/** Returns the ResultSet for a given table. */
 	public static ResultSet getTable(Table table) {
 		try {

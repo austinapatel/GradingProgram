@@ -37,12 +37,15 @@ public class UpdateDatabaseItemRunnable implements Runnable {
 			resultSet.absolute(rowIndex);
 			
 			if (dataType == DataType.Integer) {
-				resultSet.updateInt(columnIndex, Integer.parseInt(newValue.toString()));
+				int intVal = Integer.parseInt(newValue.toString());
+								
+				resultSet.updateInt(columnIndex, intVal);
 			} else if (dataType == DataType.String)
 				resultSet.updateString(columnIndex, newValue.toString());
 
 			resultSet.updateRow();
 		} catch (Exception e) {
+			System.out.println("Invalid new value into database row.");
 		}
 	}
 

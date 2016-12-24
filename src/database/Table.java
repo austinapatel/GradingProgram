@@ -8,6 +8,7 @@
 package database;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Lets tables utilize the operations in the DatabaseManager class and adds
@@ -54,18 +55,39 @@ public class Table {
 
 	/**
 	 * Adds a row to the table. "data" parameter should have data in same order
-	 * as "COLUMN_INFO" variable.
+	 * as "tableColumn" variable.
 	 */
 	public void addRow(Object[] data) {
 		DatabaseManager.beginRowInsert(this);
 
 		if (data == null)
-			data = new Object[getTableColumns().length];
+			data = new Object[tableColumns.length];
 
 		for (int i = 0; i < data.length; i++)
 			DatabaseManager.addToRow(this, data[i], i);
 
 		DatabaseManager.endRowInsert(this);
+	}
+
+	/**
+	 * Removes a row from the table given a value and the column that value is
+	 * in. Returns the index of the row that was deleted.
+	 */
+	public int deleteRow(Object value, int column) {
+		try {
+			resultSet.beforeFirst();
+
+			while (resultSet.next())
+				if (resultSet.getObject(column).toString()
+						.equals(value.toString())) {
+					resultSet.deleteRow();
+					return resultSet.getRow();
+				}
+		} catch (SQLException e) {
+			System.out.println("Failed to delete row.");
+		}
+
+		return -1;
 	}
 
 }

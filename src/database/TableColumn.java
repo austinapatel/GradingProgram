@@ -11,18 +11,17 @@ package database;
 public class TableColumn {
 
 	private String name, type;
-	private boolean isText;
+	private ValueParameter valueParameter;
 	
 	public enum DataType {
 		String,
 		Integer
 	}
 
-	public TableColumn(String name, String type) {
+	public TableColumn(String name, String type, ValueParameter valueParameter) {
 		this.name = name;
 		this.type = type;
-		
-		isText = type.contains("VARCHAR") || type.contains("CHAR");
+		this.valueParameter = valueParameter;		
 	}
 
 	public String getName() {
@@ -33,8 +32,8 @@ public class TableColumn {
 		return type;
 	}
 	
-	public boolean isText() {
-		return isText;
+	public ValueParameter getValueParameter() {
+		return valueParameter;
 	}
 
 }

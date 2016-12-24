@@ -23,6 +23,12 @@ public class DatabaseTableModel extends AbstractTableModel {
 		this.table = table;
 		this.resultSet = table.getResultSet();
 	}
+	
+	/**Changes the table of the model.*/
+	public void setTable(Table table) {
+		this.table = table;
+		this.resultSet = table.getResultSet();
+	}
 
 	@Override
 	public int getColumnCount() {
@@ -70,8 +76,15 @@ public class DatabaseTableModel extends AbstractTableModel {
 		DataType dataType = DatabaseManager
 				.getSQLType(table.getTableColumns()[columnIndex].getType());
 
-		new Thread(new UpdateDatabaseItemRunnable(columnIndex + 1, rowIndex + 1,
-				value, dataType, resultSet)).start();
+		columnIndex++;
+		rowIndex++;
+		
+		Thread updateRowThread = new Thread(new UpdateDatabaseItemRunnable(columnIndex, rowIndex,
+				value, dataType, resultSet));
+		
+//		updateRowThread.
+		
+		updateRowThread.start();
 	}
 
 	@Override

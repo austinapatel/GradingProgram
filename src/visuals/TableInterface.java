@@ -38,8 +38,9 @@ public class TableInterface extends JFrame {
 	private JTable jTable;
 	private JPanel tableContainer, bottomContainer;
 	private JScrollPane tableScrollPane;
+	private JList<String> tableList;
 	private Table table;
-	private DatabaseTableModel model;
+	private DatabaseTableModel databaseTableModel;
 
 	public TableInterface() {
 		initFrame();
@@ -52,7 +53,7 @@ public class TableInterface extends JFrame {
 
 		setVisible(true);
 	}
-	
+
 	private void initBottomContainer() {
 		bottomContainer = new JPanel();
 		bottomContainer.setLayout(new GridLayout());
@@ -74,14 +75,22 @@ public class TableInterface extends JFrame {
 				addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						table.addRow(null);
+						int deletedRow = table.deleteRow(0, 1);
+						databaseTableModel.fireTableRowsDeleted(deletedRow, deletedRow);
 						
-						setTable(table);
+						table.addRow(null);
+						int numRows = databaseTableModel.getRowCount();
+						databaseTableModel.fireTableRowsInserted(numRows, numRows);
+
+						jTable.requestFocus();
+						jTable.changeSelection(
+								databaseTableModel.getRowCount() - 1, 0, false,
+								false);
 					}
 				});
 			}
 		});
-		
+
 		bottomContainer.add(new JButton() {
 			{
 				setText("Delete Row(s)");
@@ -89,23 +98,25 @@ public class TableInterface extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						ResultSet resultSet = table.getResultSet();
-						
+
 						int[] selectedRows = jTable.getSelectedRows();
 						int[] selectedRowsReverse = new int[selectedRows.length];
-						
+
 						for (int i = selectedRows.length - 1; i >= 0; i--)
-							selectedRowsReverse[selectedRows.length - 1 - i] = selectedRows[i];
-																		
+							selectedRowsReverse[selectedRows.length - 1
+									- i] = selectedRows[i];
+
 						for (int row : selectedRowsReverse) {
 							try {
-								resultSet.absolute(row + 1);							
+								resultSet.absolute(row + 1);
 								resultSet.deleteRow();
+								
+								databaseTableModel.fireTableRowsDeleted(row, row);
 							} catch (SQLException e1) {
-								System.out.println("Failed to delete row from database.");
+								System.out.println(
+										"Failed to delete row from database.");
 							}
 						}
-						
-						setTable(table);
 					}
 				});
 			}
@@ -127,39 +138,38 @@ public class TableInterface extends JFrame {
 		for (int i = 0; i < tables.length; i++)
 			tableNames[i] = tables[i].getName();
 
-		add(new JList<String>(tableNames) {
+		tableList = new JList<String>(tableNames) {
 			{
 				setSelectionMode(
 						ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 				setLayoutOrientation(JList.HORIZONTAL_WRAP);
 				setVisibleRowCount(tables.length);
 				setBackground(tableContainer.getBackground());
+				setSelectedIndex(0);
 
 				addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						setTable(TableManager.getTable(getSelectedValue()));
+						table = TableManager.getTable(getSelectedValue());
+						databaseTableModel.setTable(table);
+						
+						databaseTableModel.fireTableStructureChanged();
 					}
 				});
 			}
-		}, BorderLayout.WEST);
+		};
+
+		add(tableList, BorderLayout.WEST);
 	}
 
+	/** Initializes a JTable (and its container) and the table model. */
 	private void initTable() {
 		jTable = new JTable();
 		tableScrollPane = new JScrollPane(jTable);
-
 		tableContainer.add(tableScrollPane, BorderLayout.CENTER);
 
-		setTable(TableManager.getAllTables()[0]);
+		this.table = TableManager.getTable(tableList.getSelectedValue());
+		this.databaseTableModel = new DatabaseTableModel(table);
+		jTable.setModel(databaseTableModel);
 	}
-
-	/**Updates the JTable to display a specific table.*/
-	private void setTable(Table table) {
-		this.table = table;
-		this.model = new DatabaseTableModel(table);
-		
-		jTable.setModel(model);
-	}
-
 }
