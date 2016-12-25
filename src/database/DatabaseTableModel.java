@@ -94,6 +94,15 @@ public class DatabaseTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int col) {
-		return table.getTableColumns()[col].getName();
+		String rawColumnName = table.getTableColumns()[col].getName();		
+		String columnName = "";
+		
+		for (Character c : rawColumnName.toCharArray()) {
+			if (Character.isUpperCase(c))
+				columnName += ' ';
+			columnName += Character.toUpperCase(c);
+		}
+		
+		return columnName;
 	}
 }
