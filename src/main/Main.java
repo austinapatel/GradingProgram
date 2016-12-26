@@ -31,7 +31,7 @@ public class Main
 	
 	public static void setUpTables() {		
 		TableColumn[] studentsTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE", new ValueParameter(){{
+				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL UNIQUE", new ValueParameter(){{
 					setValueRange(1, Integer.MAX_VALUE);
 					setValueLengthRange(6, 6);
 				}}),
@@ -52,7 +52,9 @@ public class Main
 				}}) };
 		
 		TableColumn[] coursesTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE", null),
+				new TableColumn(TableProperties.PERIOD, "INT NOT NULL UNIQUE", new ValueParameter() {{
+					setValueRange(1, 7);
+				}}),
 				new TableColumn(TableProperties.NAME, "VARCHAR(50) NOT NULL", new ValueParameter() {{
 					setValueLengthRange(0, 50);
 				}})};

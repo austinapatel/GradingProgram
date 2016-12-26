@@ -16,7 +16,7 @@ public class TableProperties {
 	
 	// Students
 	public static String STUDENTS_TABLE_NAME = "Students";
-	public static String ID = "id";
+	public static String STUDENT_ID = "studentId";
 	public static String FIRST_NAME = "firstName";
 	public static String LAST_NAME = "lastName";
 	public static String NOTES = "notes";
@@ -26,4 +26,5 @@ public class TableProperties {
 	// Courses
 	public static String COURSES_TABLE_NAME = "Courses";
 	public static String NAME = "name";
+	public static String PERIOD = "period";
 }

@@ -25,7 +25,7 @@ public class Table {
 		this.tableColumns = tableColumns;
 
 		this.name = name;
-		this.primaryKey = TableProperties.ID;
+		this.primaryKey = tableColumns[0].getName();
 
 		createTable();
 

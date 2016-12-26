@@ -22,13 +22,12 @@ public class UpdateDatabaseItemRunnable implements Runnable {
 	private DataType dataType;
 	private ResultSet resultSet;
 
-	public UpdateDatabaseItemRunnable(int columnIndex, int rowIndex, Object newValue,
-			DataType dataType, ResultSet resultSet) {
+	public UpdateDatabaseItemRunnable(int columnIndex, int rowIndex, Object newValue, ResultSet resultSet, DataType dataType) {
 		this.columnIndex = columnIndex;
 		this.newValue = newValue;
-		this.dataType = dataType;
 		this.resultSet = resultSet;
 		this.rowIndex = rowIndex;
+		this.dataType = dataType;
 	}
 
 	@Override
@@ -42,11 +41,12 @@ public class UpdateDatabaseItemRunnable implements Runnable {
 				resultSet.updateInt(columnIndex, intVal);
 			} else if (dataType == DataType.String)
 				resultSet.updateString(columnIndex, newValue.toString());
-
-			resultSet.updateRow();
+			else
+				throw new Exception("DataType not handled");
+			
+			resultSet.updateRow();			
 		} catch (Exception e) {
 			System.out.println("Invalid new value into database row.");
 		}
 	}
-
 }

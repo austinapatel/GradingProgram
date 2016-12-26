@@ -46,7 +46,7 @@ public class ValueParameter {
 	}
 
 	public void setValueRange(int minValue, int maxValue) {
-		this.hasSetLength = true;
+		this.hasSetValue = true;
 		
 		this.minValue = minValue;
 		this.maxValue = maxValue;
