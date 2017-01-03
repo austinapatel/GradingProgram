@@ -37,7 +37,7 @@ import database.DatabaseCellEditor;
 import database.DatabaseTableModel;
 import database.Table;
 import database.TableManager;
-import javafx.scene.input.KeyCode;
+
 
 /** Interface for the program. */
 @SuppressWarnings("serial")
