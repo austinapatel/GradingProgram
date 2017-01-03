@@ -13,11 +13,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.print.PrinterException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,6 +25,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -146,9 +146,12 @@ public class TableInterface extends JFrame implements ActionListener {
 					public void actionPerformed(ActionEvent e) {
 						
 						try {
-							jTable.print();
+							MessageFormat header = new MessageFormat(jTable.getTableHeader() + " Page {0,number,integer}");
+							jTable.print(JTable.PrintMode.FIT_WIDTH, header, null);
+							JOptionPane.showMessageDialog(null, "Printing Succesful");
+							
 						} catch (PrinterException e1) {
-							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, "Unable To Print");
 							e1.printStackTrace();
 						}
 					}
