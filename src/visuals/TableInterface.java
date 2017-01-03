@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.print.PrinterException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -38,14 +39,12 @@ import database.DatabaseTableModel;
 import database.Table;
 import database.TableManager;
 
-
 /** Interface for the program. */
 @SuppressWarnings("serial")
 public class TableInterface extends JFrame implements ActionListener {
 
 	private static final int WIDTH = 800, HEIGHT = 600;
-	private final String ACTION_ADD_ROW = "Add Row",
-			ACTION_DELETE_ROW = "Delete Row";
+	private final String ACTION_ADD_ROW = "Add Row", ACTION_DELETE_ROW = "Delete Row";
 
 	private JTable jTable;
 	private JPanel tableContainer, bottomContainer;
@@ -53,7 +52,7 @@ public class TableInterface extends JFrame implements ActionListener {
 	private JList<String> tableList;
 	private Table table;
 	private DatabaseTableModel databaseTableModel;
-	private JButton addRowButton, deleteRowButton;
+	private JButton addRowButton, deleteRowButton, printButton;
 
 	public TableInterface() {
 		initFrame();
@@ -75,9 +74,8 @@ public class TableInterface extends JFrame implements ActionListener {
 					{
 						add(new JMenuItem("Add row") {
 							{
-								setAccelerator(KeyStroke.getKeyStroke(
-										java.awt.event.KeyEvent.VK_N,
-										java.awt.Event.CTRL_MASK));
+								setAccelerator(
+										KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.Event.CTRL_MASK));
 
 								setActionCommand(ACTION_ADD_ROW);
 								addActionListener(TableInterface.this);
@@ -85,9 +83,8 @@ public class TableInterface extends JFrame implements ActionListener {
 						});
 						add(new JMenuItem("Delete row") {
 							{
-								setAccelerator(KeyStroke.getKeyStroke(
-										java.awt.event.KeyEvent.VK_D,
-										java.awt.Event.CTRL_MASK));
+								setAccelerator(
+										KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.Event.CTRL_MASK));
 
 								setActionCommand(ACTION_DELETE_ROW);
 								addActionListener(TableInterface.this);
@@ -122,24 +119,38 @@ public class TableInterface extends JFrame implements ActionListener {
 					public void actionPerformed(ActionEvent e) {
 						if (databaseTableModel.getRowCount() > 0) {
 							int deletedRow = table.deleteRow(0, 1);
-							
-							databaseTableModel.fireTableRowsDeleted(deletedRow,
-									deletedRow);
+
+							databaseTableModel.fireTableRowsDeleted(deletedRow, deletedRow);
 						}
 
 						table.addRow(null);
 						int numRows = databaseTableModel.getRowCount();
-						
+
 						if (numRows > 0)
-							databaseTableModel.fireTableRowsInserted(numRows - 1,
-									numRows - 1);
+							databaseTableModel.fireTableRowsInserted(numRows - 1, numRows - 1);
 						else
 							databaseTableModel.fireTableRowsInserted(1, 1);
 
 						jTable.requestFocus();
-						jTable.changeSelection(
-								databaseTableModel.getRowCount() - 1, 0, false,
-								false);
+						jTable.changeSelection(databaseTableModel.getRowCount() - 1, 0, false, false);
+					}
+				});
+			}
+		};
+
+		printButton = new JButton() {
+			{
+				setText("PrintTable");
+				addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						
+						try {
+							jTable.print();
+						} catch (PrinterException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				});
 			}
@@ -157,8 +168,7 @@ public class TableInterface extends JFrame implements ActionListener {
 						int[] selectedRowsReverse = new int[selectedRows.length];
 
 						for (int i = selectedRows.length - 1; i >= 0; i--)
-							selectedRowsReverse[selectedRows.length - 1
-									- i] = selectedRows[i];
+							selectedRowsReverse[selectedRows.length - 1 - i] = selectedRows[i];
 
 						for (int row : selectedRowsReverse) {
 							try {
@@ -166,13 +176,11 @@ public class TableInterface extends JFrame implements ActionListener {
 								resultSet.deleteRow();
 
 								if (databaseTableModel.getRowCount() > 0)
-									databaseTableModel.fireTableRowsDeleted(row,
-										row);
+									databaseTableModel.fireTableRowsDeleted(row, row);
 								else
 									databaseTableModel.fireTableDataChanged();
 							} catch (SQLException e1) {
-								System.out.println(
-										"Failed to delete row from database.");
+								System.out.println("Failed to delete row from database.");
 							}
 						}
 					}
@@ -182,6 +190,7 @@ public class TableInterface extends JFrame implements ActionListener {
 
 		bottomContainer.add(addRowButton);
 		bottomContainer.add(deleteRowButton);
+		bottomContainer.add(printButton);
 	}
 
 	/** Sets up the top container. */
@@ -210,7 +219,7 @@ public class TableInterface extends JFrame implements ActionListener {
 				addKeyListener(new KeyListener() {
 					@Override
 					public void keyTyped(KeyEvent e) {
-						
+
 					}
 
 					@Override
@@ -227,16 +236,16 @@ public class TableInterface extends JFrame implements ActionListener {
 					public void keyPressed(KeyEvent e) {
 					}
 				});
-				
+
 				addListSelectionListener(new ListSelectionListener() {
-					
+
 					@Override
 					public void valueChanged(ListSelectionEvent e) {
 						table = TableManager.getTable(getSelectedValue());
 						databaseTableModel.setTable(table);
 
 						databaseTableModel.fireTableStructureChanged();
-						
+
 					}
 				});
 			}
@@ -252,19 +261,20 @@ public class TableInterface extends JFrame implements ActionListener {
 				setAutoCreateRowSorter(true);
 				setCellEditor(new DatabaseCellEditor());
 				addKeyListener(new KeyListener() {
-					
+
 					@Override
-					public void keyTyped(KeyEvent e) {						
+					public void keyTyped(KeyEvent e) {
 					}
-					
+
 					@Override
 					public void keyReleased(KeyEvent e) {
-						
+
 					}
-					
+
 					@Override
 					public void keyPressed(KeyEvent e) {
-						if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_KP_LEFT) && jTable.getSelectedColumn() == 0)
+						if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_KP_LEFT)
+								&& jTable.getSelectedColumn() == 0)
 							tableList.requestFocus();
 					}
 				});

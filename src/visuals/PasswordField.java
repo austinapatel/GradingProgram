@@ -38,7 +38,7 @@ public class PasswordField extends JFrame implements ActionListener {
 
 	}
 
-	private final int WIDTH = 300, HEIGHT = 300;
+	private final int WIDTH = 255, HEIGHT = 300;
 
 	private JButton submit = new JButton("Submit");
 
