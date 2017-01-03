@@ -17,8 +17,11 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import database.DatabaseManager;
 
 /** Password entry prompt for database credentials. */
 public class PasswordField extends JFrame implements ActionListener {
@@ -30,11 +33,13 @@ public class PasswordField extends JFrame implements ActionListener {
 	private JCheckBox checkbox1;
 	private JButton button1;
 
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
+
 		PasswordField field = new PasswordField();
+
 	}
 
-	private final int WIDTH = 300, HEIGHT = 300;
+	private final int WIDTH = 255, HEIGHT = 300;
 
 	private JButton submit = new JButton("Submit");
 
@@ -109,13 +114,27 @@ public class PasswordField extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
-	private String convertUrl(String url, String port, String dbName) {
-		return "jdbc\\:mysql\\://" + url + "\\:" + port + "/" + dbName
-				+ "?autoReconnect\\=true&useSSL\\=false";
+	private String convertUrl(String ip, String port, String dbName) {
+		
+		return "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&useSSL=false";
 
 	}
+	
+	private void testConnection()
+	{
+		String url = convertUrl(databaseIpField.getText(), databasePortField.getText(), databaseNameField.getText());
+		
+		if (DatabaseManager.testConnection(url, userNameField.getText(), new String(passwordField.getPassword())))
+			JOptionPane.showMessageDialog(null, "Successfully connected to database.");
+		else
+			JOptionPane.showMessageDialog(null, "Could not connect to database.");	
+	}
 
-	public void actionPerformed(ActionEvent e) {
-
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource().equals(button1))
+		{
+			testConnection();
+		}
 	}
 }

@@ -152,7 +152,35 @@ public class DatabaseManager {
 			System.out.print(e);
 		}
 	}
-
+	
+	
+	
+	/** Test a connection to a database. */
+	public static boolean testConnection(String url, String username, String password) 
+	{
+		try {
+			
+			
+			System.out.println(DatabasePropertiesManager.read("db", "url").equals(url));
+			System.out.println(url);
+			System.out.println(username);
+			System.out.println(password);
+			String driver = "com.mysql.jdbc.Driver";
+			Class.forName(driver);
+		
+			Connection con = DriverManager.getConnection(url, username, password);
+			System.out.println("Successfully connected to database.");
+			con.close();
+			return true;
+			
+		} catch (Exception e) 
+		{
+			System.out.print(e.getMessage());
+		
+		}
+		return false;
+	}
+	
 	/** Returns the mySQL prepared table given a command. */
 	public static PreparedStatement getSQLStatement(String mySQLCommand) {
 
