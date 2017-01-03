@@ -13,8 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -32,12 +30,12 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableCellEditor;
 
 import database.DatabaseCellEditor;
 import database.DatabaseTableModel;
 import database.Table;
 import database.TableManager;
-import javafx.scene.input.KeyCode;
 
 /** Interface for the program. */
 @SuppressWarnings("serial")
@@ -120,22 +118,10 @@ public class TableInterface extends JFrame implements ActionListener {
 				addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						if (databaseTableModel.getRowCount() > 0) {
-							int deletedRow = table.deleteRow(0, 1);
-							
-							databaseTableModel.fireTableRowsDeleted(deletedRow,
-									deletedRow);
-						}
-
-						table.addRow(null);
-						int numRows = databaseTableModel.getRowCount();
+						table.addRow();
 						
-						if (numRows > 0)
-							databaseTableModel.fireTableRowsInserted(numRows - 1,
-									numRows - 1);
-						else
-							databaseTableModel.fireTableRowsInserted(1, 1);
-
+						databaseTableModel.fireTableDataChanged();
+						
 						jTable.requestFocus();
 						jTable.changeSelection(
 								databaseTableModel.getRowCount() - 1, 0, false,
@@ -175,6 +161,9 @@ public class TableInterface extends JFrame implements ActionListener {
 										"Failed to delete row from database.");
 							}
 						}
+						
+						if (databaseTableModel.getRowCount() == 0)
+							tableList.requestFocus();
 					}
 				});
 			}
@@ -198,7 +187,7 @@ public class TableInterface extends JFrame implements ActionListener {
 
 		for (int i = 0; i < tables.length; i++)
 			tableNames[i] = tables[i].getName();
-
+		
 		tableList = new JList<String>(tableNames) {
 			{
 				setLayoutOrientation(JList.HORIZONTAL_WRAP);
@@ -232,11 +221,7 @@ public class TableInterface extends JFrame implements ActionListener {
 					
 					@Override
 					public void valueChanged(ListSelectionEvent e) {
-						table = TableManager.getTable(getSelectedValue());
-						databaseTableModel.setTable(table);
-
-						databaseTableModel.fireTableStructureChanged();
-						
+						setTable(TableManager.getTable(getSelectedValue()));
 					}
 				});
 			}
@@ -248,9 +233,14 @@ public class TableInterface extends JFrame implements ActionListener {
 	/** Initializes a JTable (and its container) and the table model. */
 	private void initTable() {
 		jTable = new JTable() {
+			
+			public TableCellEditor getCellEditor(int row, int column) {
+			     return new DatabaseCellEditor();
+			}
+			
 			{
 				setAutoCreateRowSorter(true);
-				setCellEditor(new DatabaseCellEditor());
+				setRowHeight(17);
 				addKeyListener(new KeyListener() {
 					
 					@Override
@@ -274,9 +264,9 @@ public class TableInterface extends JFrame implements ActionListener {
 		tableScrollPane = new JScrollPane(jTable);
 		tableContainer.add(tableScrollPane, BorderLayout.CENTER);
 
-		this.table = TableManager.getTable(tableList.getSelectedValue());
-		this.databaseTableModel = new DatabaseTableModel(table);
-		jTable.setModel(databaseTableModel);
+		this.databaseTableModel = new DatabaseTableModel();
+		
+		setTable(TableManager.getTable(tableList.getSelectedValue()));
 	}
 
 	@Override
@@ -287,5 +277,16 @@ public class TableInterface extends JFrame implements ActionListener {
 			addRowButton.doClick();
 		else if (action.equals(ACTION_DELETE_ROW))
 			deleteRowButton.doClick();
+	}
+	
+	public void setTable(Table table) {
+		this.table = table;
+		
+		databaseTableModel.setTable(table);
+		databaseTableModel.fireTableStructureChanged();
+		
+		jTable.setModel(databaseTableModel);
+		
+		jTable.removeColumn(jTable.getColumn(databaseTableModel.getColumnName(0)));
 	}
 }

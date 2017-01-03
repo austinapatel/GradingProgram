@@ -52,19 +52,41 @@ public class Table {
 	public TableColumn[] getTableColumns() {
 		return tableColumns;
 	}
+	
+	/**Determines the number of rows in the table.*/
+	public int getRowCount() {
+		int rows = 0;
+
+		try {
+//			resultSet.beforeFirst();
+//
+//			while (resultSet.next())
+//				rows++;
+//
+//			resultSet.first();
+			
+			resultSet.last();
+			rows = resultSet.getRow();
+		} catch (SQLException e) {
+			System.out.println("Failed to determine the number of rows in "
+					+ name);
+		}
+
+		return rows;
+	}
 
 	/**
-	 * Adds a row to the table. "data" parameter should have data in same order
-	 * as "tableColumn" variable.
+	 * Adds a row to the table with blank data.
 	 */
-	public void addRow(Object[] data) {
+	public void addRow() {
+		int numRows = getRowCount();
+
 		DatabaseManager.beginRowInsert(this);
 
-		if (data == null)
-			data = new Object[tableColumns.length];
-
-		for (int i = 0; i < data.length; i++)
-			DatabaseManager.addToRow(this, data[i], i);
+		DatabaseManager.addToRow(this, numRows, 0);
+		
+		for (int i = 1; i < tableColumns.length; i++)
+			DatabaseManager.addToRow(this, null, i);
 
 		DatabaseManager.endRowInsert(this);
 	}

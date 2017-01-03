@@ -16,17 +16,40 @@ import java.sql.Statement;
 
 import database.TableColumn.DataType;
 
-/** Abstracts mySQL database management operations. "init() must be called before use."*/
+/**
+ * Abstracts mySQL database management operations. "init() must be called before
+ * use."
+ */
 public class DatabaseManager {
 
 	private static Connection connection;
-	
+
 	public DatabaseManager() {
-		
+
 	}
-	
+//
+//	public static void main(String[] args) {
+//		 DatabaseManager.init();
+//		 DatabaseManager.deleteTable(TableProperties.CATEGORIES_TABLE_NAME);
+//		 DatabaseManager.deleteTable(TableProperties.COURSES_TABLE_NAME);
+//		 DatabaseManager.deleteTable(TableProperties.STUDENTS_TABLE_NAME);
+//	}
+
 	public static void init() {
 		DatabaseManager.connectToRemote();
+	}
+
+	/** Deletes a table. */
+	public static void deleteTable(String tableName) {
+		try {
+			DatabaseManager.getSQLStatement("DROP TABLE " + tableName)
+					.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Failed to delete table \"" + tableName + "\".");
+		} finally {
+			System.out.println(
+					"Sucessfully deleted table \"" + tableName + "\".");
+		}
 	}
 
 	/** Returns the ResultSet for a given table. */
@@ -67,10 +90,11 @@ public class DatabaseManager {
 			resultSet.insertRow();
 			resultSet.moveToCurrentRow();
 		} catch (SQLException e) {
-
+			System.out.println(
+					"Insert row already added. Change values that need to be unique in row before adding a new row.");
 		}
 	}
-	
+
 	/** Adds a value of the correct type to a table row ResultSet. */
 	public static void addToRow(Table table, Object value, int columnIndex) {
 
@@ -79,18 +103,17 @@ public class DatabaseManager {
 		ResultSet resultSet = table.getResultSet();
 
 		columnIndex++; // columnIndex starts at 1, not 0
-		
+
 		try {
 			if (type == DataType.String) {
 				if (value == null)
 					value = "";
-				
+
 				resultSet.updateString(columnIndex, value.toString());
-			}
-			else if (type == DataType.Integer) {
+			} else if (type == DataType.Integer) {
 				if (value == null)
 					value = 0;
-				
+
 				resultSet.updateInt(columnIndex, Integer.class.cast(value));
 			}
 		} catch (SQLException e) {
@@ -123,7 +146,7 @@ public class DatabaseManager {
 			String driver = "com.mysql.jdbc.Driver";
 			Class.forName(driver);
 			connection = DriverManager.getConnection(url, username, password);
-			
+
 			System.out.println("Successfully connected to database.");
 		} catch (Exception e) {
 			System.out.print(e);

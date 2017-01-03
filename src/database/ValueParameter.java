@@ -10,12 +10,14 @@ package database;
 /** Dictates attributes that a value must have to be valid input. */
 public class ValueParameter {
 	
-	private boolean hasSetLength, hasSetValue;
+	private boolean hasSetLength, hasSetValue, hasSelector;
 	private int minValueLength, maxValueLength, minValue, maxValue;
+	private String selectorTable, selectorOutputColumn, selectorLinkColumn;
 
 	public ValueParameter() {
-		hasSetLength = hasSetValue = false;
+		hasSetLength = hasSetValue = hasSelector = false;
 		minValueLength = maxValueLength = minValue = maxValue = 0;
+		selectorTable = selectorOutputColumn = selectorLinkColumn = "";
 	}
 	
 	public int getMinValueLength() {
@@ -54,6 +56,30 @@ public class ValueParameter {
 
 	public boolean isSetValue() {
 		return hasSetValue;
+	}
+
+	public boolean hasSelector() {
+		return hasSelector;
+	}
+	
+	/**Sets the field to be have a JComboBox to pick input*/
+	public void addSelector(String tableName, String visualColumnName, String linkColumnName) {
+		selectorTable = tableName;
+		selectorOutputColumn = visualColumnName;
+		selectorLinkColumn = linkColumnName;
+		hasSelector = true;
+	}
+
+	public String getSelectorTable() {
+		return selectorTable;
+	}
+
+	public String getSelectorOutputColumn() {
+		return selectorOutputColumn;
+	}
+
+	public String getSelectorLinkColumn() {
+		return selectorLinkColumn;
 	}
 	
 }
