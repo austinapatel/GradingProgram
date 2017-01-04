@@ -128,9 +128,7 @@ public class PasswordField extends JFrame implements ActionListener
 
 	private void testConnection()
 	{
-		String url = convertUrl();
-
-		if (DatabaseManager.testConnection(url, userNameField.getText(), new String(passwordField.getPassword())))
+		if (DatabaseManager.testConnection(convertUrl(), userNameField.getText(), new String(passwordField.getPassword())))
 			JOptionPane.showMessageDialog(null, "Successfully connected to database.");
 		else
 			JOptionPane.showMessageDialog(null, "Could not connect to database.");

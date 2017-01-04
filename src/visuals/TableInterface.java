@@ -46,7 +46,7 @@ public class TableInterface extends JFrame implements ActionListener
 {
 
 	private static final int WIDTH = 800, HEIGHT = 600;
-	private final String ACTION_ADD_ROW = "Add Row", ACTION_DELETE_ROW = "Delete Row";
+	private final String ACTION_ADD_ROW = "Add Row", ACTION_DELETE_ROW = "Delete Row", ACTION_CHANGE_CONNECTION = "Change Database Connection";
 
 	private JTable jTable;
 	private JPanel tableContainer, bottomContainer;
@@ -93,6 +93,15 @@ public class TableInterface extends JFrame implements ActionListener
 								setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.Event.CTRL_MASK));
 
 								setActionCommand(ACTION_DELETE_ROW);
+								addActionListener(TableInterface.this);
+							}
+						});
+						add(new JMenuItem("Change Database Connection")
+						{
+							{
+								setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.Event.CTRL_MASK));
+
+								setActionCommand(ACTION_CHANGE_CONNECTION);
 								addActionListener(TableInterface.this);
 							}
 						});
@@ -338,6 +347,11 @@ public class TableInterface extends JFrame implements ActionListener
 			addRowButton.doClick();
 		else if (action.equals(ACTION_DELETE_ROW))
 			deleteRowButton.doClick();
+		else if (action.equals(ACTION_CHANGE_CONNECTION))
+		{
+			PasswordField pass = new PasswordField();
+			dispose();
+		}
 	}
 
 	public void setTable(Table table)
