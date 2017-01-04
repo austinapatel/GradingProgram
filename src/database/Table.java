@@ -14,14 +14,16 @@ import java.sql.SQLException;
  * Lets tables utilize the operations in the DatabaseManager class and adds
  * common methods for all tables.
  */
-public class Table {
+public class Table
+{
 	public final static String PROPERTY_ID = "id";
 
 	private String name, primaryKey;
 	private TableColumn[] tableColumns;
 	private ResultSet resultSet;
 
-	public Table(String name, TableColumn[] tableColumns) {
+	public Table(String name, TableColumn[] tableColumns)
+	{
 		this.tableColumns = tableColumns;
 
 		this.name = name;
@@ -33,43 +35,51 @@ public class Table {
 	}
 
 	/** Creates the table. */
-	private void createTable() {
+	private void createTable()
+	{
 		DatabaseManager.createTable(this);
 	}
 
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
 
-	public String getPrimaryKey() {
+	public String getPrimaryKey()
+	{
 		return primaryKey;
 	}
 
-	public ResultSet getResultSet() {
+	public ResultSet getResultSet()
+	{
 		return resultSet;
 	}
 
-	public TableColumn[] getTableColumns() {
+	public TableColumn[] getTableColumns()
+	{
 		return tableColumns;
 	}
-	
+
 	/**Determines the number of rows in the table.*/
-	public int getRowCount() {
+	public int getRowCount()
+	{
 		int rows = 0;
 
-		try {
-//			resultSet.beforeFirst();
-//
-//			while (resultSet.next())
-//				rows++;
-//
-//			resultSet.first();
-			
+		try
+		{
+			//			resultSet.beforeFirst();
+			//
+			//			while (resultSet.next())
+			//				rows++;
+			//
+			//			resultSet.first();
+
 			resultSet.last();
 			rows = resultSet.getRow();
-		} catch (SQLException e) {
-			System.out.println("Failed to determine the number of rows in "
-					+ name);
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Failed to determine the number of rows in " + name);
 		}
 
 		return rows;
@@ -78,13 +88,14 @@ public class Table {
 	/**
 	 * Adds a row to the table with blank data.
 	 */
-	public void addRow() {
+	public void addRow()
+	{
 		int numRows = getRowCount();
 
 		DatabaseManager.beginRowInsert(this);
 
 		DatabaseManager.addToRow(this, numRows, 0);
-		
+
 		for (int i = 1; i < tableColumns.length; i++)
 			DatabaseManager.addToRow(this, null, i);
 
@@ -95,17 +106,21 @@ public class Table {
 	 * Removes a row from the table given a value and the column that value is
 	 * in. Returns the index of the row that was deleted.
 	 */
-	public int deleteRow(Object value, int column) {
-		try {
+	public int deleteRow(Object value, int column)
+	{
+		try
+		{
 			resultSet.beforeFirst();
 
 			while (resultSet.next())
-				if (resultSet.getObject(column).toString()
-						.equals(value.toString())) {
+				if (resultSet.getObject(column).toString().equals(value.toString()))
+				{
 					resultSet.deleteRow();
 					return resultSet.getRow();
 				}
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Failed to delete row.");
 		}
 

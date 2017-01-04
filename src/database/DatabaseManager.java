@@ -20,49 +20,58 @@ import database.TableColumn.DataType;
  * Abstracts mySQL database management operations. "init() must be called before
  * use."
  */
-public class DatabaseManager {
+public class DatabaseManager
+{
 
 	private static Connection connection;
 
-	public DatabaseManager() {
+	public DatabaseManager()
+	{
 
 	}
-//
-//	public static void main(String[] args) {
-//		 DatabaseManager.init();
-//		 DatabaseManager.deleteTable(TableProperties.CATEGORIES_TABLE_NAME);
-//		 DatabaseManager.deleteTable(TableProperties.COURSES_TABLE_NAME);
-//		 DatabaseManager.deleteTable(TableProperties.STUDENTS_TABLE_NAME);
-//	}
+	//
+	//	public static void main(String[] args) {
+	//		 DatabaseManager.init();
+	//		 DatabaseManager.deleteTable(TableProperties.CATEGORIES_TABLE_NAME);
+	//		 DatabaseManager.deleteTable(TableProperties.COURSES_TABLE_NAME);
+	//		 DatabaseManager.deleteTable(TableProperties.STUDENTS_TABLE_NAME);
+	//	}
 
-	public static void init() {
+	public static void init()
+	{
 		DatabaseManager.connectToRemote();
 	}
 
 	/** Deletes a table. */
-	public static void deleteTable(String tableName) {
-		try {
-			DatabaseManager.getSQLStatement("DROP TABLE " + tableName)
-					.executeUpdate();
-		} catch (SQLException e) {
+	public static void deleteTable(String tableName)
+	{
+		try
+		{
+			DatabaseManager.getSQLStatement("DROP TABLE " + tableName).executeUpdate();
+		}
+		catch (SQLException e)
+		{
 			System.out.println("Failed to delete table \"" + tableName + "\".");
-		} finally {
-			System.out.println(
-					"Sucessfully deleted table \"" + tableName + "\".");
+		}
+		finally
+		{
+			System.out.println("Sucessfully deleted table \"" + tableName + "\".");
 		}
 	}
 
 	/** Returns the ResultSet for a given table. */
-	public static ResultSet getTable(Table table) {
-		try {
+	public static ResultSet getTable(Table table)
+	{
+		try
+		{
 			String sql = "SELECT * FROM " + table.getName();
-			Statement stmt = connection.createStatement(
-					ResultSet.TYPE_SCROLL_SENSITIVE,
-					ResultSet.CONCUR_UPDATABLE);
+			Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			ResultSet rs = stmt.executeQuery(sql);
 
 			return rs;
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			System.out.println(e.getMessage());
 		}
 
@@ -70,55 +79,66 @@ public class DatabaseManager {
 	}
 
 	/** Gets a table ready to be inserted into. */
-	public static void beginRowInsert(Table table) {
+	public static void beginRowInsert(Table table)
+	{
 		ResultSet resultSet = table.getResultSet();
-		try {
+		try
+		{
 			if (resultSet.getConcurrency() == ResultSet.CONCUR_UPDATABLE)
 				resultSet.moveToInsertRow();
-		} catch (SQLException e) {
-			System.out
-					.println("Unable to begin inserting a row into the table: "
-							+ table.getName());
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Unable to begin inserting a row into the table: " + table.getName());
 		}
 	}
 
 	/** Finishes the insert process for a row into a table. */
-	public static void endRowInsert(Table table) {
+	public static void endRowInsert(Table table)
+	{
 		ResultSet resultSet = table.getResultSet();
 
-		try {
+		try
+		{
 			resultSet.insertRow();
 			resultSet.moveToCurrentRow();
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			System.out.println(
-					"Insert row already added. Change values that need to be unique in row before adding a new row.");
+						"Insert row already added. Change values that need to be unique in row before adding a new row.");
 		}
 	}
 
 	/** Adds a value of the correct type to a table row ResultSet. */
-	public static void addToRow(Table table, Object value, int columnIndex) {
+	public static void addToRow(Table table, Object value, int columnIndex)
+	{
 
-		DataType type = DatabaseManager
-				.getSQLType(table.getTableColumns()[columnIndex].getType());
+		DataType type = DatabaseManager.getSQLType(table.getTableColumns()[columnIndex].getType());
 		ResultSet resultSet = table.getResultSet();
 
 		columnIndex++; // columnIndex starts at 1, not 0
 
-		try {
-			if (type == DataType.String) {
+		try
+		{
+			if (type == DataType.String)
+			{
 				if (value == null)
 					value = "";
 
 				resultSet.updateString(columnIndex, value.toString());
-			} else if (type == DataType.Integer) {
+			}
+			else if (type == DataType.Integer)
+			{
 				if (value == null)
 					value = 0;
 
 				resultSet.updateInt(columnIndex, Integer.class.cast(value));
 			}
-		} catch (SQLException e) {
-			System.out.println("Unable to add value " + value.toString()
-					+ " to " + table.getName() + ".");
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Unable to add value " + value.toString() + " to " + table.getName() + ".");
 		}
 
 	}
@@ -127,7 +147,8 @@ public class DatabaseManager {
 	 * Returns the name of the data type from a String containing a mySQL data
 	 * type.
 	 */
-	public static DataType getSQLType(String name) {
+	public static DataType getSQLType(String name)
+	{
 		if (name.contains("VARCHAR") || name.contains("CHAR"))
 			return DataType.String;
 		else if (name.contains("INT"))
@@ -137,56 +158,63 @@ public class DatabaseManager {
 	}
 
 	/** Opens the remote connection to the database. */
-	private static void connectToRemote() {
+	private static void connectToRemote()
+	{
 		String url = DatabasePropertiesManager.read("db", "url");
 		String username = DatabasePropertiesManager.read("db", "username");
 		String password = DatabasePropertiesManager.read("db", "password");
 
-		try {
+		try
+		{
 			String driver = "com.mysql.jdbc.Driver";
 			Class.forName(driver);
 			connection = DriverManager.getConnection(url, username, password);
 
 			System.out.println("Successfully connected to database.");
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			System.out.print(e);
 		}
 	}
-	
-	
-	
+
 	/** Test a connection to a database. */
-	public static boolean testConnection(String url, String username, String password) 
+	public static boolean testConnection(String url, String username, String password)
 	{
-		try {
-			
-			
+		try
+		{
+
 			System.out.println(DatabasePropertiesManager.read("db", "url").equals(url));
 			System.out.println(url);
 			System.out.println(username);
 			System.out.println(password);
 			String driver = "com.mysql.jdbc.Driver";
 			Class.forName(driver);
-		
+
 			Connection con = DriverManager.getConnection(url, username, password);
 			System.out.println("Successfully connected to database.");
 			con.close();
 			return true;
-			
-		} catch (Exception e) 
+
+		}
+		catch (Exception e)
 		{
 			System.out.print(e.getMessage());
-		
+
 		}
 		return false;
 	}
-	
-	/** Returns the mySQL prepared table given a command. */
-	public static PreparedStatement getSQLStatement(String mySQLCommand) {
 
-		try {
+	/** Returns the mySQL prepared table given a command. */
+	public static PreparedStatement getSQLStatement(String mySQLCommand)
+	{
+
+		try
+		{
 			return connection.prepareStatement(mySQLCommand);
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			System.out.println("The operation " + mySQLCommand + " failed.");
 			e.printStackTrace();
 
@@ -195,7 +223,8 @@ public class DatabaseManager {
 	}
 
 	/** Creates a single table. */
-	public static void createTable(Table table) {
+	public static void createTable(Table table)
+	{
 
 		String columnInfo = "";
 
@@ -204,15 +233,16 @@ public class DatabaseManager {
 
 		columnInfo += "PRIMARY KEY (" + table.getPrimaryKey() + ")";
 
-		try {
+		try
+		{
 
-			String sql = "CREATE TABLE IF NOT EXISTS " + table.getName() + "("
-					+ columnInfo + ")";
+			String sql = "CREATE TABLE IF NOT EXISTS " + table.getName() + "(" + columnInfo + ")";
 			DatabaseManager.getSQLStatement(sql).executeUpdate();
 
-			System.out.println(
-					"Sucessfully created table \"" + table.getName() + "\".");
-		} catch (SQLException e) {
+			System.out.println("Sucessfully created table \"" + table.getName() + "\".");
+		}
+		catch (SQLException e)
+		{
 			e.printStackTrace();
 		}
 	}

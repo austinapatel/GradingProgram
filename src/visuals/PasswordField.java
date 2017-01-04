@@ -24,7 +24,8 @@ import javax.swing.JTextField;
 import database.DatabaseManager;
 
 /** Password entry prompt for database credentials. */
-public class PasswordField extends JFrame implements ActionListener {
+public class PasswordField extends JFrame implements ActionListener
+{
 	private JTextField userNameField;
 	private JPasswordField passwordField;
 	private JTextField databaseIpField;
@@ -33,7 +34,8 @@ public class PasswordField extends JFrame implements ActionListener {
 	private JCheckBox checkbox1;
 	private JButton button1;
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 
 		PasswordField field = new PasswordField();
 
@@ -43,7 +45,8 @@ public class PasswordField extends JFrame implements ActionListener {
 
 	private JButton submit = new JButton("Submit");
 
-	public PasswordField() {
+	public PasswordField()
+	{
 		setLayout(null);
 		setIconImage(new ImageIcon("icon.png").getImage());
 		setResizable(false);
@@ -64,7 +67,7 @@ public class PasswordField extends JFrame implements ActionListener {
 		button1.setSize(160, 30);
 		button1.setLocation(WIDTH / 2 - 80, 200);
 		button1.setFocusable(false); // Don't let the button be pressed via
-										// ENTER or SPACE
+		// ENTER or SPACE
 		button1.setVisible(true);
 		button1.addActionListener(this);
 		add(button1);
@@ -114,20 +117,21 @@ public class PasswordField extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
-	private String convertUrl(String ip, String port, String dbName) {
-		
+	private String convertUrl(String ip, String port, String dbName)
+	{
+
 		return "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&useSSL=false";
 
 	}
-	
+
 	private void testConnection()
 	{
 		String url = convertUrl(databaseIpField.getText(), databasePortField.getText(), databaseNameField.getText());
-		
+
 		if (DatabaseManager.testConnection(url, userNameField.getText(), new String(passwordField.getPassword())))
 			JOptionPane.showMessageDialog(null, "Successfully connected to database.");
 		else
-			JOptionPane.showMessageDialog(null, "Could not connect to database.");	
+			JOptionPane.showMessageDialog(null, "Could not connect to database.");
 	}
 
 	public void actionPerformed(ActionEvent e)

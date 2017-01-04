@@ -33,60 +33,72 @@ import database.TableColumn.DataType;
 
 /** Cell editor for JTable to create custom input methods. */
 @SuppressWarnings("serial")
-public class DatabaseCellEditor extends AbstractCellEditor
-		implements TableCellEditor {
+public class DatabaseCellEditor extends AbstractCellEditor implements TableCellEditor
+{
 
 	private JComboBox<String> list;
 	private JTextField textField;
 	private ValueParameter valueParameter;
-	
-	public DatabaseCellEditor() {
+
+	public DatabaseCellEditor()
+	{
 		list = null;
 		textField = null;
 		valueParameter = null;
 	}
 
 	@Override
-	public Object getCellEditorValue() {
-		if (list != null) {			
+	public Object getCellEditorValue()
+	{
+		if (list != null)
+		{
 			// Link the selected item to the correct value from the spefific database table.
 			Table selectorTable = TableManager.getTable(valueParameter.getSelectorTable());
 			ResultSet selectorResultSet = selectorTable.getResultSet();
 			TableColumn[] selectorTableColumns = selectorTable.getTableColumns();
-			
+
 			// Move the row of the item selected
-			try {
+			try
+			{
 				selectorResultSet.absolute(list.getSelectedIndex() + 1);
-			} catch (SQLException e1) {
+			}
+			catch (SQLException e1)
+			{
 				System.out.println("Failed to move to the row of the selector item in selector.");
 				e1.printStackTrace();
 			}
-			
+
 			// Get the correct value from the linked column.
 			String linkColumnName = valueParameter.getSelectorLinkColumn();
 			int linkColumnIndex = 0;
-			
+
 			for (int i = 0; i < selectorTableColumns.length; i++)
-				if (selectorTableColumns[i].getName().equals(linkColumnName)) {
+				if (selectorTableColumns[i].getName().equals(linkColumnName))
+				{
 					linkColumnIndex = i + 1;
 					break;
 				}
-			
+
 			String linkedValue = null;
-			try {
+			try
+			{
 				linkedValue = selectorResultSet.getObject(linkColumnIndex).toString();
-			} catch (SQLException e) {
+			}
+			catch (SQLException e)
+			{
 				System.out.println("Failed to get linked value with selector.");
 				e.printStackTrace();
 			}
-			
+
 			list = null;
-			
+
 			return linkedValue;
-		} else {
+		}
+		else
+		{
 			String value = textField.getText();
 			textField = null;
-			
+
 			return value;
 		}
 	}
@@ -96,66 +108,75 @@ public class DatabaseCellEditor extends AbstractCellEditor
 	 * database cell when editing.
 	 */
 	@Override
-	public Component getTableCellEditorComponent(JTable table, Object value,
-			boolean isSelected, int row, int column) {
-		if (value != null) {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
+	{
+		if (value != null)
+		{
 			Border border = BorderFactory.createMatteBorder(1, 1, 1, 1, table.getSelectionBackground());
-			
+
 			// Get the data type of the column
 			DatabaseTableModel model = (DatabaseTableModel) table.getModel();
 			int databaseColumnIndex = table.getColumnModel().getColumn(column).getModelIndex();
 			TableColumn tableColumn = model.getTable().getTableColumns()[databaseColumnIndex];
 			valueParameter = tableColumn.getValueParameter();
-			
+
 			// Only use JComboBox for values that have an associated selector
-			if ((valueParameter != null && !valueParameter.hasSelector()) || valueParameter == null) {
+			if ((valueParameter != null && !valueParameter.hasSelector()) || valueParameter == null)
+			{
 				textField = new JTextField();
 				textField.setBorder(border);
 				String text = model.getValueAt(row, column).toString();
 				text = text.equals("0") ? "" : text;
 				textField.setText(text);
-				
+
 				return textField;
-			} 
-			
+			}
+
 			// Set up selector
 			Table selectorTable = TableManager.getTable(valueParameter.getSelectorTable());
 			ResultSet selectorResultSet = selectorTable.getResultSet();
 			String[] selectorValues = new String[selectorTable.getRowCount()];
 			int selectorColumnIndex = 0;
-			TableColumn[] selectorTableColumns = selectorTable.getTableColumns();		
-			
+			TableColumn[] selectorTableColumns = selectorTable.getTableColumns();
+
 			// Find index of selector output table column
-			for (int i = 0; i < selectorTableColumns.length; i++) {
+			for (int i = 0; i < selectorTableColumns.length; i++)
+			{
 				TableColumn cur = selectorTableColumns[i];
-				if (cur.getName().equals(valueParameter.getSelectorOutputColumn())) {
+				if (cur.getName().equals(valueParameter.getSelectorOutputColumn()))
+				{
 					selectorColumnIndex = i + 1;
 					break;
 				}
 			}
-			
+
 			// Add all the values in the rows in the specific column to the list
-			try {
+			try
+			{
 				selectorResultSet.beforeFirst();
 				int i = 0;
-				while (selectorResultSet.next()) {
+				while (selectorResultSet.next())
+				{
 					selectorValues[i] = selectorResultSet.getObject(selectorColumnIndex).toString();
 					i++;
 				}
-			} catch (SQLException e1) {
+			}
+			catch (SQLException e1)
+			{
 				e1.printStackTrace();
 			}
-			
+
 			list = new JComboBox<String>(selectorValues);
 
 			// When the space key action occurs, show the popup
 			String ACTION_KEY = "spacePress";
-			Action actionListener = new AbstractAction() {
+			Action actionListener = new AbstractAction()
+			{
 				@Override
-				public void actionPerformed(ActionEvent actionEvent) {
+				public void actionPerformed(ActionEvent actionEvent)
+				{
 					@SuppressWarnings("unchecked")
-					JComboBox<String> source = (JComboBox<String>) actionEvent
-							.getSource();
+					JComboBox<String> source = (JComboBox<String>) actionEvent.getSource();
 					source.showPopup();
 					source.requestFocus();
 				}
@@ -163,26 +184,30 @@ public class DatabaseCellEditor extends AbstractCellEditor
 
 			// Simulate space key press to open popup menu when JComboBox focused.
 			KeyStroke spacePress = KeyStroke.getKeyStroke(' ');
-			InputMap inputMap = list
-					.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+			InputMap inputMap = list.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 			inputMap.put(spacePress, ACTION_KEY);
 			ActionMap actionMap = list.getActionMap();
 			actionMap.put(ACTION_KEY, actionListener);
 			list.setActionMap(actionMap);
 
-			list.addKeyListener(new KeyListener() {
+			list.addKeyListener(new KeyListener()
+			{
 
 				@Override
-				public void keyTyped(KeyEvent e) {
+				public void keyTyped(KeyEvent e)
+				{
 				}
 
 				@Override
-				public void keyReleased(KeyEvent e) {
+				public void keyReleased(KeyEvent e)
+				{
 				}
 
 				@Override
-				public void keyPressed(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				public void keyPressed(KeyEvent e)
+				{
+					if (e.getKeyCode() == KeyEvent.VK_ENTER)
+					{
 						list.hidePopup();
 						table.requestFocus();
 					}
@@ -190,7 +215,8 @@ public class DatabaseCellEditor extends AbstractCellEditor
 			});
 
 			return list;
-		} else
+		}
+		else
 			return null;
 	}
 
