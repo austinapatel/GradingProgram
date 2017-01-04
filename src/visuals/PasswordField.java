@@ -22,6 +22,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import database.DatabaseManager;
+import database.DatabasePropertiesManager;
+import main.Main;
 
 /** Password entry prompt for database credentials. */
 public class PasswordField extends JFrame implements ActionListener
@@ -117,16 +119,16 @@ public class PasswordField extends JFrame implements ActionListener
 		setVisible(true);
 	}
 
-	private String convertUrl(String ip, String port, String dbName)
+	private String convertUrl()
 	{
 
-		return "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&useSSL=false";
+		return "jdbc:mysql://" + databaseIpField.getText() + ":" + databasePortField.getText() + "/" + databaseNameField.getText() + "?autoReconnect=true&useSSL=false";
 
 	}
 
 	private void testConnection()
 	{
-		String url = convertUrl(databaseIpField.getText(), databasePortField.getText(), databaseNameField.getText());
+		String url = convertUrl();
 
 		if (DatabaseManager.testConnection(url, userNameField.getText(), new String(passwordField.getPassword())))
 			JOptionPane.showMessageDialog(null, "Successfully connected to database.");
@@ -134,11 +136,19 @@ public class PasswordField extends JFrame implements ActionListener
 			JOptionPane.showMessageDialog(null, "Could not connect to database.");
 	}
 
+	
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource().equals(button1))
-		{
 			testConnection();
+		
+		
+		if (e.getSource().equals(submit))
+		{
+			DatabasePropertiesManager.write("db2.properties", new String[]{"password", "url", "username"}, new String[] {new String(passwordField.getPassword()), convertUrl(), userNameField.getText()});
+			Main.main(null);;
+			dispose();
 		}
+		
 	}
 }
