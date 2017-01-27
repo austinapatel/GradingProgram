@@ -46,7 +46,8 @@ public class TableInterface extends JFrame implements ActionListener
 {
 
 	private static final int WIDTH = 800, HEIGHT = 600;
-	private final String ACTION_ADD_ROW = "Add Row", ACTION_DELETE_ROW = "Delete Row", ACTION_CHANGE_CONNECTION = "Change Database Connection";
+	private final String ACTION_ADD_ROW = "Add Row", ACTION_DELETE_ROW = "Delete Row",
+				ACTION_CHANGE_CONNECTION = "Change Database Connection";
 
 	private JTable jTable;
 	private JPanel tableContainer, bottomContainer;
@@ -305,6 +306,8 @@ public class TableInterface extends JFrame implements ActionListener
 			{
 				setAutoCreateRowSorter(true);
 				setRowHeight(17);
+				getTableHeader().setReorderingAllowed(false);
+
 				addKeyListener(new KeyListener()
 				{
 
@@ -363,6 +366,6 @@ public class TableInterface extends JFrame implements ActionListener
 
 		jTable.setModel(databaseTableModel);
 
-		jTable.removeColumn(jTable.getColumn(databaseTableModel.getColumnName(0)));
+		//		jTable.removeColumn(jTable.getColumn(databaseTableModel.getColumnName(0)));
 	}
 }
