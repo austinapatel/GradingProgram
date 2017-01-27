@@ -120,6 +120,9 @@ public class DatabaseTableModel extends AbstractTableModel
 	@Override
 	public boolean isCellEditable(int row, int col)
 	{
+		if (col == 0)
+			return false;
+		
 		return true;
 	}
 
