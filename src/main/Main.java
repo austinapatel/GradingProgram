@@ -23,7 +23,12 @@ public class Main
 
 	public static void main(String[] args)
 	{
-		DatabaseManager.init();
+		
+		if (args[0] == null)
+			args[0] = "Dave123";
+		
+		else
+			DatabaseManager.init(args[0]);
 		Main.setUpTables();
 		new TableInterface();
 	}

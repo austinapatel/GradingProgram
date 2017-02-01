@@ -37,9 +37,9 @@ public class DatabaseManager
 	//		 DatabaseManager.deleteTable(TableProperties.STUDENTS_TABLE_NAME);
 	//	}
 
-	public static void init()
+	public static void init(String secretKey)
 	{
-		DatabaseManager.connectToRemote();
+		DatabaseManager.connectToRemote(secretKey);
 	}
 
 	/** Deletes a table. */
@@ -158,11 +158,11 @@ public class DatabaseManager
 	}
 
 	/** Opens the remote connection to the database. */
-	private static void connectToRemote()
+	private static void connectToRemote(String secretString)
 	{
-		String url = DatabasePropertiesManager.read("db", "url");
-		String username = DatabasePropertiesManager.read("db", "username");
-		String password = DatabasePropertiesManager.read("db", "password");
+		String url = DatabasePropertiesManager.read(secretString, "db", "url");
+		String username = DatabasePropertiesManager.read(secretString, "db", "username");
+		String password = DatabasePropertiesManager.read(secretString,"db", "password");
 
 		try
 		{
@@ -184,7 +184,7 @@ public class DatabaseManager
 		try
 		{
 
-			System.out.println(DatabasePropertiesManager.read("db", "url").equals(url));
+			//System.out.println(DatabasePropertiesManager.read(new String("db", "url").equals(url));
 			System.out.println(url);
 			System.out.println(username);
 			System.out.println(password);

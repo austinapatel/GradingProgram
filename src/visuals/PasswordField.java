@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import database.DatabaseManager;
 import database.DatabasePropertiesManager;
 import main.Main;
+import utilities.AES;
 
 /** Password entry prompt for database credentials. */
 public class PasswordField extends JFrame implements ActionListener
@@ -136,6 +137,20 @@ public class PasswordField extends JFrame implements ActionListener
 			JOptionPane.showMessageDialog(null, "Could not connect to database.");
 	}
 
+	
+//	public static void main(String[] args) 
+//	{
+//	    final String secretKey = "ssshhhhhhhhhhh!!!!";
+//	     
+//	    String originalString = "howtodoinjava.com";
+//	    String encryptedString = AES.encrypt(originalString, secretKey) ;
+//	    String decryptedString = AES.decrypt(encryptedString, secretKey) ;
+//	     
+//	    System.out.println(originalString);
+//	    System.out.println(encryptedString);
+//	    System.out.println(decryptedString);
+//	}
+	
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource().equals(button1))
@@ -143,10 +158,15 @@ public class PasswordField extends JFrame implements ActionListener
 
 		if (e.getSource().equals(submit))
 		{
-			DatabasePropertiesManager.write("db2.properties", new String[] {"password", "url", "username"},
-						new String[] {new String(passwordField.getPassword()), convertUrl(), userNameField.getText()});
-			Main.main(null);
-			;
+		
+			final String secretKey = new String(passwordField.getPassword());
+		
+			DatabasePropertiesManager.write("db", new String[] {"password", "url", "username"},
+						new String[] {AES.encrypt(secretKey, secretKey), 
+									AES.encrypt(convertUrl(), secretKey), AES.encrypt(userNameField.getText(), secretKey)});
+			
+			Main.main(new String[] {secretKey});
+		
 			dispose();
 		}
 

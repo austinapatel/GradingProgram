@@ -12,6 +12,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
+import utilities.AES;
+
 /** Stores the database credential information to a file. */
 public class DatabasePropertiesManager
 {
@@ -44,7 +46,7 @@ public class DatabasePropertiesManager
 	}
 
 	/** Reads a values in a with a given key and property file name. */
-	public static String read(String fileName, String key)
+	public static String read(String secretKey, String fileName, String key)
 	{
 		fileName += ".properties";
 
@@ -53,8 +55,7 @@ public class DatabasePropertiesManager
 			Properties properties = new Properties();
 			FileInputStream in = new FileInputStream(fileName);
 			properties.load(in);
-
-			return properties.getProperty(key);
+			return 	AES.decrypt(properties.getProperty(key), secretKey);
 		}
 		catch (Exception e)
 		{
