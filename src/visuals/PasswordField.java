@@ -22,9 +22,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import database.DatabaseManager;
-import database.DatabasePropertiesManager;
 import main.Main;
 import utilities.AES;
+import utilities.DatabasePropertiesManager;
 
 /** Password entry prompt for database credentials. */
 public class PasswordField extends JFrame implements ActionListener

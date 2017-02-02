@@ -9,7 +9,7 @@ package main;
 
 import database.DatabaseManager;
 import database.TableProperties;
-import database.ValueParameter;
+import utilities.ValueParameter;
 //import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import database.Table;
 import database.TableColumn;

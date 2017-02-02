@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import database.TableColumn.DataType;
+import utilities.DatabasePropertiesManager;
 
 /**
  * Abstracts mySQL database management operations. "init() must be called before

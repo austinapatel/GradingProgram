@@ -5,14 +5,12 @@
 // 10/13/16
 // WriteProperties.java
 
-package database;
+package utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
-
-import utilities.AES;
 
 /** Stores the database credential information to a file. */
 public class DatabasePropertiesManager
