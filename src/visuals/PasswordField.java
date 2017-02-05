@@ -8,8 +8,10 @@
 package visuals;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -31,25 +33,27 @@ public class PasswordField extends JFrame implements ActionListener
 {
 	private JTextField userNameField;
 	private JPasswordField passwordField;
+	private JPasswordField passwordField2;
 	private JTextField databaseIpField;
 	private JTextField databasePortField;
 	private JTextField databaseNameField;
 	private JCheckBox checkbox1;
-	private JButton button1;
+	private JButton button1, button2;
+	private final String PROPERTIES_FILE = "db";
+	private Box box;
 
 	public static void main(String[] args)
 	{
-
 		PasswordField field = new PasswordField();
-
 	}
 
-	private final int WIDTH = 255, HEIGHT = 300;
+	private final int WIDTH = 255, HEIGHT = 350;
 
 	private JButton submit = new JButton("Submit");
 
 	public PasswordField()
 	{
+		//DatabasePropertiesManager.deleteFile(PROPERTIES_FILE);
 		setLayout(null);
 		setIconImage(new ImageIcon("icon.png").getImage());
 		setResizable(false);
@@ -74,7 +78,25 @@ public class PasswordField extends JFrame implements ActionListener
 		button1.setVisible(true);
 		button1.addActionListener(this);
 		add(button1);
-
+		
+		button2 = new JButton();
+		button2.setText("Use Previous Login");
+		button2.setForeground(Color.BLACK);
+		button2.setSize(160, 30);
+		button2.setLocation(WIDTH / 2 - 80, 270);
+		button2.setFocusable(false); // Don't let the button be pressed via
+		
+		String filename = PROPERTIES_FILE;
+		
+		File f = new File(filename);
+		if (f.exists())
+			button2.setVisible(true);
+		else
+			button2.setVisible(false);
+		
+		button2.setVisible(true);
+		button2.addActionListener(this);
+		add(button2);
 		checkbox1 = new JCheckBox("<html>Remember Login (Encrypted)</html>");
 		// checkbox1.setBackground(Color.GRAY);
 		checkbox1.setForeground(Color.BLACK);
@@ -86,30 +108,24 @@ public class PasswordField extends JFrame implements ActionListener
 
 		userNameField = new JTextField(20);
 		passwordField = new JPasswordField();
+		passwordField2 = new JPasswordField();
 		databaseIpField = new JTextField(20);
 		databasePortField = new JTextField(20);
 		databaseNameField = new JTextField(20);
-
-		Box box = Box.createVerticalBox(); // vertical box
+		box = Box.createVerticalBox(); // vertical box
 		box.add(label);
 		box.add(userNameField);
-
 		box.add(label2);
 		box.add(passwordField);
-
 		box.add(label3);
 		box.add(databaseIpField);
-
 		box.add(label4);
 		box.add(databasePortField);
-
 		box.add(label5);
 		box.add(databaseNameField);
-
 		box.add(checkbox1);
 		box.setSize(250, 200);
 		add(box);
-
 		int subSize = 200;
 		submit.setSize(subSize, 30);
 		submit.setLocation(WIDTH / 2 - subSize / 2, 235);
@@ -125,50 +141,90 @@ public class PasswordField extends JFrame implements ActionListener
 
 		return "jdbc:mysql://" + databaseIpField.getText() + ":" + databasePortField.getText() + "/"
 					+ databaseNameField.getText() + "?autoReconnect=true&useSSL=false";
-
 	}
 
-	private void testConnection()
+	private boolean testConnection()
 	{
-		if (DatabaseManager.testConnection(convertUrl(), userNameField.getText(),
-					new String(passwordField.getPassword())))
+		if (DatabaseManager.testConnection(convertUrl(), userNameField.getText(),new String(passwordField.getPassword())))
+		{
 			JOptionPane.showMessageDialog(null, "Successfully connected to database.");
+			return true;
+				
+		}
 		else
+		{
 			JOptionPane.showMessageDialog(null, "Could not connect to database.");
+			return false;
+		}
 	}
 
-	
-//	public static void main(String[] args) 
-//	{
-//	    final String secretKey = "ssshhhhhhhhhhh!!!!";
-//	     
-//	    String originalString = "howtodoinjava.com";
-//	    String encryptedString = AES.encrypt(originalString, secretKey) ;
-//	    String decryptedString = AES.decrypt(encryptedString, secretKey) ;
-//	     
-//	    System.out.println(originalString);
-//	    System.out.println(encryptedString);
-//	    System.out.println(decryptedString);
-//	}
-	
 	public void actionPerformed(ActionEvent e)
-	{
+	{	
+		if (e.getSource().equals(button2))
+		{
+	
+			JPasswordField pf = new JPasswordField();
+			int okCxl = JOptionPane.showConfirmDialog(null, pf, "Enter Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+			if (okCxl == JOptionPane.OK_OPTION) 
+			{
+				String password = new String(pf.getPassword());
+		
+				if (!password.trim().equals(""))
+					{
+					System.out.println(password);
+					
+					String url = DatabasePropertiesManager.read(password, PROPERTIES_FILE, "url");
+					String username = DatabasePropertiesManager.read(password, PROPERTIES_FILE, "username");		
+					String pass = DatabasePropertiesManager.read(password, PROPERTIES_FILE, "password");
+							
+	
+					if (url != null && username!= null && pass != null && DatabaseManager.testConnection(url, username, password))	
+					{
+						
+					  Main.main(new String[] {password});
+					  dispose();
+					  
+					}
+				
+				}					
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Could not connect to database.");
+										
+		}
+		
 		if (e.getSource().equals(button1))
 			testConnection();
 
 		if (e.getSource().equals(submit))
 		{
-		
-			final String secretKey = new String(passwordField.getPassword());
-		
-			DatabasePropertiesManager.write("db", new String[] {"password", "url", "username"},
-						new String[] {AES.encrypt(secretKey, secretKey), 
+			 Thread thread = new Thread("New Thread") {
+			      public void run(){
+			        System.out.println("run by: " + getName());
+			      }
+			   };
+	
+			if (testConnection())
+			{	
+					final String secretKey = new String(passwordField.getPassword());
+				
+					if (checkbox1.isSelected())
+					{
+						DatabasePropertiesManager.write(PROPERTIES_FILE, new String[] {"password", "url", "username"},
+								new String[] {AES.encrypt(secretKey, secretKey), 
 									AES.encrypt(convertUrl(), secretKey), AES.encrypt(userNameField.getText(), secretKey)});
-			
-			Main.main(new String[] {secretKey});
-		
-			dispose();
+					}
+					else
+					{
+						DatabasePropertiesManager.deleteFile(PROPERTIES_FILE);
+					}
+						
+					Main.main(new String[] {secretKey});
+					dispose();
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Could not connect to database.");
 		}
-
 	}
 }

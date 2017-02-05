@@ -201,9 +201,10 @@ public class DatabaseManager
 		catch (Exception e)
 		{
 			System.out.print(e.getMessage());
+			return false;
 
 		}
-		return false;
+		
 	}
 
 	/** Returns the mySQL prepared table given a command. */

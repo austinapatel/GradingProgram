@@ -24,11 +24,8 @@ public class Main
 	public static void main(String[] args)
 	{
 		
-		if (args[0] == null)
-			args[0] = "Dave123";
-		
-		else
-			DatabaseManager.init(args[0]);
+//else
+			DatabaseManager.init("Dave123");
 		Main.setUpTables();
 		new TableInterface();
 	}

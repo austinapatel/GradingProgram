@@ -9,6 +9,7 @@ package utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
@@ -24,7 +25,7 @@ public class DatabasePropertiesManager
 		try
 		{
 			Properties properties = new Properties();
-			FileInputStream in = new FileInputStream("db.properties");
+			FileInputStream in = new FileInputStream(fileName);
 			properties.load(in);
 
 			for (int i = 0; i < keys.length; i++)
@@ -42,7 +43,21 @@ public class DatabasePropertiesManager
 		}
 
 	}
-
+	
+	
+	public static void deleteFile(String filename)
+	{
+		filename += ".properties";
+		File f = new File(filename);
+		if (f.exists())
+		{
+		   f.delete();
+		}
+	}
+	
+	
+	
+	
 	/** Reads a values in a with a given key and property file name. */
 	public static String read(String secretKey, String fileName, String key)
 	{
