@@ -42,6 +42,11 @@ public class DatabaseManager
 	{
 		DatabaseManager.connectToRemote(secretKey);
 	}
+	
+	public static void init(String url, String username, String password)
+	{
+		DatabaseManager.connectToRemote(url, username, password);
+	}
 
 	/** Deletes a table. */
 	public static void deleteTable(String tableName)
@@ -165,6 +170,21 @@ public class DatabaseManager
 		String username = DatabasePropertiesManager.read(secretString, "db", "username");
 		String password = DatabasePropertiesManager.read(secretString,"db", "password");
 
+		try
+		{
+			String driver = "com.mysql.jdbc.Driver";
+			Class.forName(driver);
+			connection = DriverManager.getConnection(url, username, password);
+
+			System.out.println("Successfully connected to database.");
+		}
+		catch (Exception e)
+		{
+			System.out.print(e);
+		}
+	}
+	private static void connectToRemote(String url, String username, String password)
+	{
 		try
 		{
 			String driver = "com.mysql.jdbc.Driver";

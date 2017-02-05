@@ -186,7 +186,6 @@ public class PasswordField extends JFrame implements ActionListener
 					  dispose();
 					  
 					}
-				
 				}					
 			}
 			else
@@ -199,12 +198,6 @@ public class PasswordField extends JFrame implements ActionListener
 
 		if (e.getSource().equals(submit))
 		{
-			 Thread thread = new Thread("New Thread") {
-			      public void run(){
-			        System.out.println("run by: " + getName());
-			      }
-			   };
-	
 			if (testConnection())
 			{	
 					final String secretKey = new String(passwordField.getPassword());
@@ -214,14 +207,15 @@ public class PasswordField extends JFrame implements ActionListener
 						DatabasePropertiesManager.write(PROPERTIES_FILE, new String[] {"password", "url", "username"},
 								new String[] {AES.encrypt(secretKey, secretKey), 
 									AES.encrypt(convertUrl(), secretKey), AES.encrypt(userNameField.getText(), secretKey)});
+						Main.main(new String[] {secretKey});
+						dispose();
 					}
 					else
 					{
 						DatabasePropertiesManager.deleteFile(PROPERTIES_FILE);
+						Main.main(new String[] {convertUrl(), userNameField.getText(), new String(passwordField.getPassword())});
+						dispose();
 					}
-						
-					Main.main(new String[] {secretKey});
-					dispose();
 			}
 			else
 				JOptionPane.showMessageDialog(null, "Could not connect to database.");

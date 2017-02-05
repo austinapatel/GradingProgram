@@ -25,7 +25,19 @@ public class DatabasePropertiesManager
 		try
 		{
 			Properties properties = new Properties();
-			FileInputStream in = new FileInputStream(fileName);
+			File file = new File(fileName);
+			
+			try
+			{
+				
+			if (!file.exists())
+				file.createNewFile();
+			}
+			catch(Exception e)
+			{
+				
+			}
+			FileInputStream in = new FileInputStream(new File(fileName));
 			properties.load(in);
 
 			for (int i = 0; i < keys.length; i++)
@@ -38,7 +50,7 @@ public class DatabasePropertiesManager
 		}
 		catch (Exception e)
 		{
-			System.out.println("Failed to read from file");
+			System.out.println("Failed to write to file");
 			e.printStackTrace();
 		}
 

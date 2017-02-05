@@ -24,13 +24,32 @@ public class Main
 	public static void main(String[] args)
 	{
 		
-//else
-			DatabaseManager.init("Dave123");
+		
+		//PasswordField field = new PasswordField();
+	
+		if (args.length == 1)
+			launchGUI(args[0]);
+		else if (args.length > 1)
+			launchGUI(args[0], args[1], args[2]);
+		
+	}
+	//note that field calls launchGUI
+	public static void launchGUI(String secretKey)
+	{
+		DatabaseManager.init(secretKey);
 		Main.setUpTables();
 		new TableInterface();
 	}
-
-	public static void setUpTables()
+	//note that field calls launchGUI
+	public static void launchGUI(String url, String username, String password)
+	{
+		DatabaseManager.init(url, username, password);
+		Main.setUpTables();
+		new TableInterface();
+	}
+	
+	
+	private static void setUpTables()
 	{
 		TableColumn[] studentsTableColumns = new TableColumn[] {
 					new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE", null),
