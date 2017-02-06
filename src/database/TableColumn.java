@@ -7,6 +7,8 @@
 
 package database;
 
+import utilities.ValueParameter;
+
 /** Holds information for a specific column in a database table. */
 public class TableColumn
 {

@@ -5,7 +5,7 @@
 // 12/24/16
 // ValueParameter.java
 
-package database;
+package utilities;
 
 /** Dictates attributes that a value must have to be valid input. */
 public class ValueParameter

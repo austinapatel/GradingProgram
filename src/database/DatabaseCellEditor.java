@@ -29,6 +29,8 @@ import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 import javax.swing.table.TableCellEditor;
 
+import utilities.ValueParameter;
+
 /** Cell editor for JTable to create custom input methods. */
 @SuppressWarnings("serial")
 public class DatabaseCellEditor extends AbstractCellEditor implements TableCellEditor

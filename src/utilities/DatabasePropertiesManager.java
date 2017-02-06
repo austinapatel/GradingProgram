@@ -5,10 +5,11 @@
 // 10/13/16
 // WriteProperties.java
 
-package database;
+package utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
@@ -24,7 +25,19 @@ public class DatabasePropertiesManager
 		try
 		{
 			Properties properties = new Properties();
-			FileInputStream in = new FileInputStream("db.properties");
+			File file = new File(fileName);
+			
+			try
+			{
+				
+			if (!file.exists())
+				file.createNewFile();
+			}
+			catch(Exception e)
+			{
+				
+			}
+			FileInputStream in = new FileInputStream(new File(fileName));
 			properties.load(in);
 
 			for (int i = 0; i < keys.length; i++)
@@ -37,14 +50,28 @@ public class DatabasePropertiesManager
 		}
 		catch (Exception e)
 		{
-			System.out.println("Failed to read from file");
+			System.out.println("Failed to write to file");
 			e.printStackTrace();
 		}
 
 	}
-
+	
+	
+	public static void deleteFile(String filename)
+	{
+		filename += ".properties";
+		File f = new File(filename);
+		if (f.exists())
+		{
+		   f.delete();
+		}
+	}
+	
+	
+	
+	
 	/** Reads a values in a with a given key and property file name. */
-	public static String read(String fileName, String key)
+	public static String read(String secretKey, String fileName, String key)
 	{
 		fileName += ".properties";
 
@@ -53,8 +80,7 @@ public class DatabasePropertiesManager
 			Properties properties = new Properties();
 			FileInputStream in = new FileInputStream(fileName);
 			properties.load(in);
-
-			return properties.getProperty(key);
+			return 	AES.decrypt(properties.getProperty(key), secretKey);
 		}
 		catch (Exception e)
 		{
