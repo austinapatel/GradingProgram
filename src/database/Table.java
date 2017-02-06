@@ -94,7 +94,7 @@ public class Table
 
 		DatabaseManager.beginRowInsert(this);
 
-		DatabaseManager.addToRow(this, numRows, 0);
+		DatabaseManager.addToRow(this, numRows+ 1, 0);
 
 		for (int i = 1; i < tableColumns.length; i++)
 			DatabaseManager.addToRow(this, null, i);
