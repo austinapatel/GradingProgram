@@ -21,17 +21,16 @@ import visuals.TableInterface;
 public class Main
 {
 
+	static PasswordField login;
 	public static void main(String[] args)
 	{
-		
-		
-		//PasswordField field = new PasswordField();
 	
 		if (args.length == 1)
 			launchGUI(args[0]);
 		else if (args.length > 1)
 			launchGUI(args[0], args[1], args[2]);
-		
+		else
+			login = new PasswordField();
 	}
 	//note that field calls launchGUI
 	public static void launchGUI(String secretKey)
