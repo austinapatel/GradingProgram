@@ -5,7 +5,7 @@
 // 12/24/16
 // ValueParameter.java
 
-package utilities;
+package database;
 
 /** Dictates attributes that a value must have to be valid input. */
 public class ValueParameter
@@ -13,13 +13,15 @@ public class ValueParameter
 
 	private boolean hasSetLength, hasSetValue, hasSelector;
 	private int minValueLength, maxValueLength, minValue, maxValue;
-	private String selectorTable, selectorOutputColumn, selectorLinkColumn;
+	private String selectorTable, selectorLinkColumn;
+	private String[] selectorOutputColumns;
 
 	public ValueParameter()
 	{
 		hasSetLength = hasSetValue = hasSelector = false;
 		minValueLength = maxValueLength = minValue = maxValue = 0;
-		selectorTable = selectorOutputColumn = selectorLinkColumn = "";
+		selectorTable = selectorLinkColumn = "";
+		selectorOutputColumns = null;
 	}
 
 	public int getMinValueLength()
@@ -74,11 +76,11 @@ public class ValueParameter
 	}
 
 	/**Sets the field to be have a JComboBox to pick input*/
-	public void addSelector(String tableName, String visualColumnName, String linkColumnName)
+	public void addSelector(String tableName, String... visualColumnNames)
 	{
 		selectorTable = tableName;
-		selectorOutputColumn = visualColumnName;
-		selectorLinkColumn = linkColumnName;
+		selectorOutputColumns = visualColumnNames;
+		selectorLinkColumn = TableProperties.ID;
 		hasSelector = true;
 	}
 
@@ -87,9 +89,9 @@ public class ValueParameter
 		return selectorTable;
 	}
 
-	public String getSelectorOutputColumn()
+	public String[] getSelectorOutputColumns()
 	{
-		return selectorOutputColumn;
+		return selectorOutputColumns;
 	}
 
 	public String getSelectorLinkColumn()

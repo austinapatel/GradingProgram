@@ -50,7 +50,7 @@ public class TableInterface extends JFrame implements ActionListener
 
 	private static final int WIDTH = 800, HEIGHT = 600;
 	private final String ACTION_ADD_ROW = "Add Row", ACTION_DELETE_ROW = "Delete Row",
-				ACTION_CHANGE_CONNECTION = "Change Database Connection";
+				ACTION_CHANGE_CONNECTION = "Manage Database Connection";
 
 	private JTable jTable;
 	private JPanel tableContainer, bottomContainer;
@@ -82,7 +82,7 @@ public class TableInterface extends JFrame implements ActionListener
 				add(new JMenu("Database")
 				{
 					{
-						add(new JMenuItem("Add row")
+						add(new JMenuItem(ACTION_ADD_ROW)
 						{
 							{
 								setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.Event.CTRL_MASK));
@@ -91,7 +91,7 @@ public class TableInterface extends JFrame implements ActionListener
 								addActionListener(TableInterface.this);
 							}
 						});
-						add(new JMenuItem("Delete row")
+						add(new JMenuItem(ACTION_DELETE_ROW)
 						{
 							{
 								setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.Event.CTRL_MASK));
@@ -100,10 +100,10 @@ public class TableInterface extends JFrame implements ActionListener
 								addActionListener(TableInterface.this);
 							}
 						});
-						add(new JMenuItem("Change Database Connection")
+						add(new JMenuItem(ACTION_CHANGE_CONNECTION)
 						{
 							{
-								setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.Event.CTRL_MASK));
+								setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.Event.CTRL_MASK));
 
 								setActionCommand(ACTION_CHANGE_CONNECTION);
 								addActionListener(TableInterface.this);
@@ -129,6 +129,7 @@ public class TableInterface extends JFrame implements ActionListener
 		setSize(WIDTH, HEIGHT);
 		setTitle("Grading Program");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 	}
 
 	private void initBottomButtons()
@@ -147,7 +148,7 @@ public class TableInterface extends JFrame implements ActionListener
 						databaseTableModel.fireTableDataChanged();
 
 						jTable.requestFocus();
-						jTable.changeSelection(databaseTableModel.getRowCount() - 1, 0, false, false);
+						jTable.changeSelection(databaseTableModel.getRowCount() - 1, 1, false, false);
 					}
 				});
 			}
@@ -269,7 +270,7 @@ public class TableInterface extends JFrame implements ActionListener
 							if (databaseTableModel.getRowCount() > 0)
 							{
 								jTable.requestFocus();
-								jTable.changeSelection(0, 0, false, false);
+								jTable.changeSelection(0, 1, false, false);
 							}
 						}
 					}
@@ -329,7 +330,7 @@ public class TableInterface extends JFrame implements ActionListener
 					public void keyPressed(KeyEvent e)
 					{
 						if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_KP_LEFT)
-									&& jTable.getSelectedColumn() == 0)
+									&& jTable.getSelectedColumn() == 1)
 							tableList.requestFocus();
 					}
 				});
@@ -369,10 +370,9 @@ public class TableInterface extends JFrame implements ActionListener
 
 		jTable.setModel(databaseTableModel);
 		
-		jTable.getColumnModel().getColumn(0).setMaxWidth(0);;
-
-		
-		
-//		jTable.removeColumn(jTable.getColumn(databaseTableModel.getColumnName(0)));
+		// Hide the ID column
+		jTable.getColumnModel().getColumn(0).setMinWidth(0);
+		jTable.getColumnModel().getColumn(0).setMaxWidth(0);
+		jTable.getColumnModel().getColumn(0).setWidth(0);		
 	}
 }
