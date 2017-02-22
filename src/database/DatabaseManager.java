@@ -38,6 +38,10 @@ public class DatabaseManager
 ////			 DatabaseManager.deleteTable(TableProperties.STUDENTS_TABLE_NAME);
 //		}
 
+	public static Connection getConnection() {
+		return connection;
+	}
+
 	public static void init(String secretKey)
 	{
 		DatabaseManager.connectToRemote(secretKey);

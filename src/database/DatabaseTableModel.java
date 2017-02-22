@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.table.AbstractTableModel;
 import database.TableColumn.DataType;
+import visuals.TableInterface;
 
 /** Relates a mySQL database to a JTable TableModel. */
 @SuppressWarnings("serial")
@@ -18,9 +19,10 @@ public class DatabaseTableModel extends AbstractTableModel {
 
 	private Table table;
 	private ResultSet resultSet;
+	private TableInterface tableInterface;
 
-	public DatabaseTableModel() {
-
+	public DatabaseTableModel(TableInterface tableInterface) {
+		this.tableInterface = tableInterface;
 	}
 
 	/** Changes the table of the model. */
@@ -60,7 +62,7 @@ public class DatabaseTableModel extends AbstractTableModel {
 				
 				// Add together the values from each of the visual columns
 				String newValue = "";
-				
+
 				for (String columnName : valueParameter.getSelectorOutputColumns()) {
 					// Check if columnName is actually a column (could be a formatting String)
 					boolean isColumn = false;
@@ -72,8 +74,10 @@ public class DatabaseTableModel extends AbstractTableModel {
 					
 					if (isColumn)
 						newValue += otherResultSet.getString(columnName) + " ";
-					else
+					else {
+						newValue = newValue.trim();
 						newValue += columnName;
+					}
 				}
 				
 				newValue = newValue.substring(0, newValue.length() - 1);
@@ -136,9 +140,12 @@ public class DatabaseTableModel extends AbstractTableModel {
 		columnIndex++;
 		rowIndex++;
 
-		if (success)
+		if (success) {
+			resultSet = table.getResultSet();
+
 			new Thread(new UpdateDatabaseItemRunnable(columnIndex, rowIndex,
 					value, resultSet, dataType)).start();
+		}
 	}
 
 	@Override
@@ -146,7 +153,7 @@ public class DatabaseTableModel extends AbstractTableModel {
 		if (col == 0)
 			return false;
 
-		return true;
+		return !tableInterface.isLocked();
 	}
 
 	@Override

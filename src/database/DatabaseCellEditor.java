@@ -7,6 +7,8 @@
 
 package database;
 
+import visuals.TableInterface;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -38,8 +40,11 @@ public class DatabaseCellEditor extends AbstractCellEditor
 	private JComboBox<String> list;
 	private JTextField textField;
 	private ValueParameter valueParameter;
+	private TableInterface tableInterface;
 
-	public DatabaseCellEditor() {
+	public DatabaseCellEditor(TableInterface tableInterface) {
+		this.tableInterface = tableInterface;
+
 		list = null;
 		textField = null;
 		valueParameter = null;
@@ -47,7 +52,7 @@ public class DatabaseCellEditor extends AbstractCellEditor
 
 	@Override
 	public Object getCellEditorValue() {
-		if (list != null) {
+		if (list != null) { // has a custom editor field
 			// Link the selected item to the correct value from the specific
 			// database table.
 			Table selectorTable = TableManager
@@ -124,6 +129,18 @@ public class DatabaseCellEditor extends AbstractCellEditor
 				textField.setText(text);
 
 				return textField;
+			} else if (valueParameter.hasSelector() && valueParameter.hasWholeRowSelector()) {
+				Table[] tables = TableManager.getAllTables();
+
+				int index = 0;
+				for (int i = 0; i < tables.length; i++)
+					if (tables[i].getName().equals(valueParameter.getSelectorTable())) {
+						index = i;
+						break;
+					}
+
+				tableInterface.lockInto(index, row, column);
+				return null;
 			}
 
 			// Set up selector
@@ -138,13 +155,14 @@ public class DatabaseCellEditor extends AbstractCellEditor
 			ArrayList<Integer> selecterColumnIndices = new ArrayList<Integer>();
 
 			// Find indices of selector outputs in the table columns
+			outer:
 			for (int k = 0; k < selectorOutputColumns.length; k++) {
 				for (int i = 0; i < selectorTableColumns.length; i++) {
 					TableColumn cur = selectorTableColumns[i];
 
 					if (cur.getName().equals(selectorOutputColumns[k])) {
 						selecterColumnIndices.add(i + 1);
-						break;
+						continue outer;
 					}
 				}
 				// if the current selecter table column is not actually a column
@@ -165,7 +183,7 @@ public class DatabaseCellEditor extends AbstractCellEditor
 					for (int index : selecterColumnIndices) {
 						if (index < 0) { // This must be a formatting String
 							selectorValues[i] = selectorValues[i].trim(); // Allow freedom in formatting
-							
+
 							int actualIndex = -(index + 1);
 							selectorValues[i] += selectorOutputColumns[actualIndex];
 						} else

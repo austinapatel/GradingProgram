@@ -139,13 +139,15 @@ public class Main {
 				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL",
 						new ValueParameter() {
 							{
-								addSelector(TableProperties.COURSES_TABLE_NAME,
+								addSelector(TableProperties.COURSES_TABLE_NAME, true,
 										TableProperties.PERIOD,
-										"� ",
+										"° ",
 										TableProperties.NAME,
 										TableProperties.START_YEAR,
 										"-",
 										TableProperties.END_YEAR);
+
+//								addSelector(TableProperties.COURSES_TABLE_NAME, true, );
 							}
 						}),
 				new TableColumn(TableProperties.STUDENTS_ID, "INT NOT NULL",

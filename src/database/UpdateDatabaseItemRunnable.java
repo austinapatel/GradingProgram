@@ -8,6 +8,7 @@
 package database;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import database.TableColumn.DataType;
 
@@ -40,6 +41,8 @@ public class UpdateDatabaseItemRunnable implements Runnable
 		{
 			resultSet.absolute(rowIndex);
 
+			System.out.println("ResultSet Row: " + resultSet.getRow());
+
 			if (dataType == DataType.Integer)
 			{
 				int intVal = Integer.parseInt(newValue.toString());
@@ -49,13 +52,14 @@ public class UpdateDatabaseItemRunnable implements Runnable
 			else if (dataType == DataType.String)
 				resultSet.updateString(columnIndex, newValue.toString());
 			else
-				throw new Exception("DataType not handled");
+				throw new Exception("DataType not handled (UpdateDatabaseItemRunnabale.java)");
 
 			resultSet.updateRow();
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			System.out.println("Invalid new value into database row.");
+
+			e.printStackTrace();
 		}
 	}
 }
