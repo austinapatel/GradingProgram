@@ -32,6 +32,8 @@ public class TableProperties
 	public static String COURSES_TABLE_NAME = "Courses";
 	public static String NAME = "name";
 	public static String PERIOD = "period";
+	public static String START_YEAR = "startYear";
+	public static String END_YEAR = "endYear";
 
 	// Assignments
 	public static String ASSIGNMENTS_TABLE_NAME = "Assignments";
@@ -48,7 +50,8 @@ public class TableProperties
 
 	// Enrollments
 	public static String ENROLLMENTS_TABLE_NAME = "Enrollments";
-	public static String YEAR = "year";
 	// Also uses the "courseID" field of "Assignments" table
 	public static String STUDENTS_ID = "studentId";
+	// Also uses the "start year" field of "Courses" table
+	// Also uses the "end year" field of "Courses" table
 }

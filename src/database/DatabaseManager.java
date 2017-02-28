@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import database.TableColumn.DataType;
-import utilities.DatabasePropertiesManager;
 
 /**
  * Abstracts mySQL database management operations. "init() must be called before
@@ -30,13 +29,18 @@ public class DatabaseManager
 	{
 
 	}
-	//
-	//	public static void main(String[] args) {
-	//		 DatabaseManager.init();
-	//		 DatabaseManager.deleteTable(TableProperties.CATEGORIES_TABLE_NAME);
-	//		 DatabaseManager.deleteTable(TableProperties.COURSES_TABLE_NAME);
-	//		 DatabaseManager.deleteTable(TableProperties.STUDENTS_TABLE_NAME);
-	//	}
+
+//		public static void main(String[] args) {
+//			 DatabaseManager.init(args[0], args[1], args[2]);
+//			 DatabaseManager.deleteTable(TableProperties.ENROLLMENTS_TABLE_NAME);
+////			 DatabaseManager.deleteTable(TableProperties.COURSES_TABLE_NAME);
+////			 DatabaseManager.deleteTable(TableProperties.COURSES_TABLE_NAME);
+////			 DatabaseManager.deleteTable(TableProperties.STUDENTS_TABLE_NAME);
+//		}
+
+	public static Connection getConnection() {
+		return connection;
+	}
 
 	public static void init(String secretKey)
 	{
@@ -54,15 +58,12 @@ public class DatabaseManager
 		try
 		{
 			DatabaseManager.getSQLStatement("DROP TABLE " + tableName).executeUpdate();
+			System.out.println("Sucessfully deleted table \"" + tableName + "\".");
 		}
 		catch (SQLException e)
 		{
 			System.out.println("Failed to delete table \"" + tableName + "\".");
-		}
-		finally
-		{
-			System.out.println("Sucessfully deleted table \"" + tableName + "\".");
-		}
+		}	
 	}
 
 	/** Returns the ResultSet for a given table. */

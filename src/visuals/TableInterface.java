@@ -38,19 +38,18 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableCellEditor;
 
-import database.DatabaseCellEditor;
-import database.DatabaseTableModel;
-import database.Table;
-import database.TableManager;
+import database.*;
 
 /** Interface for the program. */
 @SuppressWarnings("serial")
 public class TableInterface extends JFrame implements ActionListener
 {
 
+	private static final String FRAME_TITLE = "Grading Program";
+
 	private static final int WIDTH = 800, HEIGHT = 600;
 	private final String ACTION_ADD_ROW = "Add Row", ACTION_DELETE_ROW = "Delete Row",
-				ACTION_CHANGE_CONNECTION = "Change Database Connection";
+				ACTION_CHANGE_CONNECTION = "Manage Database Connection";
 
 	private JTable jTable;
 	private JPanel tableContainer, bottomContainer;
@@ -58,20 +57,31 @@ public class TableInterface extends JFrame implements ActionListener
 	private JList<String> tableList;
 	private Table table;
 	private DatabaseTableModel databaseTableModel;
-	private JButton addRowButton, deleteRowButton, printButton;
+	private JButton addRowButton, deleteRowButton, printButton, selectButton;
+	private int callingTableIndex;
+
+	// Locked means that the TableInterface is being used as a selector for a table row
+	private boolean isLocked;
 
 	public TableInterface()
 	{
 		initFrame();
 
+
 		initTopContainer();
+
 		initBottomContainer();
 		initTablePicker();
+
 		initTable();
 		initBottomButtons();
 		initMenu();
 
 		setVisible(true);
+	}
+
+	public boolean isLocked() {
+		return isLocked;
 	}
 
 	private void initMenu()
@@ -82,7 +92,7 @@ public class TableInterface extends JFrame implements ActionListener
 				add(new JMenu("Database")
 				{
 					{
-						add(new JMenuItem("Add row")
+						add(new JMenuItem(ACTION_ADD_ROW)
 						{
 							{
 								setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.Event.CTRL_MASK));
@@ -91,7 +101,7 @@ public class TableInterface extends JFrame implements ActionListener
 								addActionListener(TableInterface.this);
 							}
 						});
-						add(new JMenuItem("Delete row")
+						add(new JMenuItem(ACTION_DELETE_ROW)
 						{
 							{
 								setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.Event.CTRL_MASK));
@@ -100,10 +110,10 @@ public class TableInterface extends JFrame implements ActionListener
 								addActionListener(TableInterface.this);
 							}
 						});
-						add(new JMenuItem("Change Database Connection")
+						add(new JMenuItem(ACTION_CHANGE_CONNECTION)
 						{
 							{
-								setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.Event.CTRL_MASK));
+								setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.Event.CTRL_MASK));
 
 								setActionCommand(ACTION_CHANGE_CONNECTION);
 								addActionListener(TableInterface.this);
@@ -127,8 +137,64 @@ public class TableInterface extends JFrame implements ActionListener
 	{
 		setIconImage(new ImageIcon("icon.png").getImage());
 		setSize(WIDTH, HEIGHT);
-		setTitle("Grading Program");
+		setTitle(TableInterface.FRAME_TITLE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+	}
+
+	// Locks the TableInterface into a specific table so that it can be used as a selector
+	public void lockInto(int tableIndexLock, int rowToChange, int columnToChange) {
+		this.callingTableIndex = tableList.getSelectedIndex();
+		isLocked = true;
+		setTitle("Select a row from the " + TableManager.getAllTables()[tableIndexLock].getName() + " table");
+
+		tableList.setSelectedIndex(tableIndexLock);
+
+//		selectButton = new JButton("Select Row");
+		selectButton.setEnabled(true);
+		selectButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				unlock(jTable.getSelectedRow(), rowToChange, columnToChange);
+				jTable.requestFocus();
+				jTable.changeSelection(0,1, false, false);
+			}
+		});
+
+//		bottomContainer.remove(printButton);
+//		bottomContainer.add(selectButton);
+
+//		tableContainer.remove(bottomContainer);
+
+		tableList.setEnabled(false);
+
+		jTable.requestFocus();
+		jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		jTable.changeSelection(0, 1, false, false);
+	}
+
+	/**Unlocks a table after it was locked into picking a row.*/
+	private void unlock(int selectedRow, int rowToChange, int columnToChange) {
+		// Reset the TableInterface to how it was
+		isLocked = false;
+		setTitle(TableInterface.FRAME_TITLE);
+
+		int idValue = Integer.class.cast(databaseTableModel.getValueAt(selectedRow, 0)).intValue();
+
+		tableList.setEnabled(true);
+		tableList.requestFocus();
+//		tableList.setSelectedIndex(callingTableIndex);
+		tableList.setSelectedIndex(callingTableIndex);
+		setTable(TableManager.getAllTables()[callingTableIndex]);
+
+		selectButton.setEnabled(false);
+
+//		bottomContainer.removeAll();
+//		initBottomButtons();
+
+		databaseTableModel.setValueAt(idValue, rowToChange, columnToChange);
+
+		jTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
 	private void initBottomButtons()
@@ -147,7 +213,7 @@ public class TableInterface extends JFrame implements ActionListener
 						databaseTableModel.fireTableDataChanged();
 
 						jTable.requestFocus();
-						jTable.changeSelection(databaseTableModel.getRowCount() - 1, 0, false, false);
+						jTable.changeSelection(databaseTableModel.getRowCount() - 1, 1, false, false);
 					}
 				});
 			}
@@ -222,9 +288,13 @@ public class TableInterface extends JFrame implements ActionListener
 			}
 		};
 
+		selectButton = new JButton("Select Row");
+		selectButton.setEnabled(false);
+
 		bottomContainer.add(addRowButton);
 		bottomContainer.add(deleteRowButton);
 		bottomContainer.add(printButton);
+		bottomContainer.add(selectButton);
 	}
 
 	/** Sets up the top container. */
@@ -269,7 +339,7 @@ public class TableInterface extends JFrame implements ActionListener
 							if (databaseTableModel.getRowCount() > 0)
 							{
 								jTable.requestFocus();
-								jTable.changeSelection(0, 0, false, false);
+								jTable.changeSelection(0, 1, false, false);
 							}
 						}
 					}
@@ -298,12 +368,13 @@ public class TableInterface extends JFrame implements ActionListener
 	/** Initializes a JTable (and its container) and the table model. */
 	private void initTable()
 	{
+		TableInterface thisTableInterface = this;
 		jTable = new JTable()
 		{
 
 			public TableCellEditor getCellEditor(int row, int column)
 			{
-				return new DatabaseCellEditor();
+				return new DatabaseCellEditor(thisTableInterface);
 			}
 
 			{
@@ -329,7 +400,7 @@ public class TableInterface extends JFrame implements ActionListener
 					public void keyPressed(KeyEvent e)
 					{
 						if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_KP_LEFT)
-									&& jTable.getSelectedColumn() == 0)
+									&& jTable.getSelectedColumn() == 1 && !isLocked)
 							tableList.requestFocus();
 					}
 				});
@@ -339,7 +410,7 @@ public class TableInterface extends JFrame implements ActionListener
 		tableScrollPane = new JScrollPane(jTable);
 		tableContainer.add(tableScrollPane, BorderLayout.CENTER);
 
-		this.databaseTableModel = new DatabaseTableModel();
+		this.databaseTableModel = new DatabaseTableModel(this);
 
 		setTable(TableManager.getTable(tableList.getSelectedValue()));
 	}
@@ -369,10 +440,9 @@ public class TableInterface extends JFrame implements ActionListener
 
 		jTable.setModel(databaseTableModel);
 		
-		jTable.getColumnModel().getColumn(0).setMaxWidth(0);;
-
-		
-		
-//		jTable.removeColumn(jTable.getColumn(databaseTableModel.getColumnName(0)));
+		// Hide the ID column
+//		jTable.getColumnModel().getColumn(0).setMinWidth(0);
+//		jTable.getColumnModel().getColumn(0).setMaxWidth(0);
+//		jTable.getColumnModel().getColumn(0).setWidth(0);
 	}
 }
