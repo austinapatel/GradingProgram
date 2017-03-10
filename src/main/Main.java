@@ -41,6 +41,7 @@ public class Main {
 
 	// note that field calls launchGUI
 	public static void launchGUI(String url, String username, String password) {
+		System.out.println(url + " " + username + " " + password);
 		DatabaseManager.init(url, username, password);
 		Main.setUpTables();
 		new TableInterface();

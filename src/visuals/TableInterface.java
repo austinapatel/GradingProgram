@@ -48,7 +48,7 @@ public class TableInterface extends JFrame implements ActionListener
 	private static final String FRAME_TITLE = "Grading Program";
 
 	private static final int WIDTH = 800, HEIGHT = 600;
-	private final String ACTION_ADD_ROW = "Add Row", ACTION_DELETE_ROW = "Delete Row",
+	private final String ACTION_ADD_ROW = "Add Row", ACTION_DELETE_ROW = "Delete Row", ACTION_CREATE_CLASS,
 				ACTION_CHANGE_CONNECTION = "Manage Database Connection";
 
 	private JTable jTable;
@@ -67,7 +67,6 @@ public class TableInterface extends JFrame implements ActionListener
 	{
 		initFrame();
 
-
 		initTopContainer();
 
 		initBottomContainer();
@@ -80,7 +79,8 @@ public class TableInterface extends JFrame implements ActionListener
 		setVisible(true);
 	}
 
-	public boolean isLocked() {
+	public boolean isLocked()
+	{
 		return isLocked;
 	}
 
@@ -121,6 +121,19 @@ public class TableInterface extends JFrame implements ActionListener
 						});
 					}
 				});
+
+				add(new JMenu("Do")
+				{
+					{
+						add(new JMenuItem("Add class")
+						{
+							{
+								setActionCommand(ACTION_CREATE_CLASS);
+								addActionListener(TableInterface.this);
+							}
+						});
+					}
+				});
 			}
 		}, BorderLayout.NORTH);
 	}
@@ -143,28 +156,31 @@ public class TableInterface extends JFrame implements ActionListener
 	}
 
 	// Locks the TableInterface into a specific table so that it can be used as a selector
-	public void lockInto(int tableIndexLock, int rowToChange, int columnToChange) {
+	public void lockInto(int tableIndexLock, int rowToChange, int columnToChange)
+	{
 		this.callingTableIndex = tableList.getSelectedIndex();
 		isLocked = true;
 		setTitle("Select a row from the " + TableManager.getAllTables()[tableIndexLock].getName() + " table");
 
 		tableList.setSelectedIndex(tableIndexLock);
 
-//		selectButton = new JButton("Select Row");
+		//		selectButton = new JButton("Select Row");
 		selectButton.setEnabled(true);
-		selectButton.addActionListener(new ActionListener() {
+		selectButton.addActionListener(new ActionListener()
+		{
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e)
+			{
 				unlock(jTable.getSelectedRow(), rowToChange, columnToChange);
 				jTable.requestFocus();
-				jTable.changeSelection(0,1, false, false);
+				jTable.changeSelection(0, 1, false, false);
 			}
 		});
 
-//		bottomContainer.remove(printButton);
-//		bottomContainer.add(selectButton);
+		//		bottomContainer.remove(printButton);
+		//		bottomContainer.add(selectButton);
 
-//		tableContainer.remove(bottomContainer);
+		//		tableContainer.remove(bottomContainer);
 
 		tableList.setEnabled(false);
 
@@ -174,7 +190,8 @@ public class TableInterface extends JFrame implements ActionListener
 	}
 
 	/**Unlocks a table after it was locked into picking a row.*/
-	private void unlock(int selectedRow, int rowToChange, int columnToChange) {
+	private void unlock(int selectedRow, int rowToChange, int columnToChange)
+	{
 		// Reset the TableInterface to how it was
 		isLocked = false;
 		setTitle(TableInterface.FRAME_TITLE);
@@ -183,14 +200,14 @@ public class TableInterface extends JFrame implements ActionListener
 
 		tableList.setEnabled(true);
 		tableList.requestFocus();
-//		tableList.setSelectedIndex(callingTableIndex);
+		//		tableList.setSelectedIndex(callingTableIndex);
 		tableList.setSelectedIndex(callingTableIndex);
 		setTable(TableManager.getAllTables()[callingTableIndex]);
 
 		selectButton.setEnabled(false);
 
-//		bottomContainer.removeAll();
-//		initBottomButtons();
+		//		bottomContainer.removeAll();
+		//		initBottomButtons();
 
 		databaseTableModel.setValueAt(idValue, rowToChange, columnToChange);
 
@@ -439,10 +456,10 @@ public class TableInterface extends JFrame implements ActionListener
 		databaseTableModel.fireTableStructureChanged();
 
 		jTable.setModel(databaseTableModel);
-		
+
 		// Hide the ID column
-//		jTable.getColumnModel().getColumn(0).setMinWidth(0);
-//		jTable.getColumnModel().getColumn(0).setMaxWidth(0);
-//		jTable.getColumnModel().getColumn(0).setWidth(0);
+		//		jTable.getColumnModel().getColumn(0).setMinWidth(0);
+		//		jTable.getColumnModel().getColumn(0).setMaxWidth(0);
+		//		jTable.getColumnModel().getColumn(0).setWidth(0);
 	}
 }
