@@ -48,7 +48,7 @@ public class TableInterface extends JFrame implements ActionListener
 	private static final String FRAME_TITLE = "Grading Program";
 
 	private static final int WIDTH = 800, HEIGHT = 600;
-	private final String ACTION_ADD_ROW = "Add Row", ACTION_DELETE_ROW = "Delete Row", ACTION_CREATE_CLASS,
+	private final String ACTION_ADD_ROW = "Add Row", ACTION_DELETE_ROW = "Delete Row", ACTION_CREATE_CLASS = "Create Class",
 				ACTION_CHANGE_CONNECTION = "Manage Database Connection";
 
 	private JTable jTable;
@@ -369,7 +369,6 @@ public class TableInterface extends JFrame implements ActionListener
 
 				addListSelectionListener(new ListSelectionListener()
 				{
-
 					@Override
 					public void valueChanged(ListSelectionEvent e)
 					{
@@ -441,6 +440,8 @@ public class TableInterface extends JFrame implements ActionListener
 			addRowButton.doClick();
 		else if (action.equals(ACTION_DELETE_ROW))
 			deleteRowButton.doClick();
+		else if (action.equals(ACTION_CREATE_CLASS))
+			System.out.println("Creating a new class!");
 		else if (action.equals(ACTION_CHANGE_CONNECTION))
 		{
 			PasswordField pass = new PasswordField();
