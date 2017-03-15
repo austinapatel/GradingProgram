@@ -147,8 +147,6 @@ public class Main {
 										TableProperties.START_YEAR,
 										"-",
 										TableProperties.END_YEAR);
-
-//								addSelector(TableProperties.COURSES_TABLE_NAME, true, );
 							}
 						}),
 				new TableColumn(TableProperties.STUDENTS_ID, "INT NOT NULL",
