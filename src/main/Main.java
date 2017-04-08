@@ -10,6 +10,7 @@ package main;
 import database.DatabaseManager;
 import database.TableProperties;
 import database.ValueParameter;
+import grading.GradingScale;
 //import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import database.Table;
 import database.TableColumn;
@@ -37,6 +38,11 @@ public class Main {
 		DatabaseManager.init(secretKey);
 		Main.setUpTables();
 		new TableInterface();
+		
+		double value[] = {98, 93 ,90, 87, 83, 80, 77, 73, 70, 67, 63, 60, 0};
+		
+		
+		GradingScale test = new GradingScale(value);
 	}
 
 	// note that field calls launchGUI
@@ -45,6 +51,8 @@ public class Main {
 		DatabaseManager.init(url, username, password);
 		Main.setUpTables();
 		new TableInterface();
+
+		
 	}
 
 	private static void setUpTables() {
@@ -165,12 +173,16 @@ public class Main {
 				new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null),
 				new TableColumn(TableProperties.ASSIGNMENT_ID, "INT NOT NULL", null)};
 		
+
 		
-//		TableColumn[] gradingScales = new TableColumn[] {
-//				new TableColumn(TableProperties.GRADE_ID, "INT NOT NULL UNIQUE", null),	
-//				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", null),
-//				new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null),
-//				new TableColumn(TableProperties.ASSIGNMENT_ID, "INT NOT NULL", null)};
+		
+		
+		
+		TableColumn[] gradingScales = new TableColumn[] {
+				new TableColumn(TableProperties.SCALE_ID, "INT NOT NULL UNIQUE", null),	
+				new TableColumn(TableProperties.SCALE_DATA, "TEXT NOT NULL", null)};
+		
+		TableManager.addTable(new Table(database.TableProperties.SCALE_TABLE_NAME, gradingScales));
 						
 
 		TableManager.addTable(

@@ -64,6 +64,16 @@ public class TableManager
 			if (rs.last()) {
 				System.out.println("moved to last row");
 			}
+			
+			
+			//DatabaseManager.addToRow(table, values., columnIndex);
+			
+			
+			
+			
+			
+			
+			
 			Object[] keySetObjects = values.keySet().toArray();
 			String[] keys = new String[keySetObjects.length];
 

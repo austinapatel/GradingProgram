@@ -65,7 +65,8 @@ public class TableProperties
 	
 	
 	public static String SCALE_ID = "scaleId";
-	public static String SCALE_TABLE_NAME = "scale";
+	public static String SCALE_TABLE_NAME = "Scale";
+	public static String SCALE_DATA = "scaleData";
 	
 	
 	
