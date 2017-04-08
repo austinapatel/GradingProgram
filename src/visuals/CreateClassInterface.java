@@ -49,7 +49,7 @@ public class CreateClassInterface implements KeyListener, WindowListener
 		initStudentAdder();
 		initStudentData();
 		//initFrameProperties();
-		tableInterface.addTab("Create class", null, basePane);
+		tableInterface.addTab("Create class", new ImageIcon("class.png"), basePane);
 	}
 
 	private void initStudentData() {
