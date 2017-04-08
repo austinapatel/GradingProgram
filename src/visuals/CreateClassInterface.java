@@ -1,11 +1,9 @@
 package visuals;
 
 import database.Table;
-import database.TableColumn;
 import database.TableManager;
 import database.TableProperties;
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
@@ -16,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -25,7 +22,7 @@ public class CreateClassInterface extends JFrame
 {
 
 	private JPanel contentPane, studentsPane, basePane;
-	private JTextField txtClassName, txtStartYear, txtEndYear, txtFirstName, txtLastName;
+	private JTextField txtClassName, txtStartYear, txtEndYear, txtFirstName, txtLastName, txtStudentID, txtMonth, txtDay, txtYear;
 	private JComboBox<Character> jComboBoxGender;
 	private JList listStudents;
 	private JButton btnAddStudent, btnFinish;
@@ -33,6 +30,10 @@ public class CreateClassInterface extends JFrame
 	private ArrayList<String> firstNames, lastNames;
 	private ArrayList<ArrayList> studentProperties;
 	private TableInterface tableInterface;
+
+	public static void main(String[] args) {
+		new CreateClassInterface(null);
+	}
 
 	/**
 	 * Create the frame.
@@ -117,7 +118,7 @@ public class CreateClassInterface extends JFrame
 		wrapInJPanel(lblClass);
 
 		JLabel lblClassName = new JLabel("Name");
-		contentPane.add(lblClassName);
+		wrapInJPanel(lblClassName);
 
 		txtClassName = new JTextField();
 		contentPane.add(txtClassName);
@@ -154,12 +155,13 @@ public class CreateClassInterface extends JFrame
 	private void initYearPicker()
 	{
 		JLabel lblStartYear = new JLabel("Start Year");
-		contentPane.add(lblStartYear);
+		wrapInJPanel(lblStartYear);
 
 		int year = Calendar.getInstance().get(Calendar.YEAR);
 
 		JCheckBox chckbxCustomYear = new JCheckBox("Custom Year");
-		contentPane.add(chckbxCustomYear);
+		wrapInJPanel(chckbxCustomYear);
+
 		chckbxCustomYear.addActionListener(new ActionListener()
 		{
 			@Override
@@ -232,7 +234,7 @@ public class CreateClassInterface extends JFrame
 		studentsPane.add(listStudents);
 
 		JLabel lblFirstName = new JLabel("First Name:");
-		contentPane.add(lblFirstName);
+		wrapInJPanel(lblFirstName);
 
 		txtFirstName = new JTextField();
 		contentPane.add(txtFirstName);
@@ -271,11 +273,11 @@ public class CreateClassInterface extends JFrame
 			}
 		});
 
-		JLabel lblLastName = new JLabel("Last Name:");
-		contentPane.add(lblLastName);
+		wrapInJPanel(new JLabel("Last Name:"));
 
 		txtLastName = new JTextField();
-		contentPane.add(txtLastName);
+		wrapInJPanel(txtLastName);
+
 		txtLastName.setColumns(10);
 		txtLastName.addActionListener(new ActionListener()
 		{
@@ -284,7 +286,7 @@ public class CreateClassInterface extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				if (!txtLastName.getText().trim().equals(""))
-					btnAddStudent.requestFocus();
+					txtStudentID.requestFocus();
 			}
 		});
 
@@ -311,10 +313,46 @@ public class CreateClassInterface extends JFrame
 		});
 		
 		DefaultComboBoxModel<Character> genderModel = new DefaultComboBoxModel<Character>(new Character[] {' ', 'M', 'F', 'O'});
-		
-		JLabel genderLabel = new JLabel("Gender:");
-		contentPane.add(genderLabel);
-		
+
+		// Student id
+		wrapInJPanel(new JLabel("Student ID"));
+		txtStudentID = new JTextField();
+		txtStudentID.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String t = txtStudentID.getText();
+				boolean isValid = true;
+				try {
+					Integer.parseInt(t);
+				} catch (Exception exp) {
+					isValid = false;
+				}
+
+				if (t.length() != 6 && isValid) {
+
+				}
+			}
+		});
+
+		wrapInJPanel(txtStudentID);
+
+		// Birth date
+		wrapInJPanel(new JLabel("MM/DD/YY"));
+
+		JPanel birthdatePanel = new JPanel();
+		birthdatePanel.setLayout(new BoxLayout(birthdatePanel, BoxLayout.X_AXIS));
+		txtDay = new JTextField();
+		txtMonth = new JTextField();
+		txtYear = new JTextField();
+
+		birthdatePanel.add(txtMonth);
+		birthdatePanel.add(txtDay);
+		birthdatePanel.add(txtYear);
+		contentPane.add(birthdatePanel);
+
+		// Gender
+		wrapInJPanel(new JLabel("Gender:"));
+
 		jComboBoxGender = new JComboBox<>(genderModel);
 		contentPane.add(jComboBoxGender);
 

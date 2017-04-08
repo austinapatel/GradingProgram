@@ -38,11 +38,6 @@ public class Main {
 		DatabaseManager.init(secretKey);
 		Main.setUpTables();
 		new TableInterface();
-		
-		double value[] = {98, 93 ,90, 87, 83, 80, 77, 73, 70, 67, 63, 60, 0};
-		
-		
-		GradingScale test = new GradingScale(value);
 	}
 
 	// note that field calls launchGUI
@@ -52,7 +47,9 @@ public class Main {
 		Main.setUpTables();
 		new TableInterface();
 
-		
+		double value[] = {98, 93 ,90, 87, 83, 80, 77, 73, 70, 67, 63, 60, 0};
+
+		GradingScale test = new GradingScale(value);
 	}
 
 	private static void setUpTables() {
@@ -172,15 +169,10 @@ public class Main {
 				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", null),
 				new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null),
 				new TableColumn(TableProperties.ASSIGNMENT_ID, "INT NOT NULL", null)};
-		
 
-		
-		
-		
-		
 		TableColumn[] gradingScales = new TableColumn[] {
 				new TableColumn(TableProperties.SCALE_ID, "INT NOT NULL UNIQUE", null),	
-				new TableColumn(TableProperties.SCALE_DATA, "TEXT NOT NULL", null)};
+				new TableColumn(TableProperties.SCALE_DATA, "VARCHAR(500) NOT NULL", null)};
 		
 		TableManager.addTable(new Table(database.TableProperties.SCALE_TABLE_NAME, gradingScales));
 						
