@@ -83,7 +83,33 @@ public class DatabaseManager
 		}
 
 		return null;
+	
 	}
+	
+	public static ResultSet getFilterdTable(Table table, String filter, String filterValue)
+	{
+		
+		// SELECT * FROM GRADES WHERE GRADES_STUDENT_ID = value
+		
+		try
+		{
+			String sql = "SELECT * FROM " + table.getName() + " WHERE " + filter + " = " + filterValue;
+			Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			ResultSet rs = stmt.executeQuery(sql);
+			return rs;
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+
+		return null;
+	}
+	
+	
+
+	
+	
 
 	/** Gets a table ready to be inserted into. */
 	public static void beginRowInsert(Table table)

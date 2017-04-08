@@ -5,10 +5,8 @@ import database.TableColumn;
 import database.TableManager;
 import database.TableProperties;
 import javafx.scene.input.KeyCode;
-
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;

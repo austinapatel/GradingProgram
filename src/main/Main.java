@@ -49,7 +49,7 @@ public class Main {
 
 	private static void setUpTables() {
 		TableColumn[] studentsTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE",
+				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL UNIQUE",
 						null),
 				new TableColumn(TableProperties.STUDENT_REDWOOD_ID,
 						"INT NOT NULL UNIQUE", new ValueParameter() {
@@ -77,7 +77,7 @@ public class Main {
 						}) };
 
 		TableColumn[] coursesTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE",
+				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL UNIQUE",
 						null),
 				new TableColumn(TableProperties.NAME, "VARCHAR(50) NOT NULL",
 						null),
@@ -87,7 +87,7 @@ public class Main {
 				new TableColumn(TableProperties.END_YEAR, "INT NOT NULL", null)};
 
 		TableColumn[] assignmentsTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE",
+				new TableColumn(TableProperties.ASSIGNMENT_ID, "INT NOT NULL UNIQUE",
 						null),
 
 				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL",
@@ -116,7 +116,7 @@ public class Main {
 						null) };
 
 		TableColumn[] categoriesTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE",
+				new TableColumn(TableProperties.CATEGORY_ID, "INT NOT NULL UNIQUE",
 						null),
 				new TableColumn(TableProperties.NAME, "VARCHAR(50) NOT NULL",
 						null),
@@ -135,7 +135,7 @@ public class Main {
 						}), };
 
 		TableColumn[] enrollmentsTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE",
+				new TableColumn(TableProperties.ENTROLLMENT_ID, "INT NOT NULL UNIQUE",
 						null),
 				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL",
 						new ValueParameter() {
@@ -160,11 +160,11 @@ public class Main {
 		
 		
 		TableColumn[] gradesTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE", null),
-				
+				new TableColumn(TableProperties.GRADE_ID, "INT NOT NULL UNIQUE", null),	
 				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", null),
-
-				new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null)};
+				new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null),
+				new TableColumn(TableProperties.ASSIGNMENT_ID, "INT NOT NULL", null)};
+						
 
 		TableManager.addTable(
 				new Table(database.TableProperties.STUDENTS_TABLE_NAME,
