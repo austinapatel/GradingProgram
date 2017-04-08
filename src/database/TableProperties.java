@@ -62,4 +62,12 @@ public class TableProperties
 	// Also uses studentId field of "Enrollments" table
 	public static String GRADE_VALUE = "points";
 	///public static String COU
+	
+	
+	public static String SCALE_ID = "scaleId";
+	public static String SCALE_TABLE_NAME = "scale";
+	
+	
+	
+	
 }
