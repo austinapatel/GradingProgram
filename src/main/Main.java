@@ -142,7 +142,7 @@ public class Main {
 							{
 								addSelector(TableProperties.COURSES_TABLE_NAME, true,
 										TableProperties.PERIOD,
-										"° ",
+										" peroid",
 										TableProperties.NAME,
 										TableProperties.START_YEAR,
 										"-",
@@ -157,6 +157,14 @@ public class Main {
 										TableProperties.LAST_NAME);
 							}
 						}) };
+		
+		
+		TableColumn[] gradesTableColumns = new TableColumn[] {
+				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE",
+						null),
+				new TableColumn(TableProperties.ID, "INT NOT NULL", null), 
+				new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null)};
+						
 
 		TableManager.addTable(
 				new Table(database.TableProperties.STUDENTS_TABLE_NAME,
@@ -173,5 +181,6 @@ public class Main {
 		TableManager.addTable(
 				new Table(database.TableProperties.ENROLLMENTS_TABLE_NAME,
 						enrollmentsTableColumns));
+		TableManager.addTable(new Table(database.TableProperties.GRADES_TABLE_NAME, gradesTableColumns));
 	}
 }

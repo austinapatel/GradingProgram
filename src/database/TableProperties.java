@@ -54,4 +54,12 @@ public class TableProperties
 	public static String STUDENTS_ID = "studentId";
 	// Also uses the "start year" field of "Courses" table
 	// Also uses the "end year" field of "Courses" table
+	
+	
+	// Grades
+	public static String GRADES_TABLE_NAME = "Grades";
+	public static String GRADE_VALUE;
+	
+	
+	
 }
