@@ -164,6 +164,13 @@ public class Main {
 				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", null),
 				new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null),
 				new TableColumn(TableProperties.ASSIGNMENT_ID, "INT NOT NULL", null)};
+		
+		
+//		TableColumn[] gradingScales = new TableColumn[] {
+//				new TableColumn(TableProperties.GRADE_ID, "INT NOT NULL UNIQUE", null),	
+//				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", null),
+//				new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null),
+//				new TableColumn(TableProperties.ASSIGNMENT_ID, "INT NOT NULL", null)};
 						
 
 		TableManager.addTable(
