@@ -57,6 +57,7 @@ public class TableInterface extends JFrame implements ActionListener {
 	private DatabaseTableModel databaseTableModel;
 	private JButton addRowButton, deleteRowButton, printButton, selectButton;
 	private int callingTableIndex;
+	private JMenuBar jMenuBar;
 
 	// Locked means that the TableInterface is being used as a selector for a
 	// table row
@@ -82,7 +83,7 @@ public class TableInterface extends JFrame implements ActionListener {
 	}
 
 	private void initMenu() {
-		add(new JMenuBar() {
+		jMenuBar = new JMenuBar() {
 			{
 				add(new JMenu("Database") {
 					{
@@ -130,7 +131,9 @@ public class TableInterface extends JFrame implements ActionListener {
 					}
 				});
 			}
-		}, BorderLayout.NORTH);
+		};
+
+		add(jMenuBar, BorderLayout.NORTH);
 	}
 
 	private void initBottomContainer() {
@@ -343,6 +346,7 @@ public class TableInterface extends JFrame implements ActionListener {
 
 					@Override
 					public void keyPressed(KeyEvent e) {
+
 					}
 				});
 
