@@ -51,6 +51,11 @@ public class UpdateDatabaseItemRunnable implements Runnable
 			}
 			else if (dataType == DataType.String)
 				resultSet.updateString(columnIndex, newValue.toString());
+			else if (dataType == DataType.Double)
+			{
+				double doubleVal = Double.parseDouble(newValue.toString());
+				resultSet.updateDouble(columnIndex, doubleVal);
+			}
 			else
 				throw new Exception("DataType not handled (UpdateDatabaseItemRunnabale.java)");
 
