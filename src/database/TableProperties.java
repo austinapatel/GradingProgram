@@ -18,9 +18,10 @@ public class TableProperties
 
 	// All tables
 	public static String ALL = "*";
+
 	// Students
-	public static String STUDENT_ID = "studentId";
 	public static String STUDENTS_TABLE_NAME = "Students";
+	public static String STUDENT_ID = "studentId";
 	public static String STUDENT_REDWOOD_ID = "studentRedwoodId";
 	public static String FIRST_NAME = "firstName";
 	public static String LAST_NAME = "lastName";
@@ -57,18 +58,18 @@ public class TableProperties
 	// Also uses the "end year" field of "Courses" table
 
 	// Grades
-	public static String GRADE_ID = "gradeId";
 	public static String GRADES_TABLE_NAME = "Grades";
+	public static String GRADE_ID = "gradeId";
 	// Also uses studentId field of "Enrollments" table
 	public static String GRADE_VALUE = "points";
-	///public static String COU
-	
-	
+
+	// Counselors
+	public static String COUNSELORS_TABLE_NAME = "Counselors";
+	public static String COUNSELOR_ID = "counselorId";
+	// Also uses "name"
+
+	// Grading Scales
 	public static String SCALE_ID = "scaleId";
 	public static String SCALE_TABLE_NAME = "Scale";
 	public static String SCALE_DATA = "scaleData";
-	
-	
-	
-	
 }

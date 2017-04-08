@@ -9,6 +9,7 @@ package database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Lets tables utilize the operations in the DatabaseManager class and adds
@@ -16,17 +17,16 @@ import java.sql.SQLException;
  */
 public class Table
 {
-	public final static String PROPERTY_ID = "id";
 
 	private String name, primaryKey;
 	private TableColumn[] tableColumns;
 	private ResultSet resultSet;
 
-	public Table(String name, TableColumn[] tableColumns)
+	public Table(Object name, TableColumn[] tableColumns)
 	{
 		this.tableColumns = tableColumns;
 
-		this.name = name;
+		this.name = name.toString();
 		this.primaryKey = tableColumns[0].getName();
 
 		createTable();
@@ -130,5 +130,34 @@ public class Table
 				return i;
 
 		return -1;
+	}
+
+	public ArrayList<Object> getAllFromColumn(String columnName) {
+		return getAllFromColumn(columnName, resultSet);
+	}
+
+	private ArrayList<Object> getAllFromColumn(String columnName, ResultSet resultSet) {
+		ArrayList<Object> data = new ArrayList<Object>();
+		int columnIndex = getColumnIndex(columnName) + 1;
+
+		try {
+			resultSet.first();
+			while(!resultSet.isAfterLast())
+			{
+				Object currentValue = resultSet.getObject(columnIndex);
+				data.add(currentValue);
+
+				resultSet.next();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return data;
+	}
+
+	public ArrayList<Object> getSomeFromColumn(String returnColumnName, String searchColumnName, String searchQuery) {
+		ResultSet filter = DatabaseManager.getFilterdTable(this, searchColumnName, searchQuery);
+		return getAllFromColumn(returnColumnName, filter);
 	}
 }

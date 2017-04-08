@@ -41,8 +41,6 @@ public class UpdateDatabaseItemRunnable implements Runnable
 		{
 			resultSet.absolute(rowIndex);
 
-			System.out.println("ResultSet Row: " + resultSet.getRow());
-
 			if (dataType == DataType.Integer)
 			{
 				int intVal = Integer.parseInt(newValue.toString());

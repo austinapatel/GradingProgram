@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import database.TableColumn.DataType;
 
@@ -105,11 +106,6 @@ public class DatabaseManager
 
 		return null;
 	}
-	
-	
-
-	
-	
 
 	/** Gets a table ready to be inserted into. */
 	public static void beginRowInsert(Table table)
