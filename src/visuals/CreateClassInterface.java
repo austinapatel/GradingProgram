@@ -1,33 +1,28 @@
 package visuals;
 
+import database.Table;
+import database.TableColumn;
+import database.TableManager;
+import database.TableProperties;
 import javafx.scene.input.KeyCode;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JList;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class CreateClassInterface extends JFrame
 {
@@ -37,6 +32,9 @@ public class CreateClassInterface extends JFrame
 	private JComboBox<Character> jComboBoxGender;
 	private JList listStudents;
 	private JButton btnAddStudent, btnFinish;
+	private ArrayList<Character> genders;
+	private ArrayList<String> firstNames, lastNames;
+	private ArrayList<ArrayList> studentProperties;
 
 	/**
 	 * Launch the application.
@@ -72,6 +70,18 @@ public class CreateClassInterface extends JFrame
 		initYearPicker();
 		initStudentAdder();
 		initFrameProperties();
+		initStudentData();
+	}
+
+	private void initStudentData() {
+		genders = new ArrayList<Character>();
+		firstNames = new ArrayList<String>();
+		lastNames = new ArrayList<String>();
+		studentProperties = new ArrayList<ArrayList>(){{
+			add(genders);
+			add(firstNames);
+			add(lastNames);
+		}};
 	}
 
 	private void initBasePanel()
@@ -101,7 +111,6 @@ public class CreateClassInterface extends JFrame
 	private void initFrameProperties()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 481, 673);
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setResizable(false);
@@ -114,11 +123,20 @@ public class CreateClassInterface extends JFrame
 		setVisible(true);
 	}
 
+	private JPanel wrapInJPanel(JComponent component) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		contentPane.add(panel);
+		panel.add(component);
+
+		return panel;
+	}
+
 	private void initClassName()
 	{
 		JLabel lblClass = new JLabel("Class");
 		lblClass.setFont(new Font("Tahoma", Font.PLAIN, 32));
-		contentPane.add(lblClass);
+		wrapInJPanel(lblClass);
 
 		JLabel lblClassName = new JLabel("Name");
 		contentPane.add(lblClassName);
@@ -128,12 +146,29 @@ public class CreateClassInterface extends JFrame
 		txtClassName.setColumns(10);
 		txtClassName.addActionListener(new ActionListener()
 		{
-
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (!txtClassName.getText().trim().equals(""))
 					txtFirstName.requestFocus();
+			}
+		});
+		txtClassName.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				btnFinish.setEnabled(true);
+				if (txtClassName.getText().trim().equals(""))
+					btnFinish.setEnabled(false);
 			}
 		});
 	}
@@ -179,7 +214,7 @@ public class CreateClassInterface extends JFrame
 	{
 		JLabel lblStudents = new JLabel("Students");
 		lblStudents.setFont(new Font("Tahoma", Font.PLAIN, 32));
-		contentPane.add(lblStudents);
+		wrapInJPanel(lblStudents);
 
 		listStudents = new JList();
 		listStudents.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -208,6 +243,9 @@ public class CreateClassInterface extends JFrame
 			{
 				if (e.getKeyCode() == 127 && listStudents.getSelectedIndex() != -1)
 				{
+					for (ArrayList arrayList : studentProperties)
+						arrayList.remove(listStudents.getSelectedIndex());
+
 					model.remove(listStudents.getSelectedIndex());
 				}
 			}
@@ -312,6 +350,14 @@ public class CreateClassInterface extends JFrame
 			{
 				model.addElement(txtFirstName.getText() + " " + txtLastName.getText());
 
+//				private ArrayList<Character> genders;
+//				private ArrayList<String> firstNames, lastNames;
+//				private ArrayList<ArrayList> studentProperties;
+
+				genders.add((Character) jComboBoxGender.getSelectedItem());
+				firstNames.add(txtFirstName.getText());
+				lastNames.add(txtLastName.getText());
+
 				txtFirstName.setText("");
 				txtLastName.setText("");
 
@@ -337,18 +383,38 @@ public class CreateClassInterface extends JFrame
 			}
 		});
 
-		JPanel addStudentPanel = new JPanel();
-		addStudentPanel.setLayout(new BorderLayout());
-		contentPane.add(addStudentPanel);
-		addStudentPanel.add(btnAddStudent);
-
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new BorderLayout());
-		contentPane.add(buttonPanel);
-
+		wrapInJPanel(btnAddStudent);
 
 		btnFinish = new JButton("Finish");
-		buttonPanel.add(btnFinish);
+		wrapInJPanel(btnFinish);
+		btnFinish.setEnabled(false);
+
+		CreateClassInterface thisInterface = this;
+
+		btnFinish.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String className = txtClassName.getText().trim();
+
+				for (int i = 0; i < firstNames.size(); i++) {
+					char gender = genders.get(i);
+					String firstName = firstNames.get(i);
+					String lastName = lastNames.get(i);
+
+					Table studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
+
+					HashMap<String, Object> newValues = new HashMap<String, Object>() {{
+						put(TableProperties.GENDER, gender);
+						put(TableProperties.FIRST_NAME, firstName);
+						put(TableProperties.LAST_NAME, lastName);
+					}};
+
+					TableManager.insertValuesIntoNewRow(studentsTable, newValues);
+				}
+
+				thisInterface.dispose();
+			}
+		});
 	}
 
 	private void textChanged()

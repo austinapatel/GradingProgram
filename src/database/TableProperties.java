@@ -57,5 +57,6 @@ public class TableProperties
 
 	// Grades
 	public static String GRADES_TABLE_NAME = "Grades";
+	// Also uses studentId field of "Enrollments" table
 	public static String GRADE_VALUE = "points";
 }

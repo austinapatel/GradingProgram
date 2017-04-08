@@ -61,8 +61,7 @@ public class Table
 	}
 
 	/**Determines the number of rows in the table.*/
-	public int getRowCount()
-	{
+	public int getRowCount() {
 		int rows = 0;
 
 		try
@@ -88,13 +87,12 @@ public class Table
 	/**
 	 * Adds a row to the table with blank data.
 	 */
-	public void addRow()
-	{
+	public void addRow() {
 		int numRows = getRowCount();
 
 		DatabaseManager.beginRowInsert(this);
 
-		DatabaseManager.addToRow(this, numRows+ 1, 0);
+		DatabaseManager.addToRow(this, numRows + 1, 0);
 
 		for (int i = 1; i < tableColumns.length; i++)
 			DatabaseManager.addToRow(this, null, i);
@@ -106,8 +104,7 @@ public class Table
 	 * Removes a row from the table given a value and the column that value is
 	 * in. Returns the index of the row that was deleted.
 	 */
-	public int deleteRow(Object value, int column)
-	{
+	public int deleteRow(Object value, int column) {
 		try
 		{
 			resultSet.beforeFirst();
@@ -127,4 +124,11 @@ public class Table
 		return -1;
 	}
 
+	public int getColumnIndex(String columnName) {
+		for (int i = 0; i < tableColumns.length; i++)
+			if (tableColumns[i].getName().equals(columnName))
+				return i;
+
+		return -1;
+	}
 }

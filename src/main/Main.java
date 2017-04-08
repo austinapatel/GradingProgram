@@ -165,7 +165,6 @@ public class Main {
 				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", null),
 
 				new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null)};
-						
 
 		TableManager.addTable(
 				new Table(database.TableProperties.STUDENTS_TABLE_NAME,

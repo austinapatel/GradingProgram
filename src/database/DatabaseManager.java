@@ -120,7 +120,6 @@ public class DatabaseManager
 	/** Adds a value of the correct type to a table row ResultSet. */
 	public static void addToRow(Table table, Object value, int columnIndex)
 	{
-
 		DataType type = DatabaseManager.getSQLType(table.getTableColumns()[columnIndex].getType());
 		ResultSet resultSet = table.getResultSet();
 

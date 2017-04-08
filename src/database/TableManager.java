@@ -7,9 +7,12 @@
 
 package database;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 /** Holds all of the tables for easy accessibility. */
 public class TableManager
@@ -51,6 +54,25 @@ public class TableManager
 			finalTables[i] = tablesArray.get(i);
 
 		return finalTables;
+	}
+
+	public static void insertValuesIntoNewRow(Table table, HashMap<String, Object> values) {
+		try {
+			table.addRow();
+			ResultSet rs = table.getResultSet();
+			rs.moveToInsertRow();
+			Object[] keySetObjects = values.keySet().toArray();
+			String[] keys = new String[keySetObjects.length];
+
+			for (int i = 0; i < keySetObjects.length; i++)
+				keys[i] = keySetObjects[i].toString();
+
+			for (int i = 0; i < keys.length; i++) {
+				rs.updateObject(table.getColumnIndex(keys[i]), values.get(keys[i]));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
