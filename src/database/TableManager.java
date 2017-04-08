@@ -63,17 +63,7 @@ public class TableManager
 				System.out.println("moved to last row");
 			}
 
-			
-			
 			//DatabaseManager.addToRow(table, values., columnIndex);
-			
-			
-			
-			
-			
-			
-			
-
 
 			table.addRow();
 

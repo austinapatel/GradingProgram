@@ -19,10 +19,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class CreateClassInterface implements KeyListener, WindowListener
+public class CreateClassInterface extends JPanel implements KeyListener, WindowListener
 {
 
-	private JPanel contentPane, studentsPane, basePane;
+	private JPanel contentPane, studentsPane;
 	private JTextField txtClassName, txtStartYear, txtEndYear, txtFirstName, txtLastName, txtStudentID, txtMonth, txtDay, txtYear;
 	private JComboBox<Character> genderComboBox;
 	private JList listStudents;
@@ -54,14 +54,13 @@ public class CreateClassInterface implements KeyListener, WindowListener
 //		initFrameProperties();
 //		initStudentData();
 		//initFrameProperties();
-		tableInterface.addTab("Create class", new ImageIcon("class.png"), basePane);
+		tableInterface.addTab("Create class", new ImageIcon("class.png"), this);
 	}
 
 	private void initBasePanel()
 	{
-		basePane = new JPanel();
-		basePane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		basePane.setLayout(new BorderLayout());
+		setBorder(new EmptyBorder(5, 5, 5, 5));
+		setLayout(new BorderLayout());
 		//setContentPane(basePane);
 	}
 
@@ -69,7 +68,7 @@ public class CreateClassInterface implements KeyListener, WindowListener
 	{
 		studentsPane = new JPanel();
 		studentsPane.setBorder(BorderFactory.createEtchedBorder());
-		basePane.add(studentsPane);
+		add(studentsPane);
 		studentsPane.setLayout(new BorderLayout());
 	}
 
@@ -77,7 +76,7 @@ public class CreateClassInterface implements KeyListener, WindowListener
 	{
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		basePane.add(contentPane, BorderLayout.WEST);
+		add(contentPane, BorderLayout.WEST);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 	}
 //
@@ -392,6 +391,8 @@ public class CreateClassInterface implements KeyListener, WindowListener
 					txtYear.setText("");
 					counselorComboBox.setSelectedIndex(0);
 					genderComboBox.setSelectedIndex(0);
+
+					btnAddStudent.setEnabled(false);
 				} catch (Exception e) {
 					System.out.println("Failed to add student");
 //					JOptionPane.showMessageDialog(thisInterface, "Failed to add student");
@@ -407,21 +408,19 @@ public class CreateClassInterface implements KeyListener, WindowListener
 
 		btnFinish = new JButton("Finish");
 		btnFinish.addKeyListener(this);
-		btnFinish.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				btnFinish.doClick();
-			}
-		});
+//		btnFinish.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				btnFinish.doClick();
+//			}
+//		});
 		wrapInJPanel(btnFinish);
 		btnFinish.setEnabled(false);
 
-
 		btnFinish.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String className = txtClassName.getText().trim();
-
+				System.out.println("action performed");
 				for (Student student : students) {
 					String firstName = student.getFirstName();
 					String lastName = student.getLastName();
@@ -429,9 +428,20 @@ public class CreateClassInterface implements KeyListener, WindowListener
 					char gender = student.getGender();
 					int graduationYear = student.getGraduationYear();
 					Date birthdate = student.getBirthday();
-					int birthMonth = birthdate.getMonth();
-					int birthDay = birthdate.getDay();
-					int birthYear = birthdate.getYear();
+
+					int birthMonth = 0;
+					int birthDay = 0;
+					int birthYear = 0;
+
+					if (birthdate != null) {
+						birthMonth = birthdate.getMonth();
+						birthDay = birthdate.getDay();
+						birthYear = birthdate.getYear();
+					}
+
+					final int monthFinal = birthMonth;
+					final int dayFinal = birthDay;
+					final int yearFinal = birthYear;
 
 					Table studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
 
@@ -441,15 +451,15 @@ public class CreateClassInterface implements KeyListener, WindowListener
 						put(TableProperties.LAST_NAME, lastName);
 						put(TableProperties.GENDER, gender);
 						put(TableProperties.GRADUATION_YEAR, graduationYear);
-						put(TableProperties.BIRTH_MONTH, birthMonth);
-						put(TableProperties.BIRTH_DAY, birthDay);
-						put(TableProperties.BIRTH_YEAR, birthYear);
+						put(TableProperties.BIRTH_MONTH, monthFinal);
+						put(TableProperties.BIRTH_DAY, dayFinal);
+						put(TableProperties.BIRTH_YEAR, yearFinal);
 					}};
 
 					TableManager.insertValuesIntoNewRow(studentsTable, newValues);
 				}
 
-				closeJFrame();
+				closePane();
 			}
 		});
 	}
@@ -462,13 +472,13 @@ public class CreateClassInterface implements KeyListener, WindowListener
 		return jTextField.getText().trim().equals("");
 	}
 
-	private void closeJFrame() {
+	private void closePane() {
 		if (tableInterface != null) {
 			tableInterface.notifyExternalDataChange();
 //			tableInterface.setEnabled(true);
 		}
 
-		tableInterface.remove(basePane);
+		tableInterface.remove(this);
 	}
 
 	private boolean isStudentIDValid() {
@@ -606,7 +616,7 @@ public class CreateClassInterface implements KeyListener, WindowListener
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		closeJFrame();
+		closePane();
 	}
 
 	@Override

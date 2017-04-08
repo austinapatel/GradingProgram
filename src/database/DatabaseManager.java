@@ -171,7 +171,7 @@ public class DatabaseManager
 		}
 		catch (SQLException e)
 		{
-			System.out.println("Unable to add value " + value.toString() + " to " + table.getName() + ".");
+			System.out.println("Unable to add value " + value.toString() + " to " + table.getName() + " Column index: " + columnIndex + " Column Name: " + table.getTableColumns()[columnIndex].getName() + ".");
 		}
 
 	}
