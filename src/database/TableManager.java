@@ -43,7 +43,7 @@ public class TableManager
 	public static Table[] getAllTables()
 	{
 		ArrayList<Table> tablesArray = new ArrayList<Table>();
-		;
+
 		Iterator<String> iter = tables.keySet().iterator();
 
 		while (iter.hasNext())
@@ -59,8 +59,11 @@ public class TableManager
 	public static void insertValuesIntoNewRow(Table table, HashMap<String, Object> values) {
 		try {
 			table.addRow();
+
 			ResultSet rs = table.getResultSet();
-			rs.moveToInsertRow();
+			if (rs.last()) {
+				System.out.println("moved to last row");
+			}
 			Object[] keySetObjects = values.keySet().toArray();
 			String[] keys = new String[keySetObjects.length];
 
@@ -68,7 +71,12 @@ public class TableManager
 				keys[i] = keySetObjects[i].toString();
 
 			for (int i = 0; i < keys.length; i++) {
-				rs.updateObject(table.getColumnIndex(keys[i]), values.get(keys[i]));
+				int columnIndex = table.getColumnIndex(keys[i]);
+				String currentKey = keys[i];
+				Object value = values.get(currentKey);
+
+				DatabaseManager.addToRow(table, value, columnIndex);
+//				rs.updateObject(columnIndex, value);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

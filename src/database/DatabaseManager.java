@@ -143,7 +143,7 @@ public class DatabaseManager
 		}
 	}
 
-	/** Adds a value of the correct type to a table row ResultSet. */
+	/** Adds a value of the correct type to a table row ResultSet. Move to correct row before usage.*/
 	public static void addToRow(Table table, Object value, int columnIndex)
 	{
 		DataType type = DatabaseManager.getSQLType(table.getTableColumns()[columnIndex].getType());
@@ -168,7 +168,7 @@ public class DatabaseManager
 				resultSet.updateInt(columnIndex, Integer.class.cast(value));
 			} else if (type == DataType.Double) {
 				if (value == null)
-					value = 0;
+					value = 0d;
 
 				resultSet.updateDouble(columnIndex, Double.class.cast(value));
 			}

@@ -52,7 +52,7 @@ public class Main {
 				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL UNIQUE",
 						null),
 				new TableColumn(TableProperties.STUDENT_REDWOOD_ID,
-						"INT NOT NULL UNIQUE", new ValueParameter() {
+						"INT NOT NULL", new ValueParameter() {
 							{
 								setValueRange(1, Integer.MAX_VALUE);
 								setValueLengthRange(6, 6);
