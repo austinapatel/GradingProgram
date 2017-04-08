@@ -51,7 +51,7 @@ public class Main {
 		TableColumn[] studentsTableColumns = new TableColumn[] {
 				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE",
 						null),
-				new TableColumn(TableProperties.STUDENT_ID,
+				new TableColumn(TableProperties.STUDENT_REDWOOD_ID,
 						"INT NOT NULL UNIQUE", new ValueParameter() {
 							{
 								setValueRange(1, Integer.MAX_VALUE);
@@ -149,7 +149,7 @@ public class Main {
 										TableProperties.END_YEAR);
 							}
 						}),
-				new TableColumn(TableProperties.STUDENTS_ID, "INT NOT NULL",
+				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL",
 						new ValueParameter() {
 							{
 								addSelector(TableProperties.STUDENTS_TABLE_NAME,
@@ -162,8 +162,8 @@ public class Main {
 		TableColumn[] gradesTableColumns = new TableColumn[] {
 				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE", null),
 				
-				new TableColumn(TableProperties.ID, "INT NOT NULL", null), 
-				
+				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", null),
+
 				new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null)};
 						
 

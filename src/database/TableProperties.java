@@ -21,7 +21,7 @@ public class TableProperties
 
 	// Students
 	public static String STUDENTS_TABLE_NAME = "Students";
-	public static String STUDENT_ID = "studentId";
+	public static String STUDENT_REDWOOD_ID = "studentRedwoodId";
 	public static String FIRST_NAME = "firstName";
 	public static String LAST_NAME = "lastName";
 	public static String NOTES = "notes";
@@ -51,15 +51,11 @@ public class TableProperties
 	// Enrollments
 	public static String ENROLLMENTS_TABLE_NAME = "Enrollments";
 	// Also uses the "courseID" field of "Assignments" table
-	public static String STUDENTS_ID = "studentId";
+	public static String STUDENT_ID = "studentId";
 	// Also uses the "start year" field of "Courses" table
 	// Also uses the "end year" field of "Courses" table
-	
-	
+
 	// Grades
 	public static String GRADES_TABLE_NAME = "Grades";
-	public static String GRADE_VALUE ="points";
-	
-	
-	
+	public static String GRADE_VALUE = "points";
 }

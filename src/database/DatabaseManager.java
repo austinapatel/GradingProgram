@@ -143,7 +143,7 @@ public class DatabaseManager
 				resultSet.updateInt(columnIndex, Integer.class.cast(value));
 			} else if (type == DataType.Double) {
 				if (value == null)
-					value = 0.0;
+					value = 0;
 
 				resultSet.updateDouble(columnIndex, Double.class.cast(value));
 			}
