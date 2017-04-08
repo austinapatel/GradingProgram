@@ -58,7 +58,7 @@ public class TableProperties
 	
 	// Grades
 	public static String GRADES_TABLE_NAME = "Grades";
-	public static String GRADE_VALUE;
+	public static String GRADE_VALUE ="points";
 	
 	
 	
