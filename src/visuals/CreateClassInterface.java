@@ -32,34 +32,15 @@ public class CreateClassInterface extends JFrame
 	private ArrayList<Character> genders;
 	private ArrayList<String> firstNames, lastNames;
 	private ArrayList<ArrayList> studentProperties;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args)
-	{
-		EventQueue.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					CreateClassInterface frame = new CreateClassInterface();
-					frame.setVisible(true);
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private TableInterface tableInterface;
 
 	/**
 	 * Create the frame.
 	 */
-	public CreateClassInterface()
+	public CreateClassInterface(TableInterface tableInterface)
 	{
+		this.tableInterface = tableInterface;
+
 		initBasePanel();
 		initMainContentPane();
 		initStudentsPane();
@@ -409,6 +390,7 @@ public class CreateClassInterface extends JFrame
 					TableManager.insertValuesIntoNewRow(studentsTable, newValues);
 				}
 
+				tableInterface.notifyExternalDataChange();
 				thisInterface.dispose();
 			}
 		});
