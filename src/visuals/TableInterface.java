@@ -78,6 +78,10 @@ public class TableInterface extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
+	public void notifyExternalDataChange() {
+		databaseTableModel.fireTableDataChanged();
+	}
+
 	public boolean isLocked() {
 		return isLocked;
 	}
@@ -415,7 +419,7 @@ public class TableInterface extends JFrame implements ActionListener {
 		else if (action.equals(ACTION_DELETE_ROW))
 			deleteRowButton.doClick();
 		else if (action.equals(ACTION_CREATE_CLASS))
-			new CreateClassInterface();
+			new CreateClassInterface(this);
 		else if (action.equals(ACTION_CHANGE_CONNECTION)) {
 			PasswordField pass = new PasswordField();
 			dispose();
