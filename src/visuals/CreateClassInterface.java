@@ -320,17 +320,24 @@ public class CreateClassInterface extends JFrame
 		txtStudentID.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String t = txtStudentID.getText();
-				boolean isValid = true;
-				try {
-					Integer.parseInt(t);
-				} catch (Exception exp) {
-					isValid = false;
-				}
+				if (isStudentIDValid())
+					btnAddStudent.requestFocus();
+			}
+		});
+		txtStudentID.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
 
-				if (t.length() != 6 && isValid) {
+			}
 
-				}
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				btnAddStudent.setEnabled(shouldAddBeEnabled());
 			}
 		});
 
@@ -434,10 +441,26 @@ public class CreateClassInterface extends JFrame
 		});
 	}
 
+	private boolean isStudentIDValid() {
+		String t = txtStudentID.getText();
+		boolean isValid = true;
+		try {
+			Integer.parseInt(t);
+		} catch (Exception exp) {
+			isValid = false;
+		}
+
+		return t.length() == 6 && isValid;
+	}
+
 	private void textChanged()
 	{
 		// Make sure to not allow adding of student if name is blank
 		btnAddStudent.setEnabled(!txtFirstName.getText().equals("") && !txtLastName.getText().equals(""));
+	}
+
+	private boolean shouldAddBeEnabled() {
+		return isStudentIDValid();
 	}
 
 	// first and last - required
