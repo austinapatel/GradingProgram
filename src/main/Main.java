@@ -7,9 +7,13 @@
 
 package main;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import database.DatabaseManager;
 import database.TableProperties;
 import database.ValueParameter;
+import grading.GradeCalculator;
 import grading.GradingScale;
 //import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import database.Table;
@@ -38,6 +42,9 @@ public class Main {
 		DatabaseManager.init(secretKey);
 		Main.setUpTables();
 		new TableInterface();
+		
+		GradeCalculator.getScales();
+
 	}
 
 	// note that field calls launchGUI
@@ -47,9 +54,8 @@ public class Main {
 		Main.setUpTables();
 		new TableInterface();
 
-		double value[] = {98, 93 ,90, 87, 83, 80, 77, 73, 70, 67, 63, 60, 0};
-
-		GradingScale test = new GradingScale(value);
+		
+		
 	}
 
 	private static void setUpTables() {
