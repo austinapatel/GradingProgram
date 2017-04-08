@@ -84,7 +84,7 @@ public class ValueParameter
 	{
 		selectorTable = tableName;
 		selectorOutputColumns = visualColumnNames;
-		selectorLinkColumn = TableProperties.ID;
+		selectorLinkColumn = tableName.toUpperCase() + "_ID";
 		hasSelector = true;
 		wholeRowSelector = false;
 	}
