@@ -141,6 +141,11 @@ public class DatabaseManager
 					value = 0;
 
 				resultSet.updateInt(columnIndex, Integer.class.cast(value));
+			} else if (type == DataType.Double) {
+				if (value == null)
+					value = 0.0;
+
+				resultSet.updateDouble(columnIndex, Double.class.cast(value));
 			}
 		}
 		catch (SQLException e)
@@ -160,6 +165,8 @@ public class DatabaseManager
 			return DataType.String;
 		else if (name.contains("INT"))
 			return DataType.Integer;
+		else if (name.contains("DOUBLE"))
+			return DataType.Double;
 		else
 			return null;
 	}

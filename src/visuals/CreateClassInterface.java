@@ -1,5 +1,7 @@
 package visuals;
 
+import javafx.scene.input.KeyCode;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -34,7 +36,7 @@ public class CreateClassInterface extends JFrame
 	private JTextField txtClassName, txtStartYear, txtEndYear, txtFirstName, txtLastName;
 	private JComboBox<Character> jComboBoxGender;
 	private JList listStudents;
-	private JButton btnAddStudent;
+	private JButton btnAddStudent, btnFinish;
 
 	/**
 	 * Launch the application.
@@ -104,7 +106,7 @@ public class CreateClassInterface extends JFrame
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setResizable(false);
 
-		setSize(300, 375);
+		setSize(400, 500);
 		setLocationRelativeTo(null);
 		setTitle("Create Class");
 		setIconImage(new ImageIcon("icon.png").getImage());
@@ -130,7 +132,8 @@ public class CreateClassInterface extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				txtFirstName.requestFocus();
+				if (!txtClassName.getText().trim().equals(""))
+					txtFirstName.requestFocus();
 			}
 		});
 	}
@@ -191,14 +194,12 @@ public class CreateClassInterface extends JFrame
 			@Override
 			public void keyTyped(KeyEvent e)
 			{
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e)
 			{
-				// TODO Auto-generated method stub
 
 			}
 
@@ -227,7 +228,8 @@ public class CreateClassInterface extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				txtLastName.requestFocus();
+				if (!txtFirstName.getText().trim().equals(""))
+					txtLastName.requestFocus();
 			}
 		});
 
@@ -265,8 +267,8 @@ public class CreateClassInterface extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				btnAddStudent.doClick();
-				txtFirstName.requestFocus();
+				if (!txtLastName.getText().trim().equals(""))
+					btnAddStudent.requestFocus();
 			}
 		});
 
@@ -292,7 +294,7 @@ public class CreateClassInterface extends JFrame
 			}
 		});
 		
-		DefaultComboBoxModel<Character> genderModel = new DefaultComboBoxModel<Character>(new Character[] {'>', '<', '?'});
+		DefaultComboBoxModel<Character> genderModel = new DefaultComboBoxModel<Character>(new Character[] {' ', 'M', 'F', 'O'});
 		
 		JLabel genderLabel = new JLabel("Gender:");
 		contentPane.add(genderLabel);
@@ -301,7 +303,6 @@ public class CreateClassInterface extends JFrame
 		contentPane.add(jComboBoxGender);
 
 		btnAddStudent = new JButton("Add Student");
-		contentPane.add(btnAddStudent);
 		btnAddStudent.setEnabled(false);
 
 		btnAddStudent.addActionListener(new ActionListener()
@@ -313,8 +314,41 @@ public class CreateClassInterface extends JFrame
 
 				txtFirstName.setText("");
 				txtLastName.setText("");
+
+				txtFirstName.requestFocus();
 			}
 		});
+
+		btnAddStudent.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER)
+					btnAddStudent.doClick();
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+			}
+		});
+
+		JPanel addStudentPanel = new JPanel();
+		addStudentPanel.setLayout(new BorderLayout());
+		contentPane.add(addStudentPanel);
+		addStudentPanel.add(btnAddStudent);
+
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BorderLayout());
+		contentPane.add(buttonPanel);
+
+
+		btnFinish = new JButton("Finish");
+		buttonPanel.add(btnFinish);
 	}
 
 	private void textChanged()
