@@ -25,9 +25,12 @@ public class TableProperties
 	public static String STUDENT_REDWOOD_ID = "studentRedwoodId";
 	public static String FIRST_NAME = "firstName";
 	public static String LAST_NAME = "lastName";
-	public static String NOTES = "notes";
 	public static String GENDER = "gender";
-	public static String GRADE_LEVEL = "gradeLevel";
+	public static String GRADUATION_YEAR = "graduationYear";
+	public static String BIRTH_MONTH = "birthMonth";
+	public static String BIRTH_DAY = "birthDay";
+	public static String BIRTH_YEAR = "birthYear";
+	// also uses "counselorId"
 
 	// Courses
 	public static String COURSE_ID = "courseId";

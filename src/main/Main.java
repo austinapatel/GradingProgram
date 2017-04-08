@@ -69,19 +69,17 @@ public class Main {
 						"VARCHAR(50) NOT NULL", null),
 				new TableColumn(TableProperties.LAST_NAME,
 						"VARCHAR(50) NOT NULL", null),
-				new TableColumn(TableProperties.NOTES, "VARCHAR(255)", null),
+				new TableColumn(TableProperties.BIRTH_MONTH, "INT", null),
+				new TableColumn(TableProperties.BIRTH_DAY, "INT", null),
+				new TableColumn(TableProperties.BIRTH_YEAR, "INT", null),
 				new TableColumn(TableProperties.GENDER, "CHAR(1)",
 						new ValueParameter() {
 							{
 								setValueLengthRange(1, 1);
 							}
 						}),
-				new TableColumn(TableProperties.GRADE_LEVEL, "INT NOT NULL",
-						new ValueParameter() {
-							{
-								setValueRange(1, 12);
-							}
-						}) };
+				new TableColumn(TableProperties.GRADUATION_YEAR, "INT NOT NULL", null),
+				new TableColumn(TableProperties.COUNSELOR_ID, "INT", null)};
 
 		TableColumn[] coursesTableColumns = new TableColumn[] {
 				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL UNIQUE",

@@ -4,15 +4,21 @@ import database.DataTypeManager;
 import database.Table;
 import database.TableManager;
 import database.TableProperties;
-import javafx.scene.input.KeyCode;
+import table.Date;
+import table.Student;
 
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class CreateClassInterface extends JFrame implements KeyListener, WindowListener
 {
@@ -22,11 +28,11 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 	private JComboBox<Character> genderComboBox;
 	private JList listStudents;
 	private JButton btnAddStudent, btnFinish;
-	private ArrayList<Character> genders;
-	private ArrayList<String> firstNames, lastNames;
-	private ArrayList<ArrayList> studentProperties;
 	private TableInterface tableInterface;
 	private JComboBox<String> counselorComboBox;
+	private JTextField txtGradYear;
+	private ArrayList<Student> students = new ArrayList<>();
+	private JLabel lblStudentInfo;
 
 	public static void main(String[] args) {
 		new CreateClassInterface(null) {{
@@ -34,9 +40,6 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 		}};
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public CreateClassInterface(TableInterface tableInterface)
 	{
 		this.tableInterface = tableInterface;
@@ -49,19 +52,7 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 		initClassName();
 		initYearPicker();
 		initStudentAdder();
-		initStudentData();
 		initFrameProperties();
-	}
-
-	private void initStudentData() {
-		genders = new ArrayList<Character>();
-		firstNames = new ArrayList<String>();
-		lastNames = new ArrayList<String>();
-		studentProperties = new ArrayList<ArrayList>(){{
-			add(genders);
-			add(firstNames);
-			add(lastNames);
-		}};
 	}
 
 	private void initBasePanel()
@@ -77,7 +68,7 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 		studentsPane = new JPanel();
 		studentsPane.setBorder(BorderFactory.createEtchedBorder());
 		basePane.add(studentsPane);
-		studentsPane.setLayout(new BoxLayout(studentsPane, BoxLayout.Y_AXIS));
+		studentsPane.setLayout(new BorderLayout());
 	}
 
 	private void initMainContentPane()
@@ -142,6 +133,8 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 		int year = Calendar.getInstance().get(Calendar.YEAR);
 
 		JCheckBox chckbxCustomYear = new JCheckBox("Custom Year");
+		chckbxCustomYear.addKeyListener(this);
+
 		wrapInJPanel(chckbxCustomYear);
 
 		chckbxCustomYear.addActionListener(new ActionListener()
@@ -165,11 +158,13 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 		panel.add(txtStartYear);
 		txtStartYear.setText(String.valueOf(year));
 		txtStartYear.setEnabled(false);
+		txtStartYear.addKeyListener(this);
 
 		txtEndYear = new JTextField();
 		panel.add(txtEndYear);
 		txtEndYear.setText(String.valueOf(year + 1));
 		txtEndYear.setEnabled(false);
+		txtEndYear.addKeyListener(this);
 	}
 
 	private void initStudentAdder()
@@ -181,15 +176,33 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 		listStudents = new JList();
 		listStudents.setAlignmentX(Component.LEFT_ALIGNMENT);
 		listStudents.setBackground(contentPane.getBackground());
+		listStudents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listStudents.setModel(new DefaultListModel<String>());
 
-		DefaultListModel<String> model = (DefaultListModel<String>) listStudents.getModel();
+		DefaultListModel<String> listStudentsModel = (DefaultListModel<String>) listStudents.getModel();
+
+		listStudents.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				Student student = students.get(listStudents.getSelectedIndex());
+
+				int counselorId = student.getCounselorId();
+
+				String counselorName = TableManager.getTable(TableProperties.COUNSELORS_TABLE_NAME).getSomeFromColumn(TableProperties.NAME, TableProperties.COUNSELOR_ID, String.valueOf(counselorId)).get(0).toString();
+
+				lblStudentInfo.setText(toHTML(student.toString() + "\nCounselor: " + counselorName));
+			}
+		});
 
 		listStudents.addKeyListener(this);
 
-		studentsPane.add(listStudents);
+		studentsPane.add(listStudents, BorderLayout.CENTER);
 
-		JLabel lblFirstName = new JLabel("First Name:");
+		lblStudentInfo = new JLabel();
+		lblStudentInfo.setBorder(BorderFactory.createEtchedBorder());
+		studentsPane.add(lblStudentInfo, BorderLayout.SOUTH);
+
+		JLabel lblFirstName = new JLabel("*First Name");
 		wrapInJPanel(lblFirstName);
 
 		txtFirstName = new JTextField();
@@ -198,7 +211,6 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 
 		txtFirstName.addActionListener(new ActionListener()
 		{
-
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -209,7 +221,7 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 
 		txtFirstName.addKeyListener(this);
 
-		wrapInJPanel(new JLabel("Last Name:"));
+		wrapInJPanel(new JLabel("*Last Name"));
 
 		txtLastName = new JTextField();
 		wrapInJPanel(txtLastName);
@@ -229,18 +241,27 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 		txtLastName.addKeyListener(this);
 
 		// Student id
-		wrapInJPanel(new JLabel("Student ID"));
+		wrapInJPanel(new JLabel("*Student ID"));
 		txtStudentID = new JTextField();
 		txtStudentID.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (isStudentIDValid())
-					btnAddStudent.requestFocus();
+					if (btnAddStudent.isEnabled())
+						btnAddStudent.requestFocus();
+					else
+						tab();
 			}
 		});
 		txtStudentID.addKeyListener(this);
 
 		wrapInJPanel(txtStudentID);
+
+		// Graduation year
+		wrapInJPanel(new JLabel("Graduation Year"));
+		txtGradYear = new JTextField();
+		txtGradYear.addKeyListener(this);
+		contentPane.add(txtGradYear);
 
 		// Birth date
 		wrapInJPanel(new JLabel("MM/DD/YY"));
@@ -250,6 +271,24 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 		txtDay = new JTextField();
 		txtMonth = new JTextField();
 		txtYear = new JTextField();
+
+		NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
+		DecimalFormat decimalFormat = (DecimalFormat) numberFormat;
+		decimalFormat.setGroupingUsed(false);
+
+		txtDay = new JFormattedTextField(decimalFormat);
+		txtDay.setColumns(2); //whatever size you wish to set
+
+		txtMonth = new JFormattedTextField(decimalFormat);
+		txtMonth.setColumns(2); //whatever size you wish to set
+
+		txtYear = new JFormattedTextField(decimalFormat);
+		txtYear.setColumns(2); //whatever size you wish to set
+
+
+		txtDay.addKeyListener(this);
+		txtMonth.addKeyListener(this);
+		txtYear.addKeyListener(this);
 
 		txtDay.addActionListener(new ActionListener() {
 			@Override
@@ -271,7 +310,10 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (isDateValid(txtYear.getText()))
-					btnAddStudent.requestFocus();
+					if (btnAddStudent.isEnabled())
+						btnAddStudent.requestFocus();
+					else
+						tab();
 			}
 		});
 
@@ -285,6 +327,8 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 
 		DefaultComboBoxModel<Character> genderModel = new DefaultComboBoxModel<Character>(new Character[] {' ', 'M', 'F', 'O'});
 		genderComboBox = new JComboBox<>(genderModel);
+		genderComboBox.addKeyListener(this);
+
 		contentPane.add(genderComboBox);
 
 		// Counselor selector
@@ -294,80 +338,111 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 		Table counselorTable = TableManager.getTable(TableProperties.COUNSELORS_TABLE_NAME);
 		ArrayList<String> counselorNames = DataTypeManager.toStringArrayList(counselorTable.getAllFromColumn(TableProperties.NAME));
 
+		counselorModel.addElement("");
 		for (String name : counselorNames)
 			counselorModel.addElement(name);
 
 		counselorComboBox = new JComboBox<String>(counselorModel);
+		counselorComboBox.addKeyListener(this);
 		contentPane.add(counselorComboBox);
 
 		btnAddStudent = new JButton("Add Student");
 		btnAddStudent.setEnabled(false);
+
+		JFrame thisInterface = this;
 
 		btnAddStudent.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				model.addElement(txtFirstName.getText() + " " + txtLastName.getText());
+				try {
+					Student student = new Student(txtFirstName.getText(), txtLastName.getText(), Integer.parseInt(txtStudentID.getText()));
 
-				genders.add((Character) genderComboBox.getSelectedItem());
-				firstNames.add(txtFirstName.getText());
-				lastNames.add(txtLastName.getText());
+					if (!isEmpty(txtMonth) && !isEmpty(txtDay) && !isEmpty(txtYear)) {
+						int month = Integer.parseInt(txtMonth.getText());
+						int day = Integer.parseInt(txtDay.getText());
+						int year = Integer.parseInt(txtYear.getText());
 
-				txtFirstName.setText("");
-				txtLastName.setText("");
-				txtStudentID.setText("");
-				txtDay.setText("");
-				txtMonth.setText("");
-				txtYear.setText("");
-				genderComboBox.setSelectedIndex(0);
+						student.setBirthday(new Date(month, day, year));
+					}
+
+					student.setGender((Character) genderComboBox.getSelectedItem());
+
+					if (!isEmpty(txtGradYear))
+						student.setGraduationYear(Integer.parseInt(txtGradYear.getText()));
+
+					if (counselorComboBox.getSelectedIndex() > 0) {
+						String counselorName = counselorComboBox.getSelectedItem().toString();
+
+						int counselorId = Integer.parseInt(TableManager.getTable(TableProperties.COUNSELORS_TABLE_NAME).getSomeFromColumn(TableProperties.COUNSELOR_ID, TableProperties.NAME, counselorName).get(0).toString());
+
+						student.setCounselorId(counselorId);
+					}
+
+					students.add(student);
+					listStudentsModel.addElement(student.getFirstName() + " " + student.getLastName());
+
+					txtFirstName.setText("");
+					txtLastName.setText("");
+					txtStudentID.setText("");
+					txtGradYear.setText("");
+					txtDay.setText("");
+					txtMonth.setText("");
+					txtYear.setText("");
+					counselorComboBox.setSelectedIndex(0);
+					genderComboBox.setSelectedIndex(0);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(thisInterface, "Failed to add student");
+				}
 
 				txtFirstName.requestFocus();
 			}
 		});
 
-		btnAddStudent.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					btnAddStudent.doClick();
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-			}
-		});
+		btnAddStudent.addKeyListener(this);
 
 		wrapInJPanel(btnAddStudent);
 
 		btnFinish = new JButton("Finish");
+		btnFinish.addKeyListener(this);
+		btnFinish.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnFinish.doClick();
+			}
+		});
 		wrapInJPanel(btnFinish);
 		btnFinish.setEnabled(false);
 
-		CreateClassInterface thisInterface = this;
 
 		btnFinish.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String className = txtClassName.getText().trim();
 
-				for (int i = 0; i < firstNames.size(); i++) {
-					char gender = genders.get(i);
-					String firstName = firstNames.get(i);
-					String lastName = lastNames.get(i);
+				for (Student student : students) {
+					String firstName = student.getFirstName();
+					String lastName = student.getLastName();
+					int studentID = student.getStudentId();
+					char gender = student.getGender();
+					int graduationYear = student.getGraduationYear();
+					Date birthdate = student.getBirthday();
+					int birthMonth = birthdate.getMonth();
+					int birthDay = birthdate.getDay();
+					int birthYear = birthdate.getYear();
 
 					Table studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
 
 					HashMap<String, Object> newValues = new HashMap<String, Object>() {{
-						put(TableProperties.GENDER, gender);
+						put(TableProperties.STUDENT_REDWOOD_ID, studentID);
 						put(TableProperties.FIRST_NAME, firstName);
 						put(TableProperties.LAST_NAME, lastName);
+						put(TableProperties.GENDER, gender);
+						put(TableProperties.GRADUATION_YEAR, graduationYear);
+						put(TableProperties.BIRTH_MONTH, birthMonth);
+						put(TableProperties.BIRTH_DAY, birthDay);
+						put(TableProperties.BIRTH_YEAR, birthYear);
 					}};
 
 					TableManager.insertValuesIntoNewRow(studentsTable, newValues);
@@ -376,6 +451,14 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 				closeJFrame();
 			}
 		});
+	}
+
+	private String toHTML(String text) {
+		return "<html>" + text.replaceAll("\n", "<br>") + "</html>";
+	}
+
+	private boolean isEmpty(JTextField jTextField) {
+		return jTextField.getText().trim().equals("");
 	}
 
 	private void closeJFrame() {
@@ -401,7 +484,7 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 
 	private boolean isDateValid(String text) {
 		if (text.equals(""))
-			return true;
+			return false;
 
 		try {
 			Integer.parseInt(text);
@@ -424,54 +507,96 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if (isArrowKey(e)) {
+			if (isOnLastTabSpot(e) && e.getSource() == counselorComboBox && !counselorComboBox.isPopupVisible()) {
+				escape();
+			}
+			// Don't handle arrow key presses if the combobox is open
+			if ((e.getSource() == genderComboBox && genderComboBox.isPopupVisible()) ||
+					(e.getSource() == counselorComboBox && counselorComboBox.isPopupVisible()))
+				return;
+			if (e.getKeyCode() == KeyEvent.VK_DOWN && !isOnLastTabSpot(e))
+				tab();
+			if (e.getKeyCode() == KeyEvent.VK_UP && e.getSource() != txtClassName)
+				shiftTab();
+		} else if (e.getSource() == listStudents) {
+			// Handle the deletion of students from the students list
+			if (e.getKeyCode() == KeyEvent.VK_DELETE && listStudents.getSelectedIndex() != -1) {
+				students.remove(listStudents.getSelectedIndex());
 
+				((DefaultListModel) listStudents.getModel()).remove(listStudents.getSelectedIndex());
+			}
+		} else if (e.getSource() == btnAddStudent) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER)
+				btnAddStudent.doClick();
+		}
+	}
+
+	private boolean isOnLastTabSpot(KeyEvent e) {
+		Object source = e.getSource();
+
+		if (source == btnFinish)
+			return true;
+		if (source == btnAddStudent && !btnFinish.isEnabled())
+			return true;
+		if (source == counselorComboBox && !btnFinish.isEnabled() && !btnAddStudent.isEnabled())
+			return true;
+
+		return false;
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		String source = e.getSource().getClass().getSimpleName() ;
+		// Determine if the add button should be enabled
+		btnAddStudent.setEnabled(isStudentIDValid() && isNotEmpty(txtFirstName) && isNotEmpty(txtLastName));
 
-		if (source.equals("JList")) {
-			// Handle the deletion of students from the students list
-			if (e.getKeyCode() == 127 && listStudents.getSelectedIndex() != -1) {
-				for (ArrayList arrayList : studentProperties)
-					arrayList.remove(listStudents.getSelectedIndex());
+		// Determine if the finish button should be enabled
+		btnFinish.setEnabled(isNotEmpty(txtClassName));
 
-				((DefaultListModel) listStudents.getModel()).remove(listStudents.getSelectedIndex());
-			}
-		} else if (isArrowKey(e)) {
-			Robot robot = null;
-			try {
-				robot = new Robot();
-				if (isForwardKey(e)) {
-					robot.keyPress(KeyEvent.VK_TAB);
-					robot.keyRelease(KeyEvent.VK_TAB);
-				} else {
-					robot.keyPress(KeyEvent.VK_SHIFT);
-					robot.keyPress(KeyEvent.VK_TAB);
-					robot.keyRelease(KeyEvent.VK_TAB);
-					robot.keyRelease(KeyEvent.VK_SHIFT);
-				}
-			} catch (AWTException e1) {
-				e1.printStackTrace();
-			}
-		} else {
-			// Determine if the add button should be enabled
-			btnAddStudent.setEnabled(isStudentIDValid() && isNotEmpty(txtFirstName) && isNotEmpty(txtLastName));
+		// Limit the date fields to two characters
+		if (txtMonth.getText().length() > 2)
+			txtMonth.setText(txtMonth.getText().substring(0, 2));
+		if (txtDay.getText().length() > 2)
+			txtDay.setText(txtDay.getText().substring(0, 2));
+		if (txtYear.getText().length() > 2)
+			txtYear.setText(txtYear.getText().substring(0, 2));
+	}
 
-			// Determine if the finish button should be enabled
-			btnFinish.setEnabled(isNotEmpty(txtClassName));
+	private void tab() {
+		try {
+			Robot robot = new Robot();
+			robot.keyPress(KeyEvent.VK_TAB);
+			robot.keyRelease(KeyEvent.VK_TAB);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void shiftTab() {
+		try {
+			Robot robot = new Robot();
+			robot.keyPress(KeyEvent.VK_SHIFT);
+			robot.keyPress(KeyEvent.VK_TAB);
+			robot.keyRelease(KeyEvent.VK_TAB);
+			robot.keyRelease(KeyEvent.VK_SHIFT);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void escape() {
+		try {
+			Robot robot = new Robot();
+			robot.keyPress(KeyEvent.VK_ESCAPE);
+			robot.keyRelease(KeyEvent.VK_ESCAPE);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	private boolean isArrowKey(KeyEvent e) {
 		int k = e.getKeyCode();
-		return k == KeyEvent.VK_UP || k == KeyEvent.VK_DOWN || k == KeyEvent.VK_LEFT || k == KeyEvent.VK_RIGHT;
-	}
-
-	private boolean isForwardKey(KeyEvent e) {
-		int k = e.getKeyCode();
-		return k == KeyEvent.VK_DOWN || k == KeyEvent.VK_RIGHT;
+		return k == KeyEvent.VK_UP || k == KeyEvent.VK_DOWN;
 	}
 
 	@Override
@@ -506,8 +631,8 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 	// first and last - required 1
 	// student id - required 1
 	// gender 1
-	// birthdate
-	// graduation year
-	// counselor
+	// birthdate 1
+	// graduation year 1
+	// counselor 1
 
 }
