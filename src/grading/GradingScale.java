@@ -5,29 +5,24 @@ import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import database.Table;
 import database.TableManager;
 import database.TableProperties;
 
 public class GradingScale 
 {
-
 	private String[] letters = {"A+", "A", "A-","B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-"};	
 	private JSONArray letterGrades = new JSONArray();
-	public static void main(String[] args)
+	public GradingScale(String jsonText)
 	{
-		
-		double value[] = {98, 93 ,90, 87, 83, 80, 77, 73, 70, 67, 63, 60, 0};
-		
-		
-		GradingScale test = new GradingScale(value);
-		//
-		//System.out.println(test.getLetterGrade(92));
-		//System.out.println(test.getString());
+		try {
+			letterGrades = new JSONArray(jsonText);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-
 	public GradingScale(double[] values)
 	{
 		for (int i = 0; i < letters.length; i++)
@@ -73,5 +68,4 @@ public class GradingScale
 	}
 		return null;
 	}
-
 }
