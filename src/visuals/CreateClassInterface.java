@@ -4,8 +4,6 @@ import database.DataTypeManager;
 import database.Table;
 import database.TableManager;
 import database.TableProperties;
-import javafx.scene.input.KeyCode;
-
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
