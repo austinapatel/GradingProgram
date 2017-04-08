@@ -160,9 +160,10 @@ public class Main {
 		
 		
 		TableColumn[] gradesTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE",
-						null),
+				new TableColumn(TableProperties.ID, "INT NOT NULL UNIQUE", null),
+				
 				new TableColumn(TableProperties.ID, "INT NOT NULL", null), 
+				
 				new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null)};
 						
 
