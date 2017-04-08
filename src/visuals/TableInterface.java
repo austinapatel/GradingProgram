@@ -1,4 +1,3 @@
-
 // Austin Patel & Jason Morris & Lex VonKlark
 // APCS
 // Redwood High School
@@ -8,6 +7,7 @@
 package visuals;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,6 +29,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
@@ -51,6 +53,7 @@ public class TableInterface extends JFrame implements ActionListener {
 
 	private JTable jTable;
 	private JPanel tableContainer, bottomContainer;
+	private JTabbedPane tabbedPane = new JTabbedPane();
 	private JScrollPane tableScrollPane;
 	private JList<String> tableList;
 	private Table table;
@@ -65,7 +68,8 @@ public class TableInterface extends JFrame implements ActionListener {
 
 	public TableInterface() {
 		initFrame();
-
+		
+		initTabbedPane();
 		initTopContainer();
 
 		initBottomContainer();
@@ -74,10 +78,36 @@ public class TableInterface extends JFrame implements ActionListener {
 		initTable();
 		initBottomButtons();
 		initMenu();
-
+		
+	
+		//tabbedPane.add("Tables", tableContainer);
+		
+		add(tabbedPane);
+		//pack();
 		setVisible(true);
 	}
 
+	
+	public void addTab(String tabName, Icon icon, Component tab)
+	{
+		
+		tabbedPane.addTab(tabName, icon, tab);
+	}
+	
+	public void removeTab(Component component)
+	{
+		tabbedPane.remove(component);
+	}
+	
+	
+	
+	
+	public void initTabbedPane()
+	{
+		tabbedPane.setVisible(true);
+	}
+	
+	
 	public void notifyExternalDataChange() {
 		databaseTableModel.fireTableDataChanged();
 	}
@@ -312,7 +342,12 @@ public class TableInterface extends JFrame implements ActionListener {
 	private void initTopContainer() {
 		tableContainer = new JPanel();
 		tableContainer.setLayout(new BorderLayout());
-		add(tableContainer, BorderLayout.CENTER);
+		addTab("Table", new ImageIcon("table.png"), tableContainer);
+		
+	
+		
+		
+		//add(tableContainer, BorderLayout.CENTER);
 	}
 
 	/** Displays the table picker on the frame. */

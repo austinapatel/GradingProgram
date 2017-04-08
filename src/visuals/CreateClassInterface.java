@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class CreateClassInterface extends JFrame implements KeyListener, WindowListener
+public class CreateClassInterface implements KeyListener, WindowListener
 {
 
 	private JPanel contentPane, studentsPane, basePane;
@@ -26,11 +26,11 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 	private TableInterface tableInterface;
 	private JComboBox<String> counselorComboBox;
 
-	public static void main(String[] args) {
-		new CreateClassInterface(null) {{
-			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		}};
-	}
+//	public static void main(String[] args) {
+//		new CreateClassInterface(null) {{
+//			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//		}};
+//	}
 
 	/**
 	 * Create the frame.
@@ -38,8 +38,8 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 	public CreateClassInterface(TableInterface tableInterface)
 	{
 		this.tableInterface = tableInterface;
-		if (tableInterface != null)
-			tableInterface.setEnabled(false);
+//		if (tableInterface != null)
+//			tableInterface.setEnabled(false);
 
 		initBasePanel();
 		initMainContentPane();
@@ -48,7 +48,8 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 		initYearPicker();
 		initStudentAdder();
 		initStudentData();
-		initFrameProperties();
+		//initFrameProperties();
+		tableInterface.addTab("Create class", null, basePane);
 	}
 
 	private void initStudentData() {
@@ -67,7 +68,7 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 		basePane = new JPanel();
 		basePane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		basePane.setLayout(new BorderLayout());
-		setContentPane(basePane);
+		//setContentPane(basePane);
 	}
 
 	private void initStudentsPane()
@@ -85,21 +86,21 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 		basePane.add(contentPane, BorderLayout.WEST);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 	}
-
-	private void initFrameProperties()
-	{
-//		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-		setResizable(false);
-
-		setSize(400, 600);
-		setLocationRelativeTo(null);
-		setTitle("Create Class");
-		setIconImage(new ImageIcon("icon.png").getImage());
-		addWindowListener(this);
-
-		setVisible(true);
-	}
+//
+//	private void initFrameProperties()
+//	{
+////		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+//
+//		setResizable(false);
+//
+//		setSize(400, 600);
+//		setLocationRelativeTo(null);
+//		setTitle("Create Class");
+//		setIconImage(new ImageIcon("icon.png").getImage());
+//		addWindowListener(this);
+//
+//		setVisible(true);
+//	}
 
 	private void wrapInJPanel(JComponent component) {
 		JPanel panel = new JPanel();
@@ -379,10 +380,10 @@ public class CreateClassInterface extends JFrame implements KeyListener, WindowL
 	private void closeJFrame() {
 		if (tableInterface != null) {
 			tableInterface.notifyExternalDataChange();
-			tableInterface.setEnabled(true);
+//			tableInterface.setEnabled(true);
 		}
 
-		dispose();
+		tableInterface.remove(basePane);
 	}
 
 	private boolean isStudentIDValid() {
