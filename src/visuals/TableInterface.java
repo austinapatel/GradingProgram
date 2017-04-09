@@ -52,7 +52,7 @@ public class TableInterface extends JFrame implements ActionListener {
 
 	private JTable jTable;
 	private JPanel tableContainer, bottomContainer;
-	private JTabbedPane tabbedPane = new JTabbedPane();
+	private  DnDTabbedPane tabbedPane = new  DnDTabbedPane();
 	private JScrollPane tableScrollPane;
 	private JList<String> tableList;
 	private Table table;
