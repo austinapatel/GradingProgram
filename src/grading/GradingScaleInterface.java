@@ -3,10 +3,18 @@ package grading;
 import visuals.Tab;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.HashMap;
 
 import javax.swing.DefaultListSelectionModel;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -20,27 +28,64 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 {
 
 	private int rows = 13, cols = 5, rowHeight = 30, colWidth = 30;
-	
+	private static final Font STANDARD_FONT = new Font("Arial", Font.BOLD, 24);
 	private JTable letterTable;
-	private JTabbedPane window;
+	private JSplitPane splitPane;
 	
 	
 	private int[] disabled_columns = {1, 3};
 	private String[] disabled_labels = {"Below", "down to"};	
 	private int disabled_col = 2, cur_col = 0;
+	private JLabel label1;
+	private JScrollPane scrollPane1, scrollPane2;
 	public GradingScaleInterface()
 	{
-		
-		
-		
-		initPane();
+		initLabels();
 		initTable();
-
-
+		initPane(); //make sure this is last line in constructor
+	}
+	
+	
+	private void initLabels()
+	{
+		label1 = new JLabel();
+		label1.setSize(30, 30);
+		//label1.setLocation(10, 10);
+		label1.setFont(STANDARD_FONT);
+		label1.setText("Scale Description");
+		label1.setOpaque(true);
+		//label1.setBackground(Color.BLACK);
+		//label1.setForeground(Color.WHITE);
+		label1.setVisible(true);
 	}
 
 	private void initPane() {
 		setLayout(new BorderLayout());
+		
+		scrollPane1 = new JScrollPane();
+		scrollPane1.setColumnHeaderView(label1);
+		
+		scrollPane2 = new JScrollPane(letterTable);
+		//scrollPane1.setLayout(new BorderLayout());
+		//scrollPane2.setLayout(new BorderLayout());
+		
+		
+	
+		//scrollPane1.add(label1, ScrollPaneLayout.);
+		//scrollPane2.add(letterTable);
+
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPane1, scrollPane2);
+		splitPane.setOneTouchExpandable(true);
+	//	splitPane.setDividerLocation(150);
+		
+		
+		
+		splitPane.setResizeWeight(0.5);
+		splitPane.setDividerSize(0);
+		splitPane.setBorder(null);
+		add(splitPane, BorderLayout.CENTER);
+		
+		
 	}
 	
 	
@@ -105,7 +150,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			}
 		}
 		
-		add(letterTable, BorderLayout.CENTER);
+		
 	}
 	
 	public int getUneditableIndex(int col)

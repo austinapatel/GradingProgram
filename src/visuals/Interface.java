@@ -72,7 +72,16 @@ public class Interface extends JFrame implements ActionListener {
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
+				try
+				{
+					
+				
 				tabs.get(tabbedPane.getSelectedIndex()).onTabSelected();
+				}
+				catch (Exception et)
+				{
+					
+				}
 			}
 		});
 	}
@@ -139,7 +148,12 @@ public class Interface extends JFrame implements ActionListener {
 	/** Initializes properties of the JFrame. */
 	private void initFrame() {
 		setIconImage(new ImageIcon("icon.png").getImage());
-		setSize(WIDTH, HEIGHT);
+		
+		Toolkit toolkit =  Toolkit.getDefaultToolkit ();
+		Dimension dim = toolkit.getScreenSize();
+		setSize(dim.width,dim.height);
+		
+		//setSize(WIDTH, HEIGHT);
 		setTitle(Interface.FRAME_TITLE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
