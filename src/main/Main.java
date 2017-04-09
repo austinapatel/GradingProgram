@@ -55,13 +55,7 @@ public class Main {
 
 	private static void startInterface() {
 		Main.setUpTables();
-		TableInterface tableInterface = new TableInterface();
-
-		GradingScaleInterface gradingScaleInterface = new GradingScaleInterface();
-		CreateClassInterface createClassInterface = new CreateClassInterface();
-
-		tableInterface.addTab("Grading Scale", new ImageIcon("grading.png"), gradingScaleInterface);
-		tableInterface.addTab("Create class", new ImageIcon("class.png"), createClassInterface);
+		new TableInterface();
 	}
 
 	private static void setUpTables() {

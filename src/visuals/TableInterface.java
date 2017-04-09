@@ -38,6 +38,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableCellEditor;
 
 import database.*;
+import grading.GradingScaleInterface;
 
 /** Interface for the program. */
 @SuppressWarnings("serial")
@@ -48,7 +49,10 @@ public class TableInterface extends JFrame implements ActionListener {
 	private static final int WIDTH = 800, HEIGHT = 700;
 	private final String ACTION_ADD_ROW = "Add Row",
 			ACTION_DELETE_ROW = "Delete Row",
-			ACTION_CHANGE_CONNECTION = "Manage Database Connection";
+			ACTION_CHANGE_CONNECTION = "Manage Database Connection",
+			ACTION_SHOW_TABLE_INTERFACE = "Tables",
+			ACTION_SHOW_CREATE_CLASS_INTERFACE = "Create Class",
+			ACTION_SHOW_GRADE_SCALES = "Grade Scales";
 
 	private JTable jTable;
 	private JPanel tableContainer, bottomContainer;
@@ -67,36 +71,30 @@ public class TableInterface extends JFrame implements ActionListener {
 
 	public TableInterface() {
 		initFrame();
-		
 		initTabbedPane();
 		initTopContainer();
-
 		initBottomContainer();
 		initTablePicker();
-
 		initTable();
 		initBottomButtons();
 		initMenu();
-		
-	
-		//tabbedPane.add("Tables", tableContainer);
-		
 		add(tabbedPane);
-		//pack();
+		addAllTabs();
 		setVisible(true);
 		
+	}
+
+	private void addAllTabs() {
+		addTab("Grading Scale", new ImageIcon("grading.png"), new GradingScaleInterface());
+		addTab("Create class", new ImageIcon("class.png"), new CreateClassInterface());
 	}
 	
 	public void addTab(String tabName, Icon icon, Component tab)
 	{
-		
 		tabbedPane.addTab(tabName, icon, tab);
 		
 		tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(tab),new ButtonTabComponent(tabbedPane));
-		
-		
-		
-		
+		tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
 	}
 	
 	public void removeTab(Component component)
@@ -154,6 +152,22 @@ public class TableInterface extends JFrame implements ActionListener {
 						});
 					}
 				});
+				add(new JMenu("Interface") {{
+					add(new JMenu("Show View") {{
+						add(new JMenuItem(ACTION_SHOW_TABLE_INTERFACE){{
+							setActionCommand(ACTION_SHOW_TABLE_INTERFACE);
+							addActionListener(TableInterface.this);
+						}});
+						add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE){{
+							setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE);
+							addActionListener(TableInterface.this);
+						}});
+						add(new JMenuItem(ACTION_SHOW_GRADE_SCALES){{
+							setActionCommand(ACTION_SHOW_GRADE_SCALES);
+							addActionListener(TableInterface.this);
+						}});
+					}});
+				}});
 			}
 		};
 
@@ -440,13 +454,26 @@ public class TableInterface extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent actionEvent) {
 		String action = actionEvent.getActionCommand();
 
-		if (action.equals(ACTION_ADD_ROW))
-			addRowButton.doClick();
-		else if (action.equals(ACTION_DELETE_ROW))
-			deleteRowButton.doClick();
-		else if (action.equals(ACTION_CHANGE_CONNECTION)) {
-			PasswordField pass = new PasswordField();
-			dispose();
+		switch (action) {
+			case ACTION_ADD_ROW:
+				addRowButton.doClick();
+				break;
+			case ACTION_DELETE_ROW:
+				deleteRowButton.doClick();
+				break;
+			case ACTION_CHANGE_CONNECTION:
+				new PasswordField();
+				dispose();
+				break;
+			case ACTION_SHOW_CREATE_CLASS_INTERFACE:
+				addTab("Create class", new ImageIcon("class.png"), new CreateClassInterface());
+				break;
+			case ACTION_SHOW_GRADE_SCALES:
+				addTab("Grading Scale", new ImageIcon("grading.png"), new GradingScaleInterface());
+				break;
+			case ACTION_SHOW_TABLE_INTERFACE:
+				System.out.println("Not implemented yet");
+				break;
 		}
 	}
 
