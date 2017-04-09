@@ -44,8 +44,9 @@ import java.awt.event.*;
  */ 
 public class ButtonTabComponent extends JPanel {
     private final JTabbedPane pane;
+    private JLabel label;
 
-    public ButtonTabComponent(final JTabbedPane pane, Icon icon) {
+    public ButtonTabComponent(final JTabbedPane pane) {
         //unset default FlowLayout' gaps
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         if (pane == null) {
@@ -55,18 +56,23 @@ public class ButtonTabComponent extends JPanel {
         setOpaque(false);
         
         //make JLabel read titles from JTabbedPane
-        JLabel label = new JLabel() {
+       
+        
+         label = new JLabel() {
             public String getText() {
                 int i = pane.indexOfTabComponent(ButtonTabComponent.this);
                 if (i != -1) {
-                    return pane.getTitleAt(i);
+                	label.setIcon(pane.getIconAt(i));
+                	return pane.getTitleAt(i);
                 }
                 return null;
             }
         };
-        int i = pane.indexOfTabComponent(ButtonTabComponent.this);
-        label.setIcon(icon);
+        
+        
     
+        
+        
         
         add(label);
         //add more space between the label and the button

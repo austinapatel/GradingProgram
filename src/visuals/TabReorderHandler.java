@@ -14,7 +14,10 @@ public class TabReorderHandler extends MouseInputAdapter {
 	
 	private JTabbedPane tabPane;
 	private int draggedTabIndex;
-	
+	public void mousePressed(MouseEvent e) { 
+		draggedTabIndex = tabPane.getUI().tabForCoordinate(tabPane, 
+		e.getX(), e.getY()); 
+		}
 	protected TabReorderHandler(JTabbedPane pane) {
 		this.tabPane = pane;
 		draggedTabIndex = -1;
@@ -40,6 +43,7 @@ public class TabReorderHandler extends MouseInputAdapter {
 					isForwardDrag ? targetTabIndex+1 : targetTabIndex);
 			draggedTabIndex = targetTabIndex;
 			tabPane.setSelectedIndex(draggedTabIndex);
+			tabPane.setTabComponentAt(draggedTabIndex ,new ButtonTabComponent(tabPane));
 		}
 	}
 }
