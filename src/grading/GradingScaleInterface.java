@@ -61,7 +61,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		
 		letterTable = new JTable(tableModel);
 		letterTable.getModel().addTableModelListener(this);
-		letterTable.setRowHeight(30);
+		letterTable.setRowHeight(rowHeight);
 		letterTable.getColumnModel().getColumn(0).setPreferredWidth(colWidth);
 		letterTable.setBackground(getBackground());
 		
@@ -105,7 +105,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			}
 		}
 		
-		add(letterTable, BorderLayout.WEST);
+		add(letterTable, BorderLayout.CENTER);
 	}
 	
 	public int getUneditableIndex(int col)
