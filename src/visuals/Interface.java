@@ -32,6 +32,9 @@ public class Interface extends JFrame implements ActionListener {
 	private JMenuBar jMenuBar;
 
 	public Interface() {
+		
+		
+		TabReorderHandler.enableReordering(tabbedPane);
 		initFrame();
 		initTabbedPane();
 		initMenu();
