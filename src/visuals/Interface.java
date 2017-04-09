@@ -152,7 +152,7 @@ public class Interface extends JFrame implements ActionListener {
 		Toolkit toolkit =  Toolkit.getDefaultToolkit ();
 		Dimension dim = toolkit.getScreenSize();
 		setSize(dim.width,dim.height);
-		
+		setDefaultLookAndFeelDecorated(true);
 		//setSize(WIDTH, HEIGHT);
 		setTitle(Interface.FRAME_TITLE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

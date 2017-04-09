@@ -24,6 +24,9 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		
+		System.setProperty("awt.useSystemAAFontSettings","on");
+		System.setProperty("swing.aatext", "true");
 		if (args.length == 1)
 			launchGUI(args[0]);
 		else if (args.length == 3)

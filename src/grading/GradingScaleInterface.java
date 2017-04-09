@@ -7,9 +7,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.util.HashMap;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,6 +20,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -28,35 +32,51 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 {
 
 	private int rows = 13, cols = 5, rowHeight = 30, colWidth = 30;
-	private static final Font STANDARD_FONT = new Font("Arial", Font.BOLD, 24);
+	private static final Font STANDARD_FONT = new Font("Arial", Font.PLAIN, 30);
 	private JTable letterTable;
 	private JSplitPane splitPane;
-	
+	private Border blackline, raisedetched, loweredetched, raisedbevel, loweredbevel, empty;
 	
 	private int[] disabled_columns = {1, 3};
 	private String[] disabled_labels = {"Below", "down to"};	
 	private int disabled_col = 2, cur_col = 0;
 	private JLabel label1;
 	private JScrollPane scrollPane1, scrollPane2;
+	
+	
 	public GradingScaleInterface()
 	{
+		initBorders();
 		initLabels();
 		initTable();
 		initPane(); //make sure this is last line in constructor
 	}
 	
 	
+	private void initBorders()
+	{
+		blackline = BorderFactory.createLineBorder(Color.black);
+		raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+		loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
+		raisedbevel = BorderFactory.createRaisedBevelBorder();
+		loweredbevel = BorderFactory.createLoweredBevelBorder();
+		empty = BorderFactory.createEmptyBorder();
+
+	}
+	
 	private void initLabels()
 	{
-		label1 = new JLabel();
-		label1.setSize(30, 30);
+		label1 = new JLabel("", JLabel.CENTER);
+		label1.setBorder(BorderFactory.createCompoundBorder(raisedbevel, loweredbevel));
 		//label1.setLocation(10, 10);
 		label1.setFont(STANDARD_FONT);
 		label1.setText("Scale Description");
 		label1.setOpaque(true);
 		//label1.setBackground(Color.BLACK);
 		//label1.setForeground(Color.WHITE);
+		label1.setSize(label1.getPreferredSize());
 		label1.setVisible(true);
+		
 	}
 
 	private void initPane() {
@@ -73,7 +93,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	
 		//scrollPane1.add(label1, ScrollPaneLayout.);
 		//scrollPane2.add(letterTable);
-
+		
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPane1, scrollPane2);
 		splitPane.setOneTouchExpandable(true);
 	//	splitPane.setDividerLocation(150);
@@ -85,6 +105,11 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		splitPane.setBorder(null);
 		add(splitPane, BorderLayout.CENTER);
 		
+		 GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		    Font[] fonts = e.getAllFonts(); // Get the fonts
+		    for (Font f : fonts) {
+		      System.out.println(f.getFontName());
+		    }
 		
 	}
 	
