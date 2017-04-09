@@ -26,6 +26,8 @@ public class Interface extends JFrame implements ActionListener {
 	private static final String FRAME_TITLE = "Grading Program";
 
 	private static final int WIDTH = 1200, HEIGHT = 800;
+	
+	private Color tabColor = Color.GRAY;
 	private final String ACTION_ADD_ROW = "Add Row",
 			ACTION_DELETE_ROW = "Delete Row",
 			ACTION_CHANGE_CONNECTION = "Manage Database Connection",
@@ -53,6 +55,8 @@ public class Interface extends JFrame implements ActionListener {
 	}
 	
 	public void addTab(Tab tab) {
+		
+		//((JPanel) tab).setBorder(new TextBubbleBorder(tabColor, 2, 10));
 		tabbedPane.addTab(tab.getTabName(), new ImageIcon(tab.getTabImage()), (JPanel) tab);
 		//tabbedPane.setBorder(new TextBubbleBorder(Color.GRAY, 8, 10));
 		int index = tabbedPane.indexOfComponent((JPanel) tab);
@@ -157,11 +161,13 @@ public class Interface extends JFrame implements ActionListener {
 //		Toolkit toolkit =  Toolkit.getDefaultToolkit ();
 //		Dimension dim = toolkit.getScreenSize();
 //		setSize(dim.width,dim.height);
-		setDefaultLookAndFeelDecorated(true);
+		//setDefaultLookAndFeelDecorated(false);
+		//this.setUndecorated(true);
 		setSize(WIDTH, HEIGHT);
 		setTitle(Interface.FRAME_TITLE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
+		//this.getRootPane().setBorder(new TextBubbleBorder(tabColor, 5, 8));
 	}
 
 //	private boolean doesTabExist(String tab) {

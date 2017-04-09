@@ -10,6 +10,7 @@ package main;
 import database.DatabaseManager;
 import database.TableProperties;
 import database.ValueParameter;
+import grading.GradingScale;
 //import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import database.Table;
 import database.TableColumn;
@@ -50,6 +51,8 @@ public class Main {
 	private static void startInterface() {
 		Main.setUpTables();
 		new Interface();
+		double[] values = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 9, 7, 6};
+		new GradingScale("test" + (int)(Math.random() * 1000), values);
 	}
 
 	private static void setUpTables() {
@@ -170,7 +173,8 @@ public class Main {
 
 		TableColumn[] gradingScaleTableColumns = new TableColumn[] {
 				new TableColumn(TableProperties.SCALE_ID, "INT NOT NULL UNIQUE", null),	
-				new TableColumn(TableProperties.SCALE_DATA, "VARCHAR(500) NOT NULL", null)};
+				new TableColumn(TableProperties.SCALE_DATA, "VARCHAR(500) NOT NULL", null),
+				new TableColumn(TableProperties.SCALE_DESCRIPTION, "VARCHAR(50) NOT NULL UNIQUE", null)};
 
 		TableColumn[] counselorTableColumns = new TableColumn[] {
 				new TableColumn(TableProperties.COUNSELOR_ID, "INT NOT NULL UNIQUE", null),

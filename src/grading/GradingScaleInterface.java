@@ -9,11 +9,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -26,13 +31,14 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import customBorders.CurvedBorder;
 import customBorders.RoundedCornerBorder;
 import customBorders.TextBubbleBorder;
 
-public class GradingScaleInterface extends JPanel implements TableModelListener, Tab
+public class GradingScaleInterface extends JPanel implements TableModelListener, Tab, KeyListener
 {
 
 	private int rows = 13, cols = 5, rowHeight = 30, colWidth = 30;
@@ -46,17 +52,46 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	private int disabled_col = 2, cur_col = 0;
 	private JLabel label1;
 	private JScrollPane scrollPane1, scrollPane2;
+	private JList scaleList;
+	private DefaultListModel listModel;
+	private ArrayList<GradingScale> scales = new ArrayList();
+	
 	
 	
 	public GradingScaleInterface()
 	{
+		
 		initBorders();
+		initList();
 		initLabels();
 		initTable();
 		initPane(); //make sure this is last line in constructor
 	}
 	
+	private void initList()
+	{
+		listModel = new DefaultListModel();
+		scaleList= new JList(listModel);
+		scales = GradeCalculator.getScales();
+		scaleList.addKeyListener(this);
+		System.out.println(scales.size());
 	
+		for (GradingScale scale: scales)
+		{
+			System.out.println(scale.getName());
+			listModel.addElement(scale.getName());
+		}
+		
+		
+	}
+	
+	private void openScale()
+	{
+		String name = (String) listModel.getElementAt(scaleList.getSelectedIndex());
+		
+		System.out.println(name);
+		
+	}
 	private void initBorders()
 	{
 		blackline = BorderFactory.createLineBorder(Color.black);
@@ -73,6 +108,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		label1 = new JLabel("", JLabel.CENTER);
 		//label1.setBorder(BorderFactory.createCompoundBorder( new RoundedCornerBorder(), raisedbevel));
 		//label1.setBorder(new RoundedCornerBorder());
+		label1.setBorder(new TextBubbleBorder(Color.DARK_GRAY, 1, 8));
 		//label1.setLocation(10, 10);
 		label1.setFont(STANDARD_FONT);
 		label1.setText("Scale Description");
@@ -87,10 +123,11 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	private void initPane() {
 		setLayout(new BorderLayout());
 		
-		scrollPane1 = new JScrollPane();
+		scrollPane1 = new JScrollPane(scaleList);
 		scrollPane1.setColumnHeaderView(label1);
 		
 		scrollPane2 = new JScrollPane(letterTable);
+	//	scrollPane1.add(scaleList);
 		//scrollPane1.setLayout(new BorderLayout());
 		//scrollPane2.setLayout(new BorderLayout());
 		
@@ -110,12 +147,12 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		splitPane.setBorder(null);
 		add(splitPane, BorderLayout.CENTER);
 		
-		 GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		    Font[] fonts = e.getAllFonts(); // Get the fonts
-		    for (Font f : fonts) {
-		      System.out.println(f.getFontName());
-		    }
-		
+//		 GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//		    Font[] fonts = e.getAllFonts(); // Get the fonts
+//		    for (Font f : fonts) {
+//		      System.out.println(f.getFontName());
+//		    }
+//		
 	}
 	
 	
@@ -135,11 +172,28 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		
 		
 		letterTable = new JTable(tableModel);
+		
 		letterTable.getModel().addTableModelListener(this);
 		letterTable.setRowHeight(rowHeight);
-		letterTable.getColumnModel().getColumn(0).setPreferredWidth(colWidth);
 		letterTable.setBackground(getBackground());
-		letterTable.setBorder(new TextBubbleBorder(Color.GRAY, 2, 50));
+		letterTable.setBorder(new TextBubbleBorder(Color.GRAY, 2, 8));
+		letterTable.setFont(new Font("Arial", Font.PLAIN, 18));
+		letterTable.getTableHeader().setReorderingAllowed(false);
+		
+		
+		
+		for (int i = 0; i < letterTable.getColumnCount(); i++)
+		{
+			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+			centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+			letterTable.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
+			
+			
+			if (getUneditableIndex(i) == -1)
+				letterTable.getColumnModel().getColumn(i).setMaxWidth(50);
+		}
+		
+		
 		
 		//letterTable.setSelectionModel(new CustomModel(letterTable.getSelectionModel()));
 		
@@ -197,7 +251,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				}
 					
 			}
-			return 0;
+			return -1;
 	}
 
 	@Override
@@ -216,8 +270,31 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		return "grading.png";
 	}
 
+
 	@Override
 	public void onTabSelected() {
 
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent key) {
+		// TODO Auto-generated method stub
+		if (key.getKeyCode() == KeyEvent.VK_ENTER) 
+		{
+			openScale();
+		}
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
