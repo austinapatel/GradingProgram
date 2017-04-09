@@ -8,4 +8,6 @@ public interface Tab {
 
     String getTabName();
     String getTabImage();
+
+    void onTabSelected();
 }

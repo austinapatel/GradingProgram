@@ -59,14 +59,8 @@ public class TableManager
 	public static void insertValuesIntoNewRow(Table table, HashMap<String, Object> values) {
 		try {
 			ResultSet rs = table.getResultSet();
-			if (rs.last()) {
-				System.out.println("moved to last row");
-			}
-
-			//DatabaseManager.addToRow(table, values., columnIndex);
 
 			table.addRow();
-
 
 			Object[] keySetObjects = values.keySet().toArray();
 			String[] keys = new String[keySetObjects.length];
@@ -84,9 +78,7 @@ public class TableManager
 
 				rs.last();
 				rs.absolute(rs.getRow());
-				if (rs.getConcurrency() == ResultSet.CONCUR_UPDATABLE) {
-					System.out.println("updatable");
-				}
+
 				DatabaseManager.addToRow(table, value, columnIndex);
 //				rs.updateObject(columnIndex, value);
 				rs.updateRow();
