@@ -9,6 +9,8 @@ package visuals;
 import grading.GradingScaleInterface;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,9 +36,11 @@ public class Interface extends JFrame implements ActionListener {
 
 	private ArrayList<Tab> tabs;
 
+	private CreateClassInterface createClassInterface = new CreateClassInterface();
+	private GradingScaleInterface gradingScaleInterface = new GradingScaleInterface();
+	private TableInterface tableInterface = new TableInterface();
+
 	public Interface() {
-		
-		
 		TabReorderHandler.enableReordering(tabbedPane);
 		initFrame();
 		initTabbedPane();
@@ -45,11 +49,10 @@ public class Interface extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 	
-	public void addTab(String tabName, Icon icon, Component tab) {
-		tabbedPane.addTab(tabName, icon, tab);
+	public void addTab(Tab tab) {
+		tabbedPane.addTab(tab.getTabName(), new ImageIcon(tab.getTabImage()), (JPanel) tab);
 
-		
-		tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(tab),new ButtonTabComponent(tabbedPane));
+		tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent((JPanel) tab),new ButtonTabComponent(tabbedPane));
 
 		tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
 	}
@@ -57,15 +60,21 @@ public class Interface extends JFrame implements ActionListener {
 	public void initTabbedPane()
 	{
 		tabs = new ArrayList<>();
-		tabs.add(new TableInterface());
-		tabs.add(new GradingScaleInterface());
-		tabs.add(new CreateClassInterface());
+		tabs.add(tableInterface);
+		tabs.add(gradingScaleInterface);
+		tabs.add(createClassInterface);
 
 		for (Tab tab : tabs)
-			addTab(tab.getTabName(), new ImageIcon(tab.getTabImage()), (JPanel) tab);
+			addTab(tab);
 
 		tabbedPane.setSelectedIndex(0);
 		tabbedPane.setVisible(true);
+		tabbedPane.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				tabs.get(tabbedPane.getSelectedIndex()).onTabSelected();
+			}
+		});
 	}
 
 	private void initMenu() {
@@ -136,11 +145,15 @@ public class Interface extends JFrame implements ActionListener {
 		setLocationRelativeTo(null);
 	}
 
-//	private boolean doesTabExist(Tab tab) {
+//	private boolean doesTabExist(String tab) {
 //		for (int i = 0; i < tabbedPane.getTabCount(); i++) {
-//			Tab currentTab = (Tab) tabbedPane.getTabComponentAt(i);
-////			System.out.println();
+//			Tab currentTab = (Tab) tabbedPane.getComponentAt(i);
+//
+//			if (currentTab.getTabName().equals(tab))
+//				return true;
 //		}
+//
+//		return false;
 //	}
 
 	@Override
@@ -159,13 +172,13 @@ public class Interface extends JFrame implements ActionListener {
 				dispose();
 				break;
 			case ACTION_SHOW_CREATE_CLASS_INTERFACE:
-				addTab("Create class", new ImageIcon("class.png"), new CreateClassInterface());
+				addTab(createClassInterface);
 				break;
 			case ACTION_SHOW_GRADE_SCALES:
-				addTab("Grading Scale", new ImageIcon("grading.png"), new GradingScaleInterface());
+				addTab(gradingScaleInterface);
 				break;
 			case ACTION_SHOW_TABLE_INTERFACE:
-				addTab("Table", new ImageIcon("table.png"), new TableInterface());
+				addTab(tableInterface);
 				break;
 		}
 	}

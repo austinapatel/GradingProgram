@@ -26,7 +26,7 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab
 	private JTextField txtClassName, txtStartYear, txtEndYear, txtFirstName, txtLastName, txtStudentID, txtMonth, txtDay, txtYear;
 	private JComboBox<Character> genderComboBox;
 	private JList listStudents;
-	private JButton btnAddStudent, btnFinish;
+	private JButton btnAddStudent, btnCreateClass;
 	private JComboBox<String> counselorComboBox;
 	private JTextField txtGradYear;
 	private ArrayList<Student> students = new ArrayList<>();
@@ -176,11 +176,18 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab
 		listStudents.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
+				if (listStudents.getSelectedIndex() == -1)
+					return;
+
 				Student student = students.get(listStudents.getSelectedIndex());
 
 				int counselorId = student.getCounselorId();
 
-				String counselorName = TableManager.getTable(TableProperties.COUNSELORS_TABLE_NAME).getSomeFromColumn(TableProperties.NAME, TableProperties.COUNSELOR_ID, String.valueOf(counselorId)).get(0).toString();
+
+				String counselorName = "Not specified";
+
+				if (counselorId != 0)
+					TableManager.getTable(TableProperties.COUNSELORS_TABLE_NAME).getSomeFromColumn(TableProperties.NAME, TableProperties.COUNSELOR_ID, String.valueOf(counselorId)).get(0).toString();
 
 				lblStudentInfo.setText(toHTML(student.toString() + "\nCounselor: " + counselorName));
 			}
@@ -341,6 +348,8 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab
 		btnAddStudent = new JButton("Add Student");
 		btnAddStudent.setEnabled(false);
 
+		JPanel thisPanel = this;
+
 		btnAddStudent.addActionListener(new ActionListener()
 		{
 			@Override
@@ -365,9 +374,13 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab
 					if (counselorComboBox.getSelectedIndex() > 0) {
 						String counselorName = counselorComboBox.getSelectedItem().toString();
 
-						int counselorId = Integer.parseInt(TableManager.getTable(TableProperties.COUNSELORS_TABLE_NAME).getSomeFromColumn(TableProperties.COUNSELOR_ID, TableProperties.NAME, counselorName).get(0).toString());
+						if (!counselorName.equals("")) {
+							int counselorId = Integer.parseInt(TableManager.getTable(TableProperties.COUNSELORS_TABLE_NAME).getSomeFromColumn(TableProperties.COUNSELOR_ID, TableProperties.NAME, counselorName).get(0).toString());
 
-						student.setCounselorId(counselorId);
+							System.out.println("The counselor id is : " + counselorId);
+
+							student.setCounselorId(counselorId);
+						}
 					}
 
 					students.add(student);
@@ -384,9 +397,11 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab
 					genderComboBox.setSelectedIndex(0);
 
 					btnAddStudent.setEnabled(false);
+					listStudents.setSelectedIndex(listStudentsModel.getSize() - 1);
 				} catch (Exception e) {
+					e.printStackTrace();
 					System.out.println("Failed to add student");
-//					JOptionPane.showMessageDialog(thisInterface, "Failed to add student");
+					JOptionPane.showMessageDialog(thisPanel, "Failed to add student");
 				}
 
 				txtFirstName.requestFocus();
@@ -397,16 +412,15 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab
 
 		wrapInJPanel(btnAddStudent);
 
-		btnFinish = new JButton("Add Class");
-		btnFinish.addKeyListener(this);
+		btnCreateClass = new JButton("Add Class");
+		btnCreateClass.addKeyListener(this);
 
-		wrapInJPanel(btnFinish);
-		btnFinish.setEnabled(false);
+		wrapInJPanel(btnCreateClass);
+		btnCreateClass.setEnabled(false);
 
-		btnFinish.addActionListener(new ActionListener() {
+		btnCreateClass.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("action performed");
 				for (Student student : students) {
 					String firstName = student.getFirstName();
 					String lastName = student.getLastName();
@@ -429,6 +443,8 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab
 					final int dayFinal = birthDay;
 					final int yearFinal = birthYear;
 
+					int counselorId = student.getCounselorId();
+
 					Table studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
 
 					HashMap<String, Object> newValues = new HashMap<String, Object>() {{
@@ -440,10 +456,16 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab
 						put(TableProperties.BIRTH_MONTH, monthFinal);
 						put(TableProperties.BIRTH_DAY, dayFinal);
 						put(TableProperties.BIRTH_YEAR, yearFinal);
+						put(TableProperties.COUNSELOR_ID, counselorId);
 					}};
 
 					TableManager.insertValuesIntoNewRow(studentsTable, newValues);
 				}
+
+				btnCreateClass.setEnabled(false);
+				students.removeAll(students);
+				listStudentsModel.removeAllElements();
+				txtClassName.setText("");
 			}
 		});
 	}
@@ -493,7 +515,7 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (isArrowKey(e)) {
+		if (isArrowKey(e) && e.getSource() != listStudents) {
 			if (isOnLastTabSpot(e) && e.getSource() == counselorComboBox && !counselorComboBox.isPopupVisible()) {
 				escape();
 			}
@@ -515,17 +537,20 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab
 		} else if (e.getSource() == btnAddStudent) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER)
 				btnAddStudent.doClick();
+		} else if (e.getSource() == btnCreateClass) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER)
+				btnCreateClass.doClick();
 		}
 	}
 
 	private boolean isOnLastTabSpot(KeyEvent e) {
 		Object source = e.getSource();
 
-		if (source == btnFinish)
+		if (source == btnCreateClass)
 			return true;
-		if (source == btnAddStudent && !btnFinish.isEnabled())
+		if (source == btnAddStudent && !btnCreateClass.isEnabled())
 			return true;
-		if (source == counselorComboBox && !btnFinish.isEnabled() && !btnAddStudent.isEnabled())
+		if (source == counselorComboBox && !btnCreateClass.isEnabled() && !btnAddStudent.isEnabled())
 			return true;
 
 		return false;
@@ -537,7 +562,7 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab
 		btnAddStudent.setEnabled(isStudentIDValid() && isNotEmpty(txtFirstName) && isNotEmpty(txtLastName));
 
 		// Determine if the finish button should be enabled
-		btnFinish.setEnabled(isNotEmpty(txtClassName));
+		btnCreateClass.setEnabled(isNotEmpty(txtClassName));
 
 		// Limit the date fields to two characters
 		if (txtMonth.getText().length() > 2)
@@ -593,6 +618,11 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab
 	@Override
 	public String getTabImage() {
 		return "class.png";
+	}
+
+	@Override
+	public void onTabSelected() {
+
 	}
 
 }

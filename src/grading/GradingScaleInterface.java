@@ -75,4 +75,9 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	public String getTabImage() {
 		return "grading.png";
 	}
+
+	@Override
+	public void onTabSelected() {
+
+	}
 }

@@ -142,6 +142,10 @@ public class Table
 
 		try {
 			resultSet.first();
+
+			if (!resultSet.next()) // Checks if ResultSet is empty
+				return data;
+
 			while(!resultSet.isAfterLast())
 			{
 				Object currentValue = resultSet.getObject(columnIndex);
