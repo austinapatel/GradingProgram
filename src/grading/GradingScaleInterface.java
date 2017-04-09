@@ -1,5 +1,7 @@
 package grading;
 
+import visuals.Tab;
+
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
@@ -8,7 +10,7 @@ import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
-public class GradingScaleInterface extends JPanel implements TableModelListener
+public class GradingScaleInterface extends JPanel implements TableModelListener, Tab
 {
 
 	private int rows = 13, cols = 2, rowHeight = 30, colWidth = 30;
@@ -43,4 +45,13 @@ public class GradingScaleInterface extends JPanel implements TableModelListener
 
 	}
 
+	@Override
+	public String getTabName() {
+		return "Grading Scale";
+	}
+
+	@Override
+	public String getTabImage() {
+		return "grading.png";
+	}
 }
