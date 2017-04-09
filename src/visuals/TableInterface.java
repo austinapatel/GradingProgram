@@ -92,7 +92,7 @@ public class TableInterface extends JFrame implements ActionListener {
 		
 		tabbedPane.addTab(tabName, icon, tab);
 		
-		tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(tab),new ButtonTabComponent(tabbedPane));
+		tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(tab),new ButtonTabComponent(tabbedPane, icon));
 		
 		
 		
