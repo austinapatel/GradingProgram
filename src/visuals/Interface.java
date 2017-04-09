@@ -12,8 +12,6 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import customBorders.TextBubbleBorder;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,67 +27,89 @@ public class Interface extends JFrame implements ActionListener {
 
     private static final int WIDTH = 1200, HEIGHT = 800;
 
-    private Color tabColor = Color.GRAY;
     private final String ACTION_ADD_ROW = "Add Row",
             ACTION_DELETE_ROW = "Delete Row",
             ACTION_CHANGE_CONNECTION = "Manage Database Connection",
+            ACTION_SHOW_TABLE_INTERFACE_RIGHT = "Tables Right",
+            ACTION_SHOW_CREATE_CLASS_INTERFACE_RIGHT = "Create Class Right",
+            ACTION_SHOW_GRADE_SCALES_RIGHT = "Grade Scales Right",
             ACTION_SHOW_TABLE_INTERFACE = "Tables",
             ACTION_SHOW_CREATE_CLASS_INTERFACE = "Create Class",
             ACTION_SHOW_GRADE_SCALES = "Grade Scales";
 
-    private JTabbedPane tabbedPane = new JTabbedPane();
+    private JSplitPane splitPane;
+    private JTabbedPane leftTabbedPane = new JTabbedPane(), rightTabbedPane = new JTabbedPane();
 
     private JMenuBar jMenuBar;
 
     private ArrayList<Tab> tabs;
+
+    private enum TabSide {
+        Left,
+        Right
+    }
 
     private CreateClassInterface createClassInterface = new CreateClassInterface();
     private GradingScaleInterface gradingScaleInterface = new GradingScaleInterface();
     private TableInterface tableInterface = new TableInterface();
 
     public Interface() {
-        TabReorderHandler.enableReordering(tabbedPane);
-        initFrame();
-        initTabbedPane();
+        initTabbedPanes();
+        initSplitPane();
         initMenu();
-        add(tabbedPane);
-        setVisible(true);
+        initFrame();
     }
 
-    public void addTab(Tab tab) {
-
-        //((JPanel) tab).setBorder(new TextBubbleBorder(tabColor, 2, 10));
-        tabbedPane.addTab(tab.getTabName(), new ImageIcon(tab.getTabImage()), (JPanel) tab);
-        //tabbedPane.setBorder(new TextBubbleBorder(Color.GRAY, 8, 10));
-        int index = tabbedPane.indexOfComponent((JPanel) tab);
-        tabbedPane.setTabComponentAt(index, new ButtonTabComponent(tabbedPane));
-
-        tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
+    private void initSplitPane() {
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftTabbedPane, rightTabbedPane);
+        splitPane.setResizeWeight(0.5);
+        add(splitPane);
     }
 
-    public void initTabbedPane() {
-        tabs = new ArrayList<>();
-        tabs.add(tableInterface);
-        tabs.add(gradingScaleInterface);
-        tabs.add(createClassInterface);
+    public void addTab(Tab tab, TabSide tabSide) {
+        JTabbedPane destination = leftTabbedPane;
+        if (tabSide == TabSide.Right)
+            destination = rightTabbedPane;
 
-        for (Tab tab : tabs) {
-            addTab(tab);
-        }
-        tabbedPane.setSelectedIndex(0);
+        destination.addTab(tab.getTabName(), new ImageIcon(tab.getTabImage()), (JPanel) tab);
+        int index = destination.indexOfComponent((JPanel) tab);
+        destination.setTabComponentAt(index, new ButtonTabComponent(destination));
+        destination.setSelectedIndex(destination.getTabCount() - 1);
+    }
+
+    private void initTabbedPane(JTabbedPane tabbedPane) {
+        TabReorderHandler.enableReordering(tabbedPane);
+
         tabbedPane.setVisible(true);
         tabbedPane.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 try {
-
-
                     tabs.get(tabbedPane.getSelectedIndex()).onTabSelected();
                 } catch (Exception et) {
 
                 }
             }
         });
+    }
+
+    public void initTabbedPanes() {
+        initTabbedPane(leftTabbedPane);
+        initTabbedPane(rightTabbedPane);
+
+        tabs = new ArrayList<>();
+        tabs.add(tableInterface);
+        tabs.add(gradingScaleInterface);
+        tabs.add(createClassInterface);
+
+        addTab(tabs.get(0), TabSide.Left);
+        addTab(tabs.get(1), TabSide.Right);
+        addTab(tabs.get(2), TabSide.Right);
+
+//        for (Tab tab : tabs)
+//            addTab(tab, TabSide.Left);
+
+        leftTabbedPane.setSelectedIndex(0);
     }
 
     private void initMenu() {
@@ -131,17 +151,33 @@ public class Interface extends JFrame implements ActionListener {
                 });
                 add(new JMenu("Interface") {{
                     add(new JMenu("Show View") {{
-                        add(new JMenuItem(ACTION_SHOW_TABLE_INTERFACE) {{
-                            setActionCommand(ACTION_SHOW_TABLE_INTERFACE);
-                            addActionListener(Interface.this);
+                        add(new JMenu("On Left Tab") {{
+                            add(new JMenuItem(ACTION_SHOW_TABLE_INTERFACE) {{
+                                setActionCommand(ACTION_SHOW_TABLE_INTERFACE);
+                                addActionListener(Interface.this);
+                            }});
+                            add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
+                                setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE);
+                                addActionListener(Interface.this);
+                            }});
+                            add(new JMenuItem(ACTION_SHOW_GRADE_SCALES) {{
+                                setActionCommand(ACTION_SHOW_GRADE_SCALES);
+                                addActionListener(Interface.this);
+                            }});
                         }});
-                        add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
-                            setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE);
-                            addActionListener(Interface.this);
-                        }});
-                        add(new JMenuItem(ACTION_SHOW_GRADE_SCALES) {{
-                            setActionCommand(ACTION_SHOW_GRADE_SCALES);
-                            addActionListener(Interface.this);
+                        add(new JMenu("On Right Tab") {{
+                            add(new JMenuItem(ACTION_SHOW_TABLE_INTERFACE) {{
+                                setActionCommand(ACTION_SHOW_TABLE_INTERFACE_RIGHT);
+                                addActionListener(Interface.this);
+                            }});
+                            add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
+                                setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE_RIGHT);
+                                addActionListener(Interface.this);
+                            }});
+                            add(new JMenuItem(ACTION_SHOW_GRADE_SCALES) {{
+                                setActionCommand(ACTION_SHOW_GRADE_SCALES_RIGHT);
+                                addActionListener(Interface.this);
+                            }});
                         }});
                     }});
                 }});
@@ -160,6 +196,7 @@ public class Interface extends JFrame implements ActionListener {
         setTitle(Interface.FRAME_TITLE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setVisible(true);
     }
 
 
@@ -179,13 +216,22 @@ public class Interface extends JFrame implements ActionListener {
                 dispose();
                 break;
             case ACTION_SHOW_CREATE_CLASS_INTERFACE:
-                addTab(createClassInterface);
+                addTab(createClassInterface, TabSide.Left);
                 break;
             case ACTION_SHOW_GRADE_SCALES:
-                addTab(gradingScaleInterface);
+                addTab(gradingScaleInterface, TabSide.Left);
                 break;
             case ACTION_SHOW_TABLE_INTERFACE:
-                addTab(tableInterface);
+                addTab(tableInterface, TabSide.Left);
+                break;
+            case ACTION_SHOW_CREATE_CLASS_INTERFACE_RIGHT:
+                addTab(createClassInterface, TabSide.Right);
+                break;
+            case ACTION_SHOW_GRADE_SCALES_RIGHT:
+                addTab(gradingScaleInterface, TabSide.Right);
+                break;
+            case ACTION_SHOW_TABLE_INTERFACE_RIGHT:
+                addTab(tableInterface, TabSide.Right);
                 break;
         }
     }

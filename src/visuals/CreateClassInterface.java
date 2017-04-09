@@ -24,6 +24,7 @@ import java.util.Locale;
 
 public class CreateClassInterface extends JPanel implements KeyListener, Tab {
 
+    private JSplitPane splitPane;
     private JPanel contentPane, studentsPane;
     private JTextField txtClassName, txtStartYear, txtEndYear, txtFirstName, txtLastName, txtStudentID, txtMonth, txtDay, txtYear;
     private JComboBox<Character> genderComboBox;
@@ -40,28 +41,31 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
         initBasePanel();
         initMainContentPane();
         initStudentsPane();
+        initSplitPane();
         initClassInterface();
         initYearPicker();
         initStudentAdder();
     }
 
+    private void initSplitPane() {
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, contentPane, studentsPane);
+        splitPane.setResizeWeight(0.5);
+        add(splitPane);
+    }
+
     private void initBasePanel() {
-        setBorder(new EmptyBorder(5, 5, 5, 5));
         setLayout(new BorderLayout());
-        //setContentPane(basePane);
     }
 
     private void initStudentsPane() {
         studentsPane = new JPanel();
         studentsPane.setBorder(BorderFactory.createEtchedBorder());
-        add(studentsPane);
         studentsPane.setLayout(new BorderLayout());
     }
 
     private void initMainContentPane() {
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        add(contentPane, BorderLayout.WEST);
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
     }
 
