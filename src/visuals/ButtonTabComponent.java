@@ -45,7 +45,7 @@ import java.awt.event.*;
 public class ButtonTabComponent extends JPanel {
     private final JTabbedPane pane;
 
-    public ButtonTabComponent(final JTabbedPane pane) {
+    public ButtonTabComponent(final JTabbedPane pane, Icon icon) {
         //unset default FlowLayout' gaps
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         if (pane == null) {
@@ -64,6 +64,10 @@ public class ButtonTabComponent extends JPanel {
                 return null;
             }
         };
+        
+        
+        label.setIcon(icon);
+    
         
         add(label);
         //add more space between the label and the button

@@ -46,7 +46,7 @@ public class TableInterface extends JFrame implements ActionListener {
 
 	private static final String FRAME_TITLE = "Grading Program";
 
-	private static final int WIDTH = 800, HEIGHT = 700;
+	private static final int WIDTH = 1200, HEIGHT = 800;
 	private final String ACTION_ADD_ROW = "Add Row",
 			ACTION_DELETE_ROW = "Delete Row",
 			ACTION_CHANGE_CONNECTION = "Manage Database Connection",
@@ -93,7 +93,7 @@ public class TableInterface extends JFrame implements ActionListener {
 	{
 		tabbedPane.addTab(tabName, icon, tab);
 		
-		tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(tab),new ButtonTabComponent(tabbedPane));
+		tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(tab),new ButtonTabComponent(tabbedPane, icon));
 		tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
 	}
 	
