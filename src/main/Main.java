@@ -7,24 +7,15 @@
 
 package main;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import database.DatabaseManager;
 import database.TableProperties;
 import database.ValueParameter;
-import grading.GradeCalculator;
-import grading.GradingScale;
-import grading.GradingScaleInterface;
 //import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import database.Table;
 import database.TableColumn;
 import database.TableManager;
-import visuals.CreateClassInterface;
 import visuals.PasswordField;
-import visuals.TableInterface;
-
-import javax.swing.*;
+import visuals.Interface;
 
 /** Driver class for entire program. */
 public class Main {
@@ -55,7 +46,7 @@ public class Main {
 
 	private static void startInterface() {
 		Main.setUpTables();
-		new TableInterface();
+		new Interface();
 	}
 
 	private static void setUpTables() {

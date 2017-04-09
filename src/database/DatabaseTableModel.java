@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.table.AbstractTableModel;
 import database.TableColumn.DataType;
+import visuals.Interface;
 import visuals.TableInterface;
 
 /** Relates a mySQL database to a JTable TableModel. */
