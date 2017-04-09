@@ -93,6 +93,12 @@ public class TableInterface extends JFrame implements ActionListener {
 	{
 		
 		tabbedPane.addTab(tabName, icon, tab);
+		
+		tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(tab),new ButtonTabComponent(tabbedPane));
+		
+		
+		
+		
 	}
 	
 	public void removeTab(Component component)
@@ -344,6 +350,7 @@ public class TableInterface extends JFrame implements ActionListener {
 		tableContainer = new JPanel();
 		tableContainer.setLayout(new BorderLayout());
 		addTab("Table", new ImageIcon("table.png"), tableContainer);
+		
 		
 	
 		
