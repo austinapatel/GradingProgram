@@ -137,14 +137,16 @@ public class Table
 	}
 
 	private ArrayList<Object> getAllFromColumn(String columnName, ResultSet resultSet) {
-		ArrayList<Object> data = new ArrayList<Object>();
+		ArrayList<Object> data = new ArrayList<>();
 		int columnIndex = getColumnIndex(columnName) + 1;
 
 		try {
-			resultSet.first();
+			resultSet.beforeFirst();
 
 			if (!resultSet.next()) // Checks if ResultSet is empty
 				return data;
+
+			resultSet.first();
 
 			while(!resultSet.isAfterLast())
 			{
