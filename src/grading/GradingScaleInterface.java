@@ -4,6 +4,7 @@ import visuals.Tab;
 
 import java.awt.BorderLayout;
 
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -35,6 +36,26 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		letterTable.getModel().addTableModelListener(this);
 		letterTable.setRowHeight(30);
 		letterTable.setBackground(getBackground());
+		
+		
+		
+		
+		letterTable.setSelectionModel(new DefaultListSelectionModel() {
+			@Override
+			public boolean isSelectedIndex(final int index) {
+			boolean isSelected;
+			if (index == 2) {
+			isSelected = false;
+			} else {
+			isSelected = super.isSelectedIndex(index);
+			}
+			return isSelected;
+			}
+			});
+		
+
+		
+		
 		letterTable.getColumnModel().getColumn(0).setPreferredWidth(colWidth);
 		add(letterTable, BorderLayout.WEST);
 	}
