@@ -14,7 +14,7 @@ import java.awt.geom.*;
 import java.awt.image.*;
 import javax.swing.*;
 
-public class DnDTabbedPane extends JTabbedPane {
+public class tab extends JTabbedPane {
     public static final long serialVersionUID = 1L;
     private static final int LINEWIDTH = 3;
     private static final String NAME = "TabTransferData";
@@ -28,7 +28,7 @@ public class DnDTabbedPane extends JTabbedPane {
     private final Color m_lineColor = new Color(0, 100, 255);
     private TabAcceptor m_acceptor = null;
 
-    public DnDTabbedPane() {
+    public tab() {
         super();
         final DragSourceListener dsl = new DragSourceListener() {
             public void dragEnter(DragSourceDragEvent e) {
