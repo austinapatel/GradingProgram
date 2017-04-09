@@ -64,8 +64,7 @@ public class ButtonTabComponent extends JPanel {
                 return null;
             }
         };
-        
-        
+        int i = pane.indexOfTabComponent(ButtonTabComponent.this);
         label.setIcon(icon);
     
         

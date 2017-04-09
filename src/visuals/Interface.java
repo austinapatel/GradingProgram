@@ -28,13 +28,16 @@ public class Interface extends JFrame implements ActionListener {
 			ACTION_SHOW_CREATE_CLASS_INTERFACE = "Create Class",
 			ACTION_SHOW_GRADE_SCALES = "Grade Scales";
 
-	private DnDTabbedPane tabbedPane = new  DnDTabbedPane();
+	private JTabbedPane tabbedPane = new  JTabbedPane();
 
 	private JMenuBar jMenuBar;
 
 	private ArrayList<Tab> tabs;
 
 	public Interface() {
+		
+		
+		TabReorderHandler.enableReordering(tabbedPane);
 		initFrame();
 		initTabbedPane();
 		initMenu();

@@ -328,3 +328,4 @@ public class TableInterface extends JPanel implements Tab {
         return "table.png";
     }
 }
+
