@@ -11,6 +11,9 @@ import grading.GradingScaleInterface;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import customBorders.TextBubbleBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,9 +54,10 @@ public class Interface extends JFrame implements ActionListener {
 	
 	public void addTab(Tab tab) {
 		tabbedPane.addTab(tab.getTabName(), new ImageIcon(tab.getTabImage()), (JPanel) tab);
-
-		tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent((JPanel) tab),new ButtonTabComponent(tabbedPane));
-
+		//tabbedPane.setBorder(new TextBubbleBorder(Color.GRAY, 8, 10));
+		int index = tabbedPane.indexOfComponent((JPanel) tab);
+		tabbedPane.setTabComponentAt(index ,new ButtonTabComponent(tabbedPane));
+	
 		tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
 	}
 
@@ -65,8 +69,9 @@ public class Interface extends JFrame implements ActionListener {
 		tabs.add(createClassInterface);
 
 		for (Tab tab : tabs)
+		{	
 			addTab(tab);
-
+		}
 		tabbedPane.setSelectedIndex(0);
 		tabbedPane.setVisible(true);
 		tabbedPane.addChangeListener(new ChangeListener() {
@@ -149,11 +154,11 @@ public class Interface extends JFrame implements ActionListener {
 	private void initFrame() {
 		setIconImage(new ImageIcon("icon.png").getImage());
 		
-		Toolkit toolkit =  Toolkit.getDefaultToolkit ();
-		Dimension dim = toolkit.getScreenSize();
-		setSize(dim.width,dim.height);
+//		Toolkit toolkit =  Toolkit.getDefaultToolkit ();
+//		Dimension dim = toolkit.getScreenSize();
+//		setSize(dim.width,dim.height);
 		setDefaultLookAndFeelDecorated(true);
-		//setSize(WIDTH, HEIGHT);
+		setSize(WIDTH, HEIGHT);
 		setTitle(Interface.FRAME_TITLE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);

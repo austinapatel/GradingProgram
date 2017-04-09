@@ -28,6 +28,10 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import customBorders.CurvedBorder;
+import customBorders.RoundedCornerBorder;
+import customBorders.TextBubbleBorder;
+
 public class GradingScaleInterface extends JPanel implements TableModelListener, Tab
 {
 
@@ -67,7 +71,8 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	private void initLabels()
 	{
 		label1 = new JLabel("", JLabel.CENTER);
-		label1.setBorder(BorderFactory.createCompoundBorder(raisedbevel, loweredbevel));
+		//label1.setBorder(BorderFactory.createCompoundBorder( new RoundedCornerBorder(), raisedbevel));
+		//label1.setBorder(new RoundedCornerBorder());
 		//label1.setLocation(10, 10);
 		label1.setFont(STANDARD_FONT);
 		label1.setText("Scale Description");
@@ -134,6 +139,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		letterTable.setRowHeight(rowHeight);
 		letterTable.getColumnModel().getColumn(0).setPreferredWidth(colWidth);
 		letterTable.setBackground(getBackground());
+		letterTable.setBorder(new TextBubbleBorder(Color.GRAY, 2, 50));
 		
 		//letterTable.setSelectionModel(new CustomModel(letterTable.getSelectionModel()));
 		

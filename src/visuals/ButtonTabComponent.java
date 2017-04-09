@@ -34,6 +34,9 @@ package visuals;
 import javax.swing.*;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
+
+import customBorders.TextBubbleBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -82,6 +85,7 @@ public class ButtonTabComponent extends JPanel {
         add(button);
         //add more space to the top of the component
         setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
+       //this.setBorder(new TextBubbleBorder(Color.BLUE, 2, 10));
     }
 
     private class TabButton extends JButton implements ActionListener {
@@ -95,8 +99,9 @@ public class ButtonTabComponent extends JPanel {
             setContentAreaFilled(false);
             //No need to be focusable
             setFocusable(false);
+            //this.setBorder(new TextBubbleBorder(Color.GREEN, 2, 10));
             setBorder(BorderFactory.createEtchedBorder());
-            setBorderPainted(false);
+           setBorderPainted(false);
             //Making nice rollover effect
             //we use the same listener for all buttons
             addMouseListener(buttonMouseListener);
