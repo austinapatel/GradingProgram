@@ -133,6 +133,13 @@ public class Interface extends JFrame implements ActionListener {
 		setLocationRelativeTo(null);
 	}
 
+//	private boolean doesTabExist(Tab tab) {
+//		for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+//			Tab currentTab = (Tab) tabbedPane.getTabComponentAt(i);
+////			System.out.println();
+//		}
+//	}
+
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 		String action = actionEvent.getActionCommand();

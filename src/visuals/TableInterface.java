@@ -309,9 +309,9 @@ public class TableInterface extends JPanel implements Tab {
         jTable.setModel(databaseTableModel);
 
         // Hide the ID column
-        // jTable.getColumnModel().getColumn(0).setMinWidth(0);
-        // jTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        // jTable.getColumnModel().getColumn(0).setWidth(0);
+        jTable.getColumnModel().getColumn(0).setMinWidth(0);
+        jTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        jTable.getColumnModel().getColumn(0).setWidth(0);
     }
 
     public boolean isLocked() {
