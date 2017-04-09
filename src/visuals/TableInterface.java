@@ -23,7 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 
-public class TableInterface extends JPanel {
+public class TableInterface extends JPanel implements Tab {
 
     private JTable jTable;
     private JPanel bottomContainer;
@@ -161,7 +161,7 @@ public class TableInterface extends JPanel {
             {
                 setLayoutOrientation(JList.HORIZONTAL_WRAP);
                 setVisibleRowCount(tables.length);
-                setBackground(getBackground());
+                setBackground(bottomContainer.getBackground());
                 setSelectedIndex(0);
                 setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -316,5 +316,15 @@ public class TableInterface extends JPanel {
 
     public boolean isLocked() {
         return isLocked;
+    }
+
+    @Override
+    public String getTabName() {
+        return "Table";
+    }
+
+    @Override
+    public String getTabImage() {
+        return "table.png";
     }
 }

@@ -19,7 +19,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class CreateClassInterface extends JPanel implements KeyListener
+public class CreateClassInterface extends JPanel implements KeyListener, Tab
 {
 
 	private JPanel contentPane, studentsPane;
@@ -585,11 +585,14 @@ public class CreateClassInterface extends JPanel implements KeyListener
 		return k == KeyEvent.VK_UP || k == KeyEvent.VK_DOWN;
 	}
 
-	// first and last - required 1
-	// student id - required 1
-	// gender 1
-	// birthdate 1
-	// graduation year 1
-	// counselor 1
+	@Override
+	public String getTabName() {
+		return "Create Class";
+	}
+
+	@Override
+	public String getTabImage() {
+		return "class.png";
+	}
 
 }

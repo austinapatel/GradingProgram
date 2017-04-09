@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /** Interface for the program. */
 @SuppressWarnings("serial")
@@ -31,36 +32,33 @@ public class Interface extends JFrame implements ActionListener {
 
 	private JMenuBar jMenuBar;
 
+	private ArrayList<Tab> tabs;
+
 	public Interface() {
 		initFrame();
 		initTabbedPane();
 		initMenu();
 		add(tabbedPane);
-		addAllTabs();
 		setVisible(true);
 	}
-
-	private void addAllTabs() {
-		addTab("Table", new ImageIcon("table.png"), new TableInterface());
-		addTab("Grading Scale", new ImageIcon("grading.png"), new GradingScaleInterface());
-		addTab("Create class", new ImageIcon("class.png"), new CreateClassInterface());
-	}
 	
-	public void addTab(String tabName, Icon icon, Component tab)
-	{
+	public void addTab(String tabName, Icon icon, Component tab) {
 		tabbedPane.addTab(tabName, icon, tab);
-		
 		tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(tab),new ButtonTabComponent(tabbedPane, icon));
 		tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
 	}
-	
-//	public void removeTab(Component component)
-//	{
-//		tabbedPane.remove(component);
-//	}
 
 	public void initTabbedPane()
 	{
+		tabs = new ArrayList<>();
+		tabs.add(new TableInterface());
+		tabs.add(new GradingScaleInterface());
+		tabs.add(new CreateClassInterface());
+
+		for (Tab tab : tabs)
+			addTab(tab.getTabName(), new ImageIcon(tab.getTabImage()), (JPanel) tab);
+
+		tabbedPane.setSelectedIndex(0);
 		tabbedPane.setVisible(true);
 	}
 
@@ -154,7 +152,7 @@ public class Interface extends JFrame implements ActionListener {
 				addTab("Grading Scale", new ImageIcon("grading.png"), new GradingScaleInterface());
 				break;
 			case ACTION_SHOW_TABLE_INTERFACE:
-				System.out.println("Not implemented yet");
+				addTab("Table", new ImageIcon("table.png"), new TableInterface());
 				break;
 		}
 	}
