@@ -478,7 +478,7 @@ public class CreateClassInterface extends JPanel implements KeyListener, WindowL
 //			tableInterface.setEnabled(true);
 		}
 
-		tableInterface.remove(this);
+		tableInterface.removeTab(this);
 	}
 
 	private boolean isStudentIDValid() {

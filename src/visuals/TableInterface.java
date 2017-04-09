@@ -85,6 +85,7 @@ public class TableInterface extends JFrame implements ActionListener {
 		add(tabbedPane);
 		//pack();
 		setVisible(true);
+		
 	}
 
 	

@@ -15,6 +15,7 @@ import database.TableProperties;
 import database.ValueParameter;
 import grading.GradeCalculator;
 import grading.GradingScale;
+import grading.GradingScaleInterface;
 //import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import database.Table;
 import database.TableColumn;
@@ -41,9 +42,10 @@ public class Main {
 	public static void launchGUI(String secretKey) {
 		DatabaseManager.init(secretKey);
 		Main.setUpTables();
-		new TableInterface();
+		TableInterface face = new TableInterface();
 		
 		GradeCalculator.getScales();
+		GradingScaleInterface test = new GradingScaleInterface(face);
 	}
 
 	// note that field calls launchGUI
