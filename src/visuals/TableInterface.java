@@ -45,10 +45,9 @@ public class TableInterface extends JFrame implements ActionListener {
 
 	private static final String FRAME_TITLE = "Grading Program";
 
-	private static final int WIDTH = 800, HEIGHT = 600;
+	private static final int WIDTH = 800, HEIGHT = 700;
 	private final String ACTION_ADD_ROW = "Add Row",
 			ACTION_DELETE_ROW = "Delete Row",
-			ACTION_CREATE_CLASS = "Create Class",
 			ACTION_CHANGE_CONNECTION = "Manage Database Connection";
 
 	private JTable jTable;
@@ -87,7 +86,6 @@ public class TableInterface extends JFrame implements ActionListener {
 		setVisible(true);
 		
 	}
-
 	
 	public void addTab(String tabName, Icon icon, Component tab)
 	{
@@ -99,15 +97,11 @@ public class TableInterface extends JFrame implements ActionListener {
 	{
 		tabbedPane.remove(component);
 	}
-	
-	
-	
-	
+
 	public void initTabbedPane()
 	{
 		tabbedPane.setVisible(true);
 	}
-	
 	
 	public void notifyExternalDataChange() {
 		databaseTableModel.fireTableDataChanged();
@@ -149,17 +143,6 @@ public class TableInterface extends JFrame implements ActionListener {
 										java.awt.Event.CTRL_MASK));
 
 								setActionCommand(ACTION_CHANGE_CONNECTION);
-								addActionListener(TableInterface.this);
-							}
-						});
-					}
-				});
-
-				add(new JMenu("Do") {
-					{
-						add(new JMenuItem("Add class") {
-							{
-								setActionCommand(ACTION_CREATE_CLASS);
 								addActionListener(TableInterface.this);
 							}
 						});
@@ -399,7 +382,7 @@ public class TableInterface extends JFrame implements ActionListener {
 			}
 		};
 
-		add(tableList, BorderLayout.WEST);
+		tableContainer.add(tableList, BorderLayout.WEST);
 	}
 
 	/** Initializes a JTable (and its container) and the table model. */
@@ -454,8 +437,6 @@ public class TableInterface extends JFrame implements ActionListener {
 			addRowButton.doClick();
 		else if (action.equals(ACTION_DELETE_ROW))
 			deleteRowButton.doClick();
-		else if (action.equals(ACTION_CREATE_CLASS))
-			new CreateClassInterface(this);
 		else if (action.equals(ACTION_CHANGE_CONNECTION)) {
 			PasswordField pass = new PasswordField();
 			dispose();

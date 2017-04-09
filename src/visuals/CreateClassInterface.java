@@ -19,7 +19,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class CreateClassInterface extends JPanel implements KeyListener, WindowListener
+public class CreateClassInterface extends JPanel implements KeyListener
 {
 
 	private JPanel contentPane, studentsPane;
@@ -27,7 +27,6 @@ public class CreateClassInterface extends JPanel implements KeyListener, WindowL
 	private JComboBox<Character> genderComboBox;
 	private JList listStudents;
 	private JButton btnAddStudent, btnFinish;
-	private TableInterface tableInterface;
 	private JComboBox<String> counselorComboBox;
 	private JTextField txtGradYear;
 	private ArrayList<Student> students = new ArrayList<>();
@@ -39,22 +38,14 @@ public class CreateClassInterface extends JPanel implements KeyListener, WindowL
 //		}};
 //	}
 
-	public CreateClassInterface(TableInterface tableInterface)
+	public CreateClassInterface()
 	{
-		this.tableInterface = tableInterface;
-//		if (tableInterface != null)
-//			tableInterface.setEnabled(false);
-
 		initBasePanel();
 		initMainContentPane();
 		initStudentsPane();
 		initClassName();
 		initYearPicker();
 		initStudentAdder();
-//		initFrameProperties();
-//		initStudentData();
-		//initFrameProperties();
-		tableInterface.addTab("Create class", new ImageIcon("class.png"), this);
 	}
 
 	private void initBasePanel()
@@ -406,14 +397,9 @@ public class CreateClassInterface extends JPanel implements KeyListener, WindowL
 
 		wrapInJPanel(btnAddStudent);
 
-		btnFinish = new JButton("Finish");
+		btnFinish = new JButton("Add Class");
 		btnFinish.addKeyListener(this);
-//		btnFinish.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				btnFinish.doClick();
-//			}
-//		});
+
 		wrapInJPanel(btnFinish);
 		btnFinish.setEnabled(false);
 
@@ -458,8 +444,6 @@ public class CreateClassInterface extends JPanel implements KeyListener, WindowL
 
 					TableManager.insertValuesIntoNewRow(studentsTable, newValues);
 				}
-
-				closePane();
 			}
 		});
 	}
@@ -470,15 +454,6 @@ public class CreateClassInterface extends JPanel implements KeyListener, WindowL
 
 	private boolean isEmpty(JTextField jTextField) {
 		return jTextField.getText().trim().equals("");
-	}
-
-	private void closePane() {
-		if (tableInterface != null) {
-			tableInterface.notifyExternalDataChange();
-//			tableInterface.setEnabled(true);
-		}
-
-		tableInterface.removeTab(this);
 	}
 
 	private boolean isStudentIDValid() {
@@ -608,35 +583,6 @@ public class CreateClassInterface extends JPanel implements KeyListener, WindowL
 	private boolean isArrowKey(KeyEvent e) {
 		int k = e.getKeyCode();
 		return k == KeyEvent.VK_UP || k == KeyEvent.VK_DOWN;
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		closePane();
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
 	}
 
 	// first and last - required 1

@@ -20,8 +20,11 @@ import grading.GradingScaleInterface;
 import database.Table;
 import database.TableColumn;
 import database.TableManager;
+import visuals.CreateClassInterface;
 import visuals.PasswordField;
 import visuals.TableInterface;
+
+import javax.swing.*;
 
 /** Driver class for entire program. */
 public class Main {
@@ -41,19 +44,24 @@ public class Main {
 	// note that field calls launchGUI
 	public static void launchGUI(String secretKey) {
 		DatabaseManager.init(secretKey);
-		Main.setUpTables();
-		TableInterface face = new TableInterface();
-		
-		GradeCalculator.getScales();
-		GradingScaleInterface test = new GradingScaleInterface(face);
+		startInterface();
 	}
 
 	// note that field calls launchGUI
 	public static void launchGUI(String url, String username, String password) {
-		System.out.println(url + " " + username + " " + password);
 		DatabaseManager.init(url, username, password);
+		startInterface();
+	}
+
+	private static void startInterface() {
 		Main.setUpTables();
-		new TableInterface();
+		TableInterface tableInterface = new TableInterface();
+
+		GradingScaleInterface gradingScaleInterface = new GradingScaleInterface();
+		CreateClassInterface createClassInterface = new CreateClassInterface();
+
+		tableInterface.addTab("Grading Scale", new ImageIcon("grading.png"), gradingScaleInterface);
+		tableInterface.addTab("Create class", new ImageIcon("class.png"), createClassInterface);
 	}
 
 	private static void setUpTables() {
