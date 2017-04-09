@@ -2,14 +2,11 @@ package grading;
 
 import java.awt.BorderLayout;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-
-import visuals.TableInterface;
 
 public class GradingScaleInterface extends JPanel implements TableModelListener
 {
@@ -35,8 +32,9 @@ public class GradingScaleInterface extends JPanel implements TableModelListener
 		letterTable = new JTable(rows, cols);
 		letterTable.getModel().addTableModelListener(this);
 		letterTable.setRowHeight(30);
+		letterTable.setBackground(getBackground());
 		letterTable.getColumnModel().getColumn(0).setPreferredWidth(colWidth);
-		this.add(letterTable, BorderLayout.WEST);
+		add(letterTable, BorderLayout.WEST);
 	}
 
 	@Override
