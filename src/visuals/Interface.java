@@ -12,6 +12,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import customBorders.TextBubbleBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,6 +28,8 @@ public class Interface extends JFrame implements ActionListener {
     private static final String FRAME_TITLE = "Grading Program";
 
     private static final int WIDTH = 1200, HEIGHT = 800;
+
+    private Color tabColor = Color.GRAY;
     private final String ACTION_ADD_ROW = "Add Row",
             ACTION_DELETE_ROW = "Delete Row",
             ACTION_CHANGE_CONNECTION = "Manage Database Connection",
@@ -53,6 +57,8 @@ public class Interface extends JFrame implements ActionListener {
     }
 
     public void addTab(Tab tab) {
+
+        //((JPanel) tab).setBorder(new TextBubbleBorder(tabColor, 2, 10));
         tabbedPane.addTab(tab.getTabName(), new ImageIcon(tab.getTabImage()), (JPanel) tab);
         //tabbedPane.setBorder(new TextBubbleBorder(Color.GRAY, 8, 10));
         int index = tabbedPane.indexOfComponent((JPanel) tab);
@@ -150,27 +156,12 @@ public class Interface extends JFrame implements ActionListener {
      */
     private void initFrame() {
         setIconImage(new ImageIcon("icon.png").getImage());
-
-//		Toolkit toolkit =  Toolkit.getDefaultToolkit ();
-//		Dimension dim = toolkit.getScreenSize();
-//		setSize(dim.width,dim.height);
-        setDefaultLookAndFeelDecorated(true);
         setSize(WIDTH, HEIGHT);
         setTitle(Interface.FRAME_TITLE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
 
-//	private boolean doesTabExist(String tab) {
-//		for (int i = 0; i < tabbedPane.getTabCount(); i++) {
-//			Tab currentTab = (Tab) tabbedPane.getComponentAt(i);
-//
-//			if (currentTab.getTabName().equals(tab))
-//				return true;
-//		}
-//
-//		return false;
-//	}
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {

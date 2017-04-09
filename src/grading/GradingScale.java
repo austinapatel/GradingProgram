@@ -13,8 +13,11 @@ public class GradingScale
 {
 	private String[] letters = {"A+", "A", "A-","B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-"};	
 	private JSONArray letterGrades = new JSONArray();
-	public GradingScale(String jsonText)
+	private String name;
+	public GradingScale(String jsonText, String name)
 	{
+		
+		this.name = name;
 		try {
 			letterGrades = new JSONArray(jsonText);
 		} catch (JSONException e) {
@@ -23,9 +26,10 @@ public class GradingScale
 		}
 	}
 	
-	public GradingScale(double[] values)
+	public GradingScale(String name, double[] values)
 	{
-		for (int i = 0; i < letters.length; i++)
+		this.name = name;
+		for (int i = 0; i < Math.min(letters.length, values.length); i++)
 		{
 			JSONObject obj = new JSONObject();
 			try {
@@ -41,14 +45,21 @@ public class GradingScale
 		System.out.println(letterGrades.toString());
 		HashMap<String, Object> newValues = new HashMap<String, Object>() {{
 			put(TableProperties.SCALE_DATA, letterGrades.toString());
+			put(TableProperties.SCALE_DESCRIPTION, name);
 			
 		}};
+		
 		
 		TableManager.insertValuesIntoNewRow(table, newValues);
 	}
 	public String getString()
 	{
 		return letterGrades.toString();
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	public String getLetterGrade(double percentage)
 	{
