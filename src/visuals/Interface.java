@@ -47,7 +47,10 @@ public class Interface extends JFrame implements ActionListener {
 	
 	public void addTab(String tabName, Icon icon, Component tab) {
 		tabbedPane.addTab(tabName, icon, tab);
-		tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(tab),new ButtonTabComponent(tabbedPane, icon));
+
+		
+		tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(tab),new ButtonTabComponent(tabbedPane));
+
 		tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
 	}
 
