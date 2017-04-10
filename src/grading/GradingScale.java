@@ -79,6 +79,8 @@ public class GradingScale
 	
 	public void update(Object[][] data)
 	{
+		
+		letterGrades = new JSONArray();
 		letterGrades = objectToJSON(data);
 		UpdateDatabaseItemRunnable test = new UpdateDatabaseItemRunnable(2, 1, (Object) letterGrades.toString(),DatabaseManager.getFilterdTable(TableManager.getTable(TableProperties.SCALE_TABLE_NAME), TableProperties.SCALE_DESCRIPTION, name), DataType.String);
 		new Thread(test).start();
