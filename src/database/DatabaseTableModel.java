@@ -1,5 +1,5 @@
 
-// Austin Patel & Jason Morris & Lex VonKlark
+// Austin Patel & Jason Morris
 // APCS
 // Redwood High School
 // 12/22/16
@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.table.AbstractTableModel;
 import database.TableColumn.DataType;
-import visuals.Interface;
 import visuals.TableInterface;
 
 /** Relates a mySQL database to a JTable TableModel. */

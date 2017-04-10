@@ -1,5 +1,5 @@
 
-// Austin Patel & Jason Morris & Lex VonKlark
+// Austin Patel & Jason Morris
 // APCS
 // Redwood High School
 // 10/13/16
@@ -11,7 +11,6 @@ import database.DatabaseManager;
 import database.TableProperties;
 import database.ValueParameter;
 import grading.GradingScale;
-//import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import database.Table;
 import database.TableColumn;
 import database.TableManager;
@@ -26,8 +25,6 @@ public class Main {
     static PasswordField login;
 
     public static void main(String[] args) {
-
-        //hi
         System.setProperty("awt.useSystemAAFontSettings", "on");
         System.setProperty("swing.aatext", "true");
         if (args.length == 1)
@@ -53,9 +50,9 @@ public class Main {
     private static void startInterface() {
         Main.setUpTables();
         new Interface();
-       Object[][] obj = {{"A+", 98}, {"A", 94}, {"A-", 90}, {"B+", 85}, {"B", 80}, {"C+", 75}, {"C", 70}, {"C-", 65}, {"D+", 60}, {"D", 55}, {"D-", 50}};
-        
-        new GradingScale((int)(Math.random() * 1000) + "hi", obj);
+        Object[][] obj = {{"A+", 98}, {"A", 94}, {"A-", 90}, {"B+", 85}, {"B", 80}, {"C+", 75}, {"C", 70}, {"C-", 65}, {"D+", 60}, {"D", 55}, {"D-", 50}};
+
+        new GradingScale((int) (Math.random() * 1000) + "hi", obj);
     }
 
     private static void setUpTables() {
@@ -151,7 +148,7 @@ public class Main {
                             {
                                 addSelector(TableProperties.COURSES_TABLE_NAME, true,
                                         TableProperties.PERIOD,
-                                        " peroid",
+                                        " period",
                                         TableProperties.NAME,
                                         TableProperties.START_YEAR,
                                         "-",
@@ -166,7 +163,6 @@ public class Main {
                                         TableProperties.LAST_NAME);
                             }
                         })};
-
 
         TableColumn[] gradesTableColumns = new TableColumn[]{
                 new TableColumn(TableProperties.GRADE_ID, "INT NOT NULL UNIQUE", null),

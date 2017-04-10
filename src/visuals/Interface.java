@@ -1,4 +1,4 @@
-// Austin Patel & Jason Morris & Lex VonKlark
+// Austin Patel & Jason Morris
 // APCS
 // Redwood High School
 // 10/13/16
@@ -27,6 +27,8 @@ public class Interface extends JFrame implements ActionListener {
     private static final String FRAME_TITLE = "Grading Program";
 
     private static final int WIDTH = 1400, HEIGHT = 1000;
+
+    private static final String RIGHT_TAB_LOCATION = " Right";
 
     private final String ACTION_ADD_ROW = "Add Row",
             ACTION_DELETE_ROW = "Delete Row",
@@ -103,17 +105,19 @@ public class Interface extends JFrame implements ActionListener {
         tabs = new ArrayList<>();
         tabs.add(new TableInterface());
         tabs.add(new GradingScaleInterface());
-        tabs.add(new CreateClassInterface());
         tabs.add(new CreateAssignmentInterface());
+        tabs.add(new CreateClassInterface());
 
         // Put half of the tabs on the left and half on the right
         for (int i = 0; i < tabs.size(); i++)
             addTab(tabs.get(i), (i < tabs.size() / 2) ? TabSide.Left : TabSide.Right);
 
         leftTabbedPane.setSelectedIndex(0);
+        rightTabbedPane.setSelectedIndex(0);
     }
 
     private void initMenu() {
+        // Database menu
         jMenuBar = new JMenuBar() {
             {
                 add(new JMenu("Database") {
@@ -153,47 +157,25 @@ public class Interface extends JFrame implements ActionListener {
             }
         };
 
+        // Show view menu
         JMenu leftTabMenu = new JMenu("On Left Tab");
         JMenu rightTabMenu = new JMenu("On Right Tab");
 
+        for (Tab tab : tabs) {
+            leftTabMenu.add(new JMenuItem(tab.getTabName()) {{
+                setActionCommand(tab.getTabName());
+                addActionListener(Interface.this);
+            }});
+
+            rightTabMenu.add(new JMenuItem(tab.getTabName()) {{
+                setActionCommand(tab.getTabName() + RIGHT_TAB_LOCATION);
+                addActionListener(Interface.this);
+            }});
+        }
 
         JMenu showViewMenu = new JMenu("Show View") {{
-            add(new JMenu("On Left Tab") {{
-                add(new JMenuItem(ACTION_SHOW_TABLE_INTERFACE) {{
-                    setActionCommand(ACTION_SHOW_TABLE_INTERFACE);
-                    addActionListener(Interface.this);
-                }});
-                add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
-                    setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE);
-                    addActionListener(Interface.this);
-                }});
-                add(new JMenuItem(ACTION_SHOW_GRADE_SCALES) {{
-                    setActionCommand(ACTION_SHOW_GRADE_SCALES);
-                    addActionListener(Interface.this);
-                }});
-                add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
-                    setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE);
-                    addActionListener(Interface.this);
-                }});
-            }});
-            add(new JMenu("On Right Tab") {{
-                add(new JMenuItem(ACTION_SHOW_TABLE_INTERFACE) {{
-                    setActionCommand(ACTION_SHOW_TABLE_INTERFACE_RIGHT);
-                    addActionListener(Interface.this);
-                }});
-                add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
-                    setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE_RIGHT);
-                    addActionListener(Interface.this);
-                }});
-                add(new JMenuItem(ACTION_SHOW_GRADE_SCALES) {{
-                    setActionCommand(ACTION_SHOW_GRADE_SCALES_RIGHT);
-                    addActionListener(Interface.this);
-                }});
-                add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
-                    setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE_RIGHT);
-                    addActionListener(Interface.this);
-                }});
-            }});
+            add(leftTabMenu);
+            add(rightTabMenu);
         }};
 
         JMenu interfaceMenu = new JMenu("Interface");
@@ -231,24 +213,13 @@ public class Interface extends JFrame implements ActionListener {
                 new PasswordField();
                 dispose();
                 break;
-//            case ACTION_SHOW_CREATE_CLASS_INTERFACE:
-//                addTab(createClassInterface, TabSide.Left);
-//                break;
-//            case ACTION_SHOW_GRADE_SCALES:
-//                addTab(gradingScaleInterface, TabSide.Left);
-//                break;
-//            case ACTION_SHOW_TABLE_INTERFACE:
-//                addTab(tableInterface, TabSide.Left);
-//                break;
-//            case ACTION_SHOW_CREATE_CLASS_INTERFACE_RIGHT:
-//                addTab(createClassInterface, TabSide.Right);
-//                break;
-//            case ACTION_SHOW_GRADE_SCALES_RIGHT:
-//                addTab(gradingScaleInterface, TabSide.Right);
-//                break;
-//            case ACTION_SHOW_TABLE_INTERFACE_RIGHT:
-//                addTab(tableInterface, TabSide.Right);
-//                break;
         }
+
+        // Open tabs
+        for (Tab tab : tabs)
+            if (tab.getTabName().equals(action))
+                addTab(tab, TabSide.Left);
+            else if ((tab.getTabName() + RIGHT_TAB_LOCATION).equals(action))
+                addTab(tab, TabSide.Right);
     }
 }

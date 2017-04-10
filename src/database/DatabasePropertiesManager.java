@@ -1,5 +1,5 @@
 
-// Austin Patel & Jason Morris & Lex VonKlark
+// Austin Patel & Jason Morris
 // APCS
 // Redwood High School
 // 10/13/16
