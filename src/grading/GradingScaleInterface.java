@@ -10,6 +10,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,7 +49,7 @@ import customBorders.TextBubbleBorder;
 
 public class GradingScaleInterface extends JPanel implements TableModelListener, Tab, KeyListener {
 
-    private int rows = 13, cols = 5, rowHeight = 50, colWidth = 30;
+    private final int rows = 13, cols = 5, rowHeight = 50, colWidth = 30;
     private static final Font STANDARD_FONT = new Font("Arial", Font.PLAIN, 20);
     private JTable letterTable;
     private JSplitPane splitPane;
@@ -60,15 +63,15 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
     private JList scaleList;
     private DefaultListModel listModel;
     private ArrayList<GradingScale> scales = new ArrayList();
-    private JButton saveButton, saveAsButton;
+    private JButton saveButton, saveAsButton, addRowButton;
     private GradingScale openScale;
     private boolean open = false;
     private int currentRows = rows;
-
+    private GradingScaleTableModel tableModel;
 
     public GradingScaleInterface() {
 
-    	initButtons();
+        initButtons();
         initBorders();
         initList();
         initLabels();
@@ -77,32 +80,32 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
         letterTable.setBorder(new TextBubbleBorder(Color.GRAY, 2, 8));
         letterTable.addKeyListener(this);
     }
-    
-    private void initButtons()
-    {
-    	saveButton = new JButton("Save");
-		saveButton.setFont(new Font("Arial", Font.BOLD, 28));
-		saveButton.setForeground(Color.BLUE);
-		//saveButton.setSize(30, 30);
 
-		saveButton.setFocusable(false); // Don't let the button be pressed via ENTER or SPACE
-		saveButton.setVisible(true);
-		
-		
-		saveAsButton = new JButton("Save As");
-		saveAsButton.setFont(new Font("Arial", Font.BOLD, 28));
-		saveAsButton.setForeground(Color.BLUE);
-	//	saveAsButton.setSize(30, 30);
+    private void initButtons() {
+        saveButton = new JButton("Save");
+        saveButton.setFont(new Font("Arial", Font.BOLD, 28));
+        saveButton.setForeground(Color.BLUE);
+        //saveButton.setSize(30, 30);
 
-		saveAsButton.setFocusable(false); // Don't let the button be pressed via ENTER or SPACE
-		saveAsButton.setVisible(true);
-		
-		
-		
+        saveButton.setFocusable(false); // Don't let the button be pressed via ENTER or SPACE
+        saveButton.setVisible(true);
 
 
-		
-		
+        saveAsButton = new JButton("Save As");
+        saveAsButton.setFont(new Font("Arial", Font.BOLD, 28));
+        saveAsButton.setForeground(Color.BLUE);
+        //	saveAsButton.setSize(30, 30);
+
+        saveAsButton.setFocusable(false); // Don't let the button be pressed via ENTER or SPACE
+        saveAsButton.setVisible(true);
+
+        addRowButton = new JButton("Add Row");
+        addRowButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tableModel.addRow(new String[] {"1", "2", "3", "4", "5"});
+            }
+        });
     }
 
     private void initList() {
@@ -119,38 +122,33 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
     }
 
-    private void openScale() 
-    {
-    	
-    	scales = GradeCalculator.getScales();
-    	open = false;
-    	initValues();
-    	String name = (String) listModel.getElementAt(scaleList.getSelectedIndex());
-        JSONArray data = null;
-        for (GradingScale scale: scales)
-        {
-        	if (scale.getName().equals(name))
-        	{
-        		data = scale.getData();
-        		openScale = scale;
-        		break;
-        	}
-        }
-        
-        for (int row = 0; row < letterTable.getRowCount(); row++)
-        {
-        	try {
-				letterTable.setValueAt(data.getJSONObject(row).keys().next(), row, 0);
-				letterTable.setValueAt(data.getJSONObject(row).getDouble(data.getJSONObject(row).keys().next().toString()), row, 4);
-				letterTable.setValueAt(data.getJSONObject(row - 1).getDouble(data.getJSONObject(row - 1 ).keys().next().toString()), row, 2);
+    private void openScale() {
 
-				
-				
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-			
-			}
-        	
+        scales = GradeCalculator.getScales();
+        open = false;
+        initValues();
+        String name = (String) listModel.getElementAt(scaleList.getSelectedIndex());
+        JSONArray data = null;
+        for (GradingScale scale : scales) {
+            if (scale.getName().equals(name)) {
+                data = scale.getData();
+                openScale = scale;
+                break;
+            }
+        }
+
+        for (int row = 0; row < letterTable.getRowCount(); row++) {
+            try {
+                letterTable.setValueAt(data.getJSONObject(row).keys().next(), row, 0);
+                letterTable.setValueAt(data.getJSONObject(row).getDouble(data.getJSONObject(row).keys().next().toString()), row, 4);
+                letterTable.setValueAt(data.getJSONObject(row - 1).getDouble(data.getJSONObject(row - 1).keys().next().toString()), row, 2);
+
+
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+
+            }
+
         }
         open = true;
     }
@@ -169,7 +167,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
         label1 = new JLabel("", JLabel.CENTER);
         //label1.setBorder(BorderFactory.createCompoundBorder( new RoundedCornerBorder(), raisedbevel));
         //label1.setBorder(new RoundedCornerBorder());
-       // label1.setBorder(new TextBubbleBorder(Color.DARK_GRAY, 1, 8));
+        // label1.setBorder(new TextBubbleBorder(Color.DARK_GRAY, 1, 8));
         //label1.setLocation(10, 10);
         label1.setFont(STANDARD_FONT);
         label1.setText("Scale Description");
@@ -178,7 +176,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
         //label1.setForeground(Color.WHITE);
         //label1.setSize(label1.getPreferredSize());
         label1.setVisible(true);
-       
+
 
     }
 
@@ -188,26 +186,20 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
         scrollPane1 = new JScrollPane(scaleList);
         scrollPane1.setColumnHeaderView(label1);
 
-       
-
         rightPanel = new JPanel();
-        rightPanel.setLayout(new BorderLayout());
-        
-        
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+
         rightPanel.add(letterTable, BorderLayout.CENTER);
-        rightPanel.add(saveButton, BorderLayout.EAST);
-       
-        
+        rightPanel.add(saveButton);
+        rightPanel.add(addRowButton);
 
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPane1, rightPanel);
         splitPane.setOneTouchExpandable(true);
-      
-
 
         splitPane.setResizeWeight(0.5);
         splitPane.setDividerSize(0);
         splitPane.setBorder(null);
-       this.addKeyListener(this);
+        this.addKeyListener(this);
         add(splitPane, BorderLayout.CENTER);
 
 //		 GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -220,31 +212,9 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 
     private void initTable() {
-        DefaultTableModel tableModel = new DefaultTableModel(rows, cols) {
-
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                boolean edit = true;
-                for (int i = 0; i < disabled_columns.length; i++)
-                    if (disabled_columns[i] == column)
-                        edit = false;
-                return edit;
-            }
-            
-            @Override
-        	public int getColumnCount() {
-        		return cols;
-        	}
-
-        	@Override
-        	public int getRowCount() {
-        		return currentRows;
-        	}
-        };
-
-
+        tableModel = new GradingScaleTableModel(rows, cols, disabled_columns);
         letterTable = new JTable(tableModel);
-        letterTable.getModel().addTableModelListener(this);
+        tableModel.addTableModelListener(this);
         letterTable.setRowHeight(rowHeight);
         letterTable.setBackground(getBackground());
         letterTable.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -287,29 +257,26 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
         });
 
 
-     initValues();
-       
-
+        initValues();
 
 
     }
-    
-    
-    private void initValues()
-    {
-    	  letterTable.setValueAt("From", 0, disabled_columns[0]);
-          letterTable.setValueAt(disabled_labels[2], 0, disabled_columns[2]);
-          letterTable.setValueAt(Character.toString('\u221E'), 0, disabled_columns[1]);
-          letterTable.setValueAt(Character.toString('\u2212') + Character.toString('\u221E'), letterTable.getRowCount()-1, letterTable.getColumnCount() -1);
 
-          for (int row = 1; row < letterTable.getRowCount(); row++) {
-              for (int col = 0; col < letterTable.getColumnCount(); col++) {
-                  if (letterTable.isCellEditable(row, col) == false) {
 
-                      letterTable.setValueAt(disabled_labels[getUneditableIndex(col)], row, col);
-                  }
-              }
-          }
+    private void initValues() {
+        letterTable.setValueAt("From", 0, disabled_columns[0]);
+        letterTable.setValueAt(disabled_labels[2], 0, disabled_columns[2]);
+        letterTable.setValueAt(Character.toString('\u221E'), 0, disabled_columns[1]);
+        letterTable.setValueAt(Character.toString('\u2212') + Character.toString('\u221E'), letterTable.getRowCount() - 1, letterTable.getColumnCount() - 1);
+
+        for (int row = 1; row < letterTable.getRowCount(); row++) {
+            for (int col = 0; col < letterTable.getColumnCount(); col++) {
+                if (letterTable.isCellEditable(row, col) == false) {
+
+                    letterTable.setValueAt(disabled_labels[getUneditableIndex(col)], row, col);
+                }
+            }
+        }
     }
 
     public int getUneditableIndex(int col) {
@@ -326,21 +293,18 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
     }
 
     @Override
-    public void tableChanged(TableModelEvent arg0) 
-    {
-       
-    	
-    	if (open)
-        {
-    		System.out.println("change");
-        	Object[][] data = new Object[13][2];
-        	for (int row = 0; row < letterTable.getRowCount(); row++)
-        	{
-        		data[row][0] = letterTable.getValueAt(row, 0);
-        		data[row][1] = letterTable.getValueAt(row, letterTable.getColumnCount() -1);
-        	}
-        	openScale.update(data);
-        	openScale();
+    public void tableChanged(TableModelEvent arg0) {
+
+
+        if (open) {
+            System.out.println("change");
+            Object[][] data = new Object[13][2];
+            for (int row = 0; row < letterTable.getRowCount(); row++) {
+                data[row][0] = letterTable.getValueAt(row, 0);
+                data[row][1] = letterTable.getValueAt(row, letterTable.getColumnCount() - 1);
+            }
+            openScale.update(data);
+            openScale();
         }
 
     }
@@ -370,20 +334,18 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
     @Override
     public void keyReleased(KeyEvent key) {
         // TODO Auto-generated method stub
-        if (key.getKeyCode() == KeyEvent.VK_ENTER && scales.size() > 0) 
-        {
-        	{ 
-        	openScale();
-        	
-        	}
-        	
+        if (key.getKeyCode() == KeyEvent.VK_ENTER && scales.size() > 0) {
+            {
+                openScale();
+
+            }
+
         }
-        if (key.getKeyCode() == KeyEvent.VK_CONTROL)
-        {
-        	((DefaultTableModel)letterTable.getModel()).removeRow(letterTable.getSelectedRow());
-        	currentRows--;
+        if (key.getKeyCode() == KeyEvent.VK_CONTROL) {
+            tableModel.removeRow(letterTable.getSelectedRow());
+            currentRows--;
         }
-      
+
 
     }
 
