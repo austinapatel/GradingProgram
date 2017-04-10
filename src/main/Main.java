@@ -53,8 +53,6 @@ public class Main {
     private static void startInterface() {
         Main.setUpTables();
         new Interface();
-        double[] values = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 9, 7, 6};
-        new GradingScale("test" + (int) (Math.random() * 1000), values);
     }
 
     private static void setUpTables() {

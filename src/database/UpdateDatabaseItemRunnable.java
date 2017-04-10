@@ -27,6 +27,7 @@ public class UpdateDatabaseItemRunnable implements Runnable
 	public UpdateDatabaseItemRunnable(int columnIndex, int rowIndex, Object newValue, ResultSet resultSet,
 				DataType dataType)
 	{
+		//System.out.println(newValue.toString() + "from here");
 		this.columnIndex = columnIndex;
 		this.newValue = newValue;
 		this.resultSet = resultSet;

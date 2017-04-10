@@ -5,14 +5,17 @@ import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import database.DatabaseManager;
 import database.Table;
+import database.TableColumn.DataType;
 import database.TableManager;
 import database.TableProperties;
+import database.UpdateDatabaseItemRunnable;
 
 public class GradingScale 
 {
-	private String[] letters = {"A+", "A", "A-","B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-"};	
-	private JSONArray letterGrades = new JSONArray();
+	private JSONArray letterGrades;
 	private String name;
 	public GradingScale(String jsonText, String name)
 	{
@@ -26,23 +29,17 @@ public class GradingScale
 		}
 	}
 	
-	public GradingScale(String name, double[] values)
+	public GradingScale(String name, Object[][] data)
 	{
 		this.name = name;
-		for (int i = 0; i < Math.min(letters.length, values.length); i++)
-		{
-			JSONObject obj = new JSONObject();
-			try {
-				obj.put(letters[i], values[i]);
-				letterGrades.put(obj);
-				
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		try {
+			letterGrades = new JSONArray(objectToJSON(data));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		Table table = TableManager.getTable(TableProperties.SCALE_TABLE_NAME);
-		System.out.println(letterGrades.toString());
+		
 		HashMap<String, Object> newValues = new HashMap<String, Object>() {{
 			put(TableProperties.SCALE_DATA, letterGrades.toString());
 			put(TableProperties.SCALE_DESCRIPTION, name);
@@ -51,6 +48,45 @@ public class GradingScale
 		
 		
 		TableManager.insertValuesIntoNewRow(table, newValues);
+	}
+	
+	
+	
+	public JSONArray objectToJSON(Object[][] data)
+	{
+		
+		if (data!= null)
+		{	
+		JSONArray array = new JSONArray();
+		for (int i = 0; i < data.length; i++)
+		{
+			JSONObject obj = new JSONObject();
+			try {
+				
+
+
+				if (data[i][0] != null && data[i][1] != null)
+				{
+					obj.put(data[i][0].toString(), data[i][1].toString());
+					array.put(obj);
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return array;
+		}
+		return null;
+		
+	}
+	
+	public void update(Object[][] data)
+	{
+		letterGrades = objectToJSON(data);
+		UpdateDatabaseItemRunnable test = new UpdateDatabaseItemRunnable(2, 1, (Object) letterGrades.toString(),DatabaseManager.getFilterdTable(TableManager.getTable(TableProperties.SCALE_TABLE_NAME), TableProperties.SCALE_DESCRIPTION, name), DataType.String);
+		new Thread(test).start();
 	}
 	public String getString()
 	{
@@ -61,22 +97,28 @@ public class GradingScale
 	{
 		return name;
 	}
-	public String getLetterGrade(double percentage)
+	
+	public String getGradeLetter(double percentage)
 	{
 		for (int i = 0; i < letterGrades.length(); i++)
 		{
 			try {
-					
-					double val = letterGrades.getJSONObject(i).getDouble(letters[i]);
-					
-					if (percentage >= val)
-						return letterGrades.getJSONObject(i).keys().next().toString();
-					
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	}
+				if (percentage >= letterGrades.getJSONObject(i).getDouble(letterGrades.getJSONObject(i).keys().next().toString()))
+					return letterGrades.getJSONObject(i).keys().next().toString(); 
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return null;
+		
 	}
+	
+	public JSONArray getData()
+	{
+		return letterGrades;
+	}
+	
+	
+	
 }
