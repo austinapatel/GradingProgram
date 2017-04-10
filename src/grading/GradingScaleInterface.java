@@ -4,30 +4,22 @@ import visuals.Tab;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
@@ -38,13 +30,10 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import customBorders.CurvedBorder;
-import customBorders.RoundedCornerBorder;
 import customBorders.TextBubbleBorder;
 
 public class GradingScaleInterface extends JPanel implements TableModelListener, Tab, KeyListener {
@@ -105,7 +94,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		addRowButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				if (letterTable.getRowCount() < rows)
 					tableModel.addRow(new String[] { "1", "2", "3", "4", "5" });
 			}
@@ -219,15 +208,16 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				break;
 			}
 		}
-		
-		System.out.println(data.length());
-		createCols(data.length());
-		initValues();
-		
-		
-		
 
-		
+		System.out.println(data.length());
+		clearTable();
+		createRows(data.length());
+		initValues();
+
+
+
+
+
 		for (int row = 0; row < letterTable.getRowCount(); row++) {
 			try {
 				letterTable.setValueAt(data.getJSONObject(row).keys().next(), row, 0);
@@ -251,7 +241,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		letterTable.setValueAt("From", 0, disabled_columns[0]);
 		letterTable.setValueAt(disabled_labels[2], 0, disabled_columns[2]);
 		letterTable.setValueAt(Character.toString('\u221E'), 0, disabled_columns[1]);
-		
+
 
 		for (int row = 1; row < letterTable.getRowCount(); row++) {
 			for (int col = 0; col < letterTable.getColumnCount(); col++) {
@@ -278,10 +268,10 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 	private void sizeTable()
 	{
-		
-		
-		
-		
+
+
+
+
 	}
 	private boolean isDouble(String text)
 	{
@@ -296,27 +286,27 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			return false;
 		}
 	}
-	
+
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
 
-	
+
 		if (open)
 		{
 			System.out.println("Table was opened!!!!!!!!!");
-			
+
 			int rowNum = 0;
 			int rowNum2 = 0;
 			for (int i = 0; i < letterTable.getRowCount(); i++)
 			{
-				
+
 				if (letterTable.getValueAt(i, letterTable.getColumnCount()- 1) != null)
 				{
 				String text = letterTable.getValueAt(i, letterTable.getColumnCount()- 1).toString();
 				System.out.println(text);
 				if (isDouble(text))
 					rowNum++;
-				}	
+				}
 				if (letterTable.getValueAt(i, 0) != null)
 				{
 							rowNum2++;
@@ -356,24 +346,24 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		// TODO Auto-generated method stub
 
 	}
-	
-	private void createCols(int numCol)
+
+	private void createRows(int row)
 	{
-		for (int i = 0; i < numCol; i++)
+		for (int i = 0; i < row; i++)
 		{
 			tableModel.addRow(new String[] { "", "", "", "", "" });
 		}
 	}
-	
-	
-	public void clearTable() 
+
+
+	public void clearTable()
 	{
 		open = false;
 		DefaultTableModel dtm = (DefaultTableModel) letterTable.getModel();
 		dtm.setRowCount(0);
-		  
+
 	}
-		
+
 
 
 	@Override
@@ -382,17 +372,28 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		if (key.getKeyCode() == KeyEvent.VK_ENTER && scales.size() > 0) {
 			{
 				clearTable();
-				//createCols();
 				openScale();
 
 			}
 
 		}
 		if (key.getKeyCode() == KeyEvent.VK_CONTROL && open) {
-			
-			if (letterTable.getSelectedRow() != -1 && letterTable.getRowCount() > minCols)
-			{
-			tableModel.removeRow(letterTable.getSelectedRow());
+
+			if (letterTable.getSelectedRow() != -1 && letterTable.getRowCount() > minCols) {
+                int selectedRow = letterTable.getSelectedRow();
+                int selectedColumn = letterTable.getSelectedColumn();
+                System.out.println("Selected Row: " + selectedRow);
+
+                tableModel.removeRow(letterTable.getSelectedRow());
+
+                if (selectedRow == 0)
+                    selectedRow = 1;
+
+                letterTable.changeSelection(selectedRow - 1, selectedColumn, false, false);
+
+                //letterTable.setEditingRow(selectedRow - 1);
+
+                System.out.println("Selected Row After: " + letterTable.getSelectedRow());
 			}
 		}
 	}
