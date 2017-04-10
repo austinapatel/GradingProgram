@@ -21,8 +21,8 @@ public class GradeCalculator
 			scales.add(new GradingScale(scaleStrings.get(i), scaleNames.get(i)));
 	
 
-//		for (GradingScale scale : scales)
-//			System.out.println(scale.getString());
+		for (GradingScale scale : scales)
+			System.out.println(scale.getString());
 		
 		return scales;
 	}
