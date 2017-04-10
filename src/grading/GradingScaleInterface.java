@@ -96,7 +96,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			public void actionPerformed(ActionEvent e) {
 
 				if (letterTable.getRowCount() < rows)
-					tableModel.addRow(new String[] { "1", "2", "3", "4", "5" });
+					tableModel.addRow(new String[] { "0", "0", "0", "0", "0" });
 			}
 		});
 	}
