@@ -63,6 +63,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
     private JButton saveButton, saveAsButton;
     private GradingScale openScale;
     private boolean open = false;
+    private int currentRows = rows;
 
 
     public GradingScaleInterface() {
@@ -74,6 +75,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
         initTable();
         initPane(); //make sure this is last line in constructor
         letterTable.setBorder(new TextBubbleBorder(Color.GRAY, 2, 8));
+        letterTable.addKeyListener(this);
     }
     
     private void initButtons()
@@ -85,7 +87,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 		saveButton.setFocusable(false); // Don't let the button be pressed via ENTER or SPACE
 		saveButton.setVisible(true);
-		
 		
 		
 		saveAsButton = new JButton("Save As");
@@ -117,9 +118,12 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
     }
 
-    private void openScale() {
-    	 scales = GradeCalculator.getScales();
+    private void openScale() 
+    {
+    	
+    	scales = GradeCalculator.getScales();
     	open = false;
+    	initValues();
     	String name = (String) listModel.getElementAt(scaleList.getSelectedIndex());
         JSONArray data = null;
         for (GradingScale scale: scales)
@@ -173,6 +177,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
         //label1.setForeground(Color.WHITE);
         //label1.setSize(label1.getPreferredSize());
         label1.setVisible(true);
+       
 
     }
 
@@ -189,7 +194,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
         
         
         rightPanel.add(letterTable, BorderLayout.CENTER);
-       
+        rightPanel.add(saveButton, BorderLayout.EAST);
        
         
 
@@ -201,6 +206,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
         splitPane.setResizeWeight(0.5);
         splitPane.setDividerSize(0);
         splitPane.setBorder(null);
+       this.addKeyListener(this);
         add(splitPane, BorderLayout.CENTER);
 
 //		 GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -223,11 +229,20 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
                         edit = false;
                 return edit;
             }
+            
+            @Override
+        	public int getColumnCount() {
+        		return cols;
+        	}
+
+        	@Override
+        	public int getRowCount() {
+        		return currentRows;
+        	}
         };
 
 
         letterTable = new JTable(tableModel);
-
         letterTable.getModel().addTableModelListener(this);
         letterTable.setRowHeight(rowHeight);
         letterTable.setBackground(getBackground());
@@ -271,23 +286,29 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
         });
 
 
-        letterTable.setValueAt("From", 0, disabled_columns[0]);
-        letterTable.setValueAt(disabled_labels[2], 0, disabled_columns[2]);
-        letterTable.setValueAt(Character.toString('\u221E'), 0, disabled_columns[1]);
-        letterTable.setValueAt(Character.toString('\u2212') + Character.toString('\u221E'), letterTable.getRowCount()-1, letterTable.getColumnCount() -1);
-
-        for (int row = 1; row < letterTable.getRowCount(); row++) {
-            for (int col = 0; col < letterTable.getColumnCount(); col++) {
-                if (letterTable.isCellEditable(row, col) == false) {
-
-                    letterTable.setValueAt(disabled_labels[getUneditableIndex(col)], row, col);
-                }
-            }
-        }
+     initValues();
        
 
 
 
+    }
+    
+    
+    private void initValues()
+    {
+    	  letterTable.setValueAt("From", 0, disabled_columns[0]);
+          letterTable.setValueAt(disabled_labels[2], 0, disabled_columns[2]);
+          letterTable.setValueAt(Character.toString('\u221E'), 0, disabled_columns[1]);
+          letterTable.setValueAt(Character.toString('\u2212') + Character.toString('\u221E'), letterTable.getRowCount()-1, letterTable.getColumnCount() -1);
+
+          for (int row = 1; row < letterTable.getRowCount(); row++) {
+              for (int col = 0; col < letterTable.getColumnCount(); col++) {
+                  if (letterTable.isCellEditable(row, col) == false) {
+
+                      letterTable.setValueAt(disabled_labels[getUneditableIndex(col)], row, col);
+                  }
+              }
+          }
     }
 
     public int getUneditableIndex(int col) {
@@ -348,10 +369,20 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
     @Override
     public void keyReleased(KeyEvent key) {
         // TODO Auto-generated method stub
-        if (key.getKeyCode() == KeyEvent.VK_ENTER && scales.size() > 0) {
-            openScale();
-       
+        if (key.getKeyCode() == KeyEvent.VK_ENTER && scales.size() > 0) 
+        {
+        	{ 
+        	openScale();
+        	
+        	}
+        	
         }
+        if (key.getKeyCode() == KeyEvent.VK_CONTROL)
+        {
+        	((DefaultTableModel)letterTable.getModel()).removeRow(letterTable.getSelectedRow());
+        	currentRows--;
+        }
+      
 
     }
 

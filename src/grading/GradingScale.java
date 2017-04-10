@@ -32,12 +32,7 @@ public class GradingScale
 	public GradingScale(String name, Object[][] data)
 	{
 		this.name = name;
-		try {
-			letterGrades = new JSONArray(objectToJSON(data));
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		letterGrades = objectToJSON(data);
 		Table table = TableManager.getTable(TableProperties.SCALE_TABLE_NAME);
 		
 		HashMap<String, Object> newValues = new HashMap<String, Object>() {{
