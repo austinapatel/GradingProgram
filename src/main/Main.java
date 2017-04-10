@@ -53,7 +53,7 @@ public class Main {
     private static void startInterface() {
         Main.setUpTables();
         new Interface();
-       Object[][] obj = {{"A+", 98}, {"A", 94}, {"A-", 90}, {"B+", 85}, {"B", 80}, {"C", 75}};
+       Object[][] obj = {{"A+", 98}, {"A", 94}, {"A-", 90}, {"B+", 85}, {"B", 80}, {"C+", 75}, {"C", 70}, {"C-", 65}, {"D+", 60}, {"D", 55}, {"D-", 50}};
         
         new GradingScale((int)(Math.random() * 1000) + "hi", obj);
     }

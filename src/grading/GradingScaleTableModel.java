@@ -19,15 +19,15 @@ public class GradingScaleTableModel extends DefaultTableModel {
         this.disabledColumns = disabledColumns;
     }
 
-    @Override
-    public int getRowCount() {
-        return super.getRowCount();
-    }
-
-    @Override
-    public int getColumnCount() {
-        return super.getColumnCount();
-    }
+//    @Override
+//    public int getRowCount() {
+//        return super.getRowCount();
+//    }
+//
+//    @Override
+//    public int getColumnCount() {
+//        return super.getColumnCount();
+//    }
 
     @Override
     public boolean isCellEditable(int row, int column) {

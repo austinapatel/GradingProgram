@@ -297,7 +297,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 
         if (open) {
-            System.out.println("change");
+            System.out.println("Table was opened!!!!!!!!!");
             Object[][] data = new Object[13][2];
             for (int row = 0; row < letterTable.getRowCount(); row++) {
                 data[row][0] = letterTable.getValueAt(row, 0);
