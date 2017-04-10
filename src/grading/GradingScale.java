@@ -19,7 +19,8 @@ public class GradingScale
 	private String name;
 	public GradingScale(String jsonText, String name)
 	{
-		
+		if (jsonText.trim().equals(""))
+			return;
 		this.name = name;
 		try {
 			letterGrades = new JSONArray(jsonText);

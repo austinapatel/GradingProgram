@@ -87,7 +87,8 @@ public class TableManager
 //						value, rs, dataType)).start();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("Failed to insertValueIntoNewRow");
 		}
 	}
 
