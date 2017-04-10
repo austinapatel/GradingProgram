@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Interface for the program.
@@ -25,7 +26,7 @@ public class Interface extends JFrame implements ActionListener {
 
     private static final String FRAME_TITLE = "Grading Program";
 
-    private static final int WIDTH = 1200, HEIGHT = 800;
+    private static final int WIDTH = 1400, HEIGHT = 1000;
 
     private final String ACTION_ADD_ROW = "Add Row",
             ACTION_DELETE_ROW = "Delete Row",
@@ -35,7 +36,9 @@ public class Interface extends JFrame implements ActionListener {
             ACTION_SHOW_GRADE_SCALES_RIGHT = "Grade Scales Right",
             ACTION_SHOW_TABLE_INTERFACE = "Tables",
             ACTION_SHOW_CREATE_CLASS_INTERFACE = "Create Class",
-            ACTION_SHOW_GRADE_SCALES = "Grade Scales";
+            ACTION_SHOW_GRADE_SCALES = "Grade Scales",
+            ACTION_SHOW_CREATE_ASSIGNMENT_RIGHT = "Create Assignment Right",
+            ACTION_SHOW_CREATE_ASSIGNMENT = "Create Assignment";
 
     private JSplitPane splitPane;
     private JTabbedPane leftTabbedPane = new JTabbedPane(), rightTabbedPane = new JTabbedPane();
@@ -49,9 +52,10 @@ public class Interface extends JFrame implements ActionListener {
         Right
     }
 
-    private CreateClassInterface createClassInterface = new CreateClassInterface();
-    private GradingScaleInterface gradingScaleInterface = new GradingScaleInterface();
-    private TableInterface tableInterface = new TableInterface();
+//    private CreateClassInterface createClassInterface = new CreateClassInterface();
+//    private GradingScaleInterface gradingScaleInterface = new GradingScaleInterface();
+//    private TableInterface tableInterface = new TableInterface();
+//    private CreateAssignmentInterface createAssignmentInterface = new CreateAssignmentInterface();
 
     public Interface() {
         initTabbedPanes();
@@ -62,7 +66,6 @@ public class Interface extends JFrame implements ActionListener {
 
     private void initSplitPane() {
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftTabbedPane, rightTabbedPane);
-        splitPane.setResizeWeight(0.5);
         add(splitPane);
     }
 
@@ -98,16 +101,14 @@ public class Interface extends JFrame implements ActionListener {
         initTabbedPane(rightTabbedPane);
 
         tabs = new ArrayList<>();
-        tabs.add(tableInterface);
-        tabs.add(gradingScaleInterface);
-        tabs.add(createClassInterface);
+        tabs.add(new TableInterface());
+        tabs.add(new GradingScaleInterface());
+        tabs.add(new CreateClassInterface());
+        tabs.add(new CreateAssignmentInterface());
 
-        addTab(tabs.get(0), TabSide.Left);
-        addTab(tabs.get(1), TabSide.Right);
-        addTab(tabs.get(2), TabSide.Right);
-
-//        for (Tab tab : tabs)
-//            addTab(tab, TabSide.Left);
+        // Put half of the tabs on the left and half on the right
+        for (int i = 0; i < tabs.size(); i++)
+            addTab(tabs.get(i), (i < tabs.size() / 2) ? TabSide.Left : TabSide.Right);
 
         leftTabbedPane.setSelectedIndex(0);
     }
@@ -149,40 +150,56 @@ public class Interface extends JFrame implements ActionListener {
                         });
                     }
                 });
-                add(new JMenu("Interface") {{
-                    add(new JMenu("Show View") {{
-                        add(new JMenu("On Left Tab") {{
-                            add(new JMenuItem(ACTION_SHOW_TABLE_INTERFACE) {{
-                                setActionCommand(ACTION_SHOW_TABLE_INTERFACE);
-                                addActionListener(Interface.this);
-                            }});
-                            add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
-                                setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE);
-                                addActionListener(Interface.this);
-                            }});
-                            add(new JMenuItem(ACTION_SHOW_GRADE_SCALES) {{
-                                setActionCommand(ACTION_SHOW_GRADE_SCALES);
-                                addActionListener(Interface.this);
-                            }});
-                        }});
-                        add(new JMenu("On Right Tab") {{
-                            add(new JMenuItem(ACTION_SHOW_TABLE_INTERFACE) {{
-                                setActionCommand(ACTION_SHOW_TABLE_INTERFACE_RIGHT);
-                                addActionListener(Interface.this);
-                            }});
-                            add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
-                                setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE_RIGHT);
-                                addActionListener(Interface.this);
-                            }});
-                            add(new JMenuItem(ACTION_SHOW_GRADE_SCALES) {{
-                                setActionCommand(ACTION_SHOW_GRADE_SCALES_RIGHT);
-                                addActionListener(Interface.this);
-                            }});
-                        }});
-                    }});
-                }});
             }
         };
+
+        JMenu leftTabMenu = new JMenu("On Left Tab");
+        JMenu rightTabMenu = new JMenu("On Right Tab");
+
+
+        JMenu showViewMenu = new JMenu("Show View") {{
+            add(new JMenu("On Left Tab") {{
+                add(new JMenuItem(ACTION_SHOW_TABLE_INTERFACE) {{
+                    setActionCommand(ACTION_SHOW_TABLE_INTERFACE);
+                    addActionListener(Interface.this);
+                }});
+                add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
+                    setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE);
+                    addActionListener(Interface.this);
+                }});
+                add(new JMenuItem(ACTION_SHOW_GRADE_SCALES) {{
+                    setActionCommand(ACTION_SHOW_GRADE_SCALES);
+                    addActionListener(Interface.this);
+                }});
+                add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
+                    setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE);
+                    addActionListener(Interface.this);
+                }});
+            }});
+            add(new JMenu("On Right Tab") {{
+                add(new JMenuItem(ACTION_SHOW_TABLE_INTERFACE) {{
+                    setActionCommand(ACTION_SHOW_TABLE_INTERFACE_RIGHT);
+                    addActionListener(Interface.this);
+                }});
+                add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
+                    setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE_RIGHT);
+                    addActionListener(Interface.this);
+                }});
+                add(new JMenuItem(ACTION_SHOW_GRADE_SCALES) {{
+                    setActionCommand(ACTION_SHOW_GRADE_SCALES_RIGHT);
+                    addActionListener(Interface.this);
+                }});
+                add(new JMenuItem(ACTION_SHOW_CREATE_CLASS_INTERFACE) {{
+                    setActionCommand(ACTION_SHOW_CREATE_CLASS_INTERFACE_RIGHT);
+                    addActionListener(Interface.this);
+                }});
+            }});
+        }};
+
+        JMenu interfaceMenu = new JMenu("Interface");
+        interfaceMenu.add(showViewMenu);
+
+        jMenuBar.add(interfaceMenu);
 
         add(jMenuBar, BorderLayout.NORTH);
     }
@@ -199,7 +216,6 @@ public class Interface extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         String action = actionEvent.getActionCommand();
@@ -215,24 +231,24 @@ public class Interface extends JFrame implements ActionListener {
                 new PasswordField();
                 dispose();
                 break;
-            case ACTION_SHOW_CREATE_CLASS_INTERFACE:
-                addTab(createClassInterface, TabSide.Left);
-                break;
-            case ACTION_SHOW_GRADE_SCALES:
-                addTab(gradingScaleInterface, TabSide.Left);
-                break;
-            case ACTION_SHOW_TABLE_INTERFACE:
-                addTab(tableInterface, TabSide.Left);
-                break;
-            case ACTION_SHOW_CREATE_CLASS_INTERFACE_RIGHT:
-                addTab(createClassInterface, TabSide.Right);
-                break;
-            case ACTION_SHOW_GRADE_SCALES_RIGHT:
-                addTab(gradingScaleInterface, TabSide.Right);
-                break;
-            case ACTION_SHOW_TABLE_INTERFACE_RIGHT:
-                addTab(tableInterface, TabSide.Right);
-                break;
+//            case ACTION_SHOW_CREATE_CLASS_INTERFACE:
+//                addTab(createClassInterface, TabSide.Left);
+//                break;
+//            case ACTION_SHOW_GRADE_SCALES:
+//                addTab(gradingScaleInterface, TabSide.Left);
+//                break;
+//            case ACTION_SHOW_TABLE_INTERFACE:
+//                addTab(tableInterface, TabSide.Left);
+//                break;
+//            case ACTION_SHOW_CREATE_CLASS_INTERFACE_RIGHT:
+//                addTab(createClassInterface, TabSide.Right);
+//                break;
+//            case ACTION_SHOW_GRADE_SCALES_RIGHT:
+//                addTab(gradingScaleInterface, TabSide.Right);
+//                break;
+//            case ACTION_SHOW_TABLE_INTERFACE_RIGHT:
+//                addTab(tableInterface, TabSide.Right);
+//                break;
         }
     }
 }

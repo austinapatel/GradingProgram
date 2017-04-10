@@ -107,6 +107,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
     private void initList() {
         listModel = new DefaultListModel();
         scaleList = new JList(listModel);
+        scaleList.setBackground(getBackground());
         scales = GradeCalculator.getScales();
         scaleList.addKeyListener(this);
 
