@@ -86,8 +86,16 @@ public class GradingScale
 		
 		letterGrades = new JSONArray();
 		letterGrades = objectToJSON(data);
+		//System.out.println(letterGrades.toString());
 		UpdateDatabaseItemRunnable test = new UpdateDatabaseItemRunnable(2, 1, (Object) letterGrades.toString(),DatabaseManager.getFilterdTable(TableManager.getTable(TableProperties.SCALE_TABLE_NAME), TableProperties.SCALE_DESCRIPTION, name), DataType.String);
-		new Thread(test).start();
+		Thread myThread = new Thread(test);
+		myThread.start();
+		try {
+			myThread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public String getString()
 	{

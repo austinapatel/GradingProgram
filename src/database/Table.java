@@ -39,6 +39,12 @@ public class Table
 	{
 		DatabaseManager.createTable(this);
 	}
+	
+	
+	public void update()
+	{
+		resultSet = DatabaseManager.getTable(this);
+	}
 
 	public String getName()
 	{

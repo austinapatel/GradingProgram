@@ -12,10 +12,19 @@ import database.TableProperties;
 public class GradeCalculator 
 {
 
-	private static ArrayList<GradingScale> scales = new ArrayList<>();
+	private static ArrayList<GradingScale> scales = new ArrayList();
 	
 	public static ArrayList<GradingScale> getScales() {
-		scales.removeAll(scales);
+		
+//		for (int i = 0; i < scales.size(); i++)
+//		{
+//			scales.remove(i);
+//		}
+		scales.clear();
+		//.scalesscales = new ArrayList<>();
+		scales.clear();
+		System.out.println(scales.size());
+		TableManager.getTable(TableProperties.SCALE_TABLE_NAME).update();
 		ArrayList<String> scaleStrings = DataTypeManager.toStringArrayList(TableManager.getTable(TableProperties.SCALE_TABLE_NAME).getAllFromColumn(TableProperties.SCALE_DATA));
 		ArrayList<String> scaleNames = DataTypeManager.toStringArrayList(TableManager.getTable(TableProperties.SCALE_TABLE_NAME).getAllFromColumn(TableProperties.SCALE_DESCRIPTION));
 

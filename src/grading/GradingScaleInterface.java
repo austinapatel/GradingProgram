@@ -271,7 +271,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	}
 
 	private void openScale() {
-
 		scales = GradeCalculator.getScales();
 		open = false;
 		String name = (String) listModel.getElementAt(scaleList.getSelectedIndex());
@@ -285,6 +284,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		}
 
 		System.out.println(data.length());
+		//System.out.println(data.toString());
 		clearTable();
 		createRows(data.length());
 		initValues();
@@ -309,6 +309,8 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 		}
 		open = true;
+		System.out.println("Table was opened!!!!!!!!!");
+		//updateList();
 	}
 
 	private void initValues() {
@@ -359,10 +361,12 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
 
-
+	
 		if (open)
 		{
-			System.out.println("Table was opened!!!!!!!!!");
+			
+			//System.out.println("Here is the  value" + letterTable.getValueAt(0, 4));
+			//System.out.println("table changed and table is open");
 
 			int rowNum = 0;
 			int rowNum2 = 0;
@@ -372,7 +376,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				if (letterTable.getValueAt(i, letterTable.getColumnCount()- 1) != null)
 				{
 				String text = letterTable.getValueAt(i, letterTable.getColumnCount()- 1).toString();
-				System.out.println(text);
 				if (isDouble(text))
 					rowNum++;
 				}
@@ -390,6 +393,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				data[row][1] = letterTable.getValueAt(row, letterTable.getColumnCount() - 1);
 			}
 			openScale.update(data);
+			//System.out.println("Table was opened!!!!!!!!!");
 			openScale();
 		}
 
