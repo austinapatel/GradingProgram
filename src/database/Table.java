@@ -94,16 +94,26 @@ public class Table
 	 * Adds a row to the table with blank data.
 	 */
 	public void addRow() {
-		int numRows = getRowCount();
 
 		DatabaseManager.beginRowInsert(this);
 
-		DatabaseManager.addToRow(this, numRows + 1, 0);
+		DatabaseManager.addToRow(this, getInsertID(), 0);
 
 		for (int i = 1; i < tableColumns.length; i++)
 			DatabaseManager.addToRow(this, null, i);
 
 		DatabaseManager.endRowInsert(this);
+	}
+
+	private int getInsertID() {
+		ArrayList<Integer> currentIDs = DataTypeManager.toIntegerArrayList(getAllFromColumn(tableColumns[0].getName()));
+
+		int largest = 0;
+		for (int i : currentIDs)
+			largest = (i > largest) ? i : largest;
+
+		System.out.println("new row id: " + (largest + 1));
+		return largest + 1;
 	}
 
 	/**

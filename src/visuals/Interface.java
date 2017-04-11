@@ -6,6 +6,7 @@
 
 package visuals;
 
+import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
 import grading.GradingScaleInterface;
 
 import javax.swing.*;
@@ -20,6 +21,8 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import javax.swing.UIManager.*;
+
 
 /**
  * Interface for the program.
@@ -227,6 +230,15 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         setLocationRelativeTo(null);
         setVisible(true);
         this.addKeyListener(this);
+
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                UIManager.setLookAndFeel(new SyntheticaStandardLookAndFeel());
+//                SwingUtilities.updateComponentTreeUI(Interface.this);
+//                pack();
+//            }
+//        });
+
     }
 
     @Override
