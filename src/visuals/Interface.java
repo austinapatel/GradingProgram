@@ -88,7 +88,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
     
     
     public Interface() {
-        setDefaultSize(15);
+        setDefaultSize(size);
     	initTabbedPanes();
         initSplitPane();
         initMenu();
@@ -269,18 +269,22 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
 		// TODO Auto-generated method stub
 		
 		System.out.println("Key");
-		if (e.getKeyCode() == KeyEvent.VK_PLUS)
+		if (e.getKeyCode() == KeyEvent.VK_0)
 		{
 			System.out.println("plus");
 			size++;
 			setDefaultSize(size);
+			//this.invalidate();
+			this.repaint();
 		}
 		
-		if (e.getKeyCode() == KeyEvent.VK_MINUS)
+		if (e.getKeyCode() == KeyEvent.VK_9)
 		{
 			System.out.println("minus");
 			size--;
 			setDefaultSize(size);
+			//this.invalidate();
+			this.repaint();
 		}
 		
 		
