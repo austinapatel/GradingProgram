@@ -16,7 +16,6 @@ public class GradingScale
 	private String name;
 	public GradingScale(String jsonText, String name)
 	{
-		
 		this.name = name;
 		try {
 			if (!jsonText.equals(""))

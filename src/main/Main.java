@@ -7,6 +7,10 @@
 
 package main;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
+
 import database.DatabaseManager;
 import database.TableProperties;
 import database.ValueParameter;
@@ -16,6 +20,13 @@ import database.TableColumn;
 import database.TableManager;
 import visuals.PasswordField;
 import visuals.Interface;
+
+import javax.swing.UIManager.*;
+
+import com.alee.laf.WebLookAndFeel;
+
+
+
 
 /**
  * Driver class for entire program.
@@ -48,12 +59,38 @@ public class Main {
     }
 
     private static void startInterface() {
-        Main.setUpTables();
-        new Interface();
-        Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83}, {"B-", 80}, {"C+", 78},
-        		{"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
 
-        new GradingScale("100 Standard", obj);
+    	
+    	//WebLookAndFeel.install();
+    	
+
+    	    try 
+    	    {
+    	      UIManager.setLookAndFeel(new SyntheticaStandardLookAndFeel());
+    	    } 
+    	    catch (Exception e) 
+    	    {
+    	      e.printStackTrace();
+    	    }
+    	    
+//          try {
+//          UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
+//      } catch (Exception e) {
+//          e.printStackTrace();
+//      }
+    	
+    	
+    	
+    	
+    	Main.setUpTables();
+        new Interface();
+        
+
+        
+        //Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83}, {"B-", 80}, {"C+", 78},
+        //		{"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
+
+       // new GradingScale("100 Standard", obj);
     }
 
     private static void setUpTables() {
