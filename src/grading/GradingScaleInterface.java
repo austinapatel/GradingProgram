@@ -11,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -171,6 +174,27 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		for (GradingScale scale : scales) {
 			listModel.addElement(scale.getName());
 		}
+		
+		
+		scaleList.addMouseListener(new MouseAdapter()
+		{
+		    public void mouseClicked(MouseEvent evt)
+		    {
+		        JList list = (JList)evt.getSource();
+		        if (evt.getClickCount() == 2) 
+		        {
+		            
+		        	clearTable();
+					openScale();
+		        	
+		        } else if (evt.getClickCount() == 3) 
+		        {
+
+		          
+		            int index = list.locationToIndex(evt.getPoint());
+		        }
+		    }
+		});
 
 
 	}
@@ -318,7 +342,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		letterTable.setValueAt("From", 0, disabled_columns[0]);
 		letterTable.setValueAt(disabled_labels[2], 0, disabled_columns[2]);
 		letterTable.setValueAt(Character.toString('\u221E'), 0, disabled_columns[1]);
-
+		letterTable.setValueAt("0", letterTable.getRowCount() - 1, letterTable.getColumnCount() - 1);
 
 		for (int row = 1; row < letterTable.getRowCount(); row++) {
 			for (int col = 0; col < letterTable.getColumnCount(); col++) {
@@ -455,24 +479,9 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		// TODO Auto-generated method stub
 		
 	
+
+
 		
-		if (key.getKeyCode() == KeyEvent.VK_ENTER && scales.size() > 0) {
-			{
-				try
-				{
-					clearTable();
-					openScale();
-				}
-				catch(Exception e)
-				{
-					
-				}
-				
-			
-
-			}
-
-		}
 		if (key.getKeyCode() == KeyEvent.VK_CONTROL && open) {
 
 			if (letterTable.getSelectedRow() != -1 && letterTable.getRowCount() > minCols) {

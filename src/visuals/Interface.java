@@ -273,17 +273,24 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
 		{
 			System.out.println("plus");
 			size++;
+			System.out.println(size);
 			setDefaultSize(size);
 			//this.invalidate();
+			this.getContentPane().validate();
+			this.getContentPane().repaint();
 			this.repaint();
 		}
 		
 		if (e.getKeyCode() == KeyEvent.VK_9)
 		{
 			System.out.println("minus");
+		
 			size--;
+			System.out.println(size);
 			setDefaultSize(size);
 			//this.invalidate();
+			this.getContentPane().validate();
+			this.getContentPane().repaint();
 			this.repaint();
 		}
 		
