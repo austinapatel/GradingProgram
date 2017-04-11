@@ -106,7 +106,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			        Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83}, {"B-", 80}, {"C+", 78},
 			        		{"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
 
-			       new GradingScale(name, obj);
+			       new GradingScale(name.trim(), obj);
 				}
 				scales = GradeCalculator.getScales();
 				updateList();
@@ -128,7 +128,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				if (name != null && !name.trim().equals(""))
 				{
 					 System.out.println("hey");
-			        GradeCalculator.deleteScale(name);
+			        GradeCalculator.deleteScale(name.trim());
 				}
 				scales = GradeCalculator.getScales();
 				updateList();
@@ -458,8 +458,17 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		
 		if (key.getKeyCode() == KeyEvent.VK_ENTER && scales.size() > 0) {
 			{
-				clearTable();
-				openScale();
+				try
+				{
+					clearTable();
+					openScale();
+				}
+				catch(Exception e)
+				{
+					
+				}
+				
+			
 
 			}
 
