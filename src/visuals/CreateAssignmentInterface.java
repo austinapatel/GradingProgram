@@ -27,6 +27,8 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
     public CreateAssignmentInterface() {
         initPanel();
         initInterface();
+
+        add(Box.createVerticalGlue());
     }
 
     private void initPanel() {
@@ -67,6 +69,11 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
         add(panel);
         panel.add(component);
     }
+
+//    @Override
+//    public Dimension getMaximumSize() {
+//        return getPreferredSize();
+//    }
 
     @Override
     public String getTabName() {

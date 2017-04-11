@@ -1,17 +1,14 @@
 package grading;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import database.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import database.DatabaseManager;
-import database.Table;
 import database.TableColumn.DataType;
-import database.TableManager;
-import database.TableProperties;
-import database.UpdateDatabaseItemRunnable;
 
 public class GradingScale 
 {
@@ -22,7 +19,8 @@ public class GradingScale
 		
 		this.name = name;
 		try {
-			letterGrades = new JSONArray(jsonText);
+			if (!jsonText.equals(""))
+				letterGrades = new JSONArray(jsonText);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,9 +38,14 @@ public class GradingScale
 			put(TableProperties.SCALE_DESCRIPTION, name);
 			
 		}};
+
+		ArrayList<String> scaleNames = DataTypeManager.toStringArrayList(table.getAllFromColumn(TableProperties.SCALE_DESCRIPTION));
+
+		for (int i = 0; i < scaleNames.size(); i++)
+			if (scaleNames.get(i).equals(name))
+				table.deleteRow(name, table.getColumnIndex(TableProperties.SCALE_DESCRIPTION));
 		
-		
-		TableManager.insertValuesIntoNewRow(table, newValues);
+//		TableManager.insertValuesIntoNewRow(table, newValues);
 	}
 	
 	
