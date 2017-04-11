@@ -40,6 +40,7 @@ public class GradeCalculator
 	
 	public static void deleteScale(String name)
 	{	
+		
 		Table table = TableManager.getTable(TableProperties.SCALE_TABLE_NAME);
 		System.out.println(table.deleteRow(name, table.getColumnIndex(TableProperties.SCALE_DESCRIPTION) + 1));
 

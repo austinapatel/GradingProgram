@@ -129,11 +129,16 @@ public class DatabaseManager
 
 		try
 		{
+			
+			
+			System.out.println(resultSet.getConcurrency() == ResultSet.CONCUR_UPDATABLE);
 			resultSet.insertRow();
+			System.out.println("hey");
 			resultSet.moveToCurrentRow();
 		}
 		catch (SQLException e)
 		{
+			e.printStackTrace();
 			System.out.println(
 						"Insert row already added. Change values that need to be unique in row before adding a new row.");
 		}

@@ -59,8 +59,9 @@ public class TableManager
 	public static void insertValuesIntoNewRow(Table table, HashMap<String, Object> values) {
 		try {
 			ResultSet rs = table.getResultSet();
-
+			
 			table.addRow();
+			System.out.println("row added");
 
 			Object[] keySetObjects = values.keySet().toArray();
 			String[] keys = new String[keySetObjects.length];

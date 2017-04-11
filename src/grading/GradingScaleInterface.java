@@ -111,7 +111,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			        
 			       new GradingScale(name, obj);
 			       scales = GradeCalculator.getScales();
-					updateList();
+			       updateList();
 	
 					
 				}
