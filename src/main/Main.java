@@ -58,18 +58,14 @@ public class Main {
 
     private static void startInterface() {
 
-    	try {
-    	    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-    	        if ("Nimbus".equals(info.getName())) {
-    	            UIManager.setLookAndFeel(info.getClassName());
-    	            break;
-    	        }
-    	    }
-    	} catch (Exception e) {
-    	    // If Nimbus is not available, you can set the GUI to another look and feel.
-    	}
     	Main.setUpTables();
         new Interface();
+        
+        try {
+            UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
         //Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83}, {"B-", 80}, {"C+", 78},
         //		{"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};

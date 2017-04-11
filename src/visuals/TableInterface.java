@@ -44,7 +44,6 @@ public class TableInterface extends JPanel implements Tab {
         initBottomButtons();
         initTablePicker();
         initTable();
-        jTable.setShowGrid(true);
     }
 
     private void initPanel() {

@@ -34,6 +34,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,7 +72,10 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		initLabels();
 		initTable();
 		initPane(); // make sure this is last line in constructor
-		letterTable.setBorder(new TextBubbleBorder(Color.GRAY, 2, 8));
+		//letterTable.setBorder(new TextBubbleBorder(Color.BLACK, 2, 8));
+		
+		
+		
 		letterTable.addKeyListener(this);
 		this.setMinimumSize(getPreferredSize());
 	
