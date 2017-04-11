@@ -24,8 +24,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -72,7 +74,10 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		letterTable.setBorder(new TextBubbleBorder(Color.GRAY, 2, 8));
 		letterTable.addKeyListener(this);
 		this.setMinimumSize(getPreferredSize());
-		
+	
+		//letterTable.setShowVerticalLines(true);
+		letterTable.setShowHorizontalLines(true);
+		letterTable.setShowVerticalLines(true);
 		
 	}
 
