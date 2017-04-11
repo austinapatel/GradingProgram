@@ -79,15 +79,12 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		initPane(); // make sure this is last line in constructor
 		//letterTable.setBorder(new TextBubbleBorder(Color.BLACK, 2, 8));
 		
-		
-		
 		letterTable.addKeyListener(this);
 		this.setMinimumSize(getPreferredSize());
 	
 		//letterTable.setShowVerticalLines(true);
 		letterTable.setShowHorizontalLines(true);
-		letterTable.setShowVerticalLines(true);
-		
+		letterTable.setShowVerticalLines(true);	
 	}
 
 	private void initButtons() {
@@ -137,8 +134,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				updateList();
 			}
 		});
-		
-		
 
 		addRowButton = new JButton("Add Row");
 		addRowButton.setFont(new Font("Helvetica", Font.BOLD, 14));
@@ -147,7 +142,15 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			public void actionPerformed(ActionEvent e) {
 
 				if (letterTable.getRowCount() < rows)
-					tableModel.addRow(new String[] { "0", "0", "0", "0", "0" });
+				{	
+					
+						tableModel.insertRow(letterTable.getSelectedRow(), new String[] { "0", "0", "0", "0", "0" });
+						
+					
+						
+					
+					//tableModel.addRow(new String[] { "0", "0", "0", "0", "0" });
+				}
 			}
 		});
 		
@@ -477,10 +480,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	@Override
 	public void keyReleased(KeyEvent key) {
 		// TODO Auto-generated method stub
-		
-	
-
-
 		
 		if (key.getKeyCode() == KeyEvent.VK_CONTROL && open) {
 
