@@ -22,7 +22,7 @@ public class GradeCalculator
 //		}
 		scales.clear();
 		//.scalesscales = new ArrayList<>();
-		scales.clear();
+		
 		System.out.println(scales.size());
 		TableManager.getTable(TableProperties.SCALE_TABLE_NAME).update();
 		ArrayList<String> scaleStrings = DataTypeManager.toStringArrayList(TableManager.getTable(TableProperties.SCALE_TABLE_NAME).getAllFromColumn(TableProperties.SCALE_DATA));

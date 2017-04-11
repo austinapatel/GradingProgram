@@ -68,6 +68,8 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	private int currentRows = rows;
 	private GradingScaleTableModel tableModel;
 	private static int minCols = 5;
+	private static Object[][] template = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83}, {"B-", 80}, {"C+", 78},
+    		{"C", 72}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
 
 	public GradingScaleInterface() {
 
@@ -102,14 +104,18 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				System.out.println(name);
 				if (name != null && !name.trim().equals(""))
 				{
-					  
+					
+					
 			        Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83}, {"B-", 80}, {"C+", 78},
-			        		{"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
-
-			       new GradingScale(name.trim(), obj);
+			        		{"C", 72}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
+			        
+			       new GradingScale(name, obj);
+			       scales = GradeCalculator.getScales();
+					updateList();
+	
+					
 				}
-				scales = GradeCalculator.getScales();
-				updateList();
+				
 			}
 		});
 		
@@ -144,14 +150,15 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				if (letterTable.getRowCount() < rows)
 				{	
 					
+				
 						tableModel.insertRow(letterTable.getSelectedRow(), new String[] { "0", "0", "0", "0", "0" });
-						
+				
 					
 						
-					
+					}
 					//tableModel.addRow(new String[] { "0", "0", "0", "0", "0" });
 				}
-			}
+			
 		});
 		
 
