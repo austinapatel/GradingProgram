@@ -19,7 +19,9 @@ public class GradingScale
 		this.name = name;
 		try {
 			if (!jsonText.equals(""))
+			{	
 				letterGrades = new JSONArray(jsonText);
+			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,7 +46,7 @@ public class GradingScale
 			if (scaleNames.get(i).equals(name))
 				table.deleteRow(name, table.getColumnIndex(TableProperties.SCALE_DESCRIPTION));
 		
-//		TableManager.insertValuesIntoNewRow(table, newValues);
+		TableManager.insertValuesIntoNewRow(table, newValues);
 	}
 	
 	

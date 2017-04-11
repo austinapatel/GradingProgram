@@ -19,6 +19,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -26,6 +27,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -44,10 +46,10 @@ import customBorders.TextBubbleBorder;
 public class GradingScaleInterface extends JPanel implements TableModelListener, Tab, KeyListener {
 
 	private final int rows = 13, cols = 5, rowHeight = 50, colWidth = 30;
-	private static final Font STANDARD_FONT = new Font("Arial", Font.PLAIN, 20);
+	private static final Font STANDARD_FONT = new Font("Calibri", Font.BOLD, 24);
 	private JTable letterTable;
 	private JSplitPane splitPane;
-	private Border blackline, raisedetched, loweredetched, raisedbevel, loweredbevel, empty;
+	private Border blackline, raisedetched, loweredetched, raisedbevel, loweredbevel, empty, compound;
 	private int[] disabled_columns = { 1, 2, 3 };
 	private String[] disabled_labels = { "Below", "", "down to" };
 	private int disabled_col = 2, cur_col = 0;
@@ -87,14 +89,34 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 	private void initButtons() {
 		newScaleButton = new JButton("Create new scale");
-		newScaleButton.setFont(new Font("Tahoma", Font.BOLD, 12));
+		newScaleButton.setFont(new Font("Helvetica", Font.BOLD, 14));
 		//newScaleButton.setForeground(Color.BLUE);
 		newScaleButton.setFocusable(false);
 		newScaleButton.setVisible(true);
+		newScaleButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+
+				String name = JOptionPane.showInputDialog("Enter the name for the new scale:   ");
+				System.out.println(name);
+				if (name != null && !name.trim().equals(""))
+				{
+					  
+			        Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83}, {"B-", 80}, {"C+", 78},
+			        		{"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
+
+			       new GradingScale(name, obj);
+				}
+				scales = GradeCalculator.getScales();
+				updateList();
+			}
+		});
 		
 		
 
 		addRowButton = new JButton("Add Row");
+		addRowButton.setFont(new Font("Helvetica", Font.BOLD, 14));
 		addRowButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -117,12 +139,16 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		listModel = new DefaultListModel();
 		scaleList = new JList(listModel);
 		scaleList.setBackground(getBackground());
+		scaleList.setBorder(compound);
 		scales = GradeCalculator.getScales();
 		scaleList.addKeyListener(this);
+		scaleList.setFont(new Font("Helvetica", Font.BOLD, 15));
+
 
 		for (GradingScale scale : scales) {
 			listModel.addElement(scale.getName());
 		}
+
 
 	}
 
@@ -133,6 +159,8 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		raisedbevel = BorderFactory.createRaisedBevelBorder();
 		loweredbevel = BorderFactory.createLoweredBevelBorder();
 		empty = BorderFactory.createEmptyBorder();
+	 compound = BorderFactory.createCompoundBorder(
+                raisedbevel, loweredbevel);
 
 	}
 
@@ -152,15 +180,20 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		leftPanel = new JPanel();
 		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
 		leftPanel.add(label1);
+		
+		
 		leftPanel.add(scrollPane1);
 		
 		rightPanel = new JPanel();
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
 		buttonPane.setMaximumSize(buttonPane.getPreferredSize());
 		rightPanel.add(buttonPane);
-		rightPanel.add(letterTable);
+		
+		
+		JScrollPane tablePanel = new JScrollPane(letterTable);
+		rightPanel.add(tablePanel);
 	
-	
+		
 		
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 
@@ -177,10 +210,13 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		tableModel = new GradingScaleTableModel(rows, cols, disabled_columns);
 		letterTable = new JTable(tableModel);
 		tableModel.addTableModelListener(this);
+		letterTable.setFont(new Font("Helvetica", Font.PLAIN, 20));
 		letterTable.setRowHeight(rowHeight);
-		letterTable.setBackground(getBackground());
-		letterTable.setFont(new Font("Arial", Font.PLAIN, 18));
+		letterTable.setBorder(compound);
+		//letterTable.setBackground(getBackground());
+		//letterTable.setFont(new Font("Arial", Font.PLAIN, 18));
 		letterTable.getTableHeader().setReorderingAllowed(false);
+	//	letterTable.set
 
 		for (int i = 0; i < letterTable.getColumnCount(); i++) {
 			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -282,13 +318,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		return -1;
 	}
 
-	private void sizeTable()
-	{
 
-
-
-
-	}
 	private boolean isDouble(String text)
 	{
 
@@ -381,10 +411,24 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	}
 
 
+	private void updateList()
+	{
+		
+		listModel.removeAllElements();
+		for (GradingScale scale : scales) {
+			{	
+			if (!listModel.contains(scale.getName()))
+				listModel.addElement(scale.getName());
+			}
+		}
+	}
 
 	@Override
 	public void keyReleased(KeyEvent key) {
 		// TODO Auto-generated method stub
+		
+	
+		
 		if (key.getKeyCode() == KeyEvent.VK_ENTER && scales.size() > 0) {
 			{
 				clearTable();
