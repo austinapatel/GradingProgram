@@ -8,6 +8,8 @@
 package main;
 
 import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Set;
 
 import javax.swing.UIManager;
@@ -34,10 +36,10 @@ import com.alee.laf.WebLookAndFeel;
 /**
  * Driver class for entire program.
  */
-public class Main {
+public class Main  {
 
     static PasswordField login;
-
+    private static int size = 15;
     public static void main(String[] args) {
         System.setProperty("awt.useSystemAAFontSettings", "on");
         System.setProperty("swing.aatext", "true");
@@ -84,7 +86,6 @@ public class Main {
     	
     	
     	
-    	setDefaultSize(20);
     	Main.setUpTables();
         new Interface();
         
@@ -97,27 +98,9 @@ public class Main {
     }
 
     
-    public static void setDefaultSize(int size) {
+   
 
-        Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
-        Object[] keys = keySet.toArray(new Object[keySet.size()]);
-
-        for (Object key : keys) {
-
-            if (key != null && key.toString().toLowerCase().contains("font")) {
-
-                System.out.println(key);
-                Font font = UIManager.getDefaults().getFont(key);
-                if (font != null) {
-                    font = font.deriveFont((float)size);
-                    UIManager.put(key, font);
-                }
-
-            }
-
-        }
-
-    }
+    
     
     private static void setUpTables() {
         TableColumn[] studentsTableColumns = new TableColumn[]{
@@ -266,4 +249,5 @@ public class Main {
         TableManager.addTable(new Table(TableProperties.COUNSELORS_TABLE_NAME,
                 counselorTableColumns));
     }
+
 }

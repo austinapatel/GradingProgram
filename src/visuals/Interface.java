@@ -15,21 +15,24 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Interface for the program.
  */
 @SuppressWarnings("serial")
-public class Interface extends JFrame implements ActionListener {
+public class Interface extends JFrame implements ActionListener, KeyListener {
 
     private static final String FRAME_TITLE = "Grading Program";
 
     private static final int WIDTH = 1400, HEIGHT = 1000;
 
     private static final String RIGHT_TAB_LOCATION = " Right";
-
+    private static int size = 15;
     private final String ACTION_ADD_ROW = "Add Row",
             ACTION_DELETE_ROW = "Delete Row",
             ACTION_CHANGE_CONNECTION = "Manage Database Connection",
@@ -59,8 +62,34 @@ public class Interface extends JFrame implements ActionListener {
 //    private TableInterface tableInterface = new TableInterface();
 //    private CreateAssignmentInterface createAssignmentInterface = new CreateAssignmentInterface();
 
+   
+    
+    public static void setDefaultSize(int size) {
+
+        Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
+        Object[] keys = keySet.toArray(new Object[keySet.size()]);
+
+        for (Object key : keys) {
+
+            if (key != null && key.toString().toLowerCase().contains("font")) {
+
+               // System.out.println(key);
+                Font font = UIManager.getDefaults().getFont(key);
+                if (font != null) {
+                    font = font.deriveFont((float)size);
+                    UIManager.put(key, font);
+                }
+
+            }
+
+        }
+    }
+    
+    
+    
     public Interface() {
-        initTabbedPanes();
+        setDefaultSize(15);
+    	initTabbedPanes();
         initSplitPane();
         initMenu();
         initFrame();
@@ -85,6 +114,7 @@ public class Interface extends JFrame implements ActionListener {
     private void initTabbedPane(JTabbedPane tabbedPane) {
         TabReorderHandler.enableReordering(tabbedPane);
 
+        tabbedPane.addKeyListener(this);
         tabbedPane.setVisible(true);
         tabbedPane.addChangeListener(new ChangeListener() {
             @Override
@@ -196,6 +226,7 @@ public class Interface extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+        this.addKeyListener(this);
     }
 
     @Override
@@ -222,4 +253,44 @@ public class Interface extends JFrame implements ActionListener {
             else if ((tab.getTabName() + RIGHT_TAB_LOCATION).equals(action))
                 addTab(tab, TabSide.Right);
     }
+
+
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+		System.out.println("Key");
+		if (e.getKeyCode() == KeyEvent.VK_PLUS)
+		{
+			System.out.println("plus");
+			size++;
+			setDefaultSize(size);
+		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_MINUS)
+		{
+			System.out.println("minus");
+			size--;
+			setDefaultSize(size);
+		}
+		
+		
+	}
+
+
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
