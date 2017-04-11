@@ -7,6 +7,9 @@
 
 package main;
 
+import java.awt.Font;
+import java.util.Set;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
@@ -81,7 +84,7 @@ public class Main {
     	
     	
     	
-    	
+    	setDefaultSize(20);
     	Main.setUpTables();
         new Interface();
         
@@ -93,6 +96,29 @@ public class Main {
        // new GradingScale("100 Standard", obj);
     }
 
+    
+    public static void setDefaultSize(int size) {
+
+        Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
+        Object[] keys = keySet.toArray(new Object[keySet.size()]);
+
+        for (Object key : keys) {
+
+            if (key != null && key.toString().toLowerCase().contains("font")) {
+
+                System.out.println(key);
+                Font font = UIManager.getDefaults().getFont(key);
+                if (font != null) {
+                    font = font.deriveFont((float)size);
+                    UIManager.put(key, font);
+                }
+
+            }
+
+        }
+
+    }
+    
     private static void setUpTables() {
         TableColumn[] studentsTableColumns = new TableColumn[]{
                 new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL UNIQUE",
