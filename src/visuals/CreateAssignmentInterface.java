@@ -4,35 +4,30 @@
 
 package visuals;
 
-import database.DataTypeManager;
-import database.TableManager;
 import database.TableProperties;
 
 import javax.swing.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 public class CreateAssignmentInterface extends JPanel implements Tab, KeyListener, ActionListener {
 
     private JTextField txtName, txtPointValue;
-    private DatabaseJComboBox comboBoxClass, comboBoxCategory;
+    private JPanel contentPanel;
 
     public CreateAssignmentInterface() {
         initPanel();
         initInterface();
-
-        add(Box.createVerticalGlue());
     }
 
     private void initPanel() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        add(contentPanel);
     }
 
     private void initInterface() {
@@ -45,35 +40,32 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
         wrapInJPanel(new JLabel("Name"));
         txtName = new JTextField();
         txtName.addActionListener(this);
-        add(txtName);
+        contentPanel.add(txtName);
 
         wrapInJPanel(new JLabel("Class"));
-        comboBoxClass = new DatabaseJComboBox(TableProperties.COURSES_TABLE_NAME, TableProperties.NAME, TableProperties.PERIOD);
-        comboBoxClass.addActionListener(this);
-        add(comboBoxClass);
+        JTable coursesJTable = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
+        coursesJTable.setPreferredScrollableViewportSize(coursesJTable.getPreferredSize());
+        JScrollPane coursesScrollPane = new JScrollPane(coursesJTable);
+        contentPanel.add(coursesScrollPane);
 
         wrapInJPanel(new JLabel("Point Value"));
         txtPointValue = new JTextField();
         txtPointValue.addActionListener(this);
-        add(txtPointValue);
+        contentPanel.add(txtPointValue);
 
         wrapInJPanel(new JLabel("Category"));
-        comboBoxCategory = new DatabaseJComboBox(TableProperties.CATEGORIES_TABLE_NAME, TableProperties.NAME);
-        comboBoxCategory.addActionListener(this);
-        add(comboBoxCategory);
+        JTable categoryJTable = new DatabaseJTable(TableProperties.CATEGORIES_TABLE_NAME);
+        categoryJTable.setPreferredScrollableViewportSize(categoryJTable.getPreferredSize());
+        JScrollPane categoryScrollPane = new JScrollPane(categoryJTable);
+        contentPanel.add(categoryScrollPane);
     }
 
     private void wrapInJPanel(JComponent component) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        add(panel);
+        contentPanel.add(panel);
         panel.add(component);
     }
-
-//    @Override
-//    public Dimension getMaximumSize() {
-//        return getPreferredSize();
-//    }
 
     @Override
     public String getTabName() {

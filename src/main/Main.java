@@ -64,14 +64,14 @@ public class Main {
     	//WebLookAndFeel.install();
     	
 
-    	    try 
-    	    {
-    	      UIManager.setLookAndFeel(new SyntheticaStandardLookAndFeel());
-    	    } 
-    	    catch (Exception e) 
-    	    {
-    	      e.printStackTrace();
-    	    }
+//    	    try
+//    	    {
+//    	      UIManager.setLookAndFeel(new SyntheticaStandardLookAndFeel());
+//    	    }
+//    	    catch (Exception e)
+//    	    {
+//    	      e.printStackTrace();
+//    	    }
     	    
 //          try {
 //          UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");

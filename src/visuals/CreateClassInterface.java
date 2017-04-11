@@ -25,7 +25,7 @@ import java.util.Locale;
 public class CreateClassInterface extends JPanel implements KeyListener, Tab {
 
     private JSplitPane splitPane;
-    private JPanel contentPane, studentsPane;
+    private JPanel contentPane, studentsPane, baseContentPane;
     private JTextField txtClassName, txtStartYear, txtEndYear, txtFirstName, txtLastName, txtStudentID, txtMonth, txtDay, txtYear;
     private JComboBox<Character> genderComboBox;
     private JList listStudents;
@@ -48,7 +48,7 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
     }
 
     private void initSplitPane() {
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, contentPane, studentsPane);
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, baseContentPane, studentsPane);
         splitPane.setResizeWeight(0.5);
         add(splitPane);
     }
@@ -67,6 +67,9 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+
+        baseContentPane = new JPanel();
+        baseContentPane.add(contentPane);
     }
 
     private void wrapInJPanel(JComponent component) {
@@ -77,7 +80,7 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
     }
 
     private void initClassInterface() {
-        JLabel lblClass = new JLabel("Class");
+        JLabel lblClass = new JLabel("Class                  ");
         lblClass.setFont(new Font("Tahoma", Font.PLAIN, 32));
         wrapInJPanel(lblClass);
 
@@ -504,7 +507,7 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
             return false;
         }
 
-        return text.length() == 2;
+        return text.length() > 0;
     }
 
     // Checks if a JTextField has any text in it
