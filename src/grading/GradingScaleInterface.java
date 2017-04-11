@@ -4,6 +4,8 @@ import visuals.Tab;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,11 +50,11 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	private int disabled_col = 2, cur_col = 0;
 	private JLabel label1;
 	private JScrollPane scrollPane1;
-	private JPanel rightPanel, panel1, panel2, bpanel1, bpanel2;
+	private JPanel rightPanel, leftPanel, buttonPane;
 	private JList scaleList;
 	private DefaultListModel listModel;
 	private ArrayList<GradingScale> scales = new ArrayList();
-	private JButton saveButton, saveAsButton, addRowButton;
+	private JButton newScaleButton, saveAsButton, addRowButton;
 	private GradingScale openScale;
 	private boolean open = false;
 	private int currentRows = rows;
@@ -69,26 +71,19 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		initPane(); // make sure this is last line in constructor
 		letterTable.setBorder(new TextBubbleBorder(Color.GRAY, 2, 8));
 		letterTable.addKeyListener(this);
+		this.setMinimumSize(getPreferredSize());
+		
+		
 	}
 
 	private void initButtons() {
-		saveButton = new JButton("Save");
-		saveButton.setFont(new Font("Arial", Font.BOLD, 28));
-		saveButton.setForeground(Color.BLUE);
-		// saveButton.setSize(30, 30);
-
-		saveButton.setFocusable(false); // Don't let the button be pressed via
-										// ENTER or SPACE
-		saveButton.setVisible(true);
-
-		saveAsButton = new JButton("Save As");
-		saveAsButton.setFont(new Font("Arial", Font.BOLD, 28));
-		saveAsButton.setForeground(Color.BLUE);
-		// saveAsButton.setSize(30, 30);
-
-		saveAsButton.setFocusable(false); // Don't let the button be pressed via
-											// ENTER or SPACE
-		saveAsButton.setVisible(true);
+		newScaleButton = new JButton("Create new scale");
+		newScaleButton.setFont(new Font("Tahoma", Font.BOLD, 12));
+		//newScaleButton.setForeground(Color.BLUE);
+		newScaleButton.setFocusable(false);
+		newScaleButton.setVisible(true);
+		
+		
 
 		addRowButton = new JButton("Add Row");
 		addRowButton.addActionListener(new ActionListener() {
@@ -99,7 +94,15 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 					tableModel.addRow(new String[] { "0", "0", "0", "0", "0" });
 			}
 		});
+		
+
+		buttonPane = new JPanel();
+		buttonPane.setLayout(new FlowLayout());
+		buttonPane.add(newScaleButton);
+		buttonPane.add(addRowButton);
+		
 	}
+	
 
 	private void initList() {
 		listModel = new DefaultListModel();
@@ -135,26 +138,30 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 	private void initPane() {
 		setLayout(new BorderLayout());
-
 		scrollPane1 = new JScrollPane(scaleList);
-		scrollPane1.setColumnHeaderView(label1);
-
+		
+		leftPanel = new JPanel();
+		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
+		leftPanel.add(label1);
+		leftPanel.add(scrollPane1);
+		
 		rightPanel = new JPanel();
-		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
+		buttonPane.setMaximumSize(buttonPane.getPreferredSize());
+		rightPanel.add(buttonPane);
+		rightPanel.add(letterTable);
+	
+	
+		
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 
-		rightPanel.add(letterTable, BorderLayout.CENTER);
-		rightPanel.add(saveButton);
-		rightPanel.add(addRowButton);
-
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPane1, rightPanel);
-		splitPane.setOneTouchExpandable(true);
-
-		splitPane.setResizeWeight(0.5);
-		splitPane.setDividerSize(0);
-		splitPane.setBorder(null);
 		this.addKeyListener(this);
 		add(splitPane, BorderLayout.CENTER);
 
+		splitPane.setResizeWeight(0.5);  
+		splitPane.setDividerSize(0);
+		splitPane.setBorder(null);
+		splitPane.setOneTouchExpandable(true);
 	}
 
 	private void initTable() {

@@ -7,6 +7,9 @@
 
 package main;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import database.DatabaseManager;
 import database.TableProperties;
 import database.ValueParameter;
@@ -16,6 +19,12 @@ import database.TableColumn;
 import database.TableManager;
 import visuals.PasswordField;
 import visuals.Interface;
+
+import javax.swing.UIManager.*;
+
+
+    // If Nimbus is not available, you can set the GUI to another look and feel.
+
 
 /**
  * Driver class for entire program.
@@ -48,10 +57,22 @@ public class Main {
     }
 
     private static void startInterface() {
-        Main.setUpTables();
+
+    	try {
+    	    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+    	        if ("Nimbus".equals(info.getName())) {
+    	            UIManager.setLookAndFeel(info.getClassName());
+    	            break;
+    	        }
+    	    }
+    	} catch (Exception e) {
+    	    // If Nimbus is not available, you can set the GUI to another look and feel.
+    	}
+    	Main.setUpTables();
         new Interface();
+        
         //Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83}, {"B-", 80}, {"C+", 78},
-        		{"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
+        //		{"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
 
        // new GradingScale("100 Standard", obj);
     }
