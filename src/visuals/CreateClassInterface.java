@@ -4,6 +4,9 @@ import database.DataTypeManager;
 import database.Table;
 import database.TableManager;
 import database.TableProperties;
+import swingmaterial.MaterialButton;
+import swingmaterial.MaterialComboBox;
+import swingmaterial.MaterialTextField;
 import table.Date;
 import table.Student;
 
@@ -26,10 +29,10 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
 
     private JSplitPane splitPane;
     private JPanel contentPane, studentsPane, baseContentPane;
-    private JTextField txtClassName, txtStartYear, txtEndYear, txtFirstName, txtLastName, txtStudentID, txtMonth, txtDay, txtYear;
-    private JComboBox<Character> genderComboBox;
+    private MaterialTextField txtClassName, txtStartYear, txtEndYear, txtFirstName, txtLastName, txtStudentID, txtMonth, txtDay, txtYear;
+    private MaterialComboBox<Character> genderComboBox;
     private JList listStudents;
-    private JButton btnAddStudent, btnCreateClass;
+    private MaterialButton btnAddStudent, btnCreateClass;
     private JComboBox<String> counselorComboBox;
     private JTextField txtGradYear;
     private ArrayList<Student> students = new ArrayList<>();
@@ -87,7 +90,7 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
         JLabel lblClassName = new JLabel("Name");
         wrapInJPanel(lblClassName);
 
-        txtClassName = new JTextField();
+        txtClassName = new MaterialTextField();
         contentPane.add(txtClassName);
         txtClassName.setColumns(10);
         txtClassName.addActionListener(new ActionListener() {
@@ -133,13 +136,13 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
         contentPane.add(panel);
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
-        txtStartYear = new JTextField();
+        txtStartYear = new MaterialTextField();
         panel.add(txtStartYear);
         txtStartYear.setText(String.valueOf(year));
         txtStartYear.setEnabled(false);
         txtStartYear.addKeyListener(this);
 
-        txtEndYear = new JTextField();
+        txtEndYear = new MaterialTextField();
         panel.add(txtEndYear);
         txtEndYear.setText(String.valueOf(year + 1));
         txtEndYear.setEnabled(false);
@@ -189,7 +192,7 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
         JLabel lblFirstName = new JLabel("*First Name");
         wrapInJPanel(lblFirstName);
 
-        txtFirstName = new JTextField();
+        txtFirstName = new MaterialTextField();
         contentPane.add(txtFirstName);
         txtFirstName.setColumns(10);
 
@@ -205,7 +208,7 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
 
         wrapInJPanel(new JLabel("*Last Name"));
 
-        txtLastName = new JTextField();
+        txtLastName = new MaterialTextField();
         wrapInJPanel(txtLastName);
 
         txtLastName.setColumns(10);
@@ -222,7 +225,7 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
 
         // Student id
         wrapInJPanel(new JLabel("*Student ID"));
-        txtStudentID = new JTextField();
+        txtStudentID = new MaterialTextField();
         txtStudentID.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -248,21 +251,21 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
 
         JPanel birthdatePanel = new JPanel();
         birthdatePanel.setLayout(new BoxLayout(birthdatePanel, BoxLayout.X_AXIS));
-        txtDay = new JTextField();
-        txtMonth = new JTextField();
-        txtYear = new JTextField();
+        txtDay = new MaterialTextField();
+        txtMonth = new MaterialTextField();
+        txtYear = new MaterialTextField();
 
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
         DecimalFormat decimalFormat = (DecimalFormat) numberFormat;
         decimalFormat.setGroupingUsed(false);
 
-        txtDay = new JFormattedTextField(decimalFormat);
+        txtDay = new MaterialTextField();
         txtDay.setColumns(2); //whatever size you wish to set
 
-        txtMonth = new JFormattedTextField(decimalFormat);
+        txtMonth = new MaterialTextField();
         txtMonth.setColumns(2); //whatever size you wish to set
 
-        txtYear = new JFormattedTextField(decimalFormat);
+        txtYear = new MaterialTextField();
         txtYear.setColumns(2); //whatever size you wish to set
 
 
@@ -306,7 +309,8 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
         wrapInJPanel(new JLabel("Gender:"));
 
         DefaultComboBoxModel<Character> genderModel = new DefaultComboBoxModel<Character>(new Character[]{' ', 'M', 'F', 'O'});
-        genderComboBox = new JComboBox<>(genderModel);
+        genderComboBox = new MaterialComboBox<>();
+        genderComboBox.setModel(genderModel);
         genderComboBox.addKeyListener(this);
 
         contentPane.add(genderComboBox);
@@ -328,7 +332,8 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
         counselorComboBox.addKeyListener(this);
         contentPane.add(counselorComboBox);
 
-        btnAddStudent = new JButton("Add Student");
+        btnAddStudent = new MaterialButton();
+        btnAddStudent.setText("Add Student");
         btnAddStudent.setEnabled(false);
 
         JPanel thisPanel = this;
@@ -395,7 +400,8 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
 
         wrapInJPanel(btnAddStudent);
 
-        btnCreateClass = new JButton("Add Class");
+        btnCreateClass = new MaterialButton();
+        btnCreateClass.setText("Create Class");
         btnCreateClass.addKeyListener(this);
 
         wrapInJPanel(btnCreateClass);

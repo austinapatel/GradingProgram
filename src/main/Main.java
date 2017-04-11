@@ -12,8 +12,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Set;
 
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
+
 import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
 
 import database.DatabaseManager;
@@ -23,6 +23,7 @@ import grading.GradingScale;
 import database.Table;
 import database.TableColumn;
 import database.TableManager;
+import theme.MaterialUIConfig;
 import visuals.PasswordField;
 import visuals.Interface;
 
@@ -40,6 +41,7 @@ public class Main  {
 
     static PasswordField login;
     private static int size = 15;
+
     public static void main(String[] args) {
         System.setProperty("awt.useSystemAAFontSettings", "on");
         System.setProperty("swing.aatext", "true");
@@ -64,8 +66,9 @@ public class Main  {
     }
 
     private static void startInterface() {
+//        MaterialUIConfig.configureUI();
 
-    	
+
     	//WebLookAndFeel.install();
     	
 
