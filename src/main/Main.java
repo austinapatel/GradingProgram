@@ -50,10 +50,10 @@ public class Main {
     private static void startInterface() {
         Main.setUpTables();
         new Interface();
-        Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83}, {"B-", 80}, {"C+", 78},
+        //Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83}, {"B-", 80}, {"C+", 78},
         		{"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
 
-        new GradingScale("100 Standard", obj);
+       // new GradingScale("100 Standard", obj);
     }
 
     private static void setUpTables() {
