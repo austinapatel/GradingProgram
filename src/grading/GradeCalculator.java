@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.DataTypeManager;
+import database.Table;
 import database.TableManager;
 import database.TableProperties;
 
@@ -14,6 +15,7 @@ public class GradeCalculator
 	private static ArrayList<GradingScale> scales = new ArrayList<>();
 	
 	public static ArrayList<GradingScale> getScales() {
+		scales.removeAll(scales);
 		ArrayList<String> scaleStrings = DataTypeManager.toStringArrayList(TableManager.getTable(TableProperties.SCALE_TABLE_NAME).getAllFromColumn(TableProperties.SCALE_DATA));
 		ArrayList<String> scaleNames = DataTypeManager.toStringArrayList(TableManager.getTable(TableProperties.SCALE_TABLE_NAME).getAllFromColumn(TableProperties.SCALE_DESCRIPTION));
 
@@ -25,5 +27,12 @@ public class GradeCalculator
 //			System.out.println(scale.getString());
 		
 		return scales;
+	}
+	
+	public static void deleteScale(String name)
+	{	
+		Table table = TableManager.getTable(TableProperties.SCALE_TABLE_NAME);
+		System.out.println(table.deleteRow(name, table.getColumnIndex(TableProperties.SCALE_DESCRIPTION) + 1));
+
 	}
 }

@@ -110,11 +110,13 @@ public class Table
 			resultSet.beforeFirst();
 
 			while (resultSet.next())
+			{	
 				if (resultSet.getObject(column).toString().equals(value.toString()))
 				{
 					resultSet.deleteRow();
 					return resultSet.getRow();
 				}
+			}
 		}
 		catch (SQLException e)
 		{

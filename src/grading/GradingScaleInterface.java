@@ -59,7 +59,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	private JList scaleList;
 	private DefaultListModel listModel;
 	private ArrayList<GradingScale> scales = new ArrayList();
-	private JButton newScaleButton, saveAsButton, addRowButton;
+	private JButton newScaleButton, saveAsButton, addRowButton, deleteScale;
 	private GradingScale openScale;
 	private boolean open = false;
 	private int currentRows = rows;
@@ -113,6 +113,28 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			}
 		});
 		
+		deleteScale = new JButton("Delete Scale");
+		deleteScale.setFont(new Font("Helvetica", Font.BOLD, 14));
+		//deleteScale.setForeground(Color.BLUE);
+		deleteScale.setFocusable(false);
+		deleteScale.setVisible(true);
+		deleteScale.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+
+				String name = JOptionPane.showInputDialog("Enter the name of the scale you wish to delete:   ");
+				System.out.println(name);
+				if (name != null && !name.trim().equals(""))
+				{
+					 System.out.println("hey");
+			        GradeCalculator.deleteScale(name);
+				}
+				scales = GradeCalculator.getScales();
+				updateList();
+			}
+		});
+		
 		
 
 		addRowButton = new JButton("Add Row");
@@ -130,6 +152,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		buttonPane = new JPanel();
 		buttonPane.setLayout(new FlowLayout());
 		buttonPane.add(newScaleButton);
+		buttonPane.add(deleteScale);
 		buttonPane.add(addRowButton);
 		
 	}
