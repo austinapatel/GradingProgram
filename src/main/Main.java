@@ -9,6 +9,7 @@ package main;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
 
 import database.DatabaseManager;
 import database.TableProperties;
@@ -22,8 +23,9 @@ import visuals.Interface;
 
 import javax.swing.UIManager.*;
 
+import com.alee.laf.WebLookAndFeel;
 
-    // If Nimbus is not available, you can set the GUI to another look and feel.
+
 
 
 /**
@@ -58,14 +60,32 @@ public class Main {
 
     private static void startInterface() {
 
+    	
+    	//WebLookAndFeel.install();
+    	
+
+    	    try 
+    	    {
+    	      UIManager.setLookAndFeel(new SyntheticaStandardLookAndFeel());
+    	    } 
+    	    catch (Exception e) 
+    	    {
+    	      e.printStackTrace();
+    	    }
+    	    
+//          try {
+//          UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
+//      } catch (Exception e) {
+//          e.printStackTrace();
+//      }
+    	
+    	
+    	
+    	
     	Main.setUpTables();
         new Interface();
         
-        try {
-            UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         
         //Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83}, {"B-", 80}, {"C+", 78},
         //		{"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
