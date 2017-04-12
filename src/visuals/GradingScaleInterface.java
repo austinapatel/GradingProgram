@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.DataInput;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -176,7 +177,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			int index = getLetterGradeIndex(data[i][0].toString());
 			if (index == -1) {
 				if (i == 0) {
-					data[i][0] = template[0][0]; // A+
+					data[i][0] = template[0][0];// A+
 				} else {
 
 					try {
@@ -212,7 +213,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 					 formatData(data);
 
 				}
-				System.out.println("HEY");
 			}
 		}
 
@@ -221,10 +221,68 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			
 			
 		}
-		return data;
+		return formatNumbers(data);
 
 	}
+	
+	
+	private Object[][] formatNumbers(Object[][] data)
+	{
+		for (int i =0; i < data.length; i++)
+		{
+			
+			try
+			{
+				double number = Double.parseDouble(data[i][1].toString());
+				
+				if (number == 0 && i < data.length -1)
+					data[i][1] = template[getLetterGradeIndex(data[i][0].toString())][1];
 
+
+			}
+			catch (Exception e)
+			{
+				data[i][1] = template[getLetterGradeIndex(data[i][0].toString())][1];
+			}
+		}
+		
+		for (int i =0; i < data.length; i++)
+		{
+			try
+			{
+				double number = Double.parseDouble(data[i][1].toString());
+				
+				if (i != 0 && number >= Double.parseDouble(data[i -1][1].toString()))
+				{	
+					data[i][1] = (Double.parseDouble(data[i -1][1].toString()) - 1);
+					
+					if (Double.parseDouble(data[i][1].toString()) < 0)
+					{
+						for (int j = 0; j <= i; j++)
+						{
+							try
+							{
+								data[j][1]= Double.parseDouble(data[j][1].toString()) +1;
+							}
+							catch(Exception e)
+							{
+								
+							}
+						}
+					}
+					
+					
+				}
+
+			}
+			catch (Exception e)
+			{
+				data[i][1] = template[getLetterGradeIndex(data[i][0].toString())][1];
+			}
+		}
+		return data;
+	}
+	
 	private void initList() {
 		listModel = new DefaultListModel();
 		scaleList = new JList(listModel);
@@ -372,6 +430,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 			}
 		}
+		letterTable.setValueAt("0", letterTable.getRowCount() - 1, letterTable.getColumnCount() - 1);
 		open = true;
 		// updateList();
 	}
@@ -442,12 +501,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				data[row][1] = letterTable.getValueAt(row, letterTable.getColumnCount() - 1);
 			}
 			data = formatData(data);
-			
-			
-			for (Object[] temp : data)
-			{
-				System.out.println(temp[0]);
-			}
 
 			openScale.update(data);
 			// System.out.println("Table was opened!!!!!!!!!");
