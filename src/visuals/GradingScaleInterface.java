@@ -145,9 +145,14 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				try {
 
 					if (letterTable.getRowCount() < rows) {
-						tableModel.insertRow(letterTable.getSelectedRow(), new String[] { "0", "0", "0", "0", "0" });
+						{
+						if (letterTable.getSelectedRow() != -1 && letterTable.getSelectedRow() != 0)
+							tableModel.insertRow(letterTable.getSelectedRow(), new String[] { "0", "0", "0", "0", "0" });
+					
+						}
 
 					}
+						
 				} catch (Exception ep) {
 
 				}
