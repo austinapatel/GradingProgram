@@ -65,6 +65,6 @@ public class UpdateDatabaseItemRunnable implements Runnable
 
 			e.printStackTrace();
 		}
-		System.out.println("done");
+		//System.out.println("done");
 	}
 }

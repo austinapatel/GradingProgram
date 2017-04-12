@@ -18,6 +18,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -102,7 +103,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			public void actionPerformed(ActionEvent e) {
 
 				String name = JOptionPane.showInputDialog("Enter the name for the new scale:   ");
-				System.out.println(name);
 				if (name != null && !name.trim().equals("")) {
 
 					Object[][] obj = { { "A+", 99.9 }, { "A", 95 }, { "A-", 90 }, { "B+", 88 }, { "B", 83 },
@@ -127,9 +127,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			public void actionPerformed(ActionEvent e) {
 
 				String name = JOptionPane.showInputDialog("Enter the name of the scale you wish to delete:   ");
-				System.out.println(name);
 				if (name != null && !name.trim().equals("")) {
-					System.out.println("hey");
 					GradeCalculator.deleteScale(name.trim());
 				}
 				scales = GradeCalculator.getScales();
@@ -141,22 +139,16 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		addRowButton.setFont(new Font("Helvetica", Font.BOLD, 14));
 		addRowButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) 
-			{
+			public void actionPerformed(ActionEvent e) {
 
-				try
-				{
-					
-				
-				if (letterTable.getRowCount() < rows)
-				{
-					tableModel.insertRow(letterTable.getSelectedRow(), new String[] { "0", "0", "0", "0", "0" });
+				try {
 
-				}
-				}
-				catch(Exception ep)
-				{
-					
+					if (letterTable.getRowCount() < rows) {
+						tableModel.insertRow(letterTable.getSelectedRow(), new String[] { "0", "0", "0", "0", "0" });
+
+					}
+				} catch (Exception ep) {
+
 				}
 			}
 
@@ -169,94 +161,70 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		buttonPane.add(addRowButton);
 	}
 
-	
-	private int getLetterGradeIndex(String grade)
-	{
-		
-		for (int i = 0; i < template.length; i ++)
-		{
+	private int getLetterGradeIndex(String grade) {
+
+		for (int i = 0; i < template.length; i++) {
 			if (template[i][0].toString().equals(grade))
 				return i;
 		}
 		return -1;
 	}
-	
 
-	
-	private void formatData(Object[][] data)
-	{
-		
-		for (int i = 0; i < data.length; i++)
-		{
+	private Object[][] formatData(Object[][] data) {
+
+		for (int i = 0; i < data.length; i++) {
 			int index = getLetterGradeIndex(data[i][0].toString());
-			if (index == -1)
-			{
-				if (i == 0)
-				{
+			if (index == -1) {
+				if (i == 0) {
 					data[i][0] = template[0][0]; // A+
+				} else {
+
+					try {
+
+						int pindex = getLetterGradeIndex(data[i - 1][0].toString());
+						data[i][0] = template[pindex + 1][0];
+					} catch (Exception e) {
+
+					}
+
 				}
-				else
-				{
-					
-					try
-					{
-						
-					
-					int pindex = getLetterGradeIndex(data[i -1][0].toString());
+
+			} else if (i != 0 && data[i][0].toString().equals(data[i - 1][0].toString())) {
+
+				try {
+					int pindex = getLetterGradeIndex(data[i - 1][0].toString());
 					data[i][0] = template[pindex + 1][0];
-					}
-					catch (Exception e)
-					{
-						
-					}
-					
+				} catch (Exception e) {
+
 				}
-					
-			}
-			else if (i !=0 && data[i][0].toString().equals(data[i -1][0].toString()))
-			{
-				
-				try
-				{
-				int pindex = getLetterGradeIndex(data[i -1][0].toString());
-				data[i][0] = template[pindex + 1][0];
-				}
-				catch (Exception e)
-				{
-					
-				}
-			}
-			else if (i !=0 && i < data.length -1)
-			{
-				
-				try
-				{
-				int currIndex = getLetterGradeIndex(data[i][0].toString());
+			} else if (i != 0 && i < data.length - 1) {
+
 				int pastIndex = getLetterGradeIndex(data[i - 1][0].toString());
-		
-				if (currIndex <= pastIndex)
-				{
-					data[i][0] = template[pastIndex + 1][0];
+				try {
+					int currIndex = getLetterGradeIndex(data[i][0].toString());
+
+					if (currIndex <= pastIndex) {
+						data[i][0] = template[pastIndex + 1][0];
+					}
+				} catch (Exception e) {
+					data[i][0] = template[pastIndex][0];
+					data[i - 1][0] = template[pastIndex - 1][0];
+					 formatData(data);
+
 				}
-				}
-				catch(Exception e)
-				{
-					
-				}
-				
-				
+				System.out.println("HEY");
 			}
-	
+		}
+
+		while (data[data.length - 2][0].toString().equals("F")) {
+			data = Arrays.copyOf(data, data.length - 1);
+			
 			
 		}
-		
-		
-		
+		return data;
+
 	}
-	
-	
-	
-	
+
 	private void initList() {
 		listModel = new DefaultListModel();
 		scaleList = new JList(listModel);
@@ -386,7 +354,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			}
 		}
 
-		System.out.println(data.length());
 		clearTable();
 		createRows(data.length());
 		initValues();
@@ -406,7 +373,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			}
 		}
 		open = true;
-		System.out.println("Table was opened!!!!!!!!!");
 		// updateList();
 	}
 
@@ -475,7 +441,14 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				data[row][0] = letterTable.getValueAt(row, 0);
 				data[row][1] = letterTable.getValueAt(row, letterTable.getColumnCount() - 1);
 			}
-			formatData(data);
+			data = formatData(data);
+			
+			
+			for (Object[] temp : data)
+			{
+				System.out.println(temp[0]);
+			}
+
 			openScale.update(data);
 			// System.out.println("Table was opened!!!!!!!!!");
 			openScale();
@@ -527,24 +500,32 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		}
 	}
 
+	public void deleteRow() {
+
+		if (letterTable.getSelectedRow() != -1 && letterTable.getRowCount() > minCols) {
+			int selectedRow = letterTable.getSelectedRow();
+			int selectedColumn = letterTable.getSelectedColumn();
+
+			tableModel.removeRow(letterTable.getSelectedRow());
+
+			if (selectedRow == 0)
+				selectedRow = 1;
+
+			letterTable.changeSelection(selectedRow - 1, selectedColumn, false, false);
+		}
+	}
+
+	public void deleteRow(int index) {
+		tableModel.removeRow(index);
+	}
+
 	@Override
 	public void keyReleased(KeyEvent key) {
 		// TODO Auto-generated method stub
 
 		if (key.getKeyCode() == KeyEvent.VK_CONTROL && open) {
 
-			if (letterTable.getSelectedRow() != -1 && letterTable.getRowCount() > minCols) {
-				int selectedRow = letterTable.getSelectedRow();
-				int selectedColumn = letterTable.getSelectedColumn();
-				System.out.println("Selected Row: " + selectedRow);
-
-				tableModel.removeRow(letterTable.getSelectedRow());
-
-				if (selectedRow == 0)
-					selectedRow = 1;
-
-				letterTable.changeSelection(selectedRow - 1, selectedColumn, false, false);
-			}
+			deleteRow();
 		}
 	}
 
