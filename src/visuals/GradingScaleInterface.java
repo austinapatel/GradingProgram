@@ -191,7 +191,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 								letterTable.changeSelection(1, letterTable.getSelectedColumn(), false, false);
 						
 						
-							tableModel.insertRow(letterTable.getSelectedRow() -1, new String[] {"::::", "0", "0", "0", "0" });
+							tableModel.insertRow(letterTable.getSelectedRow(), new String[] {"::::", "0", "0", "0", letterTable.getValueAt(letterTable.getSelectedRow(), letterTable.getColumnCount() -1).toString() });
 							open = true;
 							letterTable.setValueAt("0", letterTable.getRowCount() -1, letterTable.getColumnCount() -1);
 						}
