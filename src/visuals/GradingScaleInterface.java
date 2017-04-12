@@ -103,7 +103,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String name = JOptionPane.showInputDialog("Enter the name for the new scale:   ");
+				String name = JOptionPane.showInputDialog(this,"Enter the name for the new scale:   ");
 				if (name != null && !name.trim().equals("")) {
 
 					Object[][] obj = { { "A+", 99.9 }, { "A", 95 }, { "A-", 90 }, { "B+", 88 }, { "B", 83 },
@@ -127,7 +127,19 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String name = JOptionPane.showInputDialog("Enter the name of the scale you wish to delete:   ");
+				String temp = "";
+				
+				try
+				{
+				if (scaleList.getSelectedValue().toString() != null)
+					temp = scaleList.getSelectedValue().toString();
+				}
+				catch (Exception eo)
+				{
+					
+				}
+				
+				String name = JOptionPane.showInputDialog("Enter the name of the scale you wish to delete:   ", temp);
 				if (name != null && !name.trim().equals("")) {
 					GradeCalculator.deleteScale(name.trim());
 				}
