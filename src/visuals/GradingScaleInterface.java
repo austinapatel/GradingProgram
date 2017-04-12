@@ -442,6 +442,16 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	}
 
 	private void openScale() {
+		
+		if (scaleList.isSelectionEmpty())
+		{
+			clearTable();
+			return;
+		}
+		
+		
+		
+		
 		scales = GradeCalculator.getScales();
 		open = false;
 		String name = (String) listModel.getElementAt(scaleList.getSelectedIndex());
