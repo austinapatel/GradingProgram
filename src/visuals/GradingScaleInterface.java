@@ -178,9 +178,24 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 					if (letterTable.getRowCount() < rows) {
 						{
-						if (letterTable.getSelectedRow() != -1 && letterTable.getSelectedRow() != 0)
-							tableModel.insertRow(letterTable.getSelectedRow(), new String[] { "0", "0", "0", "0", "0" });
-					
+							
+						
+						
+						if (letterTable.getSelectedRow() != -1)
+							
+						{	
+				
+							open = false;
+							
+							if (letterTable.getSelectedRow() == 0)
+								letterTable.changeSelection(1, letterTable.getSelectedColumn(), false, false);
+						
+						
+							tableModel.insertRow(letterTable.getSelectedRow() -1, new String[] {"::::", "0", "0", "0", "0" });
+							open = true;
+							letterTable.setValueAt("0", letterTable.getRowCount() -1, letterTable.getColumnCount() -1);
+						}
+						
 						}
 
 					}
@@ -218,11 +233,11 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				} else {
 
 					try {
-
+						System.out.println("we tried bro");
 						int pindex = getLetterGradeIndex(data[i - 1][0].toString());
 						data[i][0] = template[pindex + 1][0];
 					} catch (Exception e) {
-
+						e.printStackTrace();
 					}
 
 				}
@@ -252,6 +267,14 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				}
 			}
 		}
+		
+		
+		
+		for (Object[] temp: data)
+		{
+			System.out.println(temp[0].toString() + temp[1].toString());
+		}
+		
 
 		while (data[data.length - 2][0].toString().equals("F")) {
 			data = Arrays.copyOf(data, data.length - 1);
@@ -553,6 +576,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			for (int row = 0; row < rowNum; row++) {
 				data[row][0] = letterTable.getValueAt(row, 0);
 				data[row][1] = letterTable.getValueAt(row, letterTable.getColumnCount() - 1);
+				System.out.println(data[row][1].toString() + data[row][0].toString());
 			}
 			data = formatData(data);
 
