@@ -91,8 +91,21 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 		letterTable.setShowHorizontalLines(true);
 		letterTable.setShowVerticalLines(true);
+		initScale();
 	}
+	
 
+	private void initScale()
+	{
+		scaleList.setSelectedIndex(0);
+		if (!scaleList.isSelectionEmpty())
+		{
+			clearTable();
+			openScale();
+		}
+	}
+		
+	
 	private void initButtons() {
 		newScaleButton = new JButton("Create new scale");
 		newScaleButton.setFont(new Font("Helvetica", Font.BOLD, 14));
@@ -103,7 +116,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String name = JOptionPane.showInputDialog(this,"Enter the name for the new scale:   ");
+				String name = JOptionPane.showInputDialog("Enter the name for the new scale:   ");
 				if (name != null && !name.trim().equals("")) {
 
 					Object[][] obj = { { "A+", 99.9 }, { "A", 95 }, { "A-", 90 }, { "B+", 88 }, { "B", 83 },
@@ -113,7 +126,11 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 					new GradingScale(name, obj);
 					scales = GradeCalculator.getScales();
 					updateList();
-
+					
+					scaleList.setSelectedIndex(scaleList.getLastVisibleIndex());
+					clearTable();
+					openScale();
+					
 				}
 			}
 		});
@@ -141,7 +158,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				
 				String name = JOptionPane.showInputDialog("Enter the name of the scale you wish to delete:   ", temp);
 				if (name != null && !name.trim().equals("")) {
-					GradeCalculator.deleteScale(name.trim());
+					GradeCalculator.deleteScale(name);
 				}
 				scales = GradeCalculator.getScales();
 				updateList();
@@ -252,8 +269,10 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			{
 				double number = Double.parseDouble(data[i][1].toString());
 				
-				if (number == 0 && i < data.length -1)
+				if (number <= 0 && i < data.length -1)
 					data[i][1] = template[getLetterGradeIndex(data[i][0].toString())][1];
+//				else if (number > 100)
+//					data[i][1] = 100;
 
 
 			}
@@ -273,22 +292,27 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				{	
 					data[i][1] = (Double.parseDouble(data[i -1][1].toString()) - 1);
 					
-					if (Double.parseDouble(data[i][1].toString()) < 0)
+					
+					
+					
+				}
+				
+				if (Double.parseDouble(data[i][1].toString()) < 0)
+				{
+					while((Double.parseDouble(data[i][1].toString()) < 0))
 					{
-						for (int j = 0; j <= i; j++)
+					for (int j = 0; j <= i; j++)
+					{
+						try
 						{
-							try
-							{
-								data[j][1]= Double.parseDouble(data[j][1].toString()) +1;
-							}
-							catch(Exception e)
-							{
-								
-							}
+							data[j][1]= Double.parseDouble(data[j][1].toString()) +1;
+						}
+						catch(Exception e)
+						{
+							
 						}
 					}
-					
-					
+					}
 				}
 
 			}
@@ -413,6 +437,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			});
 
 			initValues();
+			
 		}
 	}
 
@@ -495,6 +520,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
 
+		System.out.println(scaleList.getSelectedIndex());
 		if (open) {
 
 			int rowNum = 0;
