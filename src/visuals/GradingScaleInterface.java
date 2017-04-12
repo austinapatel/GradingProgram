@@ -519,8 +519,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
-
-		System.out.println(scaleList.getSelectedIndex());
 		if (open) {
 
 			int rowNum = 0;
