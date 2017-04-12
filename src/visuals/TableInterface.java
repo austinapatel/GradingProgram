@@ -4,10 +4,7 @@
 
 package visuals;
 
-import database.DatabaseCellEditor;
-import database.DatabaseTableModel;
-import database.Table;
-import database.TableManager;
+import database.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -82,7 +79,6 @@ public class TableInterface extends JPanel implements Tab {
                 addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-
                         try {
                             MessageFormat header = new MessageFormat(
                                     jTable.getTableHeader()
@@ -238,7 +234,7 @@ public class TableInterface extends JPanel implements Tab {
         isLocked = false;
 
         int idValue = Integer.class
-                .cast(databaseTableModel.getValueAt(selectedRow, 0)).intValue();
+                .cast(databaseTableModel.getValueAt(selectedRow, 0));
 
         tableList.setEnabled(true);
         tableList.requestFocus();
@@ -259,6 +255,7 @@ public class TableInterface extends JPanel implements Tab {
     /** Initializes a JTable (and its container) and the table model. */
     private void initTable() {
         TableInterface thisTableInterface = this;
+
         jTable = new JTable() {
 
             public TableCellEditor getCellEditor(int row, int column) {
@@ -307,6 +304,9 @@ public class TableInterface extends JPanel implements Tab {
         databaseTableModel.fireTableStructureChanged();
 
         jTable.setModel(databaseTableModel);
+
+        for (int i = 0; i < jTable.getColumnCount(); i++)
+            jTable.getColumnModel().getColumn(i).setCellRenderer(new ColoredTableCellRenderer());
 
         // Hide the ID column
 //        jTable.getColumnModel().getColumn(0).setMinWidth(0);
