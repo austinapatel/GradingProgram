@@ -144,8 +144,10 @@ public class DatabaseManager
 		}
 	}
 
-	/** Adds a value of the correct type to a table row ResultSet. Move to correct row before usage.*/
-	public static void addToRow(Table table, Object value, int columnIndex)
+    /**
+     * Adds a value of the correct type to a table row ResultSet.
+     */
+    public static void addToRow(Table table, Object value, int columnIndex)
 	{
 		DataType type = DatabaseManager.getSQLType(table.getTableColumns()[columnIndex].getType());
 		ResultSet resultSet = table.getResultSet();
@@ -164,18 +166,21 @@ public class DatabaseManager
 			else if (type == DataType.Integer)
 			{
 				if (value == null)
-					value = 0;
+                    value = 0;
 
-				resultSet.updateInt(columnIndex, Integer.class.cast(value));
-			} else if (type == DataType.Double) {
+                if (resultSet == null)
+                    System.out.println("result set is null");
+
+                Integer newValue = Integer.class.cast(value);
+
+                resultSet.updateInt(columnIndex, newValue);
+            } else if (type == DataType.Double) {
 				if (value == null)
 					value = 0d;
 
 				resultSet.updateDouble(columnIndex, Double.class.cast(value));
-			}
-		}
-		catch (SQLException e)
-		{
+            }
+        } catch (Exception e) {
 			System.out.println("Unable to add value " + value.toString() + " to " + table.getName() + " Column index: " + columnIndex + " Column Name: " + table.getTableColumns()[columnIndex].getName() + ".");
 		}
 

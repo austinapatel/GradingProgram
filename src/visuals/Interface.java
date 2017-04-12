@@ -6,9 +6,6 @@
 
 package visuals;
 
-import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
-import grading.GradingScaleInterface;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -19,9 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Set;
-import javax.swing.UIManager.*;
 
 
 /**

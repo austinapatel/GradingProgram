@@ -1,5 +1,8 @@
-package grading;
+package visuals;
 
+import grading.GradeCalculator;
+import grading.GradingScale;
+import grading.GradingScaleTableModel;
 import visuals.Tab;
 
 import java.awt.BorderLayout;
@@ -175,8 +178,8 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		listModel = new DefaultListModel();
 		scaleList = new JList(listModel);
 		scaleList.setBackground(getBackground());
-		scaleList.setBorder(compound);
-		scales = GradeCalculator.getScales();
+//		scaleList.setBorder(compound);
+        scales = GradeCalculator.getScales();
 		scaleList.addKeyListener(this);
 		scaleList.setFont(new Font("Helvetica", Font.BOLD, 15));
 
@@ -270,7 +273,8 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		letterTable.setFont(new Font("Helvetica", Font.PLAIN, 20));
 		letterTable.setRowHeight(rowHeight);
 		letterTable.setBorder(compound);
-		//letterTable.setBackground(getBackground());
+        letterTable.setBackground(getBackground());
+        //letterTable.setBackground(getBackground());
 		//letterTable.setFont(new Font("Arial", Font.PLAIN, 18));
 		letterTable.getTableHeader().setReorderingAllowed(false);
 	//	letterTable.set

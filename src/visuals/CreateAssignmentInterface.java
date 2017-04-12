@@ -5,6 +5,8 @@
 package visuals;
 
 import database.TableProperties;
+import swingmaterial.MaterialButton;
+import swingmaterial.MaterialPanel;
 
 import javax.swing.*;
 
@@ -18,6 +20,7 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
 
     private JTextField txtName, txtPointValue;
     private JPanel contentPanel;
+    private JButton createButton;
 
     public CreateAssignmentInterface() {
         initPanel();
@@ -58,6 +61,10 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
         categoryJTable.setPreferredScrollableViewportSize(categoryJTable.getPreferredSize());
         JScrollPane categoryScrollPane = new JScrollPane(categoryJTable);
         contentPanel.add(categoryScrollPane);
+
+        createButton = new JButton();
+        createButton.setText("Create");
+        wrapInJPanel(createButton);
     }
 
     private void wrapInJPanel(JComponent component) {

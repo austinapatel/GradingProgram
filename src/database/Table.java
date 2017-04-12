@@ -95,9 +95,10 @@ public class Table
 	 */
 	public void addRow() {
 
+		int desiredRowID = getInsertID();
 		DatabaseManager.beginRowInsert(this);
 
-		DatabaseManager.addToRow(this, getInsertID(), 0);
+		DatabaseManager.addToRow(this, desiredRowID, 0);
 
 		for (int i = 1; i < tableColumns.length; i++)
 			DatabaseManager.addToRow(this, null, i);
@@ -107,6 +108,8 @@ public class Table
 
 	private int getInsertID() {
 		ArrayList<Integer> currentIDs = DataTypeManager.toIntegerArrayList(getAllFromColumn(tableColumns[0].getName()));
+
+//		resultSet.first();
 
 		int largest = 0;
 		for (int i : currentIDs)
@@ -161,8 +164,10 @@ public class Table
 		try {
 			resultSet.beforeFirst();
 
-			if (!resultSet.next()) // Checks if ResultSet is empty
+			if (!resultSet.next()) { // Checks if ResultSet is empty
+				resultSet.beforeFirst();
 				return data;
+			}
 
 			resultSet.first();
 

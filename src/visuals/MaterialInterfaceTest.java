@@ -19,23 +19,36 @@ public class MaterialInterfaceTest extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800,800);
         setLocationRelativeTo(null);
-//        getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 //        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+//        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+//        setLayout(new FlowLayout());
 
-        add(new JLabel("Test"));
-        add(new MaterialButton("Button"));
-        add(new MaterialButton("Button"));
-        add(new MaterialButton("Button"));
-        add(new MaterialButton("Button"));
-        add(new MaterialButton("Button"));
-        add(new MaterialButton("Button"));
-        add(new MaterialButton("Button"));
+//        setLayout(new BorderLayout());
 
-        MaterialTextField textField = new MaterialTextField();
-        textField.setLabel("test");
-        add(textField);
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new GridBagLayout());
 
-//        MaterialComboBox<String> comboBox = new MaterialComboBox<>();
+        contentPanel.add(new JLabel("Testiasdfasdfasdfasdfasdfasdfasdfasdfasdf"));
+//        add(new MaterialButton("Button"));
+//        add(new MaterialButton("Button"));
+        contentPanel.add(new MaterialButton("Button"));
+//        add(new MaterialButton("Button"));
+//        add(new MaterialButton("Button"));
+//        add(new MaterialButton("Button"));
+//        add(new MaterialButton("Button"));
+
+//        MaterialTextField textField = new MaterialTextField();
+//        textField.setLabel("test");
+//        add(textField);
+
+        JTextField jTextField = new JTextField();
+        jTextField.setText("test");
+//        jTextField.setMaximumSize(jTextField.getPreferredSize());
+//        jTextField.setPreferredSize(jTextField.getMaximumSize());
+        contentPanel.add(jTextField);
+
+//
+//        JComboBox<String> comboBox = new JComboBox<>();
 //        DefaultComboBoxModel<String> comboBoxModel = (DefaultComboBoxModel<String>) comboBox.getModel();
 //        comboBoxModel.addElement("1");
 //        comboBoxModel.addElement("2");
@@ -43,6 +56,7 @@ public class MaterialInterfaceTest extends JFrame {
 //        comboBox.setMaximumSize(getPreferredSize());
 //        add(comboBox);
 
+        add(contentPanel, BorderLayout.CENTER);
         setVisible(true);
     }
 }
