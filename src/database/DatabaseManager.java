@@ -145,6 +145,60 @@ public class DatabaseManager
 		return null;
 	}
 
+	public static ResultSet getTripleJoinedTable(String table1Name, String table2Name, String table3Name, String[][] tableAndColumnNames, String table1JoinColumn, String table2JoinColumn, String table1SecondJoinColumn, String table3JoinColumn, String tableNameAndFilter, String filterValue)
+	{
+					
+		//SELECT Grades.studentId, Grades.points, Assignments.value, Students.firstname, Students.lastname From Grades
+		//Join Students On Grades.studentId = Students.studentId
+		//Join Assignments On Grades.assignmentId = Assignments.assignmentId
+		//WHERE Assignments.courseId = "1"
+
+		String selection = "";
+		if (tableAndColumnNames.length > 1)
+		{
+		for (int i = 0; i < tableAndColumnNames.length; i++)
+		{
+			
+			for (int j = 1; j < tableAndColumnNames[i].length; j++)
+			{
+				selection += tableAndColumnNames[i][0] + "." + tableAndColumnNames[i][j];
+				
+				if (i != tableAndColumnNames.length -1)
+				{
+					selection += ", ";
+				}
+				else if (j != tableAndColumnNames[i].length - 1)
+				{
+					selection += ", ";
+				}
+			}
+			
+			selection += " ";
+		}
+		}
+		else
+			selection = tableAndColumnNames[0][0] + "." + tableAndColumnNames[0][1];
+		
+		System.out.println(selection);
+		try
+		{
+			String sql = "SELECT " + selection + " FROM " + table1Name + " JOIN " 
+		+ table2Name + " ON " + table1Name + "." + table1JoinColumn + " = " 
+					+ table2Name + "." + table2JoinColumn + " JOIN " + table3Name + " ON " 
+		+ table1Name + "." + table1SecondJoinColumn + " = " + table3Name + "." + table3JoinColumn + " WHERE " + tableNameAndFilter + " = " + '\"' + filterValue + '\"';
+			
+			System.out.println(sql);
+			
+			return DatabaseManager.getSQLStatement(sql).executeQuery();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+
+		return null;
+	}
+
 	/** Gets a table ready to be inserted into. */
 	public static void beginRowInsert(Table table)
 	{

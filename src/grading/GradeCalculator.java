@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.DataTypeManager;
+import database.DatabaseManager;
 import database.Table;
 import database.TableManager;
 import database.TableProperties;
@@ -49,12 +50,16 @@ public class GradeCalculator
 	
 	
 	
-	public static void calculateGrades(int courseId, GradingScale scale, String dateRange)
-	{
-		
-		
-		
-		
+	public static ResultSet getGrades(String courseId)
+	{	
+//		return  DatabaseManager.getJoinedTable(TableProperties.GRADES_TABLE_NAME, 
+//				TableProperties.ASSIGNMENTS_TABLE_NAME, new String[] {TableProperties.GRADES_TABLE_NAME + "." + 
+//		TableProperties.STUDENT_ID, TableProperties.GRADES_TABLE_NAME + "." + TableProperties.GRADE_VALUE,
+//		TableProperties.ASSIGNMENTS_TABLE_NAME + "." + TableProperties.ASSIGNMENTS_VALUE}, 
+//				TableProperties.ASSIGNMENT_ID, TableProperties.ASSIGNMENT_ID, 
+//				TableProperties.ASSIGNMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, courseId);
+
+		return DatabaseManager.getTripleJoinedTable(TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENTS_TABLE_NAME, TableProperties.ASSIGNMENTS_TABLE_NAME, new String[][] {{TableProperties.STUDENTS_TABLE_NAME, TableProperties.FIRST_NAME, TableProperties.LAST_NAME},{TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENT_ID, TableProperties.GRADE_VALUE} , {TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.ASSIGNMENTS_VALUE}}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ASSIGNMENT_ID, TableProperties.ASSIGNMENT_ID, TableProperties.ASSIGNMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, courseId);
 		
 		
 		
@@ -62,17 +67,5 @@ public class GradeCalculator
 		
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

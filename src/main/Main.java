@@ -164,7 +164,7 @@ public class Main  {
                 new TableColumn(TableProperties.ASSIGNMENT_DATE, "DATE NOT NULL", null),
                     
 
-                new TableColumn(TableProperties.VALUE, "INT NOT NULL",
+                new TableColumn(TableProperties.ASSIGNMENTS_VALUE, "INT NOT NULL",
                         new ValueParameter() {
                             {
                                 setValueRange(0, Integer.MAX_VALUE);

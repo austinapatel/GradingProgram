@@ -43,7 +43,7 @@ public class TableProperties
 	// Assignments
 	public static String ASSIGNMENT_ID = "assignmentId";
 	public static String ASSIGNMENTS_TABLE_NAME = "Assignments";
-	public static String VALUE = "value";
+	public static String ASSIGNMENTS_VALUE = "value";
 	public static String ASSIGNMENT_DATE = "assignmentDate";
 	// Also uses same "name" field of the "Courses" table
 
