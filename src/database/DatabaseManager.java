@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import database.TableColumn.DataType;
 
@@ -217,6 +218,15 @@ public class DatabaseManager
 
 				resultSet.updateDouble(columnIndex, Double.class.cast(value));
             }
+            else if (type == DataType.Date)
+            {
+				if (value == null)
+					value = 0;
+				resultSet.updateDate(columnIndex,  new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+            }
+			
+			
+			
         } catch (Exception e) {
 			System.out.println("Unable to add value " + value.toString() + " to " + table.getName() + " Column index: " + columnIndex + " Column Name: " + table.getTableColumns()[columnIndex].getName() + ".");
 		}
@@ -235,6 +245,8 @@ public class DatabaseManager
 			return DataType.Integer;
 		else if (name.contains("DOUBLE"))
 			return DataType.Double;
+		else if (name.contains("DATE"))
+			return DataType.Date;
 		else
 			return null;
 	}

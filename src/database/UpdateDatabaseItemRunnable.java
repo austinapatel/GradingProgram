@@ -55,6 +55,10 @@ public class UpdateDatabaseItemRunnable implements Runnable
 				double doubleVal = Double.parseDouble(newValue.toString());
 				resultSet.updateDouble(columnIndex, doubleVal);
 			}
+			else if (dataType == DataType.Date)
+			{
+				resultSet.updateDate(columnIndex, java.sql.Date.valueOf(newValue.toString()));
+			}
 			else
 				throw new Exception("DataType not handled (UpdateDatabaseItemRunnabale.java)");
 

@@ -45,4 +45,34 @@ public class GradeCalculator
 		System.out.println(table.deleteRow(name, table.getColumnIndex(TableProperties.SCALE_DESCRIPTION) + 1));
 
 	}
+	
+	
+	
+	
+	public static void calculateGrades(int courseId, GradingScale scale, String dateRange)
+	{
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

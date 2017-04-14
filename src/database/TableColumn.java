@@ -16,7 +16,7 @@ public class TableColumn
 
 	public enum DataType
 	{
-		String, Integer, Double
+		String, Integer, Double, Date
 	}
 
 	public TableColumn(String name, String type, ValueParameter valueParameter)

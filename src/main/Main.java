@@ -160,6 +160,9 @@ public class Main  {
                                 setValueRange(0, Integer.MAX_VALUE);
                             }
                         }),
+                
+                new TableColumn(TableProperties.ASSIGNMENT_DATE, "DATE NOT NULL", null),
+                    
 
                 new TableColumn(TableProperties.VALUE, "INT NOT NULL",
                         new ValueParameter() {
