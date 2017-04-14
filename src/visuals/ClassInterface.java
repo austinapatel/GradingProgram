@@ -26,7 +26,7 @@ public class ClassInterface extends JPanel implements Tab
 
 	private JButton backButton;
 	private DatabaseJTable table;
-	private JScrollPane tablePane;
+	private JScrollPane tablePane, tablePane2;
 	
 	
 	public ClassInterface() 
@@ -38,21 +38,21 @@ public class ClassInterface extends JPanel implements Tab
 
 	private void initButton()
 	{
-		backButton = new JButton("Create new scale");
+		backButton = new JButton("Back");
 		backButton.setFont(new Font("Helvetica", Font.BOLD, 14));
 		// backButton.setForeground(Color.BLUE);
-		backButton.setText("TEST");
 		backButton.setFocusable(false);
-		backButton.setVisible(false);
-		//backButton.setVisible(false);
+		backButton.setVisible(true);
 		
 		backButton.addActionListener(new ActionListener() 
 		{
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				backButton.setVisible(false);
-				tablePane.setVisible(true);
+				
+			remove(tablePane2);
+			add(tablePane);
+			remove(backButton);
 			}
 			
 		});
@@ -70,11 +70,12 @@ public class ClassInterface extends JPanel implements Tab
 		    	DatabaseJTable table2 =(DatabaseJTable) me.getSource();
 		        Point p = me.getPoint();
 		        int row = table2.rowAtPoint(p);
-		        if (me.getClickCount() == 2) {
+		        if (me.getClickCount() == 2)
+		        {
 		        	{	
-		        	tablePane.setVisible(false);
-		        	backButton.setVisible(true);
+		        	
 		        	displayClass();
+		        	
 		        	}
 		        }
 		    }
@@ -87,11 +88,15 @@ public class ClassInterface extends JPanel implements Tab
 	{
 		
 		ResultSet joinedResultSet = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[] {TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, "1");
-	
-		Table table = new Table("test join table", joinedResultSet);
+		Table table2 = new Table("test join table", joinedResultSet);
+		DatabaseJTable jTable = new DatabaseJTable(table2);
 		
-		DatabaseJTable jTable = new DatabaseJTable(table);
-		add(new JScrollPane(jTable));
+		remove(tablePane);
+		this.revalidate();
+		add(backButton);
+		tablePane2  = new JScrollPane(jTable);
+		add(tablePane2);
+		this.repaint();
 		
 		
 		///SELECT * FROM Students JOIN Enrollments ON Students.studentId = Enrollments.studentId WHERE Enrollments.courseId = "1"
@@ -106,7 +111,6 @@ public class ClassInterface extends JPanel implements Tab
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.add(tablePane);
-		this.add(backButton);
 		this.setVisible(true);
 
 	}
