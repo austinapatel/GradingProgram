@@ -110,7 +110,7 @@ public class Main  {
                 new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL UNIQUE",
                         null),
                 new TableColumn(TableProperties.STUDENT_REDWOOD_ID,
-                        "INT NOT NULL", new ValueParameter() {
+                        "INT NOT NULL UNIQUE", new ValueParameter() {
                     {
                         setValueRange(1, Integer.MAX_VALUE);
                         setValueLengthRange(6, 6);
@@ -230,7 +230,6 @@ public class Main  {
                 new TableColumn(TableProperties.NAME, "VARCHAR(500) NOT NULL", null)};
 
         TableManager.addTable(new Table(database.TableProperties.SCALE_TABLE_NAME, gradingScaleTableColumns));
-
 
         TableManager.addTable(
                 new Table(TableProperties.STUDENTS_TABLE_NAME,

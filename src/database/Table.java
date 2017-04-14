@@ -8,8 +8,10 @@
 package database;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Lets tables utilize the operations in the DatabaseManager class and adds
@@ -22,16 +24,41 @@ public class Table
 	private TableColumn[] tableColumns;
 	private ResultSet resultSet;
 
-	public Table(Object name, TableColumn[] tableColumns)
+	public Table(String name, TableColumn[] tableColumns)
 	{
+		this.name = name;
+		init(name, tableColumns, DatabaseManager.getTable(this));
+		
+		createTable();
+	}
+	
+	public Table(String tableName, ResultSet resultSet) {
+		TableColumn[] tableColumns = null;
+		
+		try {
+			ResultSetMetaData metaData =  resultSet.getMetaData();
+			
+			tableColumns = new TableColumn[metaData.getColumnCount() ];
+			tableColumns[0] =  new TableColumn(metaData.getColumnName(1), metaData.getColumnTypeName(1), null);
+			for (int i = 1; i <= metaData.getColumnCount(); i++) {
+				tableColumns[i -1] = new TableColumn(metaData.getColumnName(i ), metaData.getColumnTypeName(i), null);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		init(tableName, tableColumns, resultSet);		
+	}
+	
+	private void init(String name, TableColumn[] tableColumns, ResultSet resultSet) {
 		this.tableColumns = tableColumns;
 
-		this.name = name.toString();
-		this.primaryKey = tableColumns[0].getName();
+		this.name = name;
+		this.primaryKey = tableColumns[0].getName();		
 
-		createTable();
+		
 
-		resultSet = DatabaseManager.getTable(this);
+		this.resultSet = resultSet;
 	}
 
 	/** Creates the table. */

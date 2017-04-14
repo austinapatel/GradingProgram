@@ -106,6 +106,43 @@ public class DatabaseManager
 
 		return null;
 	}
+	
+	
+	public static ResultSet getJoinedTable(String table1Name, String table2Name, String[] tableAndColumnNames, String table1JoinColumn, String table2JoinColumn, String tableNameAndFilter, String filterValue)
+	{
+						//table1        table2         table1.column       table2.column               table2 filter name  filter value
+		
+		String selection = "";
+		if (tableAndColumnNames.length > 1)
+		{
+		for (int i = 0; i < tableAndColumnNames.length -1; i++)
+		{
+			selection += tableAndColumnNames[i] + ", ";
+		}
+		selection += tableAndColumnNames[tableAndColumnNames.length -1];
+		}
+		else
+			selection = tableAndColumnNames[0];
+		
+		System.out.println(selection);
+		// SELECT * FROM Students JOIN Enrollments ON Students.studentId = Enrollments.studentId WHERE Enrollments.courseId = "1"
+		try
+		{
+			String sql = "SELECT " + selection + " FROM " + table1Name + " JOIN " 
+		+ table2Name + " ON " + table1Name + "." + table1JoinColumn + " = " 
+					+ table2Name + "." + table2JoinColumn + " WHERE " + tableNameAndFilter + " = " + '\"' + filterValue + '\"';
+			
+			System.out.println(sql);
+			
+			return DatabaseManager.getSQLStatement(sql).executeQuery();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+
+		return null;
+	}
 
 	/** Gets a table ready to be inserted into. */
 	public static void beginRowInsert(Table table)
@@ -269,7 +306,7 @@ public class DatabaseManager
 	/** Returns the mySQL prepared table given a command. */
 	public static PreparedStatement getSQLStatement(String mySQLCommand)
 	{
-
+		System.out.println(mySQLCommand);
 		try
 		{
 			return connection.prepareStatement(mySQLCommand);

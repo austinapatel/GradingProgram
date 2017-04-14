@@ -135,6 +135,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         tabs.add(new GradingScaleInterface());
         tabs.add(new CreateAssignmentInterface());
         tabs.add(new CreateClassInterface());
+        tabs.add(new ClassInterface());
 
         // Put half of the tabs on the left and half on the right
         for (int i = 0; i < tabs.size(); i++)
