@@ -48,7 +48,7 @@ public class ConsolePanel extends JPanel implements Tab
 		//add(new JScrollPane(textComponent));
 		MessageConsole mc = new MessageConsole(textComponent);
 		//mc.redirectOut();
-		mc.redirectOut(null, System.out);
+		mc.redirectOut(Color.GREEN, System.out);
 		mc.redirectErr(Color.RED, null);
 		mc.setMessageLines(100);
 		System.out.println("test");

@@ -61,8 +61,6 @@ public class MessageConsole
 	 */
 	public void redirectOut(Color textColor, PrintStream printStream)
 	{
-		
-		textColor = Color.GREEN;
 		ConsoleOutputStream cos = new ConsoleOutputStream(textColor, printStream);
 		System.setOut( new PrintStream(cos, true) );
 	}
