@@ -19,6 +19,7 @@ import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
 import database.DatabaseManager;
 import database.TableProperties;
 import database.ValueParameter;
+import grading.GradeCalculator;
 import grading.GradingScale;
 import database.Table;
 import database.TableColumn;
@@ -95,6 +96,8 @@ public class Main {
 		// {"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
 
 		// new GradingScale("100 Standard", obj);
+
+		GradeCalculator.getStudentGrades(1);
 	}
 
 	private static void setUpTables() {
@@ -127,17 +130,13 @@ public class Main {
 		TableColumn[] assignmentsTableColumns = new TableColumn[] {
 				new TableColumn(TableProperties.ASSIGNMENT_ID, "INT NOT NULL UNIQUE", null),
 
-				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL", new ValueParameter() {
-					{
-						addSelector(TableProperties.COURSES_TABLE_NAME, TableProperties.NAME);
-					}
-				}),
-
-				new TableColumn(TableProperties.CATEGORY_ID, "INT NOT NULL", new ValueParameter() {
-					{
-						setValueRange(0, Integer.MAX_VALUE);
-					}
-				}),
+				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL", null
+//						new ValueParameter() {
+//					{
+//						addSelector(TableProperties.COURSES_TABLE_NAME, TableProperties.NAME);
+//					}
+//				}
+				),
 
 				new TableColumn(TableProperties.ASSIGNMENT_DATE, "DATE NOT NULL", null),
 
@@ -165,12 +164,14 @@ public class Main {
 		TableColumn[] enrollmentsTableColumns = new TableColumn[] {
 				new TableColumn(TableProperties.ENROLLMENT_ID, "INT NOT NULL UNIQUE", null),
 				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL", null),
-				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", new ValueParameter() {
-					{
-						addSelector(TableProperties.STUDENTS_TABLE_NAME, TableProperties.FIRST_NAME,
-								TableProperties.LAST_NAME);
-					}
-				}) };
+				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", null
+//						new ValueParameter() {
+//					{
+//						addSelector(TableProperties.STUDENTS_TABLE_NAME, TableProperties.FIRST_NAME,
+//								TableProperties.LAST_NAME);
+//					}
+//				}
+				) };
 
 		TableColumn[] gradesTableColumns = new TableColumn[] {
 				new TableColumn(TableProperties.GRADE_ID, "INT NOT NULL UNIQUE", null),
