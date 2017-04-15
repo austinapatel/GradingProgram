@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class DatabaseManager
 ////			 DatabaseManager.deleteTable(TableProperties.COURSES_TABLE_NAME);
 ////			 DatabaseManager.deleteTable(TableProperties.STUDENTS_TABLE_NAME);
 //		}
+	
 
 	public static Connection getConnection() {
 		return connection;
@@ -87,6 +89,41 @@ public class DatabaseManager
 		return null;
 	
 	}
+	
+	
+	public static Object[][] ResultSetToObjectArray(ResultSet rs)
+	{
+
+		Object[][] rowData = null;
+		ResultSetMetaData data = null;
+		int columnCount = 0;
+		try {
+			data = rs.getMetaData();
+			columnCount = data.getColumnCount();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			rowData = new Object[columnCount][((Object[])rs.getArray(1).getArray()).length];
+			for (int i =0; i < columnCount; i++)
+			{
+				try 
+				{
+					rowData[i] = (Object[]) rs.getArray(i + 1).getArray();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rowData;
+	}
+	
+	
 	
 	public static ResultSet getFilterdTable(Table table, String filter, String filterValue)
 	{
@@ -145,7 +182,7 @@ public class DatabaseManager
 		return null;
 	}
 
-	public static ResultSet getTripleJoinedTable(String table1Name, String table2Name, String table3Name, String[][] tableAndColumnNames, String table1JoinColumn, String table2JoinColumn, String table1SecondJoinColumn, String table3JoinColumn, String tableNameAndFilter, String filterValue)
+	public static ResultSet getTripleJoinedTable(String table1Name, String table2Name, String table3Name, String[][] tableAndColumnNames, String table1JoinColumn, String table2JoinColumn, String table1SecondJoinColumn, String table3JoinColumn, String tableNameAndFilter, String filterValue, String groupByTableNameAndColumn)
 	{
 					
 		//SELECT Grades.studentId, Grades.points, Assignments.value, Students.firstname, Students.lastname From Grades
@@ -186,6 +223,12 @@ public class DatabaseManager
 					+ table2Name + "." + table2JoinColumn + " JOIN " + table3Name + " ON " 
 		+ table1Name + "." + table1SecondJoinColumn + " = " + table3Name + "." + table3JoinColumn + " WHERE " + tableNameAndFilter + " = " + '\"' + filterValue + '\"';
 			
+			
+			
+		if (groupByTableNameAndColumn != null)
+		{
+			sql += " GROUP BY " + groupByTableNameAndColumn;
+		}
 			System.out.println(sql);
 			
 			return DatabaseManager.getSQLStatement(sql).executeQuery();

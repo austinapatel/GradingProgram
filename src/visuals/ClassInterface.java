@@ -89,8 +89,8 @@ public class ClassInterface extends JPanel implements Tab
 	private void displayClass(int id)
 	{
 		
-		ResultSet joinedResultSet = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[] {TableProperties.STUDENTS_TABLE_NAME +  "." + TableProperties.STUDENT_ID, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, "1");
-		Table table2 = new Table("test join table", joinedResultSet);
+		//ResultSet joinedResultSet = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[] {TableProperties.STUDENTS_TABLE_NAME +  "." + TableProperties.STUDENT_ID, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, "1");
+		Table table2 = new Table("test join table", GradeCalculator.getGrades("1", TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.STUDENT_ID));
 		DatabaseJTable jTable = new DatabaseJTable(table2);
 		jTable.addMouseListener(new MouseAdapter() {
 		    public void mousePressed(MouseEvent me) {

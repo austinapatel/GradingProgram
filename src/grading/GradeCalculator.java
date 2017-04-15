@@ -1,6 +1,8 @@
 package grading;
 
+import java.sql.Array;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -47,10 +49,37 @@ public class GradeCalculator
 
 	}
 	
+
 	
 	
 	
-	public static ResultSet getGrades(String courseId)
+	
+	
+	
+	
+	private static boolean idExists(ArrayList<StudentGrade> grades, int id)
+	{
+		
+		
+		return false;
+	}
+	
+	public static void getStudentGrades(String courseId)
+	{
+		ResultSet rs = getGrades(courseId, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.STUDENT_ID);
+		
+		
+		
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	public static ResultSet getGrades(String courseId, String groupBy)
 	{	
 //		return  DatabaseManager.getJoinedTable(TableProperties.GRADES_TABLE_NAME, 
 //				TableProperties.ASSIGNMENTS_TABLE_NAME, new String[] {TableProperties.GRADES_TABLE_NAME + "." + 
@@ -65,7 +94,7 @@ public class GradeCalculator
 					TableProperties.LAST_NAME},{TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENT_ID, 
 						TableProperties.GRADE_VALUE} , {TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.ASSIGNMENTS_VALUE}},
 				TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ASSIGNMENT_ID, TableProperties.ASSIGNMENT_ID,
-				TableProperties.ASSIGNMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, courseId);
+				TableProperties.ASSIGNMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, courseId, groupBy);
 		
 		
 		
