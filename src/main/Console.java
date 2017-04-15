@@ -36,6 +36,7 @@ public class Console extends WindowAdapter implements WindowListener, ActionList
 		frame.setBounds(x, y, frameSize.width, frameSize.height);
 
 		textArea = new JTextArea();
+		textArea.setLineWrap(true);
 		textArea.setEditable(false);
 		JButton button = new JButton("clear");
 
