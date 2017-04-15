@@ -7,30 +7,17 @@
 
 package main;
 
-import java.awt.Font;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.Set;
-
-import javax.swing.*;
-
-import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
+import java.awt.GraphicsEnvironment;
 
 import database.DatabaseManager;
-import database.TableProperties;
-import database.ValueParameter;
-import grading.GradeCalculator;
-import grading.GradingScale;
 import database.Table;
 import database.TableColumn;
 import database.TableManager;
-import theme.MaterialUIConfig;
-import visuals.PasswordField;
+import database.TableProperties;
+import database.ValueParameter;
+import grading.GradeCalculator;
 import visuals.Interface;
-
-import javax.swing.UIManager.*;
-
-import com.alee.laf.WebLookAndFeel;
+import visuals.PasswordField;
 
 /**
  * Driver class for entire program.
@@ -64,7 +51,7 @@ public class Main {
 		else if (args.length == 3)
 			launchGUI(args[0], args[1], args[2]);
 		else
-			login = new PasswordField();
+			login = new PasswordField();	
 	}
 
 	private static void startInterface() {
