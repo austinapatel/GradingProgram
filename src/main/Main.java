@@ -31,252 +31,175 @@ import javax.swing.UIManager.*;
 
 import com.alee.laf.WebLookAndFeel;
 
-
-
-
 /**
  * Driver class for entire program.
  */
-public class Main  {
+public class Main {
 
-    static PasswordField login;
-    private static int size = 15;
+	static PasswordField login;
+	private static int size = 15;
 
-    public static void main(String[] args) {
-    	new Main(args);
-    }
+	public static void main(String[] args) {
+		new Main(args);
+	}
 
-    // note that field calls launchGUI
-    public static void launchGUI(String secretKey) {
-        DatabaseManager.init(secretKey);
-        startInterface();
-    }
+	// note that field calls launchGUI
+	public static void launchGUI(String secretKey) {
+		DatabaseManager.init(secretKey);
+		startInterface();
+	}
 
-    // note that field calls launchGUI
-    public static void launchGUI(String url, String username, String password) {
-        DatabaseManager.init(url, username, password);
-        startInterface();
-    }
-    
-    
-    public Main(String[] args)
-    {
-        System.setProperty("awt.useSystemAAFontSettings", "on");
-        System.setProperty("swing.aatext", "true");
-        if (args.length == 1)
-            launchGUI(args[0]);
-        else if (args.length == 3)
-            launchGUI(args[0], args[1], args[2]);
-        else
-            login = new PasswordField();
-    }
+	// note that field calls launchGUI
+	public static void launchGUI(String url, String username, String password) {
+		DatabaseManager.init(url, username, password);
+		startInterface();
+	}
 
-    private static void startInterface() {
+	public Main(String[] args) {
+		System.setProperty("awt.useSystemAAFontSettings", "on");
+		System.setProperty("swing.aatext", "true");
+		if (args.length == 1)
+			launchGUI(args[0]);
+		else if (args.length == 3)
+			launchGUI(args[0], args[1], args[2]);
+		else
+			login = new PasswordField();
+	}
 
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	//        MaterialUIConfig.configureUI();
+	private static void startInterface() {
 
+		// MaterialUIConfig.configureUI();
 
-    	//WebLookAndFeel.install();
-    	
+		// WebLookAndFeel.install();
 
-//    	    try
-//    	    {
-//    	      UIManager.setLookAndFeel(new SyntheticaStandardLookAndFeel());
-//    	    }
-//    	    catch (Exception e)
-//    	    {
-//    	      e.printStackTrace();
-//    	    }
-    	    
-//          try {
-//          UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
-//      } catch (Exception e) {
-//          e.printStackTrace();
-//      }
-    	
-    	
-    	
-    	Main.setUpTables();
-        new Interface();
-        
+		// try
+		// {
+		// UIManager.setLookAndFeel(new SyntheticaStandardLookAndFeel());
+		// }
+		// catch (Exception e)
+		// {
+		// e.printStackTrace();
+		// }
 
-        
-        //Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83}, {"B-", 80}, {"C+", 78},
-        //		{"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
+		// try {
+		// UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 
-       // new GradingScale("100 Standard", obj);
-    }
+		Main.setUpTables();
+		new Interface();
 
-    
-   
+		// Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88},
+		// {"B", 83}, {"B-", 80}, {"C+", 78},
+		// {"C", 73}, {"C-", 70}, {"D+", 68}, {"D", 63}, {"D-", 60}, {"F", 0}};
 
-    
-    
-    private static void setUpTables() {
-        TableColumn[] studentsTableColumns = new TableColumn[]{
-                new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL UNIQUE",
-                        null),
-                new TableColumn(TableProperties.STUDENT_REDWOOD_ID,
-                        "INT NOT NULL UNIQUE", new ValueParameter() {
-                    {
-                        setValueRange(1, Integer.MAX_VALUE);
-                        setValueLengthRange(6, 6);
-                    }
-                }),
-                new TableColumn(TableProperties.FIRST_NAME,
-                        "VARCHAR(50) NOT NULL", null),
-                new TableColumn(TableProperties.LAST_NAME,
-                        "VARCHAR(50) NOT NULL", null),
-                new TableColumn(TableProperties.BIRTH_MONTH, "INT", null),
-                new TableColumn(TableProperties.BIRTH_DAY, "INT", null),
-                new TableColumn(TableProperties.BIRTH_YEAR, "INT", null),
-                new TableColumn(TableProperties.GENDER, "CHAR(1)",
-                        new ValueParameter() {
-                            {
-                                setValueLengthRange(1, 1);
-                            }
-                        }),
-                new TableColumn(TableProperties.GRADUATION_YEAR, "INT NOT NULL", null),
-                new TableColumn(TableProperties.COUNSELOR_ID, "INT", null)};
+		// new GradingScale("100 Standard", obj);
+	}
 
-        TableColumn[] coursesTableColumns = new TableColumn[]{
-                new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL UNIQUE",
-                        null),
-                new TableColumn(TableProperties.NAME, "VARCHAR(50) NOT NULL",
-                        null),
-                new TableColumn(TableProperties.PERIOD, "INT NOT NULL",
-                        null),
-                new TableColumn(TableProperties.START_YEAR, "INT NOT NULL", null),
-                new TableColumn(TableProperties.END_YEAR, "INT NOT NULL", null)};
+	private static void setUpTables() {
+		TableColumn[] studentsTableColumns = new TableColumn[] {
+				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL UNIQUE", null),
+				new TableColumn(TableProperties.STUDENT_REDWOOD_ID, "INT NOT NULL UNIQUE", new ValueParameter() {
+					{
+						setValueRange(1, Integer.MAX_VALUE);
+						setValueLengthRange(6, 6);
+					}
+				}), new TableColumn(TableProperties.FIRST_NAME, "VARCHAR(50) NOT NULL", null),
+				new TableColumn(TableProperties.LAST_NAME, "VARCHAR(50) NOT NULL", null),
+				new TableColumn(TableProperties.BIRTH_MONTH, "INT", null),
+				new TableColumn(TableProperties.BIRTH_DAY, "INT", null),
+				new TableColumn(TableProperties.BIRTH_YEAR, "INT", null),
+				new TableColumn(TableProperties.GENDER, "CHAR(1)", new ValueParameter() {
+					{
+						setValueLengthRange(1, 1);
+					}
+				}), new TableColumn(TableProperties.GRADUATION_YEAR, "INT NOT NULL", null),
+				new TableColumn(TableProperties.COUNSELOR_ID, "INT", null) };
 
-        TableColumn[] assignmentsTableColumns = new TableColumn[]{
-                new TableColumn(TableProperties.ASSIGNMENT_ID, "INT NOT NULL UNIQUE",
-                        null),
+		TableColumn[] coursesTableColumns = new TableColumn[] {
+				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL UNIQUE", null),
+				new TableColumn(TableProperties.NAME, "VARCHAR(50) NOT NULL", null),
+				new TableColumn(TableProperties.PERIOD, "INT NOT NULL", null),
+				new TableColumn(TableProperties.START_YEAR, "INT NOT NULL", null),
+				new TableColumn(TableProperties.END_YEAR, "INT NOT NULL", null) };
 
-                new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL",
-                        new ValueParameter() {
-                            {
-                                addSelector(TableProperties.COURSES_TABLE_NAME,
-                                        TableProperties.NAME);
-                            }
-                        }),
+		TableColumn[] assignmentsTableColumns = new TableColumn[] {
+				new TableColumn(TableProperties.ASSIGNMENT_ID, "INT NOT NULL UNIQUE", null),
 
-                new TableColumn(TableProperties.CATEGORY_ID, "INT NOT NULL",
-                        new ValueParameter() {
-                            {
-                                setValueRange(0, Integer.MAX_VALUE);
-                            }
-                        }),
-                
-                new TableColumn(TableProperties.ASSIGNMENT_DATE, "DATE NOT NULL", null),
-                    
+				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL", new ValueParameter() {
+					{
+						addSelector(TableProperties.COURSES_TABLE_NAME, TableProperties.NAME);
+					}
+				}),
 
-                new TableColumn(TableProperties.ASSIGNMENTS_VALUE, "INT NOT NULL",
-                        new ValueParameter() {
-                            {
-                                setValueRange(0, Integer.MAX_VALUE);
-                            }
-                        }),
+				new TableColumn(TableProperties.CATEGORY_ID, "INT NOT NULL", new ValueParameter() {
+					{
+						setValueRange(0, Integer.MAX_VALUE);
+					}
+				}),
 
-                new TableColumn(TableProperties.NAME, "VARCHAR(255) NOT NULL",
-                        null)};
+				new TableColumn(TableProperties.ASSIGNMENT_DATE, "DATE NOT NULL", null),
 
-        TableColumn[] categoriesTableColumns = new TableColumn[]{
-                new TableColumn(TableProperties.CATEGORY_ID, "INT NOT NULL UNIQUE",
-                        null),
-                new TableColumn(TableProperties.NAME, "VARCHAR(50) NOT NULL",
-                        null),
-                new TableColumn(TableProperties.WEIGHT, "INT NOT NULL",
-                        new ValueParameter() {
-                            {
-                                setValueRange(0, 100);
-                            }
-                        }),
-                new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL",
-                        new ValueParameter() {
-                            {
-                                addSelector(TableProperties.COURSES_TABLE_NAME,
-                                        TableProperties.NAME);
-                            }
-                        }),};
+				new TableColumn(TableProperties.ASSIGNMENTS_VALUE, "INT NOT NULL", new ValueParameter() {
+					{
+						setValueRange(0, Integer.MAX_VALUE);
+					}
+				}),
 
-        TableColumn[] enrollmentsTableColumns = new TableColumn[]{
-                new TableColumn(TableProperties.ENTROLLMENT_ID, "INT NOT NULL UNIQUE",
-                        null),
-                new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL",
-                        new ValueParameter() {
-                            {
-                                addSelector(TableProperties.COURSES_TABLE_NAME, true,
-                                        TableProperties.PERIOD,
-                                        " period",
-                                        TableProperties.NAME,
-                                        TableProperties.START_YEAR,
-                                        "-",
-                                        TableProperties.END_YEAR);
-                            }
-                        }),
-                new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL",
-                        new ValueParameter() {
-                            {
-                                addSelector(TableProperties.STUDENTS_TABLE_NAME,
-                                        TableProperties.FIRST_NAME,
-                                        TableProperties.LAST_NAME);
-                            }
-                        })};
+				new TableColumn(TableProperties.NAME, "VARCHAR(255) NOT NULL", null) };
 
-        TableColumn[] gradesTableColumns = new TableColumn[]{
-                new TableColumn(TableProperties.GRADE_ID, "INT NOT NULL UNIQUE", null),
-                new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", null),
-                new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null),
-                new TableColumn(TableProperties.ASSIGNMENT_ID, "INT NOT NULL", null)};
+		TableColumn[] categoriesTableColumns = new TableColumn[] {
+				new TableColumn(TableProperties.CATEGORY_ID, "INT NOT NULL UNIQUE", null),
+				new TableColumn(TableProperties.NAME, "VARCHAR(50) NOT NULL", null),
+				new TableColumn(TableProperties.WEIGHT, "INT NOT NULL", new ValueParameter() {
+					{
+						setValueRange(0, 100);
+					}
+				}), new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL", new ValueParameter() {
+					{
+						addSelector(TableProperties.COURSES_TABLE_NAME, TableProperties.NAME);
+					}
+				}), };
 
-        TableColumn[] gradingScaleTableColumns = new TableColumn[]{
-                new TableColumn(TableProperties.SCALE_ID, "INT NOT NULL UNIQUE", null),
-                new TableColumn(TableProperties.SCALE_DATA, "VARCHAR(500) NOT NULL", null),
-                new TableColumn(TableProperties.SCALE_DESCRIPTION, "VARCHAR(50) NOT NULL UNIQUE", null)};
+		TableColumn[] enrollmentsTableColumns = new TableColumn[] {
+				new TableColumn(TableProperties.ENTROLLMENT_ID, "INT NOT NULL UNIQUE", null),
+				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL", new ValueParameter() {
+					{
+						addSelector(TableProperties.COURSES_TABLE_NAME, true, TableProperties.PERIOD, " period",
+								TableProperties.NAME, TableProperties.START_YEAR, "-", TableProperties.END_YEAR);
+					}
+				}), new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", new ValueParameter() {
+					{
+						addSelector(TableProperties.STUDENTS_TABLE_NAME, TableProperties.FIRST_NAME,
+								TableProperties.LAST_NAME);
+					}
+				}) };
 
-        TableColumn[] counselorTableColumns = new TableColumn[]{
-                new TableColumn(TableProperties.COUNSELOR_ID, "INT NOT NULL UNIQUE", null),
-                new TableColumn(TableProperties.NAME, "VARCHAR(500) NOT NULL", null)};
+		TableColumn[] gradesTableColumns = new TableColumn[] {
+				new TableColumn(TableProperties.GRADE_ID, "INT NOT NULL UNIQUE", null),
+				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", null),
+				new TableColumn(TableProperties.GRADE_VALUE, "DOUBLE NOT NULL", null),
+				new TableColumn(TableProperties.ASSIGNMENT_ID, "INT NOT NULL", null) };
 
-        TableManager.addTable(new Table(database.TableProperties.SCALE_TABLE_NAME, gradingScaleTableColumns));
+		TableColumn[] gradingScaleTableColumns = new TableColumn[] {
+				new TableColumn(TableProperties.SCALE_ID, "INT NOT NULL UNIQUE", null),
+				new TableColumn(TableProperties.SCALE_DATA, "VARCHAR(500) NOT NULL", null),
+				new TableColumn(TableProperties.SCALE_DESCRIPTION, "VARCHAR(50) NOT NULL UNIQUE", null) };
 
-        TableManager.addTable(
-                new Table(TableProperties.STUDENTS_TABLE_NAME,
-                        studentsTableColumns));
-        TableManager
-                .addTable(new Table(TableProperties.COURSES_TABLE_NAME,
-                        coursesTableColumns));
-        TableManager.addTable(
-                new Table(TableProperties.ASSIGNMENTS_TABLE_NAME,
-                        assignmentsTableColumns));
-        TableManager.addTable(
-                new Table(TableProperties.CATEGORIES_TABLE_NAME,
-                        categoriesTableColumns));
-        TableManager.addTable(
-                new Table(database.TableProperties.ENROLLMENTS_TABLE_NAME,
-                        enrollmentsTableColumns));
-        TableManager.addTable(new Table(TableProperties.GRADES_TABLE_NAME,
-                gradesTableColumns));
-        TableManager.addTable(new Table(TableProperties.COUNSELORS_TABLE_NAME,
-                counselorTableColumns));
-    }
+		TableColumn[] counselorTableColumns = new TableColumn[] {
+				new TableColumn(TableProperties.COUNSELOR_ID, "INT NOT NULL UNIQUE", null),
+				new TableColumn(TableProperties.NAME, "VARCHAR(500) NOT NULL", null) };
+
+		TableManager.addTable(new Table(database.TableProperties.SCALE_TABLE_NAME, gradingScaleTableColumns));
+
+		TableManager.addTable(new Table(TableProperties.STUDENTS_TABLE_NAME, studentsTableColumns));
+		TableManager.addTable(new Table(TableProperties.COURSES_TABLE_NAME, coursesTableColumns));
+		TableManager.addTable(new Table(TableProperties.ASSIGNMENTS_TABLE_NAME, assignmentsTableColumns));
+		TableManager.addTable(new Table(TableProperties.CATEGORIES_TABLE_NAME, categoriesTableColumns));
+		TableManager.addTable(new Table(database.TableProperties.ENROLLMENTS_TABLE_NAME, enrollmentsTableColumns));
+		TableManager.addTable(new Table(TableProperties.GRADES_TABLE_NAME, gradesTableColumns));
+		TableManager.addTable(new Table(TableProperties.COUNSELORS_TABLE_NAME, counselorTableColumns));
+	}
 
 }
