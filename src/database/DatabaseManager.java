@@ -179,7 +179,6 @@ public class DatabaseManager
 		else
 			selection = tableAndColumnNames[0][0] + "." + tableAndColumnNames[0][1];
 		
-		System.out.println(selection);
 		try
 		{
 			String sql = "SELECT " + selection + " FROM " + table1Name + " JOIN " 

@@ -59,7 +59,13 @@ public class GradeCalculator
 //				TableProperties.ASSIGNMENT_ID, TableProperties.ASSIGNMENT_ID, 
 //				TableProperties.ASSIGNMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, courseId);
 
-		return DatabaseManager.getTripleJoinedTable(TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENTS_TABLE_NAME, TableProperties.ASSIGNMENTS_TABLE_NAME, new String[][] {{TableProperties.STUDENTS_TABLE_NAME, TableProperties.FIRST_NAME, TableProperties.LAST_NAME},{TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENT_ID, TableProperties.GRADE_VALUE} , {TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.ASSIGNMENTS_VALUE}}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ASSIGNMENT_ID, TableProperties.ASSIGNMENT_ID, TableProperties.ASSIGNMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, courseId);
+		return DatabaseManager.getTripleJoinedTable(TableProperties.GRADES_TABLE_NAME, 
+				TableProperties.STUDENTS_TABLE_NAME, TableProperties.ASSIGNMENTS_TABLE_NAME, 
+				new String[][] {{TableProperties.STUDENTS_TABLE_NAME, TableProperties.FIRST_NAME, 
+					TableProperties.LAST_NAME},{TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENT_ID, 
+						TableProperties.GRADE_VALUE} , {TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.ASSIGNMENTS_VALUE}},
+				TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ASSIGNMENT_ID, TableProperties.ASSIGNMENT_ID,
+				TableProperties.ASSIGNMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, courseId);
 		
 		
 		
