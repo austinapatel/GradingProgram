@@ -68,6 +68,30 @@ public class GradeCalculator
 	{
 		ResultSet rs = getGrades(courseId, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.STUDENT_ID);
 		
+		try {
+			int primaryid = rs.findColumn(TableProperties.STUDENT_ID);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		Object[][] data = DatabaseManager.ResultSetToObjectArray(rs);
+		
+		ArrayList<StudentGrade> grades = new ArrayList();
+				
+		for (int j = 0; j < data[0].length; j++)
+		{
+		Object[] row = new Object[data.length];
+			
+		for (int i = 0; i < data.length; i++)
+		{
+			row[i] = data[i][j];
+		}
+
+		grades.add(new StudentGrade(row));
+		
+		
+		}
 		
 		
 		
