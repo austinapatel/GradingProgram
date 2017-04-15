@@ -10,6 +10,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import main.Console;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +28,7 @@ import java.util.Set;
 public class Interface extends JFrame implements ActionListener, KeyListener {
 
     private static final String FRAME_TITLE = "Grading Program";
-
+    private static Console con;
     private static final int WIDTH = 1400, HEIGHT = 1000;
 
     private static final String RIGHT_TAB_LOCATION = " Right";
@@ -86,11 +88,17 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
     
     
     public Interface() {
-        setDefaultSize(size);
+        
+    	setDefaultSize(size);
+    	con = new Console();
+    	this.addWindowListener(con);
+    	
     	initTabbedPanes();
         initSplitPane();
         initMenu();
         initFrame();
+        
+   
     }
 
     private void initSplitPane() {
@@ -131,16 +139,19 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         initTabbedPane(rightTabbedPane);
 
         tabs = new ArrayList<>();
+        tabs.add(con.getPanel());
         tabs.add(new TableInterface());
         tabs.add(new GradingScaleInterface());
         tabs.add(new CreateAssignmentInterface());
         tabs.add(new CreateClassInterface());
         tabs.add(new ClassInterface());
+       
 
         // Put half of the tabs on the left and half on the right
         for (int i = 0; i < tabs.size(); i++)
             addTab(tabs.get(i), (i < tabs.size() / 2) ? TabSide.Left : TabSide.Right);
 
+       
         leftTabbedPane.setSelectedIndex(0);
         rightTabbedPane.setSelectedIndex(0);
     }
@@ -226,6 +237,8 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         setLocationRelativeTo(null);
         setVisible(true);
         this.addKeyListener(this);
+      
+ 
 
 //        SwingUtilities.invokeLater(new Runnable() {
 //            public void run() {

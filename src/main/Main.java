@@ -43,14 +43,7 @@ public class Main  {
     private static int size = 15;
 
     public static void main(String[] args) {
-        System.setProperty("awt.useSystemAAFontSettings", "on");
-        System.setProperty("swing.aatext", "true");
-        if (args.length == 1)
-            launchGUI(args[0]);
-        else if (args.length == 3)
-            launchGUI(args[0], args[1], args[2]);
-        else
-            login = new PasswordField();
+    	new Main(args);
     }
 
     // note that field calls launchGUI
@@ -64,9 +57,40 @@ public class Main  {
         DatabaseManager.init(url, username, password);
         startInterface();
     }
+    
+    
+    public Main(String[] args)
+    {
+        System.setProperty("awt.useSystemAAFontSettings", "on");
+        System.setProperty("swing.aatext", "true");
+        if (args.length == 1)
+            launchGUI(args[0]);
+        else if (args.length == 3)
+            launchGUI(args[0], args[1], args[2]);
+        else
+            login = new PasswordField();
+    }
 
     private static void startInterface() {
-//        MaterialUIConfig.configureUI();
+
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	//        MaterialUIConfig.configureUI();
 
 
     	//WebLookAndFeel.install();

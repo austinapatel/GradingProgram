@@ -1,0 +1,18 @@
+0
+0
+Counselor Names: []
+0
+0
+Counselor Names: []
+0
+0
+Counselor Names: []
+Students.firstName, Students.lastName,  Grades.studentId, Grades.points,  Assignments.value 
+SELECT Students.firstName, Students.lastName,  Grades.studentId, Grades.points,  Assignments.value  FROM Grades JOIN Students ON Grades.studentId = Students.studentId JOIN Assignments ON Grades.assignmentId = Assignments.assignmentId WHERE Assignments.courseId = "1"
+SELECT Students.firstName, Students.lastName,  Grades.studentId, Grades.points,  Assignments.value  FROM Grades JOIN Students ON Grades.studentId = Students.studentId JOIN Assignments ON Grades.assignmentId = Assignments.assignmentId WHERE Assignments.courseId = "1"
+0
+0
+Counselor Names: []
+Students.firstName, Students.lastName,  Grades.studentId, Grades.points,  Assignments.value 
+SELECT Students.firstName, Students.lastName,  Grades.studentId, Grades.points,  Assignments.value  FROM Grades JOIN Students ON Grades.studentId = Students.studentId JOIN Assignments ON Grades.assignmentId = Assignments.assignmentId WHERE Assignments.courseId = "1"
+SELECT Students.firstName, Students.lastName,  Grades.studentId, Grades.points,  Assignments.value  FROM Grades JOIN Students ON Grades.studentId = Students.studentId JOIN Assignments ON Grades.assignmentId = Assignments.assignmentId WHERE Assignments.courseId = "1"
