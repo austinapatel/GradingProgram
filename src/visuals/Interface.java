@@ -90,7 +90,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
     public Interface() {
         
     	setDefaultSize(size);
-    	con = new Console();
+//    	con = new Console();
     	this.addWindowListener(con);
     	
     	initTabbedPanes();
@@ -139,7 +139,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         initTabbedPane(rightTabbedPane);
 
         tabs = new ArrayList<>();
-        tabs.add(con.getPanel());
+//        tabs.add(con.getPanel());
         tabs.add(new TableInterface());
         tabs.add(new GradingScaleInterface());
         tabs.add(new CreateAssignmentInterface());

@@ -163,13 +163,9 @@ public class Main {
 				}), };
 
 		TableColumn[] enrollmentsTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.ENTROLLMENT_ID, "INT NOT NULL UNIQUE", null),
-				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL", new ValueParameter() {
-					{
-						addSelector(TableProperties.COURSES_TABLE_NAME, true, TableProperties.PERIOD, " period",
-								TableProperties.NAME, TableProperties.START_YEAR, "-", TableProperties.END_YEAR);
-					}
-				}), new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", new ValueParameter() {
+				new TableColumn(TableProperties.ENROLLMENT_ID, "INT NOT NULL UNIQUE", null),
+				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL", null),
+				new TableColumn(TableProperties.STUDENT_ID, "INT NOT NULL", new ValueParameter() {
 					{
 						addSelector(TableProperties.STUDENTS_TABLE_NAME, TableProperties.FIRST_NAME,
 								TableProperties.LAST_NAME);

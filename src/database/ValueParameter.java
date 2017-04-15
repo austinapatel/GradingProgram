@@ -11,7 +11,7 @@ package database;
 public class ValueParameter
 {
 
-	private boolean hasSetLength, hasSetValue, hasSelector, wholeRowSelector;
+	private boolean hasSetLength, hasSetValue, hasSelector;
 	private int minValueLength, maxValueLength, minValue, maxValue;
 	private String selectorTable, selectorLinkColumn;
 	private String[] selectorOutputColumns;
@@ -75,28 +75,14 @@ public class ValueParameter
 		return hasSelector;
 	}
 
-	public boolean hasWholeRowSelector() {
-		return wholeRowSelector;
-	}
 
 	/**Sets the field to be have a JComboBox to pick input*/
 	public void addSelector(String tableName, String... visualColumnNames)
 	{
 		selectorTable = tableName;
 		selectorOutputColumns = visualColumnNames;
-		selectorLinkColumn = tableName.toUpperCase() + "_ID";
+		selectorLinkColumn = tableName.toLowerCase() + "Id";
 		hasSelector = true;
-		wholeRowSelector = false;
-	}
-
-	/**Sets the field to have a selector that lets the user pick a row from
-	 * the actual table not a JComboBox if "useWholeRow" is true.*/
-	public void addSelector(String tableName, boolean useWholeRow, String... visualColumnNames) {
-		hasSelector = true;
-		wholeRowSelector = useWholeRow;
-		selectorTable = tableName;
-		selectorOutputColumns = visualColumnNames;
-		this.selectorOutputColumns = selectorOutputColumns;
 	}
 
 	public String getSelectorTable()

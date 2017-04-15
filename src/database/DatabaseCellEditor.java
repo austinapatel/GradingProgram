@@ -129,18 +129,6 @@ public class DatabaseCellEditor extends AbstractCellEditor
 				textField.setText(text);
 
 				return textField;
-			} else if (valueParameter.hasSelector() && valueParameter.hasWholeRowSelector()) {
-				Table[] tables = TableManager.getAllTables();
-
-				int index = 0;
-				for (int i = 0; i < tables.length; i++)
-					if (tables[i].getName().equals(valueParameter.getSelectorTable())) {
-						index = i;
-						break;
-					}
-
-				tableInterface.lockInto(index, row, column);
-				return null;
 			}
 
 			// Set up selector
