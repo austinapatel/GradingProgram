@@ -212,7 +212,7 @@ public class ClassInterface extends JPanel implements Tab
 	@Override
 	public String getTabImage() {
 		// TODO Auto-generated method stub
-		return "grading.png";
+		return "grading_tab_icon.png";
 	}
 
 	@Override

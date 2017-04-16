@@ -593,7 +593,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 	@Override
 	public String getTabImage() {
-		return "grading.png";
+		return "grading_tab_icon.png";
 	}
 
 	@Override

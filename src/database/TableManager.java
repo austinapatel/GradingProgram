@@ -75,7 +75,7 @@ public class TableManager
 				String currentKey = keys[i];
 				Object value = values.get(currentKey);
 
-				TableColumn.DataType dataType = DatabaseManager.getSQLType(table.getTableColumns()[columnIndex].getType());
+//				TableColumn.DataType dataType = DatabaseManager.getSQLType(table.getTableColumns()[columnIndex].getType());
 
 				rs.last();
 				rs.absolute(rs.getRow());

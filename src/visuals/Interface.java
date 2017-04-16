@@ -87,14 +87,11 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
     
     
     public Interface() {
-        
     	setDefaultSize(size);    	
     	initTabbedPanes();
         initSplitPane();
         initMenu();
         initFrame();
-        
-   
     }
 
     private void initSplitPane() {

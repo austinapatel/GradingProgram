@@ -4,23 +4,28 @@
 
 package visuals;
 
+import database.Table;
+import database.TableManager;
 import database.TableProperties;
-import swingmaterial.MaterialButton;
-import swingmaterial.MaterialPanel;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
+import java.util.HashMap;
 
-public class CreateAssignmentInterface extends JPanel implements Tab, KeyListener, ActionListener {
+public class CreateAssignmentInterface extends JPanel implements Tab, KeyListener, ActionListener, MouseListener {
 
     private JTextField txtName, txtPointValue;
     private JPanel contentPanel;
     private JButton createButton;
+    private JTable coursesJTable;
+    UtilDateModel dateModel;
+    JDatePanelImpl datePanel;
+    JDatePickerImpl datePicker;
 
     public CreateAssignmentInterface() {
         initPanel();
@@ -43,27 +48,33 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
         wrapInJPanel(new JLabel("Name"));
         txtName = new JTextField();
         txtName.addActionListener(this);
+        txtName.addKeyListener(this);
         contentPanel.add(txtName);
 
         wrapInJPanel(new JLabel("Class"));
-        JTable coursesJTable = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
+        coursesJTable = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
         coursesJTable.setPreferredScrollableViewportSize(coursesJTable.getPreferredSize());
+        coursesJTable.addMouseListener(this);
         JScrollPane coursesScrollPane = new JScrollPane(coursesJTable);
         contentPanel.add(coursesScrollPane);
 
         wrapInJPanel(new JLabel("Point Value"));
         txtPointValue = new JTextField();
         txtPointValue.addActionListener(this);
+        txtPointValue.addKeyListener(this);
         contentPanel.add(txtPointValue);
 
-        wrapInJPanel(new JLabel("Category"));
-        JTable categoryJTable = new DatabaseJTable(TableProperties.CATEGORIES_TABLE_NAME);
-        categoryJTable.setPreferredScrollableViewportSize(categoryJTable.getPreferredSize());
-        JScrollPane categoryScrollPane = new JScrollPane(categoryJTable);
-        contentPanel.add(categoryScrollPane);
+        dateModel = new UtilDateModel();
+        datePanel = new JDatePanelImpl(dateModel);
+        datePanel.setPreferredSize(contentPanel.getPreferredSize());
+        datePicker = new JDatePickerImpl(datePanel);
+        contentPanel.add(datePicker);
+        datePanel.addActionListener(this);
 
         createButton = new JButton();
         createButton.setText("Create");
+        createButton.setEnabled(false);
+        createButton.addActionListener(this);
         wrapInJPanel(createButton);
     }
 
@@ -81,7 +92,7 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
 
     @Override
     public String getTabImage() {
-        return "assignment_icon.png";
+        return "assignment_tab_icon.png";
     }
 
     @Override
@@ -101,11 +112,67 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
 
     @Override
     public void keyReleased(KeyEvent e) {
+        determineIfCreateEnabled();
+    }
 
+    private void determineIfCreateEnabled() {
+        // Determine whether the create button should be enabled
+        boolean isEnabled = !txtName.getText().equals("") && !txtPointValue.getText().equals("") && !txtPointValue.getText().equals("") && coursesJTable.getSelectedRow() >= 0 && !datePicker.getJFormattedTextField().getText().equals("");
+
+        try {
+            Integer.parseInt(txtPointValue.getText());
+        } catch(Exception exception) {
+            isEnabled = false;
+        }
+
+        createButton.setEnabled(isEnabled);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == datePanel)
+            determineIfCreateEnabled();
+        if (e.getSource() == createButton) {
+            Table assignmentsTable = TableManager.getTable(TableProperties.ASSIGNMENTS_TABLE_NAME);
+
+            String courseId = coursesJTable.getValueAt(coursesJTable.getSelectedRow(), 0).toString();
+            String date = dateModel.getYear() + "-" + dateModel.getMonth() + "-" + dateModel.getDay();
+
+            // course id, date, value, name
+            HashMap<String, Object> values = new HashMap<String, Object>() {{
+                put(TableProperties.COURSE_ID, courseId);
+                put(TableProperties.ASSIGNMENT_DATE, date);
+                put(TableProperties.ASSIGNMENTS_VALUE, txtPointValue.getText());
+                put(TableProperties.NAME, txtName.getText());
+            }};
+
+            TableManager.insertValuesIntoNewRow(assignmentsTable, values);
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (e.getSource() == coursesJTable)
+            determineIfCreateEnabled();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
 
     }
 }
