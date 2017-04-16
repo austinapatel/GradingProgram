@@ -19,6 +19,7 @@ public class DatabaseJTable extends JTable {
     private String tableName;
     private SelectableTableModel model;
     private Table table;
+    String[] columnNames;
 
     public DatabaseJTable(String tableName) {
         this(TableManager.getTable(tableName));
@@ -35,11 +36,24 @@ public class DatabaseJTable extends JTable {
 
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
+    
+    public int getColumnIndex(String columnName)
+    {
+    	
+    	for (int i = 0; i < this.getColumnCount(); i++)
+    	{
+    		if (this.getColumnName(i).equals(columnName))
+    			return i;
+    	}	
+    	return -1;
+   
+    	
+    }
 
     private void initTableContent() {
         TableColumn[] tableColumns = table.getTableColumns();
         ArrayList<ArrayList<String>> tableContent = new ArrayList<>();
-        String[] columnNames = new String[tableColumns.length];
+        columnNames = new String[tableColumns.length];
 
       
         

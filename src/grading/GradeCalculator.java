@@ -45,45 +45,18 @@ public class GradeCalculator {
 
     }
 
-
-    private static boolean idExists(ArrayList<StudentGrade> grades, int id) {
-
-
-        return false;
-    }
-
-    public static void getStudentGrades(int courseId) {
+    public static ArrayList<Grade> getStudentGrades(int courseId) {
         ResultSet rs = getGrades(courseId, null);
-
-//        try {
-//            int primaryid = rs.findColumn(TableProperties.STUDENT_ID);
-//        } catch (SQLException e1) {
-//            // TODO Auto-generated catch block
-//            e1.printStackTrace();
-//        }
-//
-//        Object[][] data = DatabaseManager.ResultSetToObjectArray(rs);
-//
-//        ArrayList<StudentGrade> grades = new ArrayList();
-//
-//        for (int j = 0; j < data[0].length; j++) {
-//            Object[] row = new Object[data.length];
-//
-//            for (int i = 0; i < data.length; i++) {
-//                row[i] = data[i][j];
-//            }
-//
-//            grades.add(new StudentGrade(row));
-//
-//
-//        }
+        ArrayList<Grade> studentGrades = new ArrayList();
         // Get assignment scores from table
         Table table = new Table("Grade Calculator", rs);
         Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
 
-        ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, TableProperties.COURSE_ID, String.valueOf(courseId)));
+       // ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, TableProperties.COURSE_ID, String.valueOf(courseId)));
         ArrayList<Double> pointValues = DataTypeManager.toDoubleArrayList(table.getAllFromColumn(TableProperties.GRADE_VALUE));
-
+        ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(table.getAllFromColumn(TableProperties.STUDENT_ID));
+        
+        
         System.out.println("student ids: " + studentIds);
         System.out.println("point values: " + pointValues);
 
@@ -109,14 +82,17 @@ public class GradeCalculator {
             totalPoints += d;
 
         System.out.println("sum of assignment points values: " + totalPoints);
-
         Iterator<Integer> uniqueStudentIds = grades.keySet().iterator();
-        while (uniqueStudentIds.hasNext()) {
+       
+        while (uniqueStudentIds.hasNext())
+        {
             int id = uniqueStudentIds.next();
             System.out.println("Student id: " + id + " got a sum of " + grades.get(id) + " a percent grade of " + (grades.get(id) * 100 / totalPoints) + "%");
+              
+            studentGrades.add(new Grade(totalPoints, grades.get(id), id));
         }
+        return studentGrades;
     }
-
 
     public static ResultSet getGrades(int courseId, String groupBy) {
 //		return  DatabaseManager.getJoinedTable(TableProperties.GRADES_TABLE_NAME, 

@@ -133,6 +133,7 @@ public class DatabaseManager
 		try
 		{
 			String sql = "SELECT * FROM " + table.getName() + " WHERE " + filter + " = " + '\"' + filterValue + '\"';
+			System.out.println(sql);
 			Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			ResultSet rs = stmt.executeQuery(sql);
 			return rs;

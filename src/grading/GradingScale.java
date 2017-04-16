@@ -14,6 +14,9 @@ public class GradingScale
 {
 	private JSONArray letterGrades;
 	private String name;
+	private static Object[][] template = { { "A+", 99.9 }, { "A", 95 }, { "A-", 90 }, { "B+", 88 }, { "B", 83 },
+			{ "B-", 80 }, { "C+", 78 }, { "C", 72 }, { "C-", 70 }, { "D+", 68 }, { "D", 63 }, { "D-", 60 },
+			{ "F", 0 } };
 	public GradingScale(String jsonText, String name)
 	{
 		this.name = name;
@@ -49,8 +52,12 @@ public class GradingScale
 		TableManager.insertValuesIntoNewRow(table, newValues);
 	}
 	
-	
-	
+
+	public GradingScale()
+	{
+		this("Default", template);
+	}
+
 	public JSONArray objectToJSON(Object[][] data)
 	{
 		
