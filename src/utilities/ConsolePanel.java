@@ -25,7 +25,7 @@ public class ConsolePanel extends JPanel implements Tab {
 		add(pane, BorderLayout.CENTER);
 		MessageConsole mc = new MessageConsole(textComponent);
 		mc.redirectOut(Color.GREEN, System.out);
-		mc.redirectErr(Color.RED, null);
+		mc.redirectErr(Color.RED, System.out);
 		mc.setMessageLines(100);
 		System.out.println("test");
 	}

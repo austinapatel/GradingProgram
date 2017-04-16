@@ -81,7 +81,7 @@ public class GradeCalculator {
         Table table = new Table("Grade Calculator", rs);
         Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
 
-        ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, TableProperties.COURSE_ID, String.valueOf(courseId)));
+        ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(table.getSomeFromColumn(TableProperties.STUDENT_ID, TableProperties.COURSE_ID, String.valueOf(courseId)));
         ArrayList<Double> pointValues = DataTypeManager.toDoubleArrayList(table.getAllFromColumn(TableProperties.GRADE_VALUE));
 
         System.out.println("student ids: " + studentIds);
@@ -130,7 +130,7 @@ public class GradeCalculator {
                 TableProperties.STUDENTS_TABLE_NAME, TableProperties.ASSIGNMENTS_TABLE_NAME,
                 new String[][]{{TableProperties.STUDENTS_TABLE_NAME, TableProperties.FIRST_NAME,
                         TableProperties.LAST_NAME}, {TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENT_ID,
-                        TableProperties.GRADE_VALUE}, {TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.ASSIGNMENTS_VALUE}},
+                        TableProperties.GRADE_VALUE}, {TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.ASSIGNMENTS_VALUE}, {TableProperties.ENROLLMENTS_TABLE_NAME, TableProperties.COURSE_ID}},
                 TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ASSIGNMENT_ID, TableProperties.ASSIGNMENT_ID,
                 TableProperties.ASSIGNMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, String.valueOf(courseId), groupBy);
 

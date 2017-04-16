@@ -9,6 +9,8 @@ package main;
 
 import java.awt.GraphicsEnvironment;
 
+import com.alee.laf.WebLookAndFeel;
+
 import database.DatabaseManager;
 import database.Table;
 import database.TableColumn;
@@ -58,7 +60,7 @@ public class Main {
 
 		// MaterialUIConfig.configureUI();
 
-		// WebLookAndFeel.install();
+		WebLookAndFeel.install();
 
 		// try
 		// {
