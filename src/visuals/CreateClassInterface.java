@@ -4,9 +4,6 @@ import database.DataTypeManager;
 import database.Table;
 import database.TableManager;
 import database.TableProperties;
-import swingmaterial.MaterialButton;
-import swingmaterial.MaterialComboBox;
-import swingmaterial.MaterialTextField;
 import table.Date;
 import table.Student;
 
@@ -16,8 +13,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
-import java.lang.reflect.Array;
-import java.security.Key;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -636,7 +632,7 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
 
     @Override
     public String getTabImage() {
-        return "class.png";
+        return "class_tab_icon.png";
     }
 
     @Override

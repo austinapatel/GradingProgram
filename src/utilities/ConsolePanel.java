@@ -39,7 +39,7 @@ public class ConsolePanel extends JPanel implements Tab {
 	@Override
 	public String getTabImage() {
 		// TODO Auto-generated method stub
-		return "console.png";
+		return "console_tab_icon.png";
 	}
 
 	@Override

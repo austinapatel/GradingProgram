@@ -306,7 +306,7 @@ public class DatabaseManager
                 if (resultSet == null)
                     System.out.println("result set is null");
 
-                Integer newValue = Integer.class.cast(value);
+                Integer newValue = Integer.parseInt(value.toString());
 
                 resultSet.updateInt(columnIndex, newValue);
             } else if (type == DataType.Double) {
