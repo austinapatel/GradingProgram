@@ -48,7 +48,10 @@ public class DatabaseJTable extends JTable {
     	return -1;
    
     	
+    	
     }
+    
+    
 
     private void initTableContent() {
         TableColumn[] tableColumns = table.getTableColumns();
