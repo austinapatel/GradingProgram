@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import grading.GradingScaleInterface;
 import utilities.ConsolePanel;
 
 import java.awt.*;
