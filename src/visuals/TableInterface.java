@@ -53,6 +53,47 @@ public class TableInterface extends JPanel implements Tab {
         add(bottomContainer, BorderLayout.SOUTH);
     }
 
+    public void addRow() {
+        table.addRow();
+
+        databaseTableModel.fireTableDataChanged();
+
+        jTable.requestFocus();
+        jTable.changeSelection(
+                databaseTableModel.getRowCount() - 1, 1, false,
+                false);
+    }
+
+    public void deleteRow() {
+        ResultSet resultSet = table.getResultSet();
+
+        int[] selectedRows = jTable.getSelectedRows();
+        int[] selectedRowsReverse = new int[selectedRows.length];
+
+        for (int i = selectedRows.length - 1; i >= 0; i--)
+            selectedRowsReverse[selectedRows.length - 1
+                    - i] = selectedRows[i];
+
+        for (int row : selectedRowsReverse) {
+            try {
+                resultSet.absolute(row + 1);
+                resultSet.deleteRow();
+
+                if (databaseTableModel.getRowCount() > 0)
+                    databaseTableModel.fireTableRowsDeleted(row,
+                            row);
+                else
+                    databaseTableModel.fireTableDataChanged();
+            } catch (SQLException e1) {
+                System.out.println(
+                        "Failed to delete row from database.");
+            }
+        }
+
+        if (databaseTableModel.getRowCount() == 0)
+            tableList.requestFocus();
+    }
+
     private void initBottomButtons() {
         addRowButton = new JButton() {
             {
@@ -60,14 +101,7 @@ public class TableInterface extends JPanel implements Tab {
                 addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        table.addRow();
-
-                        databaseTableModel.fireTableDataChanged();
-
-                        jTable.requestFocus();
-                        jTable.changeSelection(
-                                databaseTableModel.getRowCount() - 1, 1, false,
-                                false);
+                        addRow();
                     }
                 });
             }
@@ -104,33 +138,7 @@ public class TableInterface extends JPanel implements Tab {
                 addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        ResultSet resultSet = table.getResultSet();
-
-                        int[] selectedRows = jTable.getSelectedRows();
-                        int[] selectedRowsReverse = new int[selectedRows.length];
-
-                        for (int i = selectedRows.length - 1; i >= 0; i--)
-                            selectedRowsReverse[selectedRows.length - 1
-                                    - i] = selectedRows[i];
-
-                        for (int row : selectedRowsReverse) {
-                            try {
-                                resultSet.absolute(row + 1);
-                                resultSet.deleteRow();
-
-                                if (databaseTableModel.getRowCount() > 0)
-                                    databaseTableModel.fireTableRowsDeleted(row,
-                                            row);
-                                else
-                                    databaseTableModel.fireTableDataChanged();
-                            } catch (SQLException e1) {
-                                System.out.println(
-                                        "Failed to delete row from database.");
-                            }
-                        }
-
-                        if (databaseTableModel.getRowCount() == 0)
-                            tableList.requestFocus();
+                        deleteRow();
                     }
                 });
             }

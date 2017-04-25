@@ -233,7 +233,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				} else {
 
 					try {
-						System.out.println("we tried bro");
 						int pindex = getLetterGradeIndex(data[i - 1][0].toString());
 						data[i][0] = template[pindex + 1][0];
 					} catch (Exception e) {
@@ -272,7 +271,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		
 		for (Object[] temp: data)
 		{
-			System.out.println(temp[0].toString() + temp[1].toString());
+//			System.out.println(temp[0].toString() + temp[1].toString());
 		}
 		
 
@@ -576,12 +575,11 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			for (int row = 0; row < rowNum; row++) {
 				data[row][0] = letterTable.getValueAt(row, 0);
 				data[row][1] = letterTable.getValueAt(row, letterTable.getColumnCount() - 1);
-				System.out.println(data[row][1].toString() + data[row][0].toString());
+//				System.out.println(data[row][1].toString() + data[row][0].toString());
 			}
 			data = formatData(data);
 
 			openScale.update(data);
-			// System.out.println("Table was opened!!!!!!!!!");
 			openScale();
 		}
 	}

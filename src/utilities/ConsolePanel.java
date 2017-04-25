@@ -27,7 +27,6 @@ public class ConsolePanel extends JPanel implements Tab {
 		mc.redirectOut(Color.GREEN, System.out);
 		mc.redirectErr(Color.RED, System.out);
 		mc.setMessageLines(100);
-		System.out.println("test");
 	}
 
 	@Override

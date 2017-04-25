@@ -12,14 +12,12 @@ import database.TableManager;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class DatabaseJTable extends JTable {
 
     private String tableName;
     private SelectableTableModel model;
     private Table table;
-    String[] columnNames;
 
     public DatabaseJTable(String tableName) {
         this(TableManager.getTable(tableName));
@@ -32,36 +30,18 @@ public class DatabaseJTable extends JTable {
         model = (SelectableTableModel) getModel();
         this.table = table;
 
-        initTableContent();
+        refreshTableContent();
 
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
-    
-    public int getColumnIndex(String columnName)
-    {
-    	
-    	for (int i = 0; i < this.getColumnCount(); i++)
-    	{
-    		if (this.getColumnName(i).equals(columnName))
-    			return i;
-    	}	
-    	return -1;
-   
-    	
-    }
 
-    private void initTableContent() {
+    public void refreshTableContent() {
         TableColumn[] tableColumns = table.getTableColumns();
         ArrayList<ArrayList<String>> tableContent = new ArrayList<>();
-        columnNames = new String[tableColumns.length];
+        String[] columnNames = new String[tableColumns.length];
 
-      
-        
         for (int i = 0; i < tableColumns.length; i++)
-        {  
         	columnNames[i] = tableColumns[i].getName();
-        }
-      
         
         model.setColumnNames(columnNames);
 

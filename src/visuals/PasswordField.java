@@ -174,8 +174,6 @@ public class PasswordField extends JFrame implements ActionListener {
 				String password = new String(pf.getPassword());
 
 				if (!password.trim().equals("")) {
-					System.out.println(password);
-
 					String url = DatabasePropertiesManager.read(password,
 							PROPERTIES_FILE, "url");
 					String username = DatabasePropertiesManager.read(password,

@@ -142,7 +142,6 @@ public class Table
 		for (int i : currentIDs)
 			largest = (i > largest) ? i : largest;
 
-		System.out.println("new row id: " + (largest + 1));
 		return largest + 1;
 	}
 
