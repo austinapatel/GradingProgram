@@ -333,7 +333,7 @@ public class TableInterface extends JPanel implements Tab {
 
     @Override
     public String getTabImage() {
-        return "table.png";
+        return "class_tab_icon.png";
     }
 
     @Override

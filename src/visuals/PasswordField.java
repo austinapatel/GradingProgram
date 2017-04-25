@@ -54,7 +54,7 @@ public class PasswordField extends JFrame implements ActionListener {
 	public PasswordField() {
 		// DatabasePropertiesManager.deleteFile(PROPERTIES_FILE);
 		setLayout(null);
-		setIconImage(new ImageIcon("icon.png").getImage());
+		setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
 		setResizable(false);
 		setSize(WIDTH, HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

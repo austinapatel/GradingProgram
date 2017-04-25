@@ -95,7 +95,9 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         if (tabSide == TabSide.Right)
             destination = rightTabbedPane;
 
-        destination.addTab(tab.getTabName(), new ImageIcon(tab.getTabImage()), (JPanel) tab);
+        String tabImageName = tab.getTabImage();
+
+        destination.addTab(tab.getTabName(), new ImageIcon(getClass().getClassLoader().getResource(tabImageName)), (JPanel) tab);
         int index = destination.indexOfComponent((JPanel) tab);
         destination.setTabComponentAt(index, new ButtonTabComponent(destination));
         destination.setSelectedIndex(destination.getTabCount() - 1);
@@ -130,7 +132,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         tabs.add(new GradingScaleInterface());
         tabs.add(new CreateAssignmentInterface());
         tabs.add(new CreateClassInterface());
-        tabs.add(new GradeInterface());
+        tabs.add(new GradesInterface());
 
 
         // Put half of the tabs on the left and half on the right
@@ -216,7 +218,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
      * Initializes properties of the JFrame.
      */
     private void initFrame() {
-        setIconImage(new ImageIcon("icon.png").getImage());
+        setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
         setSize(WIDTH, HEIGHT);
         setTitle(Interface.FRAME_TITLE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
