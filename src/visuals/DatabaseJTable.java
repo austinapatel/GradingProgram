@@ -18,6 +18,7 @@ public class DatabaseJTable extends JTable {
     private String tableName;
     private SelectableTableModel model;
     private Table table;
+    private String[] columnNames;
 
     public DatabaseJTable(String tableName) {
         this(TableManager.getTable(tableName));
@@ -37,6 +38,7 @@ public class DatabaseJTable extends JTable {
     
     public int getColumnIndex(String columnName)
     {
+    	
     	for (int i = 0; i < this.getColumnCount(); i ++)
     		columnNames[i] = this.getColumnModel().getColumn(i).getHeaderValue().toString();
     	for (int i = 0; i < this.getColumnCount(); i++)
@@ -44,10 +46,7 @@ public class DatabaseJTable extends JTable {
     		if (this.getColumnName(i).equals(columnName))
     			return i;
     	}	
-    	return -1;
-   
-    	
-    	
+    	return -1;	
     }
 
     public void refreshTableContent() {
