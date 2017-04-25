@@ -22,7 +22,7 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
     private JTextField txtName, txtPointValue;
     private JPanel contentPanel;
     private JButton createButton;
-    private JTable coursesJTable;
+    private DatabaseJTable coursesJTable;
     UtilDateModel dateModel;
     JDatePanelImpl datePanel;
     JDatePickerImpl datePicker;
@@ -97,7 +97,7 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
 
     @Override
     public void onTabSelected() {
-
+        coursesJTable.refreshTableContent();
     }
 
     @Override

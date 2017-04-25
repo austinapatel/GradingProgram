@@ -62,7 +62,6 @@ public class DatabaseManager
 		try
 		{
 			DatabaseManager.getSQLStatement("DROP TABLE " + tableName).executeUpdate();
-			System.out.println("Sucessfully deleted table \"" + tableName + "\".");
 		}
 		catch (SQLException e)
 		{
@@ -83,7 +82,7 @@ public class DatabaseManager
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 
 		return null;
@@ -140,7 +139,7 @@ public class DatabaseManager
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 
 		return null;
@@ -163,7 +162,6 @@ public class DatabaseManager
 		else
 			selection = tableAndColumnNames[0];
 		
-		System.out.println(selection);
 		// SELECT * FROM Students JOIN Enrollments ON Students.studentId = Enrollments.studentId WHERE Enrollments.courseId = "1"
 		try
 		{
@@ -177,7 +175,7 @@ public class DatabaseManager
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 
 		return null;
@@ -236,7 +234,7 @@ public class DatabaseManager
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 
 		return null;
@@ -264,11 +262,7 @@ public class DatabaseManager
 
 		try
 		{
-			
-			
-			System.out.println(resultSet.getConcurrency() == ResultSet.CONCUR_UPDATABLE);
 			resultSet.insertRow();
-			System.out.println("hey");
 			resultSet.moveToCurrentRow();
 		}
 		catch (SQLException e)
@@ -302,9 +296,6 @@ public class DatabaseManager
 			{
 				if (value == null)
                     value = 0;
-
-                if (resultSet == null)
-                    System.out.println("result set is null");
 
                 Integer newValue = Integer.parseInt(value.toString());
 
@@ -361,7 +352,6 @@ public class DatabaseManager
 			Class.forName(driver);
 			connection = DriverManager.getConnection(url, username, password);
 
-			System.out.println("Successfully connected to database.");
 		}
 		catch (Exception e)
 		{
@@ -375,12 +365,10 @@ public class DatabaseManager
 			String driver = "com.mysql.jdbc.Driver";
 			Class.forName(driver);
 			connection = DriverManager.getConnection(url, username, password);
-
-			System.out.println("Successfully connected to database.");
 		}
 		catch (Exception e)
 		{
-			System.out.print(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -391,9 +379,6 @@ public class DatabaseManager
 		{
 
 			//System.out.println(DatabasePropertiesManager.read(new String("db", "url").equals(url));
-			System.out.println(url);
-			System.out.println(username);
-			System.out.println(password);
 			String driver = "com.mysql.jdbc.Driver";
 			Class.forName(driver);
 
@@ -403,11 +388,9 @@ public class DatabaseManager
 			return true;
 
 		}
-		catch (Exception e)
-		{
-			System.out.print(e.getMessage());
+		catch (Exception e) {
+			e.printStackTrace();
 			return false;
-
 		}
 		
 	}
@@ -445,8 +428,6 @@ public class DatabaseManager
 
 			String sql = "CREATE TABLE IF NOT EXISTS " + table.getName() + "(" + columnInfo + ")";
 			DatabaseManager.getSQLStatement(sql).executeUpdate();
-
-			System.out.println("Sucessfully created table \"" + table.getName() + "\".");
 		}
 		catch (SQLException e)
 		{

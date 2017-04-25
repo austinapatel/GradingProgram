@@ -61,7 +61,6 @@ public class TableManager
 			ResultSet rs = table.getResultSet();
 			
 			table.addRow();
-			System.out.println("row added");
 
 			Object[] keySetObjects = values.keySet().toArray();
 			String[] keys = new String[keySetObjects.length];

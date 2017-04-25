@@ -119,7 +119,7 @@ public class LimitLinesDocumentListener implements DocumentListener
 		}
 		catch(BadLocationException ble)
 		{
-			System.out.println(ble);
+			ble.printStackTrace();
 		}
 	}
 

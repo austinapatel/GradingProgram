@@ -317,8 +317,6 @@ public class CreateClassInterface extends JPanel implements KeyListener, Tab {
         Table counselorTable = TableManager.getTable(TableProperties.COUNSELORS_TABLE_NAME);
         ArrayList<String> counselorNames = DataTypeManager.toStringArrayList(counselorTable.getAllFromColumn(TableProperties.NAME));
 
-        System.out.println("Counselor Names: " + counselorNames.toString());
-
         counselorModel.addElement("");
         for (String name : counselorNames)
             counselorModel.addElement(name);

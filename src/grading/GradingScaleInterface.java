@@ -4,7 +4,6 @@ import visuals.Tab;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -13,14 +12,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.DataInput;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -32,23 +28,18 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import customBorders.TextBubbleBorder;
 import grading.MyCellEditor.EditorType;
 
 public class GradingScaleInterface extends JPanel implements TableModelListener, Tab, KeyListener {
@@ -233,7 +224,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				} else {
 
 					try {
-						System.out.println("we tried bro");
 						int pindex = getLetterGradeIndex(data[i - 1][0].toString());
 						data[i][0] = template[pindex + 1][0];
 					} catch (Exception e) {
@@ -272,7 +262,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		
 		for (Object[] temp: data)
 		{
-			System.out.println(temp[0].toString() + temp[1].toString());
+//			System.out.println(temp[0].toString() + temp[1].toString());
 		}
 		
 
@@ -582,12 +572,11 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			for (int row = 0; row < rowNum; row++) {
 				data[row][0] = letterTable.getValueAt(row, 0);
 				data[row][1] = letterTable.getValueAt(row, letterTable.getColumnCount() - 1);
-				System.out.println(data[row][1].toString() + data[row][0].toString());
+//				System.out.println(data[row][1].toString() + data[row][0].toString());
 			}
 			//data = formatData(data);
 
 			openScale.update(data);
-			// System.out.println("Table was opened!!!!!!!!!");
 			openScale();
 		}
 	}
@@ -599,7 +588,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 	@Override
 	public String getTabImage() {
-		return "grading_tab_icon.png";
+		return "grading_scale_tab_icon.png";
 	}
 
 	@Override

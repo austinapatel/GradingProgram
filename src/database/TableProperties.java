@@ -47,13 +47,6 @@ public class TableProperties
 	public static String ASSIGNMENT_DATE = "assignmentDate";
 	// Also uses same "name" field of the "Courses" table
 
-	// Categories
-	public static String CATEGORIES_TABLE_NAME = "Category";
-	public static String CATEGORY_ID = "categoryId";
-	// Also uses same "name" field of the "Courses" table
-	// Also uses same "classID" as Assignments
-	public static String WEIGHT = "weightPercent";
-
 	// Enrollments
 	public static String ENROLLMENTS_TABLE_NAME = "Enrollment";
 	public static String ENROLLMENT_ID = "enrollmentId";

@@ -54,7 +54,7 @@ public class PasswordField extends JFrame implements ActionListener {
 	public PasswordField() {
 		// DatabasePropertiesManager.deleteFile(PROPERTIES_FILE);
 		setLayout(null);
-		setIconImage(new ImageIcon("icon.png").getImage());
+		setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
 		setResizable(false);
 		setSize(WIDTH, HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -174,8 +174,6 @@ public class PasswordField extends JFrame implements ActionListener {
 				String password = new String(pf.getPassword());
 
 				if (!password.trim().equals("")) {
-					System.out.println(password);
-
 					String url = DatabasePropertiesManager.read(password,
 							PROPERTIES_FILE, "url");
 					String username = DatabasePropertiesManager.read(password,
@@ -192,9 +190,7 @@ public class PasswordField extends JFrame implements ActionListener {
 
 					}
 					else
-					{
 						JOptionPane.showMessageDialog(null,"Could not connect to database.");
-					}
 				}
 			}
 

@@ -106,19 +106,6 @@ public class Main {
 
 				new TableColumn(TableProperties.NAME, "VARCHAR(255) NOT NULL", null) };
 
-		TableColumn[] categoriesTableColumns = new TableColumn[] {
-				new TableColumn(TableProperties.CATEGORY_ID, "INT NOT NULL UNIQUE", null),
-				new TableColumn(TableProperties.NAME, "VARCHAR(50) NOT NULL", null),
-				new TableColumn(TableProperties.WEIGHT, "INT NOT NULL", new ValueParameter() {
-					{
-						setValueRange(0, 100);
-					}
-				}), new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL", new ValueParameter() {
-					{
-						addSelector(TableProperties.COURSES_TABLE_NAME, TableProperties.NAME);
-					}
-				}), };
-
 		TableColumn[] enrollmentsTableColumns = new TableColumn[] {
 				new TableColumn(TableProperties.ENROLLMENT_ID, "INT NOT NULL UNIQUE", null),
 				new TableColumn(TableProperties.COURSE_ID, "INT NOT NULL", null),
@@ -151,7 +138,6 @@ public class Main {
 		TableManager.addTable(new Table(TableProperties.STUDENTS_TABLE_NAME, studentsTableColumns));
 		TableManager.addTable(new Table(TableProperties.COURSES_TABLE_NAME, coursesTableColumns));
 		TableManager.addTable(new Table(TableProperties.ASSIGNMENTS_TABLE_NAME, assignmentsTableColumns));
-		TableManager.addTable(new Table(TableProperties.CATEGORIES_TABLE_NAME, categoriesTableColumns));
 		TableManager.addTable(new Table(database.TableProperties.ENROLLMENTS_TABLE_NAME, enrollmentsTableColumns));
 		TableManager.addTable(new Table(TableProperties.GRADES_TABLE_NAME, gradesTableColumns));
 		TableManager.addTable(new Table(TableProperties.COUNSELORS_TABLE_NAME, counselorTableColumns));

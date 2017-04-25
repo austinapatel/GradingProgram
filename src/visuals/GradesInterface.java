@@ -31,7 +31,7 @@ import grading.Grade;
 import grading.GradeCalculator;
 import grading.GradingScale;
 
-public class ClassInterface extends JPanel implements Tab
+public class GradesInterface extends JPanel implements Tab
 {
 	private JButton backButton, printButton;
 	private DatabaseJTable table;
@@ -41,7 +41,7 @@ public class ClassInterface extends JPanel implements Tab
 	private String percentage = "Percentage", totalPoints = "Total Points", letterGrade = "Letter Grade", points = "Points";
 	private CustomJTable jTable;
 	
-	public ClassInterface() 
+	public GradesInterface()
 	{
 		initButton();
 		initTable();
@@ -217,24 +217,18 @@ public class ClassInterface extends JPanel implements Tab
 	}
 	private void initPanel() 
 	{
-		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.add(tablePane);
 		this.setVisible(true);
-
 	}
 	@Override
 	public String getTabName() {
-		// TODO Auto-generated method stub
 		return "Classes";
 	}
 
 	@Override
 	public String getTabImage() {
-		// TODO Auto-generated method stub
-		//return "classGrades.png";
-
-		return "grading_tab_icon.png";
+		return "grades_tab_icon.png";
 	}
 
 	@Override

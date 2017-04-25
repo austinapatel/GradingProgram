@@ -12,18 +12,11 @@ import database.*;
 
 public class GradeCalculator {
 
-    private static ArrayList<GradingScale> scales = new ArrayList();
+    private static ArrayList<GradingScale> scales = new ArrayList<>();
 
     public static ArrayList<GradingScale> getScales() {
-
-//		for (int i = 0; i < scales.size(); i++)
-//		{
-//			scales.remove(i);
-//		}
         scales.clear();
-        //.scalesscales = new ArrayList<>();
 
-        System.out.println(scales.size());
         TableManager.getTable(TableProperties.SCALE_TABLE_NAME).update();
         ArrayList<String> scaleStrings = DataTypeManager.toStringArrayList(TableManager.getTable(TableProperties.SCALE_TABLE_NAME).getAllFromColumn(TableProperties.SCALE_DATA));
         ArrayList<String> scaleNames = DataTypeManager.toStringArrayList(TableManager.getTable(TableProperties.SCALE_TABLE_NAME).getAllFromColumn(TableProperties.SCALE_DESCRIPTION));
@@ -31,18 +24,12 @@ public class GradeCalculator {
         for (int i = 0; i < scaleStrings.size(); i++)
             scales.add(new GradingScale(scaleStrings.get(i), scaleNames.get(i)));
 
-
-//		for (GradingScale scale : scales)
-//			System.out.println(scale.getString());
-
         return scales;
     }
 
     public static void deleteScale(String name) {
-
         Table table = TableManager.getTable(TableProperties.SCALE_TABLE_NAME);
-        System.out.println(table.deleteRow(name, table.getColumnIndex(TableProperties.SCALE_DESCRIPTION) + 1));
-
+        table.deleteRow(name, table.getColumnIndex(TableProperties.SCALE_DESCRIPTION) + 1);
     }
 
     public static ArrayList<Grade> getStudentGrades(int courseId) {
@@ -55,10 +42,6 @@ public class GradeCalculator {
        // ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, TableProperties.COURSE_ID, String.valueOf(courseId)));
         ArrayList<Double> pointValues = DataTypeManager.toDoubleArrayList(table.getAllFromColumn(TableProperties.GRADE_VALUE));
         ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(table.getAllFromColumn(TableProperties.STUDENT_ID));
-        
-        
-        System.out.println("student ids: " + studentIds);
-        System.out.println("point values: " + pointValues);
 
         // Initialize hashmap with blank values
         HashMap<Integer, Double> grades = new HashMap<>();
@@ -67,12 +50,8 @@ public class GradeCalculator {
             grades.put(i, 0.0);
 
         // Tally up each student's scores
-        for (int i = 0; i < studentIds.size(); i++) {
-            System.out.println("before: " + grades.get(studentIds.get(i)));
+        for (int i = 0; i < studentIds.size(); i++)
             grades.put(studentIds.get(i), grades.get(studentIds.get(i)) + pointValues.get(i));
-            System.out.println("after: " + grades.get(studentIds.get(i)));
-
-        }
 
         // Calculate the total number of possible points
         Table assignmentsTable = TableManager.getTable(TableProperties.ASSIGNMENTS_TABLE_NAME);
@@ -81,16 +60,16 @@ public class GradeCalculator {
         for (double d : assignmentPoints)
             totalPoints += d;
 
-        System.out.println("sum of assignment points values: " + totalPoints);
         Iterator<Integer> uniqueStudentIds = grades.keySet().iterator();
        
         while (uniqueStudentIds.hasNext())
         {
             int id = uniqueStudentIds.next();
             System.out.println("Student id: " + id + " got a sum of " + grades.get(id) + " a percent grade of " + (grades.get(id) * 100 / totalPoints) + "%");
-              
+
             studentGrades.add(new Grade(totalPoints, grades.get(id), id));
         }
+
         return studentGrades;
     }
 

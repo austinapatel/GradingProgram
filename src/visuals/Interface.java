@@ -35,15 +35,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
     private static int size = 15;
     private final String ACTION_ADD_ROW = "Add Row",
             ACTION_DELETE_ROW = "Delete Row",
-            ACTION_CHANGE_CONNECTION = "Manage Database Connection",
-            ACTION_SHOW_TABLE_INTERFACE_RIGHT = "Tables Right",
-            ACTION_SHOW_CREATE_CLASS_INTERFACE_RIGHT = "Create Class Right",
-            ACTION_SHOW_GRADE_SCALES_RIGHT = "Grade Scales Right",
-            ACTION_SHOW_TABLE_INTERFACE = "Tables",
-            ACTION_SHOW_CREATE_CLASS_INTERFACE = "Create Class",
-            ACTION_SHOW_GRADE_SCALES = "Grade Scales",
-            ACTION_SHOW_CREATE_ASSIGNMENT_RIGHT = "Create Assignment Right",
-            ACTION_SHOW_CREATE_ASSIGNMENT = "Create Assignment";
+            ACTION_CHANGE_CONNECTION = "Manage Database Connection";
 
     private JSplitPane splitPane;
     private JTabbedPane leftTabbedPane = new JTabbedPane(), rightTabbedPane = new JTabbedPane();
@@ -62,8 +54,8 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
 //    private TableInterface tableInterface = new TableInterface();
 //    private CreateAssignmentInterface createAssignmentInterface = new CreateAssignmentInterface();
 
-   
-    
+    private TableInterface tableInterface;
+
     public static void setDefaultSize(int size) {
 
         Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
@@ -73,10 +65,10 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
 
             if (key != null && key.toString().toLowerCase().contains("font")) {
 
-               // System.out.println(key);
+                // System.out.println(key);
                 Font font = UIManager.getDefaults().getFont(key);
                 if (font != null) {
-                    font = font.deriveFont((float)size);
+                    font = font.deriveFont((float) size);
                     UIManager.put(key, font);
                 }
 
@@ -84,12 +76,10 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
 
         }
     }
-    
-    
-    
+
     public Interface() {
-    	setDefaultSize(size);    	
-    	initTabbedPanes();
+        setDefaultSize(size);
+        initTabbedPanes();
         initSplitPane();
         initMenu();
         initFrame();
@@ -105,7 +95,9 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         if (tabSide == TabSide.Right)
             destination = rightTabbedPane;
 
-        destination.addTab(tab.getTabName(), new ImageIcon(tab.getTabImage()), (JPanel) tab);
+        String tabImageName = tab.getTabImage();
+
+        destination.addTab(tab.getTabName(), new ImageIcon(getClass().getClassLoader().getResource(tabImageName)), (JPanel) tab);
         int index = destination.indexOfComponent((JPanel) tab);
         destination.setTabComponentAt(index, new ButtonTabComponent(destination));
         destination.setSelectedIndex(destination.getTabCount() - 1);
@@ -132,21 +124,22 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         initTabbedPane(leftTabbedPane);
         initTabbedPane(rightTabbedPane);
 
+        tableInterface = new TableInterface();
+
         tabs = new ArrayList<>();
+        tabs.add(tableInterface);
         tabs.add(new ConsolePanel());
-        tabs.add(new TableInterface());
         tabs.add(new GradingScaleInterface());
         tabs.add(new CreateAssignmentInterface());
         tabs.add(new CreateClassInterface());
-        tabs.add(new ClassInterface());
-       
-       
+        tabs.add(new GradesInterface());
+
 
         // Put half of the tabs on the left and half on the right
         for (int i = 0; i < tabs.size(); i++)
             addTab(tabs.get(i), (i < tabs.size() / 2) ? TabSide.Left : TabSide.Right);
 
-       
+
         leftTabbedPane.setSelectedIndex(0);
         rightTabbedPane.setSelectedIndex(0);
     }
@@ -225,15 +218,14 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
      * Initializes properties of the JFrame.
      */
     private void initFrame() {
-        setIconImage(new ImageIcon("icon.png").getImage());
+        setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
         setSize(WIDTH, HEIGHT);
         setTitle(Interface.FRAME_TITLE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
         this.addKeyListener(this);
-      
- 
+
 
 //        SwingUtilities.invokeLater(new Runnable() {
 //            public void run() {
@@ -251,10 +243,10 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
 
         switch (action) {
             case ACTION_ADD_ROW:
-//				addRowButton.doClick();
+                tableInterface.addRow();
                 break;
             case ACTION_DELETE_ROW:
-//				deleteRowButton.doClick();
+                tableInterface.deleteRow();
                 break;
             case ACTION_CHANGE_CONNECTION:
                 new PasswordField();
@@ -271,53 +263,44 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
     }
 
 
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+    }
 
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-		System.out.println("Key");
-		if (e.getKeyCode() == KeyEvent.VK_0)
-		{
-			System.out.println("plus");
-			size++;
-			System.out.println(size);
-			setDefaultSize(size);
-			//this.invalidate();
-			this.getContentPane().validate();
-			this.getContentPane().repaint();
-			this.repaint();
-		}
-		
-		if (e.getKeyCode() == KeyEvent.VK_9)
-		{
-			System.out.println("minus");
-		
-			size--;
-			System.out.println(size);
-			setDefaultSize(size);
-			//this.invalidate();
-			this.getContentPane().validate();
-			this.getContentPane().repaint();
-			this.repaint();
-		}
-		
-		
-	}
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // TODO Auto-generated method stub
+        if (e.getKeyCode() == KeyEvent.VK_0) {
+            System.out.println("plus");
+            size++;
+            System.out.println(size);
+            setDefaultSize(size);
+            //this.invalidate();
+            this.getContentPane().validate();
+            this.getContentPane().repaint();
+            this.repaint();
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_9) {
+            size--;
+            System.out.println(size);
+            setDefaultSize(size);
+            //this.invalidate();
+            this.getContentPane().validate();
+            this.getContentPane().repaint();
+            this.repaint();
+        }
 
 
+    }
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // TODO Auto-generated method stub
+
+    }
 }
