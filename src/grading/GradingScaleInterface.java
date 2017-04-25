@@ -1,8 +1,5 @@
-package visuals;
+package grading;
 
-import grading.GradeCalculator;
-import grading.GradingScale;
-import grading.GradingScaleTableModel;
 import visuals.Tab;
 
 import java.awt.BorderLayout;
@@ -23,6 +20,7 @@ import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -32,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -50,6 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import customBorders.TextBubbleBorder;
+import grading.MyCellEditor.EditorType;
 
 public class GradingScaleInterface extends JPanel implements TableModelListener, Tab, KeyListener {
 
@@ -436,7 +436,12 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		letterTable.setBorder(compound);
 		letterTable.setBackground(getBackground());
 		letterTable.getTableHeader().setReorderingAllowed(false);
-
+		letterTable.getColumnModel().getColumn(0).setCellEditor(new MyCellEditor(new JTextField(), letterTable, EditorType.LetterGrade));
+		letterTable.getColumnModel().getColumn(letterTable.getColumnCount() -1).setCellEditor(new MyCellEditor(new JTextField(), letterTable, EditorType.PercentGrade));
+		
+		
+		
+		
 		for (int i = 0; i < letterTable.getColumnCount(); i++) {
 			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 			centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -577,7 +582,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 				data[row][1] = letterTable.getValueAt(row, letterTable.getColumnCount() - 1);
 //				System.out.println(data[row][1].toString() + data[row][0].toString());
 			}
-			data = formatData(data);
+			//data = formatData(data);
 
 			openScale.update(data);
 			openScale();

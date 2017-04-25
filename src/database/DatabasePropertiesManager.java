@@ -39,8 +39,7 @@ public class DatabasePropertiesManager
 			{
 				
 			}
-			FileInputStream in = new FileInputStream(new File(fileName));
-			properties.load(in);
+			properties.load(DatabasePropertiesManager.class.getResourceAsStream(fileName));
 
 			for (int i = 0; i < keys.length; i++)
 				properties.setProperty(keys[i], values[i]);
@@ -80,8 +79,8 @@ public class DatabasePropertiesManager
 		try
 		{
 			Properties properties = new Properties();
-			FileInputStream in = new FileInputStream(fileName);
-			properties.load(in);
+			//FileInputStream in = new FileInputStream(fileName);
+			properties.load(DatabasePropertiesManager.class.getResourceAsStream(fileName));
 			return 	AES.decrypt(properties.getProperty(key), secretKey);
 		}
 		catch (Exception e)

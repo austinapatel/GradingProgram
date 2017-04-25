@@ -34,6 +34,20 @@ public class DatabaseJTable extends JTable {
 
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
+    
+    public int getColumnIndex(String columnName)
+    {
+    	
+    	for (int i = 0; i < this.getColumnCount(); i++)
+    	{
+    		if (this.getColumnName(i).equals(columnName))
+    			return i;
+    	}	
+    	return -1;
+   
+    	
+    	
+    }
 
     public void refreshTableContent() {
         TableColumn[] tableColumns = table.getTableColumns();
