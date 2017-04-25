@@ -39,7 +39,8 @@ public class DatabaseJTable extends JTable {
     
     public int getColumnIndex(String columnName)
     {
-    	
+    	for (int i = 0; i < this.getColumnCount(); i ++)
+    		columnNames[i] = this.getColumnModel().getColumn(i).getHeaderValue().toString();
     	for (int i = 0; i < this.getColumnCount(); i++)
     	{
     		if (this.getColumnName(i).equals(columnName))

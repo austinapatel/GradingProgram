@@ -13,10 +13,7 @@ import database.TableColumn;
 import utilities.TablePrintable;
 
 public class CustomJTable extends JTable
-{
-
-	
-	
+{	
 	@Override
     public Printable getPrintable(PrintMode printMode, MessageFormat headerFormat, MessageFormat footerFormat)
 	{

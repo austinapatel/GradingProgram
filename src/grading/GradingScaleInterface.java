@@ -432,6 +432,8 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		tableModel = new GradingScaleTableModel(rows, cols, disabled_columns);
 		letterTable = new JTable(tableModel);
 		tableModel.addTableModelListener(this);
+		letterTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+
 		letterTable.setFont(new Font("Helvetica", Font.PLAIN, 20));
 		letterTable.setRowHeight(rowHeight);
 		letterTable.setBorder(compound);
@@ -439,10 +441,7 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 		letterTable.getTableHeader().setReorderingAllowed(false);
 		letterTable.getColumnModel().getColumn(0).setCellEditor(new MyCellEditor(new JTextField(), letterTable, EditorType.LetterGrade));
 		letterTable.getColumnModel().getColumn(letterTable.getColumnCount() -1).setCellEditor(new MyCellEditor(new JTextField(), letterTable, EditorType.PercentGrade));
-		
-		
-		
-		
+			
 		for (int i = 0; i < letterTable.getColumnCount(); i++) {
 			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 			centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -474,6 +473,8 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 
 	private void openScale() {
 		
+		
+		letterTable.clearSelection();
 		if (scaleList.isSelectionEmpty())
 		{
 			clearTable();

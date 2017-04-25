@@ -57,7 +57,6 @@ public class DatabasePropertiesManager
 
 	}
 	
-	
 	public static void deleteFile(String filename)
 	{
 		filename += ".properties";
@@ -67,10 +66,7 @@ public class DatabasePropertiesManager
 		   f.delete();
 		}
 	}
-	
-	
-	
-	
+		
 	/** Reads a values in a with a given key and property file name. */
 	public static String read(String secretKey, String fileName, String key)
 	{

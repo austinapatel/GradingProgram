@@ -191,6 +191,10 @@ public class PasswordField extends JFrame implements ActionListener {
 						dispose();
 
 					}
+					else
+					{
+						JOptionPane.showMessageDialog(null,"Could not connect to database.");
+					}
 				}
 			}
 

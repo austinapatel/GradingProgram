@@ -51,9 +51,13 @@ public class MyCellEditor extends DefaultCellEditor
 
     
 
-    @Override
-    public boolean stopCellEditing() {
-        try {
+  
+	
+	
+	
+	@Override
+    public boolean stopCellEditing() {	
+    	try {
             
         	
         //textField.getText()
@@ -65,34 +69,24 @@ public class MyCellEditor extends DefaultCellEditor
         		int num = getLetterGradeIndex(textField.getText());
         		if (num == -1)
         		{
-        			System.out.println("hey -1");
         		
         			throw new Exception();
         			
-        		
         		}
-        		
-        		System.out.println(textField.getText() + "TEXT");
-        				
-        	
+        	        				
         		if (table.getEditingRow() != 0 && num <= getLetterGradeIndex((table.getValueAt(table.getEditingRow() -1, table.getEditingColumn()).toString())) || table.getEditingRow() != table.getRowCount() && num >= getLetterGradeIndex((table.getValueAt(table.getEditingRow() + 1, table.getEditingColumn()).toString())) )		
         		{
         			throw new Exception();
         		}
-        		
-        		
-        		
-      
             }
-        	else
+        	else if (type == EditorType.PercentGrade)
         	{
-        		
+        		double num = Double.parseDouble(textField.getText());        		
+        		if (table.getEditingRow() != 0 && num >= Double.parseDouble(table.getValueAt(table.getEditingRow() -1, table.getEditingColumn()).toString()) || table.getEditingRow() != table.getRowCount() -1 && num <= Double.parseDouble(table.getValueAt(table.getEditingRow() + 1, table.getEditingColumn()).toString()))
+        		{
+        			throw new Exception();
+        		}
         	}
-        	
-        	
-        	
-        	
-        	
         } catch (Exception e) {
             textField.setBorder(red);
             return false;
