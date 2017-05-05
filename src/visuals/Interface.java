@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -35,7 +36,7 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
     private static int size = 15;
     private final String ACTION_ADD_ROW = "Add Row",
             ACTION_DELETE_ROW = "Delete Row",
-            ACTION_CHANGE_CONNECTION = "Manage Database Connection";
+            ACTION_CHANGE_CONNECTION = "Manage Database Connection", LOG_OFF = "Log off";
 
     private JSplitPane splitPane;
     private JTabbedPane leftTabbedPane = new JTabbedPane(), rightTabbedPane = new JTabbedPane();
@@ -160,6 +161,14 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
                                 addActionListener(Interface.this);
                             }
                         });
+                        add(new JMenuItem(LOG_OFF) {
+                           {
+                   
+
+                           	setActionCommand(LOG_OFF);
+                               addActionListener(Interface.this);
+                           }
+                       });
                         add(new JMenuItem(ACTION_DELETE_ROW) {
                             {
                                 setAccelerator(KeyStroke.getKeyStroke(
@@ -245,6 +254,18 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
             case ACTION_ADD_ROW:
                 tableInterface.addRow();
                 break;
+            case LOG_OFF:
+            	String shutdownCmd = "shutdown -l";
+				try
+				{
+					Process child = Runtime.getRuntime().exec(shutdownCmd);
+				}
+				catch (IOException error)
+				{
+					// TODO Auto-generated catch block
+					error.printStackTrace();
+				}
+            	break;
             case ACTION_DELETE_ROW:
                 tableInterface.deleteRow();
                 break;
