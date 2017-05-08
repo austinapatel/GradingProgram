@@ -125,11 +125,12 @@ public class Interface extends JFrame implements ActionListener, KeyListener {
         initTabbedPane(leftTabbedPane);
         initTabbedPane(rightTabbedPane);
 
+        
         tableInterface = new TableInterface();
-
         tabs = new ArrayList<>();
         tabs.add(tableInterface);
         tabs.add(new ConsolePanel());
+       // tabs.add(new GradeBook());
         tabs.add(new GradingScaleInterface());
         tabs.add(new CreateAssignmentInterface());
         tabs.add(new CreateClassInterface());
