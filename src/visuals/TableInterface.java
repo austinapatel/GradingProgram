@@ -267,7 +267,7 @@ public class TableInterface extends JPanel implements Tab {
         jTable = new JTable() {
 
             public TableCellEditor getCellEditor(int row, int column) {
-                return new DatabaseCellEditor(thisTableInterface);
+                return new DatabaseCellEditor();
             }
 
             {

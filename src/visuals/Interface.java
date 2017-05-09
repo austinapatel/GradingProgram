@@ -54,6 +54,7 @@ public class Interface extends JFrame {
         add(homeInterface);
     }
 
+
     public void showInterface(JPanel panel) {
         System.out.println("showing new interface");
 
