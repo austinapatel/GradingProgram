@@ -345,6 +345,8 @@ public class DatabaseManager
 		String url = DatabasePropertiesManager.read(secretString, "db", "url");
 		String username = DatabasePropertiesManager.read(secretString, "db", "username");
 		String password = DatabasePropertiesManager.read(secretString,"db", "password");
+		
+		System.out.println(url);
 
 		try
 		{
