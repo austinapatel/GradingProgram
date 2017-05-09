@@ -1,33 +1,31 @@
 package visuals;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import database.DatabaseCellEditor;
 import database.TableProperties;
-import grading.GradeCalculator;
-import grading.GradingScale;
 
 public class GradeBook extends JPanel implements Tab
-{
-	
+{	
 	private JList classList;
 	private DefaultListModel listModel;
 	private DatabaseJTable table;
-	 private JScrollPane tablePane;
-	
+	private JScrollPane tablePane;
+
 	public GradeBook ()
 	{		
 		add(table);
 	}
-	
 	
 	public void initClassTable()
 	{
@@ -41,19 +39,13 @@ public class GradeBook extends JPanel implements Tab
 		        if (me.getClickCount() == 2)
 		        {
 		        	{	        	
-
-		        	
+		        		
 		        	}
 		        }
 		    }
 		});
 		tablePane = new JScrollPane(table);
 	}
-	
-	
-	
-	
-	
 	private void initList() 
 	{
 		listModel = new DefaultListModel();
@@ -67,7 +59,8 @@ public class GradeBook extends JPanel implements Tab
 				if (evt.getClickCount() == 2) 
 				{
 
-				} else if (evt.getClickCount() == 3) {
+				} else if (evt.getClickCount() == 3)
+				{
 
 					int index = list.locationToIndex(evt.getPoint());
 				}
@@ -94,9 +87,5 @@ public class GradeBook extends JPanel implements Tab
 	{
 		// TODO Auto-generated method stub
 		
-	}
-
-	
-	
-	
+	}	
 }
