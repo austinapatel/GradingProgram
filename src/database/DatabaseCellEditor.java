@@ -42,8 +42,8 @@ public class DatabaseCellEditor extends AbstractCellEditor
 	private ValueParameter valueParameter;
 	private TableInterface tableInterface;
 
-	public DatabaseCellEditor(TableInterface tableInterface) {
-		this.tableInterface = tableInterface;
+	public DatabaseCellEditor() {
+		
 
 		list = null;
 		textField = null;
