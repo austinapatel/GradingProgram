@@ -1,19 +1,22 @@
 package visuals;
 
-import java.awt.Dimension;
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import database.DatabaseCellEditor;
+import database.DatabaseManager;
+import database.Table;
 import database.TableProperties;
+import grading.GradeCalculator;
 
 public class GradeBook extends JPanel implements Tab
 {	
@@ -24,7 +27,9 @@ public class GradeBook extends JPanel implements Tab
 
 	public GradeBook ()
 	{		
-		add(table);
+		this.setLayout(new BorderLayout());
+		initClassTable();
+		add(table, BorderLayout.NORTH);
 	}
 	
 	public void initClassTable()
@@ -38,7 +43,17 @@ public class GradeBook extends JPanel implements Tab
 		        int row = table2.rowAtPoint(p);
 		        if (me.getClickCount() == 2)
 		        {
-		        	{	        	
+		        	{	    
+		      		String value = "1";
+		        		//SELECT * FROM Students JOIN Enrollments ON Students.studentId = Enrollments.studentId WHERE Enrollments.courseId = "1"
+		        		ResultSet set = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[]{TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, value);
+		        		Table table = new Table("StudentsTable", set);
+		        		DatabaseJTable table3 = new DatabaseJTable(table);
+		        		remove(tablePane);
+		        		add(new JScrollPane(table3), BorderLayout.SOUTH);
+		        		validate();
+		        		repaint();
+		        		GradeCalculator.getGrades(1, "");
 		        		
 		        	}
 		        }
@@ -58,7 +73,7 @@ public class GradeBook extends JPanel implements Tab
 				JList list = (JList) evt.getSource();
 				if (evt.getClickCount() == 2) 
 				{
-
+					System.out.println("Double Click ");
 				} else if (evt.getClickCount() == 3)
 				{
 

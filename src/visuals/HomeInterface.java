@@ -21,6 +21,7 @@ public class HomeInterface extends JPanel implements ActionListener {
     private void initInterfaceHashMap() {
         interfaces = new HashMap<String, JPanel>(){{
             put("Create Class", new CreateClassInterface());
+            put("GradeBook", new GradeBook());
             put("Create Assignment", new CreateAssignmentInterface());
         }};
     }

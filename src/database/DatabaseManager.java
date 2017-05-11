@@ -179,8 +179,27 @@ public class DatabaseManager
 		}
 
 		return null;
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 
+	public static String getJoinString(String Table1Name, String Table2NameAndJoinColumn, String table1JoinColumn)
+	{
+		//return "JOIN " + Table1Name + " ON " + Table2NameAndJOinColumn + " = " + Table1Name + "." + table1JoinColumn;
+		return null;
+	}
+	
+	
+	
+	
+	
 	public static ResultSet getTripleJoinedTable(String table1Name, String table2Name, String table3Name, String[][] tableAndColumnNames, String table1JoinColumn, String table2JoinColumn, String table1SecondJoinColumn, String table3JoinColumn, String tableNameAndFilter, String filterValue, String groupByTableNameAndColumn)
 	{
 					
