@@ -9,6 +9,10 @@ package visuals;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -18,7 +22,7 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class Interface extends JFrame {
 
-    private static final String FRAME_TITLE = "Grading Program";
+    private static final String FRAME_TITLE = "Grading Program", ESCAPE = "escape";
     private static final int WIDTH = 1200, HEIGHT = 900;
 
     private static int size = 15;
@@ -42,15 +46,16 @@ public class Interface extends JFrame {
     }
 
     public Interface() {
+        interfaces = new ArrayList<>();
+
         setDefaultSize(size);
         initContent();
         initFrame();
-
-        interfaces = new ArrayList<JPanel>();
     }
 
     public void initContent() {
         homeInterface = new HomeInterface(this);
+        interfaces.add(homeInterface);
         add(homeInterface);
     }
 
@@ -58,11 +63,28 @@ public class Interface extends JFrame {
     public void showInterface(JPanel panel) {
         System.out.println("showing new interface");
 
+        if (interfaces.size() > 0)
+            remove(interfaces.get(interfaces.size() - 1));
+
         interfaces.add(panel);
 
-        remove(homeInterface);
-
         add(panel);
+
+        getContentPane().revalidate();
+        getContentPane().repaint();
+    }
+
+    public void backAnInterface() {
+        System.out.println("escape pressed");
+
+        if (interfaces.size() == 1)
+            return;
+
+
+        JPanel toRemove = interfaces.remove(interfaces.size() - 1);
+        remove(toRemove);
+
+        add(interfaces.get(interfaces.size() - 1));
 
         getContentPane().revalidate();
         getContentPane().repaint();
@@ -78,5 +100,15 @@ public class Interface extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+
+        JPanel panel = (JPanel) getContentPane();
+
+        panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), ESCAPE);
+        panel.getActionMap().put(ESCAPE, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                backAnInterface();
+            }
+        });
     }
 }

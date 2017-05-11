@@ -54,7 +54,7 @@ public class TableInterface extends JPanel implements Tab {
     }
 
     public void addRow() {
-        table.addRow();
+        table.startRowCreation();
 
         databaseTableModel.fireTableDataChanged();
 
