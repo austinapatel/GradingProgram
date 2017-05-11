@@ -28,35 +28,39 @@ public class Table
 	{
 		this.name = name;
 		init(name, tableColumns, DatabaseManager.getTable(this));
-		
+
 		createTable();
 	}
-	
-	public Table(String tableName, ResultSet resultSet) {
+
+	public Table(String tableName, ResultSet resultSet)
+	{
 		TableColumn[] tableColumns = null;
-		
-		try {
-			ResultSetMetaData metaData =  resultSet.getMetaData();
-			
-			tableColumns = new TableColumn[metaData.getColumnCount() ];
-			tableColumns[0] =  new TableColumn(metaData.getColumnName(1), metaData.getColumnTypeName(1), null);
-			for (int i = 1; i <= metaData.getColumnCount(); i++) {
-				tableColumns[i -1] = new TableColumn(metaData.getColumnName(i ), metaData.getColumnTypeName(i), null);
+
+		try
+		{
+			ResultSetMetaData metaData = resultSet.getMetaData();
+
+			tableColumns = new TableColumn[metaData.getColumnCount()];
+			tableColumns[0] = new TableColumn(metaData.getColumnName(1), metaData.getColumnTypeName(1), null);
+			for (int i = 1; i <= metaData.getColumnCount(); i++)
+			{
+				tableColumns[i - 1] = new TableColumn(metaData.getColumnName(i), metaData.getColumnTypeName(i), null);
 			}
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			e.printStackTrace();
 		}
-		
-		init(tableName, tableColumns, resultSet);		
+
+		init(tableName, tableColumns, resultSet);
 	}
-	
-	private void init(String name, TableColumn[] tableColumns, ResultSet resultSet) {
+
+	private void init(String name, TableColumn[] tableColumns, ResultSet resultSet)
+	{
 		this.tableColumns = tableColumns;
 
 		this.name = name;
-		this.primaryKey = tableColumns[0].getName();		
-
-		
+		this.primaryKey = tableColumns[0].getName();
 
 		this.resultSet = resultSet;
 	}
@@ -66,8 +70,7 @@ public class Table
 	{
 		DatabaseManager.createTable(this);
 	}
-	
-	
+
 	public void update()
 	{
 		resultSet = DatabaseManager.getTable(this);
@@ -94,7 +97,8 @@ public class Table
 	}
 
 	/**Determines the number of rows in the table.*/
-	public int getRowCount() {
+	public int getRowCount()
+	{
 		int rows = 0;
 
 		try
@@ -118,9 +122,11 @@ public class Table
 	}
 
 	/**
-	 * Adds a row to the table with blank data.
+	 * Adds a row to the table with blank data. Do not call this function if you want to add a row.
+	 * Use TableManager.insertValuesIntoNewRow();
 	 */
-	public void addRow() {
+	public void startRowCreation()
+	{
 
 		int desiredRowID = getInsertID();
 		DatabaseManager.beginRowInsert(this);
@@ -133,10 +139,11 @@ public class Table
 		DatabaseManager.endRowInsert(this);
 	}
 
-	private int getInsertID() {
+	private int getInsertID()
+	{
 		ArrayList<Integer> currentIDs = DataTypeManager.toIntegerArrayList(getAllFromColumn(tableColumns[0].getName()));
 
-//		resultSet.first();
+		//		resultSet.first();
 
 		int largest = 0;
 		for (int i : currentIDs)
@@ -149,13 +156,14 @@ public class Table
 	 * Removes a row from the table given a value and the column that value is
 	 * in. Returns the index of the row that was deleted.
 	 */
-	public int deleteRow(Object value, int column) {
+	public int deleteRow(Object value, int column)
+	{
 		try
 		{
 			resultSet.beforeFirst();
 
 			while (resultSet.next())
-			{	
+			{
 				if (resultSet.getObject(column).toString().equals(value.toString()))
 				{
 					resultSet.deleteRow();
@@ -171,7 +179,8 @@ public class Table
 		return -1;
 	}
 
-	public int getColumnIndex(String columnName) {
+	public int getColumnIndex(String columnName)
+	{
 		for (int i = 0; i < tableColumns.length; i++)
 			if (tableColumns[i].getName().equals(columnName))
 				return i;
@@ -179,39 +188,46 @@ public class Table
 		return -1;
 	}
 
-	public ArrayList<Object> getAllFromColumn(String columnName) {
+	public ArrayList<Object> getAllFromColumn(String columnName)
+	{
 		return getAllFromColumn(columnName, resultSet);
 	}
 
-	private ArrayList<Object> getAllFromColumn(String columnName, ResultSet resultSet) {
+	private ArrayList<Object> getAllFromColumn(String columnName, ResultSet resultSet)
+	{
 		ArrayList<Object> data = new ArrayList<>();
 		int columnIndex = getColumnIndex(columnName) + 1;
 
-		try {
+		try
+		{
 			resultSet.beforeFirst();
 
-			if (!resultSet.next()) { // Checks if ResultSet is empty
+			if (!resultSet.next())
+			{ // Checks if ResultSet is empty
 				resultSet.beforeFirst();
 				return data;
 			}
 
 			resultSet.first();
 
-			while(!resultSet.isAfterLast())
+			while (!resultSet.isAfterLast())
 			{
 				Object currentValue = resultSet.getObject(columnIndex);
 				data.add(currentValue);
 
 				resultSet.next();
 			}
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			e.printStackTrace();
 		}
 
 		return data;
 	}
 
-	public ArrayList<Object> getSomeFromColumn(String returnColumnName, String searchColumnName, String searchQuery) {
+	public ArrayList<Object> getSomeFromColumn(String returnColumnName, String searchColumnName, String searchQuery)
+	{
 		ResultSet filter = DatabaseManager.getFilterdTable(this, searchColumnName, searchQuery);
 		return getAllFromColumn(returnColumnName, filter);
 	}
