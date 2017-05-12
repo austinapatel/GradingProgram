@@ -53,7 +53,7 @@ public class GradeBook extends JPanel implements Tab
 		        		add(new JScrollPane(table3), BorderLayout.SOUTH);
 		        		validate();
 		        		repaint();
-		        		GradeCalculator.getGrades(1, "");
+		        		//GradeCalculator.getGrades(1, "");
 		        		
 		        	}
 		        }
