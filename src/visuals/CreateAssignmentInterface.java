@@ -51,6 +51,7 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
         txtName.addKeyListener(this);
         contentPanel.add(txtName);
 
+      
         wrapInJPanel(new JLabel("Class"));
         coursesJTable = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
         coursesJTable.setPreferredScrollableViewportSize(coursesJTable.getPreferredSize());
@@ -147,6 +148,13 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
             }};
 
             TableManager.insertValuesIntoNewRow(assignmentsTable, values);
+            
+            txtName.setText("");
+            txtPointValue.setText("");
+            dateModel.setSelected(false);
+            coursesJTable.getSelectionModel().clearSelection();
+            
+            determineIfCreateEnabled();
         }
     }
 
