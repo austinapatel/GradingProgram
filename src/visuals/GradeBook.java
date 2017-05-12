@@ -43,13 +43,13 @@ public class GradeBook extends JPanel implements Tab
 		        int row = table2.rowAtPoint(p);
 		        if (me.getClickCount() == 2)
 		        {
-		        	{	    
-		      		String value = "1";
+		        	{	
+		        		String value = (table.getValueAt(table.getSelectedRow(), 0).toString());
+		        		//String value = "1";
 		        		//SELECT * FROM Students JOIN Enrollments ON Students.studentId = Enrollments.studentId WHERE Enrollments.courseId = "1"
 		        		ResultSet set = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[]{TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, value);
-		        		Table table = new Table("StudentsTable", set);
-		        		DatabaseJTable table3 = new DatabaseJTable(table);
-		        		remove(tablePane);
+		        		Table studentTable = new Table("StudentsTable", set);
+		        		DatabaseJTable table3 = new DatabaseJTable(studentTable);
 		        		add(new JScrollPane(table3), BorderLayout.SOUTH);
 		        		validate();
 		        		repaint();
