@@ -1,8 +1,24 @@
 package database;
-
 public class SqlBuilder
 {	
-	public static String getJoinString(String JoinTable, String PriorTable, String joinColumn)
+	public enum JoinType
+	{		
+		INNER_JOIN("INNER JOIN"), LEFT_JOIN("LEFT JOIN"), RIGHT_JOIN("RIGHT JOIN"), FULL_OUTER_JOIN("FULL OUTER JOIN");
+		
+		private String joinText;
+
+		private JoinType(String joinText)
+		{
+		this.joinText = joinText;
+		}
+		
+		public String getJoinText()
+		{
+			return joinText;
+		}
+	}
+	
+	public static String getJoinString(JoinType type, String JoinTable, String PriorTable, String joinColumn)
 	{
 		return "JOIN " + JoinTable + " ON " + PriorTable + "." + joinColumn + " = " + JoinTable + "."  + joinColumn;	
 	}
