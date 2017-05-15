@@ -1,18 +1,23 @@
 package visuals;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 public class HomeInterface extends InterfacePanel implements ActionListener {
 
     private static int BUTTON_BORDER = 30;
 
-    private HashMap<String, InterfacePanel> interfaces;
+    private TreeMap<String, InterfacePanel> interfaces;
     private BaseInterface mainInterface;
     private KeyboardGridPanel gridPanel;
 
@@ -32,7 +37,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     }
 
     private void initInterfaceHashMap() {
-        interfaces = new HashMap<String, InterfacePanel>(){{
+        interfaces = new TreeMap<String, InterfacePanel>(){{
             put("Create Class", new CreateClassInterface());
             put("Grade Book", new GradeBook());
             put("Create Assignment", new CreateAssignmentInterface());
