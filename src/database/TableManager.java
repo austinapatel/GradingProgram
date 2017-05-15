@@ -18,6 +18,8 @@ import java.util.Set;
 public class TableManager
 {
 
+	public static boolean createTable = false;
+
 	private static HashMap<String, Table> tables;
 
 	public TableManager()

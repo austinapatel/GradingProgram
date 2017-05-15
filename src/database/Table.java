@@ -24,11 +24,11 @@ public class Table
 	private TableColumn[] tableColumns;
 	private ResultSet resultSet;
 
-	public Table(String name, TableColumn[] tableColumns, boolean createTable)
+	public Table(String name, TableColumn[] tableColumns)
 	{
 		this.name = name;
 		init(name, tableColumns, DatabaseManager.getTable(this));
-		if (createTable)
+		if (TableManager.createTable)
 			createTable();
 	}
 

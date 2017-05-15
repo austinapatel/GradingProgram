@@ -59,8 +59,6 @@ public class BaseInterface extends JFrame {
 
 
     public void showInterface(JPanel panel) {
-        System.out.println("showing new interface");
-
         if (interfaces.size() > 0)
             remove(interfaces.get(interfaces.size() - 1));
 
@@ -73,8 +71,6 @@ public class BaseInterface extends JFrame {
     }
 
     public void backAnInterface() {
-        System.out.println("escape pressed");
-
         if (interfaces.size() == 1)
             return;
 
