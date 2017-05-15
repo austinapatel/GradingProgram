@@ -44,7 +44,9 @@ public class GradeBook extends JPanel implements Tab
 		        if (me.getClickCount() == 2)
 		        {
 		        	{	    
-		      		String value = "1";
+
+		        		
+		        		String value = "1";
 		        		//SELECT * FROM Students JOIN Enrollments ON Students.studentId = Enrollments.studentId WHERE Enrollments.courseId = "1"
 		        		ResultSet set = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[]{TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, value);
 		        		Table table = new Table("StudentsTable", set);
@@ -54,6 +56,13 @@ public class GradeBook extends JPanel implements Tab
 		        		validate();
 		        		repaint();
 		        		GradeCalculator.getGrades(1, "");
+		        		
+		        		
+		        		
+		        		//SELECT * FROM Assignments JOIN Enrollments ON Assignments.courseId = Enrollments.courseId JOIN Students ON Enrollments.studentId = Students.studentId WHERE Enrollments.courseId = "1"
+
+		        		
+		        		DatabaseManager.getTripleJoinedTable(TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, TableProperties.STUDENTS_TABLE_NAME, new String[] {"*"}, TableProperties.COURSE_ID, TableProperties.COURSE_ID, table1SecondJoinColumn, table3JoinColumn, tableNameAndFilter, filterValue, groupByTableNameAndColumn)
 		        		
 		        	}
 		        }
