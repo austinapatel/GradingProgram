@@ -7,7 +7,6 @@
 
 package database;
 
-import visuals.Interface;
 import visuals.TableInterface;
 
 import java.awt.Component;

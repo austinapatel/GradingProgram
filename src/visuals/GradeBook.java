@@ -3,22 +3,21 @@ package visuals;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import database.DatabaseCellEditor;
 import database.DatabaseManager;
 import database.Table;
 import database.TableProperties;
-import grading.GradeCalculator;
 
-public class GradeBook extends JPanel implements Tab
+public class GradeBook extends InterfacePanel
 {	
 	private JList classList;
 	private DefaultListModel listModel;
@@ -27,7 +26,6 @@ public class GradeBook extends JPanel implements Tab
 
 	public GradeBook ()
 	{		
-		this.setLayout(new BorderLayout());
 		initClassTable();
 		add(table, BorderLayout.NORTH);
 	}
@@ -43,26 +41,17 @@ public class GradeBook extends JPanel implements Tab
 		        int row = table2.rowAtPoint(p);
 		        if (me.getClickCount() == 2)
 		        {
-		        	{	    
-
-		        		
-		        		String value = "1";
+		        	{	
+		        		String value = (table.getValueAt(table.getSelectedRow(), 0).toString());
+		        		//String value = "1";
 		        		//SELECT * FROM Students JOIN Enrollments ON Students.studentId = Enrollments.studentId WHERE Enrollments.courseId = "1"
 		        		ResultSet set = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[]{TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, value);
-		        		Table table = new Table("StudentsTable", set);
-		        		DatabaseJTable table3 = new DatabaseJTable(table);
-		        		remove(tablePane);
+		        		Table studentTable = new Table("StudentsTable", set);
+		        		DatabaseJTable table3 = new DatabaseJTable(studentTable);
 		        		add(new JScrollPane(table3), BorderLayout.SOUTH);
 		        		validate();
 		        		repaint();
-		        		GradeCalculator.getGrades(1, "");
-		        		
-		        		
-		        		
-		        		//SELECT * FROM Assignments JOIN Enrollments ON Assignments.courseId = Enrollments.courseId JOIN Students ON Enrollments.studentId = Students.studentId WHERE Enrollments.courseId = "1"
-
-		        		
-		        		DatabaseManager.getTripleJoinedTable(TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, TableProperties.STUDENTS_TABLE_NAME, new String[] {"*"}, TableProperties.COURSE_ID, TableProperties.COURSE_ID, table1SecondJoinColumn, table3JoinColumn, tableNameAndFilter, filterValue, groupByTableNameAndColumn)
+		        		//GradeCalculator.getGrades(1, "");
 		        		
 		        	}
 		        }
@@ -91,25 +80,19 @@ public class GradeBook extends JPanel implements Tab
 			}
 		});
 	}
-	
+
 	@Override
-	public String getTabName()
-	{
-		// TODO Auto-generated method stub
-		return "GradeBook";
+	public void keyTyped(KeyEvent e) {
+
 	}
 
 	@Override
-	public String getTabImage()
-	{
-		// TODO Auto-generated method stub
-		return "grading_tab_icon.png";
+	public void keyPressed(KeyEvent e) {
+
 	}
 
 	@Override
-	public void onTabSelected()
-	{
-		// TODO Auto-generated method stub
-		
-	}	
+	public void keyReleased(KeyEvent e) {
+
+	}
 }

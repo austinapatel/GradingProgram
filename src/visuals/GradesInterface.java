@@ -3,12 +3,7 @@ package visuals;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -19,7 +14,6 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -31,8 +25,7 @@ import grading.Grade;
 import grading.GradeCalculator;
 import grading.GradingScale;
 
-public class GradesInterface extends JPanel implements Tab
-{
+public class GradesInterface extends InterfacePanel {
 	private JButton backButton, printButton;
 	private DatabaseJTable table;
 	private JComboBox scaleList;
@@ -221,17 +214,19 @@ public class GradesInterface extends JPanel implements Tab
 		this.add(tablePane);
 		this.setVisible(true);
 	}
+
 	@Override
-	public String getTabName() {
-		return "Classes";
+	public void keyTyped(KeyEvent e) {
+
 	}
 
 	@Override
-	public String getTabImage() {
-		return "grades_tab_icon.png";
+	public void keyPressed(KeyEvent e) {
+
 	}
 
 	@Override
-	public void onTabSelected() {
+	public void keyReleased(KeyEvent e) {
+
 	}
 }
