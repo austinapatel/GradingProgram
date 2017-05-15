@@ -14,11 +14,7 @@ import database.TableManager;
 import database.TableProperties;
 import database.ValueParameter;
 import grading.GradeCalculator;
-<<<<<<< Updated upstream
-import visuals.InterfaceFrame;
-=======
 import visuals.BaseInterface;
->>>>>>> Stashed changes
 import visuals.PasswordField;
 
 /**
@@ -57,11 +53,7 @@ public class Main {
 
 	private static void startInterface() {
 		Main.setUpTables();
-<<<<<<< Updated upstream
-		new InterfaceFrame();
-=======
 		new BaseInterface();
->>>>>>> Stashed changes
 
 		GradeCalculator.getStudentGrades(1);
 	}

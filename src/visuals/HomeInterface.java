@@ -12,19 +12,11 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
 
     private static int BUTTON_BORDER = 30;
 
-<<<<<<< Updated upstream
     private HashMap<String, InterfacePanel> interfaces;
-    private InterfaceFrame mainInterface;
+    private BaseInterface mainInterface;
     private KeyboardGridPanel gridPanel;
 
-    public HomeInterface(InterfaceFrame mainInterface) {
-=======
-    private HashMap<String, JPanel> interfaces;
-    private BaseInterface mainInterface;
-    private JPanel contentPanel;
-
     public HomeInterface(BaseInterface mainInterface) {
->>>>>>> Stashed changes
         initInterfaceHashMap();
         initPanel();
         initVisuals();
@@ -63,21 +55,15 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
 
         for (JButton button : buttons) {
             button.addActionListener(this);
-<<<<<<< Updated upstream
             JPanel border = new JPanel();
             border.setLayout(new BorderLayout());
             border.add(button, BorderLayout.CENTER);
             border.setBorder(BorderFactory.createEmptyBorder(BUTTON_BORDER, BUTTON_BORDER, BUTTON_BORDER, BUTTON_BORDER));
-=======
-            wrapInJPanel(button);
-        }
-
-        buttons.get(0).requestFocus();
-    }
->>>>>>> Stashed changes
 
             gridPanel.add(border);
+
         }
+        buttons.get(0).requestFocus();
     }
 
     @Override
