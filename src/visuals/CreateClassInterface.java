@@ -13,11 +13,11 @@ public class CreateClassInterface extends InterfacePanel
 	private JComboBox<Integer> periodComboBox;
 	private JCheckBox chckbxCustomYear;
 	private JButton btnCreateClass;
+	private StudentInterface studentInterface;
 
 	public CreateClassInterface()
 	{
 		initClassInterface();
-		initYearPicker();
 	}
 
 	private void initClassInterface()
@@ -52,13 +52,18 @@ public class CreateClassInterface extends InterfacePanel
 		periodComboBox = new JComboBox<Integer>(new Integer[] {1, 2, 3, 4, 5, 6, 7});
 		periodComboBox.addKeyListener(this);
 		add(periodComboBox);
-
+		
+		initYearPicker();
+		
 		btnCreateClass = new JButton();
 		btnCreateClass.setText("Create Class");
 		btnCreateClass.addKeyListener(this);
 
 		add(btnCreateClass);
 		btnCreateClass.setEnabled(false);
+		
+		studentInterface = new StudentInterface();
+		add(studentInterface);		
 
 //		btnCreateClass.addActionListener(new ActionListener() {
 //			@Override
