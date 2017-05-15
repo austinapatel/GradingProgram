@@ -36,18 +36,18 @@ public class DatabaseJTable extends JTable {
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     
-    public int getColumnIndex(String columnName)
-    {
-    	
-    	for (int i = 0; i < this.getColumnCount(); i ++)
-    		columnNames[i] = this.getColumnModel().getColumn(i).getHeaderValue().toString();
-    	for (int i = 0; i < this.getColumnCount(); i++)
-    	{
-    		if (this.getColumnName(i).equals(columnName))
-    			return i;
-    	}	
-    	return -1;	
-    }
+//    public int getColumnIndex(String columnName)
+//    {
+//
+//    	for (int i = 0; i < this.getColumnCount(); i ++)
+//    		columnNames[i] = this.getColumnModel().getColumn(i).getHeaderValue().toString();
+//    	for (int i = 0; i < this.getColumnCount(); i++)
+//    	{
+//    		if (this.getColumnName(i).equals(columnName))
+//    			return i;
+//    	}
+//    	return -1;
+//    }
 
     public void refreshTableContent() {
         TableColumn[] tableColumns = table.getTableColumns();
@@ -56,7 +56,7 @@ public class DatabaseJTable extends JTable {
 
         for (int i = 0; i < tableColumns.length; i++)
         	columnNames[i] = tableColumns[i].getName();
-        
+
         model.setColumnNames(columnNames);
 
         for (TableColumn tableColumn : tableColumns)
