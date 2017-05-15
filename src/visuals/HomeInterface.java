@@ -32,7 +32,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     private void initPanel() {
         setLayout(new GridBagLayout());
 
-        gridPanel = new KeyboardGridPanel(4,2);
+        gridPanel = new KeyboardGridPanel(5,2);
         add(gridPanel);
     }
 
@@ -46,6 +46,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
             put("Grading Scale", new GradingScaleInterface());
             put("View Class Grades", new GradesInterface());
             put("Add Student", new StudentInterface());
+            put("Enroll Student", new EnrollmentsInterface());
         }};
     }
 
