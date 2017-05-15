@@ -24,12 +24,12 @@ public class Table
 	private TableColumn[] tableColumns;
 	private ResultSet resultSet;
 
-	public Table(String name, TableColumn[] tableColumns)
+	public Table(String name, TableColumn[] tableColumns, boolean createTable)
 	{
 		this.name = name;
 		init(name, tableColumns, DatabaseManager.getTable(this));
-
-		createTable();
+		if (createTable)
+			createTable();
 	}
 
 	public Table(String tableName, ResultSet resultSet)
