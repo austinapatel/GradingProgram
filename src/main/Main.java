@@ -49,6 +49,11 @@ public class Main {
 			launchGUI(args[0]);
 		else if (args.length == 3)
 			launchGUI(args[0], args[1], args[2]);
+		else if (args.length == 4)
+		{	
+			createTable = Boolean.parseBoolean(args[4]);
+			launchGUI(args[0], args[1], args[2]);
+		}
 		else
 			login = new PasswordField();	
 	}
