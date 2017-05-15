@@ -14,7 +14,7 @@ import database.TableManager;
 import database.TableProperties;
 import database.ValueParameter;
 import grading.GradeCalculator;
-import visuals.InterfaceFrame;
+import visuals.BaseInterface;
 import visuals.PasswordField;
 
 /**
@@ -55,7 +55,7 @@ public class Main {
 
 	private static void startInterface() {
 		Main.setUpTables();
-		new InterfaceFrame();
+		new BaseInterface();
 
 		GradeCalculator.getStudentGrades(1);
 	}
