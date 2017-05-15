@@ -1,6 +1,9 @@
-package grading;
+package visuals;
 
-import visuals.Tab;
+import grading.GradeCalculator;
+import grading.GradingScale;
+import grading.GradingScaleTableModel;
+import grading.MyCellEditor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -9,7 +12,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ import org.json.JSONException;
 
 import grading.MyCellEditor.EditorType;
 
-public class GradingScaleInterface extends JPanel implements TableModelListener, Tab, KeyListener {
+public class GradingScaleInterface extends InterfacePanel implements TableModelListener {
 
 	private final int rows = 13, cols = 5, rowHeight = 50, colWidth = 30;
 	private static final Font STANDARD_FONT = new Font("Calibri", Font.BOLD, 24);
@@ -579,21 +581,6 @@ public class GradingScaleInterface extends JPanel implements TableModelListener,
 			openScale.update(data);
 			openScale();
 		}
-	}
-
-	@Override
-	public String getTabName() {
-		return "Grading Scale";
-	}
-
-	@Override
-	public String getTabImage() {
-		return "grading_scale_tab_icon.png";
-	}
-
-	@Override
-	public void onTabSelected() {
-
 	}
 
 	@Override

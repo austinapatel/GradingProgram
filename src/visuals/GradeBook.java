@@ -3,22 +3,21 @@ package visuals;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import database.DatabaseCellEditor;
 import database.DatabaseManager;
 import database.Table;
 import database.TableProperties;
-import grading.GradeCalculator;
 
-public class GradeBook extends JPanel implements Tab
+public class GradeBook extends InterfacePanel
 {	
 	private JList classList;
 	private DefaultListModel listModel;
@@ -27,7 +26,6 @@ public class GradeBook extends JPanel implements Tab
 
 	public GradeBook ()
 	{		
-		this.setLayout(new BorderLayout());
 		initClassTable();
 		add(table, BorderLayout.NORTH);
 	}
@@ -82,25 +80,19 @@ public class GradeBook extends JPanel implements Tab
 			}
 		});
 	}
-	
+
 	@Override
-	public String getTabName()
-	{
-		// TODO Auto-generated method stub
-		return "GradeBook";
+	public void keyTyped(KeyEvent e) {
+
 	}
 
 	@Override
-	public String getTabImage()
-	{
-		// TODO Auto-generated method stub
-		return "grading_tab_icon.png";
+	public void keyPressed(KeyEvent e) {
+
 	}
 
 	@Override
-	public void onTabSelected()
-	{
-		// TODO Auto-generated method stub
-		
-	}	
+	public void keyReleased(KeyEvent e) {
+
+	}
 }

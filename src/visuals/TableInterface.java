@@ -20,7 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 
-public class TableInterface extends JPanel implements Tab {
+public class TableInterface extends InterfacePanel {
 
     private JTable jTable;
     private JPanel bottomContainer;
@@ -327,18 +327,18 @@ public class TableInterface extends JPanel implements Tab {
     }
 
     @Override
-    public String getTabName() {
-        return "Table";
+    public void keyTyped(KeyEvent e) {
+
     }
 
     @Override
-    public String getTabImage() {
-        return "class_tab_icon.png";
+    public void keyPressed(KeyEvent e) {
+
     }
 
     @Override
-    public void onTabSelected() {
-        databaseTableModel.fireTableDataChanged();
+    public void keyReleased(KeyEvent e) {
+
     }
 }
 

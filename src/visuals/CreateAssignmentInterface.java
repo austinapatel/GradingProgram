@@ -17,15 +17,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 
-public class CreateAssignmentInterface extends JPanel implements Tab, KeyListener, ActionListener, MouseListener {
+public class CreateAssignmentInterface extends InterfacePanel implements ActionListener, MouseListener {
 
     private JTextField txtName, txtPointValue;
     private JPanel contentPanel;
     private JButton createButton;
     private DatabaseJTable coursesJTable;
-    UtilDateModel dateModel;
-    JDatePanelImpl datePanel;
-    JDatePickerImpl datePicker;
+    private UtilDateModel dateModel;
+    private JDatePanelImpl datePanel;
+    private JDatePickerImpl datePicker;
 
     public CreateAssignmentInterface() {
         initPanel();
@@ -84,21 +84,6 @@ public class CreateAssignmentInterface extends JPanel implements Tab, KeyListene
         panel.setLayout(new BorderLayout());
         contentPanel.add(panel);
         panel.add(component);
-    }
-
-    @Override
-    public String getTabName() {
-        return "Create Assignment";
-    }
-
-    @Override
-    public String getTabImage() {
-        return "assignment_tab_icon.png";
-    }
-
-    @Override
-    public void onTabSelected() {
-        coursesJTable.refreshTableContent();
     }
 
     @Override

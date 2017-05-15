@@ -1,22 +1,22 @@
 package visuals;
 
-import grading.GradingScaleInterface;
-import utilities.ConsolePanel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class HomeInterface extends JPanel implements ActionListener {
+public class HomeInterface extends InterfacePanel implements ActionListener {
 
-    private HashMap<String, JPanel> interfaces;
-    private Interface mainInterface;
-    private JPanel contentPanel;
+    private static int BUTTON_BORDER = 30;
 
-    public HomeInterface(Interface mainInterface) {
+    private HashMap<String, InterfacePanel> interfaces;
+    private InterfaceFrame mainInterface;
+    private KeyboardGridPanel gridPanel;
+
+    public HomeInterface(InterfaceFrame mainInterface) {
         initInterfaceHashMap();
         initPanel();
         initVisuals();
@@ -25,13 +25,14 @@ public class HomeInterface extends JPanel implements ActionListener {
     }
 
     private void initPanel() {
-        contentPanel = new JPanel();
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        add(contentPanel);
+        setLayout(new GridBagLayout());
+
+        gridPanel = new KeyboardGridPanel(4,2);
+        add(gridPanel);
     }
 
     private void initInterfaceHashMap() {
-        interfaces = new HashMap<String, JPanel>(){{
+        interfaces = new HashMap<String, InterfacePanel>(){{
             put("Create Class", new CreateClassInterface());
             put("GradeBook", new GradeBook());
             put("Create Assignment", new CreateAssignmentInterface());
@@ -39,6 +40,7 @@ public class HomeInterface extends JPanel implements ActionListener {
             put("Console", new ConsolePanel());
             put("Grading Scale", new GradingScaleInterface());
             put("View Class Grades", new GradesInterface());
+            put("Add Student", new StudentInterface());
         }};
     }
 
@@ -53,15 +55,13 @@ public class HomeInterface extends JPanel implements ActionListener {
 
         for (JButton button : buttons) {
             button.addActionListener(this);
-            wrapInJPanel(button);
-        }
-    }
+            JPanel border = new JPanel();
+            border.setLayout(new BorderLayout());
+            border.add(button, BorderLayout.CENTER);
+            border.setBorder(BorderFactory.createEmptyBorder(BUTTON_BORDER, BUTTON_BORDER, BUTTON_BORDER, BUTTON_BORDER));
 
-    private void wrapInJPanel(JComponent component) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        contentPanel.add(panel);
-        panel.add(component);
+            gridPanel.add(border);
+        }
     }
 
     @Override
@@ -69,5 +69,21 @@ public class HomeInterface extends JPanel implements ActionListener {
         String name = ((JButton) e.getSource()).getText();
 
         mainInterface.showInterface(interfaces.get(name));
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        gridPanel.keyTyped(e);
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println("key pressed");
+        gridPanel.keyPressed(e);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        gridPanel.keyReleased(e);
     }
 }
