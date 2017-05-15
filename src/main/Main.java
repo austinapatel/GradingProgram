@@ -14,7 +14,7 @@ import database.TableManager;
 import database.TableProperties;
 import database.ValueParameter;
 import grading.GradeCalculator;
-import visuals.InterfaceFrame;
+import visuals.BaseInterface;
 import visuals.PasswordField;
 
 /**
@@ -23,6 +23,7 @@ import visuals.PasswordField;
 public class Main {
 
 	static PasswordField login;
+	private static boolean createTable = true;
 
 	public static void main(String[] args) {
 		new Main(args);
@@ -30,6 +31,7 @@ public class Main {
 
 	// note that field calls launchGUI
 	public static void launchGUI(String secretKey) {
+		createTable = false;
 		DatabaseManager.init(secretKey);
 		startInterface();
 	}
@@ -53,7 +55,7 @@ public class Main {
 
 	private static void startInterface() {
 		Main.setUpTables();
-		new InterfaceFrame();
+		new BaseInterface();
 
 		GradeCalculator.getStudentGrades(1);
 	}
@@ -133,14 +135,14 @@ public class Main {
 				new TableColumn(TableProperties.COUNSELOR_ID, "INT NOT NULL UNIQUE", null),
 				new TableColumn(TableProperties.NAME, "VARCHAR(500) NOT NULL", null) };
 
-		TableManager.addTable(new Table(database.TableProperties.SCALE_TABLE_NAME, gradingScaleTableColumns));
+		TableManager.addTable(new Table(database.TableProperties.SCALE_TABLE_NAME, gradingScaleTableColumns, createTable));
 
-		TableManager.addTable(new Table(TableProperties.STUDENTS_TABLE_NAME, studentsTableColumns));
-		TableManager.addTable(new Table(TableProperties.COURSES_TABLE_NAME, coursesTableColumns));
-		TableManager.addTable(new Table(TableProperties.ASSIGNMENTS_TABLE_NAME, assignmentsTableColumns));
-		TableManager.addTable(new Table(database.TableProperties.ENROLLMENTS_TABLE_NAME, enrollmentsTableColumns));
-		TableManager.addTable(new Table(TableProperties.GRADES_TABLE_NAME, gradesTableColumns));
-		TableManager.addTable(new Table(TableProperties.COUNSELORS_TABLE_NAME, counselorTableColumns));
+		TableManager.addTable(new Table(TableProperties.STUDENTS_TABLE_NAME, studentsTableColumns, createTable));
+		TableManager.addTable(new Table(TableProperties.COURSES_TABLE_NAME, coursesTableColumns, createTable));
+		TableManager.addTable(new Table(TableProperties.ASSIGNMENTS_TABLE_NAME, assignmentsTableColumns, createTable));
+		TableManager.addTable(new Table(database.TableProperties.ENROLLMENTS_TABLE_NAME, enrollmentsTableColumns, createTable));
+		TableManager.addTable(new Table(TableProperties.GRADES_TABLE_NAME, gradesTableColumns, createTable));
+		TableManager.addTable(new Table(TableProperties.COUNSELORS_TABLE_NAME, counselorTableColumns, createTable));
 	}
 
 }

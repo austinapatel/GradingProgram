@@ -13,10 +13,10 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     private static int BUTTON_BORDER = 30;
 
     private HashMap<String, InterfacePanel> interfaces;
-    private InterfaceFrame mainInterface;
+    private BaseInterface mainInterface;
     private KeyboardGridPanel gridPanel;
 
-    public HomeInterface(InterfaceFrame mainInterface) {
+    public HomeInterface(BaseInterface mainInterface) {
         initInterfaceHashMap();
         initPanel();
         initVisuals();
@@ -34,7 +34,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     private void initInterfaceHashMap() {
         interfaces = new HashMap<String, InterfacePanel>(){{
             put("Create Class", new CreateClassInterface());
-            put("GradeBook", new GradeBook());
+            put("Grade Book", new GradeBook());
             put("Create Assignment", new CreateAssignmentInterface());
             put("View Tables", new TableInterface());
             put("Console", new ConsolePanel());
@@ -61,7 +61,9 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
             border.setBorder(BorderFactory.createEmptyBorder(BUTTON_BORDER, BUTTON_BORDER, BUTTON_BORDER, BUTTON_BORDER));
 
             gridPanel.add(border);
+
         }
+        buttons.get(0).requestFocus();
     }
 
     @Override
