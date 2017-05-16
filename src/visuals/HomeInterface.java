@@ -7,12 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class HomeInterface extends InterfacePanel implements ActionListener {
 
@@ -21,6 +21,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     private TreeMap<String, InterfacePanel> interfaces;
     private BaseInterface mainInterface;
     private KeyboardGridPanel gridPanel;
+    private Timer timer;
 
     public HomeInterface(BaseInterface mainInterface) {
         initInterfaceHashMap();
@@ -34,6 +35,10 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
         setLayout(new GridBagLayout());
 
         gridPanel = new KeyboardGridPanel(5,2);
+        timer = new Timer(100, this);
+        timer.setActionCommand("go");
+        timer.start();
+        
         setBackground(Color.YELLOW);
         add(gridPanel);
     }
@@ -76,9 +81,17 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String name = ((JButton) e.getSource()).getText();
+       
+    	
+    	
+    	if (e.getActionCommand() != "go")
+    	{
+    	String name = ((JButton) e.getSource()).getText();
 
         mainInterface.showInterface(interfaces.get(name));
+    	}
+        else
+        	this.setBackground(new Color((int)(Math.random() * 0x1000000)));
     }
 
     @Override
