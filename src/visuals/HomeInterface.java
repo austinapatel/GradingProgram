@@ -1,6 +1,7 @@
 package visuals;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,6 +34,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
         setLayout(new GridBagLayout());
 
         gridPanel = new KeyboardGridPanel(5,2);
+        setBackground(Color.YELLOW);
         add(gridPanel);
     }
 
