@@ -2,6 +2,7 @@ package visuals;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +23,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     private BaseInterface mainInterface;
     private KeyboardGridPanel gridPanel;
     private Timer timer;
+    private ArrayList<JButton> buttons;
 
     public HomeInterface(BaseInterface mainInterface) {
         initInterfaceHashMap();
@@ -35,7 +37,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
         setLayout(new GridBagLayout());
 
         gridPanel = new KeyboardGridPanel(5,2);
-        timer = new Timer(100, this);
+        timer = new Timer(1, this);
         timer.setActionCommand("go");
         timer.start();
         
@@ -58,7 +60,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     }
 
     private void initVisuals() {
-        ArrayList<JButton> buttons = new ArrayList<>();
+        buttons = new ArrayList<>();
 
         String[] keys = new String[0];
         keys = interfaces.keySet().toArray(keys);
@@ -91,7 +93,23 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
         mainInterface.showInterface(interfaces.get(name));
     	}
         else
-        	this.setBackground(new Color((int)(Math.random() * 0x1000000)));
+        {
+        	setBackground(new Color((int)(Math.random() * 0x1000000)));
+        	gridPanel.setBackground(new Color((int)(Math.random() * 0x1000000)));
+        	gridPanel.setForeground(new Color((int)(Math.random() * 0x1000000)));
+        	Component[] comp = gridPanel.getComponents();
+        	
+        	for (Component hi: comp)
+        	{
+        		hi.setBackground(new Color((int)(Math.random() * 0x1000000)));
+        	}
+        	
+        	for (JButton button : buttons)
+        	{
+        		button.setBackground(new Color((int)(Math.random() * 0x1000000)));
+        		button.setForeground(new Color((int)(Math.random() * 0x1000000)));
+        	}
+        }
     }
 
     @Override
