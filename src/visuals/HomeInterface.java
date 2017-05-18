@@ -41,7 +41,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
         gridPanel = new KeyboardGridPanel(5,2);
         timer = new Timer(1, this);
         timer.setActionCommand("go");        
-        setBackground(Color.YELLOW);
+        setBackground(Color.GRAY);
         add(gridPanel);
         button = new JButton("Eplisly Mode");
         add(button);
