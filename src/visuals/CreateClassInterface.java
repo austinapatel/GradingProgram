@@ -81,9 +81,15 @@ public class CreateClassInterface extends InterfacePanel
 		add(btnCreateClass);
 		btnCreateClass.setEnabled(false);
 		
+		JLabel label1 = new JLabel("Add New");
+		add(label1);
+		
 		studentInterface = new StudentInterface();
+		studentInterface.setStudentButtonEnabled(false);
 		add(studentInterface);
 
+		add(new JLabel("Add Existing Students"));
+		
 		studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME);
 
 		add(studentsJTable.getTableHeader());
@@ -93,7 +99,6 @@ public class CreateClassInterface extends InterfacePanel
 		enrollButton.setEnabled(false);
 		enrollButton.addActionListener(new ActionListener()
 		{
-
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -140,6 +145,11 @@ public class CreateClassInterface extends InterfacePanel
 					TableManager.insertValuesIntoNewRow(coursesTable, coursesVals);
 					courseId = (int) TableManager.getTable(TableProperties.COURSES_TABLE_NAME).getSomeFromColumn(TableProperties.COURSE_ID, TableProperties.NAME, className).get(0);
 					enrollButton.setEnabled(true);
+					studentInterface.setStudentButtonEnabled(true);
+					
+					txtClassName.setText("");
+					periodComboBox.setSelectedIndex(0);
+					
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(thisInterface, "Failed to create class");
 				}

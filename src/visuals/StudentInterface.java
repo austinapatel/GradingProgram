@@ -556,4 +556,7 @@ public class StudentInterface extends InterfacePanel
 		return text.length() > 0;
 	}
 
+	public void setStudentButtonEnabled(boolean enabled){
+		btnAddStudent.setEnabled(enabled);
+	}
 }
