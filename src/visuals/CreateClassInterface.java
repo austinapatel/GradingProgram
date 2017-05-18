@@ -1,11 +1,20 @@
 package visuals;
 
 
+import database.DataTypeManager;
+import database.Table;
+import database.TableManager;
+import database.TableProperties;
+import table.Date;
+import table.Student;
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class CreateClassInterface extends InterfacePanel
 {
@@ -63,105 +72,36 @@ public class CreateClassInterface extends InterfacePanel
 		btnCreateClass.setEnabled(false);
 		
 		studentInterface = new StudentInterface();
-		add(studentInterface);		
+		add(studentInterface);
 
-//		btnCreateClass.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				try {
-//					String className = txtClassName.getText();
-//					int classPeriod = Integer.parseInt(periodComboBox.getSelectedItem().toString());
-//					int startYear = Integer.parseInt(txtStartYear.getText());
-//					int endYear = Integer.parseInt(txtEndYear.getText());
-//
-//					// Create the class
-//					Table coursesTable = TableManager.getTable(TableProperties.COURSES_TABLE_NAME);
-//					HashMap<String, Object> coursesVals = new HashMap<String, Object>() {
-//						{
-//							put(TableProperties.NAME, className);
-//							put(TableProperties.PERIOD, classPeriod);
-//							put(TableProperties.START_YEAR, startYear);
-//							put(TableProperties.END_YEAR, endYear);
-//						}
-//					};
-//					System.out.println(className + classPeriod + startYear + endYear);
-//					TableManager.insertValuesIntoNewRow(coursesTable, coursesVals);
-//
-//					ArrayList<Integer> courseIds = DataTypeManager.toIntegerArrayList(coursesTable.getAllFromColumn(TableProperties.COURSE_ID));
-//
-//					int courseId = courseIds.get(courseIds.size() - 1);
-//
-//					// Add all the students
-//					for (Student student : students) {
-//						String firstName = student.getFirstName();
-//						String lastName = student.getLastName();
-//						int studentID = student.getStudentId();
-//						char gender = student.getGender();
-//						int graduationYear = student.getGraduationYear();
-//						Date birthdate = student.getBirthday();
-//
-//						int birthMonth = 0;
-//						int birthDay = 0;
-//						int birthYear = 0;
-//
-//						if (birthdate != null) {
-//							birthMonth = birthdate.getMonth();
-//							birthDay = birthdate.getDay();
-//							birthYear = birthdate.getYear();
-//						}
-//
-//						final int monthFinal = birthMonth;
-//						final int dayFinal = birthDay;
-//						final int yearFinal = birthYear;
-//
-//						int counselorId = student.getCounselorId();
-//
-//						//adds new Student
-//						Table studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
-//
-//						ArrayList<Integer> redwoodIds = DataTypeManager.toIntegerArrayList(studentsTable.getAllFromColumn(TableProperties.STUDENT_REDWOOD_ID));
-//
-//						if (!redwoodIds.contains(studentID)) {
-//							HashMap<String, Object> studentVals = new HashMap<String, Object>() {
-//								{
-//									put(TableProperties.STUDENT_REDWOOD_ID, studentID);
-//									put(TableProperties.FIRST_NAME, firstName);
-//									put(TableProperties.LAST_NAME, lastName);
-//									put(TableProperties.GENDER, gender);
-//									put(TableProperties.GRADUATION_YEAR, graduationYear);
-//									put(TableProperties.BIRTH_MONTH, monthFinal);
-//									put(TableProperties.BIRTH_DAY, dayFinal);
-//									put(TableProperties.BIRTH_YEAR, yearFinal);
-//									put(TableProperties.COUNSELOR_ID, counselorId);
-//								}
-//							};
-//
-//							System.out.println("Added a student");
-//							TableManager.insertValuesIntoNewRow(studentsTable, studentVals);
-//						}
-//
-//						int curStudentDatabaseID = DataTypeManager.toIntegerArrayList(studentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, TableProperties.STUDENT_REDWOOD_ID, "" + studentID)).get(0);
-//
-//						//Adds new Enrollment
-//						Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
-//
-//						HashMap<String, Object> enrollmentsVals = new HashMap<String, Object>() {
-//							{
-//								put(TableProperties.STUDENT_ID, curStudentDatabaseID);
-//								put(TableProperties.COURSE_ID, courseId);
-//							}
-//						};
-//
-//						TableManager.insertValuesIntoNewRow(enrollmentsTable, enrollmentsVals);
-//					}
-//
-//					students.removeAll(students);
-//					listStudentsModel.removeAllElements();
-//				} catch (Exception e1) {
-//					JOptionPane.showMessageDialog(thisPanel, "Failed to create class");
-//				}
-//			}
-//		});
+		CreateClassInterface thisInterface = this;
+
+		btnCreateClass.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String className = txtClassName.getText();
+					int classPeriod = Integer.parseInt(periodComboBox.getSelectedItem().toString());
+					int startYear = Integer.parseInt(txtStartYear.getText());
+					int endYear = Integer.parseInt(txtEndYear.getText());
+
+					// Create the class
+					Table coursesTable = TableManager.getTable(TableProperties.COURSES_TABLE_NAME);
+					HashMap<String, Object> coursesVals = new HashMap<String, Object>() {
+						{
+							put(TableProperties.NAME, className);
+							put(TableProperties.PERIOD, classPeriod);
+							put(TableProperties.START_YEAR, startYear);
+							put(TableProperties.END_YEAR, endYear);
+						}
+					};
+					System.out.println(className + classPeriod + startYear + endYear);
+					TableManager.insertValuesIntoNewRow(coursesTable, coursesVals);
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(thisInterface, "Failed to create class");
+				}
+			}
+		});
 	}
 
 	private void initYearPicker()
@@ -176,18 +116,13 @@ public class CreateClassInterface extends InterfacePanel
 
 		add(chckbxCustomYear);
 
-		chckbxCustomYear.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				txtStartYear.setEnabled(!txtStartYear.isEnabled());
-				txtEndYear.setEnabled(!txtEndYear.isEnabled());
+		chckbxCustomYear.addActionListener(e -> {
+            txtStartYear.setEnabled(!txtStartYear.isEnabled());
+            txtEndYear.setEnabled(!txtEndYear.isEnabled());
 
-				txtStartYear.setText(String.valueOf(year));
-				txtEndYear.setText(String.valueOf(year + 1));
-			}
-		});
+            txtStartYear.setText(String.valueOf(year));
+            txtEndYear.setText(String.valueOf(year + 1));
+        });
 
 		JPanel panel = new JPanel();
 		add(panel);
