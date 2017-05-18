@@ -24,6 +24,8 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     private KeyboardGridPanel gridPanel;
     private Timer timer;
     private ArrayList<JButton> buttons;
+    private boolean color = false;
+    private JButton button;
 
     public HomeInterface(BaseInterface mainInterface) {
         initInterfaceHashMap();
@@ -38,11 +40,12 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
 
         gridPanel = new KeyboardGridPanel(5,2);
         timer = new Timer(1, this);
-        timer.setActionCommand("go");
-        timer.start();
-        
+        timer.setActionCommand("go");        
         setBackground(Color.YELLOW);
         add(gridPanel);
+        button = new JButton("Eplisly Mode");
+        add(button);
+        button.addActionListener(this);
     }
 
     private void initInterfaceHashMap() {
@@ -85,14 +88,21 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
        
     	
+    	if (e.getSource().equals(button));
+    		color = !color;
+    	if (color)
+    		timer.start();
+    	else
+    		timer.stop();
     	
-    	if (e.getActionCommand() != "go")
+    	
+    	if (!e.getActionCommand().equals("go") && !e.getSource().equals(button))
     	{
-    	String name = ((JButton) e.getSource()).getText();
-
+    		String name = ((JButton) e.getSource()).getText();
         mainInterface.showInterface(interfaces.get(name));
     	}
-        else
+
+        if (e.getActionCommand().equals("go"))
         {
         	setBackground(new Color((int)(Math.random() * 0x1000000)));
         	gridPanel.setBackground(new Color((int)(Math.random() * 0x1000000)));
