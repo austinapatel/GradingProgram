@@ -87,13 +87,15 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
        
-    	
-    	if (e.getSource().equals(button));
+    	if (e.getSource().equals(button))
     		color = !color;
+    	
     	if (color)
     		timer.start();
-    	else
+    	
+    	if (!color)
     		timer.stop();
+  
     	
     	
     	if (!e.getActionCommand().equals("go") && !e.getSource().equals(button))
