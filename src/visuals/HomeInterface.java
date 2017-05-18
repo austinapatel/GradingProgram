@@ -22,10 +22,8 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     private TreeMap<String, InterfacePanel> interfaces;
     private BaseInterface mainInterface;
     private KeyboardGridPanel gridPanel;
-    private Timer timer;
     private ArrayList<JButton> buttons;
     private boolean color = false;
-    private JButton button;
 
     public HomeInterface(BaseInterface mainInterface) {
         initInterfaceHashMap();
@@ -39,13 +37,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
         setLayout(new GridBagLayout());
 
         gridPanel = new KeyboardGridPanel(5,2);
-        timer = new Timer(1, this);
-        timer.setActionCommand("go");        
-        setBackground(Color.LIGHT_GRAY);
         add(gridPanel);
-        button = new JButton("Eplisly Mode");
-        add(button);
-        button.addActionListener(this);
     }
 
     private void initInterfaceHashMap() {
@@ -86,42 +78,8 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-       
-    	if (e.getSource().equals(button))
-    		color = !color;
-    	
-    	if (color)
-    		timer.start();
-    	
-    	if (!color)
-    		timer.stop();
-  
-    	
-    	
-    	if (!e.getActionCommand().equals("go") && !e.getSource().equals(button))
-    	{
-    		String name = ((JButton) e.getSource()).getText();
+        String name = ((JButton) e.getSource()).getText();
         mainInterface.showInterface(interfaces.get(name));
-    	}
-
-        if (e.getActionCommand().equals("go"))
-        {
-        	setBackground(new Color((int)(Math.random() * 0x1000000)));
-        	gridPanel.setBackground(new Color((int)(Math.random() * 0x1000000)));
-        	gridPanel.setForeground(new Color((int)(Math.random() * 0x1000000)));
-        	Component[] comp = gridPanel.getComponents();
-        	
-        	for (Component hi: comp)
-        	{
-        		hi.setBackground(new Color((int)(Math.random() * 0x1000000)));
-        	}
-        	
-        	for (JButton button : buttons)
-        	{
-        		button.setBackground(new Color((int)(Math.random() * 0x1000000)));
-        		button.setForeground(new Color((int)(Math.random() * 0x1000000)));
-        	}
-        }
     }
 
     @Override
