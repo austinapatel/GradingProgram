@@ -7,6 +7,10 @@
 
 package main;
 
+import javax.swing.SwingUtilities;
+
+import com.alee.laf.WebLookAndFeel;
+
 import database.DatabaseManager;
 import database.Table;
 import database.TableColumn;
@@ -24,7 +28,19 @@ public class Main {
 
 	static PasswordField login;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
+		 SwingUtilities.invokeLater ( new Runnable ()
+       {
+           public void run ()
+           {
+               // Install WebLaF as application L&F
+               WebLookAndFeel.install ();
+
+               // Create you Swing application here
+               // JFrame frame = ...
+           }
+       } );
 		new Main(args);
 	}
 
