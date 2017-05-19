@@ -34,7 +34,7 @@ public class Main {
 
       try
 		{
-			UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
+			UIManager.setLookAndFeel("com.jtattoo.plaf.noire.NoireLookAndFeel");
 			//com.jtattoo.plaf.acryl.AcrylLookAndFeel
 			//com.jtattoo.plaf.smart.SmartLookAndFeel
 		}
