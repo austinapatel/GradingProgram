@@ -25,7 +25,8 @@ public class GradeBook extends InterfacePanel
 	public GradeBook ()
 	{		
 		initClassTable();
-
+		add(table.getTableHeader());
+		add(table, BorderLayout.NORTH);
 	}
 	
 	public void initClassTable()
