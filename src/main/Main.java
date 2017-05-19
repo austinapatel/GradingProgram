@@ -34,7 +34,9 @@ public class Main {
 
       try
 		{
-			UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
+			UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
+			//com.jtattoo.plaf.acryl.AcrylLookAndFeel
+			//com.jtattoo.plaf.smart.SmartLookAndFeel
 		}
 		catch (Exception error)
 		{
