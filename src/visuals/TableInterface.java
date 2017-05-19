@@ -86,7 +86,7 @@ public class TableInterface extends InterfacePanel {
                     databaseTableModel.fireTableDataChanged();
             } catch (SQLException e1) {
                 System.out.println(
-                        "Failed to delete row from database.");
+                        "Failed to delete row from database. bitch keke");
             }
         }
 
@@ -206,59 +206,59 @@ public class TableInterface extends InterfacePanel {
 
     // Locks the TableInterface into a specific table so that it can be used as
     // a selector
-    public void lockInto(int tableIndexLock, int rowToChange,
-                         int columnToChange) {
-        this.callingTableIndex = tableList.getSelectedIndex();
-        isLocked = true;
-
-        tableList.setSelectedIndex(tableIndexLock);
-
-         selectButton = new JButton("Select Row");
-		selectButton.setEnabled(true);
-		selectButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				unlock(jTable.getSelectedRow(), rowToChange, columnToChange);
-				jTable.requestFocus();
-				jTable.changeSelection(0, 1, false, false);
-			}
-		});
-
-         bottomContainer.remove(printButton);
-         bottomContainer.add(selectButton);
-
-         remove(bottomContainer);
-
-        tableList.setEnabled(false);
-
-        jTable.requestFocus();
-        jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        jTable.changeSelection(0, 1, false, false);
-    }
-
-    /** Unlocks a table after it was locked into picking a row. */
-    private void unlock(int selectedRow, int rowToChange, int columnToChange) {
-        // Reset the TableInterface to how it was
-        isLocked = false;
-
-        int idValue = Integer.class
-                .cast(databaseTableModel.getValueAt(selectedRow, 0));
-
-        tableList.setEnabled(true);
-        tableList.requestFocus();
-        // tableList.setSelectedIndex(callingTableIndex);
-        tableList.setSelectedIndex(callingTableIndex);
-        setTable(TableManager.getAllTables()[callingTableIndex]);
-
-		selectButton.setEnabled(false);
-
-        // bottomContainer.removeAll();
-        // initBottomButtons();
-
-        databaseTableModel.setValueAt(idValue, rowToChange, columnToChange);
-
-        jTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-    }
+//    public void lockInto(int tableIndexLock, int rowToChange,
+//                         int columnToChange) {
+//        this.callingTableIndex = tableList.getSelectedIndex();
+//        isLocked = true;
+//
+//        tableList.setSelectedIndex(tableIndexLock);
+//
+//         selectButton = new JButton("Select Row");
+//		selectButton.setEnabled(true);
+//		selectButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				unlock(jTable.getSelectedRow(), rowToChange, columnToChange);
+//				jTable.requestFocus();
+//				jTable.changeSelection(0, 1, false, false);
+//			}
+//		});
+//
+//         bottomContainer.remove(printButton);
+//         bottomContainer.add(selectButton);
+//
+//         remove(bottomContainer);
+//
+//        tableList.setEnabled(false);
+//
+//        jTable.requestFocus();
+//        jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//        jTable.changeSelection(0, 1, false, false);
+//    }
+//
+//    /** Unlocks a table after it was locked into picking a row. */
+//    private void unlock(int selectedRow, int rowToChange, int columnToChange) {
+//        // Reset the TableInterface to how it was
+//        isLocked = false;
+//
+//        int idValue = Integer.class
+//                .cast(databaseTableModel.getValueAt(selectedRow, 0));
+//
+//        tableList.setEnabled(true);
+//        tableList.requestFocus();
+//        // tableList.setSelectedIndex(callingTableIndex);
+//        tableList.setSelectedIndex(callingTableIndex);
+//        setTable(TableManager.getAllTables()[callingTableIndex]);
+//
+//		selectButton.setEnabled(false);
+//
+//        // bottomContainer.removeAll();
+//        // initBottomButtons();
+//
+//        databaseTableModel.setValueAt(idValue, rowToChange, columnToChange);
+//
+//        jTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+//    }
 
     /** Initializes a JTable (and its container) and the table model. */
     private void initTable() {
@@ -322,9 +322,9 @@ public class TableInterface extends InterfacePanel {
 //        jTable.getColumnModel().getColumn(0).setWidth(0);
     }
 
-    public boolean isLocked() {
-        return isLocked;
-    }
+//    public boolean isLocked() {
+//        return isLocked;
+//    }
 
     @Override
     public void keyTyped(KeyEvent e) {

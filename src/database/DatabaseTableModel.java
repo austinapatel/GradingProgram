@@ -150,10 +150,7 @@ public class DatabaseTableModel extends AbstractTableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		if (col == 0)
-			return false;
-
-		return !tableInterface.isLocked();
+		return !(col == 0);
 	}
 
 	@Override

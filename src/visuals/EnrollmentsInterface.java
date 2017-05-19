@@ -3,6 +3,8 @@ package visuals;
 import database.TableProperties;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 /**
@@ -26,7 +28,7 @@ public class EnrollmentsInterface extends InterfacePanel {
 
         add(coursesTable.getTableHeader());
         add(coursesTable);
-        
+
         add(enrollButton = new JButton("Enroll Student"));
     }
 
