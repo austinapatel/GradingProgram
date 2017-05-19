@@ -39,6 +39,7 @@ public class EnrollmentsInterface extends InterfacePanel
 		add(coursesJTable);
 
 		add(enrollButton = new JButton("Enroll Student"));
+		enrollButton.setEnabled(false);
 		enrollButton.addActionListener(new ActionListener()
 		{
 
@@ -46,30 +47,42 @@ public class EnrollmentsInterface extends InterfacePanel
 			public void actionPerformed(ActionEvent e)
 			{
 				Table studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
-				ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(studentsTable.getAllFromColumn(TableProperties.STUDENT_ID));
-				
+				ArrayList<Integer> studentIds = DataTypeManager
+							.toIntegerArrayList(studentsTable.getAllFromColumn(TableProperties.STUDENT_ID));
+
 				int studentId = studentIds.get(studentsJTable.getSelectedRow());
-				
+
 				Table coursesTable = TableManager.getTable(TableProperties.COURSES_TABLE_NAME);
-				ArrayList<Integer> courseIds = DataTypeManager.toIntegerArrayList(coursesTable.getAllFromColumn(TableProperties.COURSE_ID));
+				ArrayList<Integer> courseIds = DataTypeManager
+							.toIntegerArrayList(coursesTable.getAllFromColumn(TableProperties.COURSE_ID));
 
 				int courseId = courseIds.get(coursesJTable.getSelectedRow());
-				
+
 				Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
 
-				HashMap<String, Object> enrollmentsVals = new HashMap<String, Object>()
+				if (!(courseIds.contains(courseId) && studentIds.contains(studentId)))
 				{
+					HashMap<String, Object> enrollmentsVals = new HashMap<String, Object>()
 					{
-						put(TableProperties.STUDENT_ID, studentId);
-						put(TableProperties.COURSE_ID, courseId);
-					}
-				};
-
-				TableManager.insertValuesIntoNewRow(enrollmentsTable, enrollmentsVals);
+						{
+							put(TableProperties.STUDENT_ID, studentId);
+							put(TableProperties.COURSE_ID, courseId);
+						}
+					};
+					TableManager.insertValuesIntoNewRow(enrollmentsTable, enrollmentsVals);
+				}
 			}
 		});
 	}
-
+	
+	void addActionListener(ActionEvent e){
+		if(studentsJTable.getSelectedRow() != -1 && coursesJTable.getSelectedRow() != -1){
+			enrollButton.setEnabled(true);
+		}
+		else
+			enrollButton.setEnabled(false);
+	}
+	
 	@Override
 	public void keyTyped(KeyEvent e)
 	{
