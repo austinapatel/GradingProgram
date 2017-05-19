@@ -7,9 +7,9 @@
 
 package main;
 
-import javax.swing.SwingUtilities;
 
-import com.alee.laf.WebLookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import database.DatabaseManager;
 import database.Table;
@@ -21,6 +21,7 @@ import grading.GradeCalculator;
 import visuals.BaseInterface;
 import visuals.PasswordField;
 
+
 /**
  * Driver class for entire program.
  */
@@ -30,17 +31,19 @@ public class Main {
 
 	public static void main(String[] args) 
 	{
-		 SwingUtilities.invokeLater ( new Runnable ()
-       {
-           public void run ()
-           {
-               // Install WebLaF as application L&F
-               WebLookAndFeel.install ();
 
-               // Create you Swing application here
-               // JFrame frame = ...
-           }
-       } );
+      try
+		{
+			UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
+		}
+		catch (Exception error)
+		{
+			// TODO Auto-generated catch block
+			error.printStackTrace();
+		}
+
+
+
 		new Main(args);
 	}
 
