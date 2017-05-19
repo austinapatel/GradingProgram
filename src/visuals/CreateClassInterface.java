@@ -1,29 +1,39 @@
 package visuals;
 
 
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import database.DataTypeManager;
 import database.Table;
 import database.TableManager;
 import database.TableProperties;
-import table.Date;
-import table.Student;
-
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 
 public class CreateClassInterface extends InterfacePanel
 {
 	private JTextField txtClassName, txtStartYear, txtEndYear;
 	private JComboBox<Integer> periodComboBox;
 	private JCheckBox chckbxCustomYear;
-	private JButton btnCreateClass;
+	private JButton btnCreateClass, enrollButton;
 	private StudentInterface studentInterface;
-
+	private EnrollmentsInterface enrollmentInterface;
+	private DatabaseJTable studentsJTable;
+	private int courseId;
+	
 	public CreateClassInterface()
 	{
 		initClassInterface();
@@ -71,9 +81,45 @@ public class CreateClassInterface extends InterfacePanel
 		add(btnCreateClass);
 		btnCreateClass.setEnabled(false);
 		
+		JLabel label1 = new JLabel("Add New");
+		add(label1);
+		
 		studentInterface = new StudentInterface();
+		studentInterface.setStudentButtonEnabled(false);
 		add(studentInterface);
 
+		add(new JLabel("Add Existing Students"));
+		
+		studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME);
+
+		add(studentsJTable.getTableHeader());
+		add(studentsJTable);
+		
+		add(enrollButton = new JButton("Enroll Student"));
+		enrollButton.setEnabled(false);
+		enrollButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Table studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
+				ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(studentsTable.getAllFromColumn(TableProperties.STUDENT_ID));
+				
+				int studentId = studentIds.get(studentsJTable.getSelectedRow());
+
+				Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
+
+				HashMap<String, Object> enrollmentsVals = new HashMap<String, Object>()
+				{
+					{
+						put(TableProperties.STUDENT_ID, studentId);
+						put(TableProperties.COURSE_ID, courseId);
+					}
+				};
+
+				TableManager.insertValuesIntoNewRow(enrollmentsTable, enrollmentsVals);
+			}
+		});
 		CreateClassInterface thisInterface = this;
 
 		btnCreateClass.addActionListener(new ActionListener() {
@@ -97,6 +143,13 @@ public class CreateClassInterface extends InterfacePanel
 					};
 					System.out.println(className + classPeriod + startYear + endYear);
 					TableManager.insertValuesIntoNewRow(coursesTable, coursesVals);
+					courseId = (int) TableManager.getTable(TableProperties.COURSES_TABLE_NAME).getSomeFromColumn(TableProperties.COURSE_ID, TableProperties.NAME, className).get(0);
+					enrollButton.setEnabled(true);
+					studentInterface.setStudentButtonEnabled(true);
+					
+					txtClassName.setText("");
+					periodComboBox.setSelectedIndex(0);
+					
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(thisInterface, "Failed to create class");
 				}
