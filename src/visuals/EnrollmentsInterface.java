@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JButton;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import database.DataTypeManager;
 import database.Table;
@@ -35,9 +37,30 @@ public class EnrollmentsInterface extends InterfacePanel
 
 		add(studentsJTable.getTableHeader());
 		add(studentsJTable);
-
+		
+		studentsJTable.getSelectionModel().addListSelectionListener(new ListSelectionListener()
+		{
+			@Override
+			public void valueChanged(ListSelectionEvent e)
+			{
+				// TODO Auto-generated method stub
+				if(studentsJTable.getSelectedRow() >= 0 && coursesJTable.getSelectedRow() >= 0)
+					enrollButton.setEnabled(true);
+			}
+		});
+		
 		add(coursesJTable.getTableHeader());
 		add(coursesJTable);
+		coursesJTable.getSelectionModel().addListSelectionListener(new ListSelectionListener()
+		{
+			@Override
+			public void valueChanged(ListSelectionEvent e)
+			{
+				// TODO Auto-generated method stub
+				if(studentsJTable.getSelectedRow() >= 0 && coursesJTable.getSelectedRow() >= 0)
+					enrollButton.setEnabled(true);
+			}
+		});
 
 		add(enrollButton = new JButton("Enroll Student"));
 		enrollButton.setEnabled(false);
@@ -60,8 +83,17 @@ public class EnrollmentsInterface extends InterfacePanel
 				int courseId = courseIds.get(coursesJTable.getSelectedRow());
 
 				Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
-
-				if (!(courseIds.contains(courseId) && studentIds.contains(studentId)))
+				
+				courseIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getAllFromColumn(TableProperties.COURSE_ID));
+				studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getAllFromColumn(TableProperties.STUDENT_ID));
+				
+				boolean flag = false;
+				for(int i = 0; i < courseIds.size(); i++){
+					if(courseIds.get(i) == courseId && studentIds.get(i) == studentId)
+						flag = true;
+				}
+				
+				if(flag == false)
 				{
 					HashMap<String, Object> enrollmentsVals = new HashMap<String, Object>()
 					{
@@ -76,13 +108,13 @@ public class EnrollmentsInterface extends InterfacePanel
 		});
 	}
 	
-	void addActionListener(ActionEvent e){
-		if(studentsJTable.getSelectedRow() != -1 && coursesJTable.getSelectedRow() != -1){
-			enrollButton.setEnabled(true);
-		}
-		else
-			enrollButton.setEnabled(false);
-	}
+//	void addActionListener(ActionEvent e){
+//		if(studentsJTable.getSelectedRow() != -1 && coursesJTable.getSelectedRow() != -1){
+//			enrollButton.setEnabled(true);
+//		}
+//		else
+//			enrollButton.setEnabled(false);
+//	}
 	
 	@Override
 	public void keyTyped(KeyEvent e)
