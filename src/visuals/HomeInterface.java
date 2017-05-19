@@ -1,17 +1,19 @@
 package visuals;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class HomeInterface extends InterfacePanel implements ActionListener {
 
@@ -20,6 +22,8 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     private TreeMap<String, InterfacePanel> interfaces;
     private BaseInterface mainInterface;
     private KeyboardGridPanel gridPanel;
+    private ArrayList<JButton> buttons;
+    private boolean color = false;
 
     public HomeInterface(BaseInterface mainInterface) {
         initInterfaceHashMap();
@@ -47,11 +51,12 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
             put("View Class Grades", new GradesInterface());
             put("Add Student", new StudentInterface());
             put("Enroll Student", new EnrollmentsInterface());
+            put("Test Interface", new TestInterface());
         }};
     }
 
     private void initVisuals() {
-        ArrayList<JButton> buttons = new ArrayList<>();
+        buttons = new ArrayList<>();
 
         String[] keys = new String[0];
         keys = interfaces.keySet().toArray(keys);
@@ -75,7 +80,6 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String name = ((JButton) e.getSource()).getText();
-
         mainInterface.showInterface(interfaces.get(name));
     }
 

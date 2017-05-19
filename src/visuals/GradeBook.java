@@ -8,9 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 import database.DatabaseCellEditor;
 import database.DatabaseManager;
@@ -22,7 +20,7 @@ public class GradeBook extends InterfacePanel
 	private JList classList;
 	private DefaultListModel listModel;
 	private DatabaseJTable table;
-	private JScrollPane tablePane;
+	private JTable gradeTable = null;
 
 	public GradeBook ()
 	{		
@@ -33,6 +31,8 @@ public class GradeBook extends InterfacePanel
 	
 	public void initClassTable()
 	{
+		GradeBook thisInterface = this;
+
 		table = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
 		table.setCellEditor(new DatabaseCellEditor());
 		 table.addMouseListener(new MouseAdapter() {
@@ -40,25 +40,33 @@ public class GradeBook extends InterfacePanel
 		    	DatabaseJTable table2 =(DatabaseJTable) me.getSource();
 		        Point p = me.getPoint();
 		        int row = table2.rowAtPoint(p);
-		        if (me.getClickCount() == 2)
-		        {
-		        	{	
-		        		String value = (table.getValueAt(table.getSelectedRow(), 0).toString());
-		        		//String value = "1";
-		        		//SELECT * FROM Students JOIN Enrollments ON Students.studentId = Enrollments.studentId WHERE Enrollments.courseId = "1"
-		        		ResultSet set = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[]{TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, value);
-		        		Table studentTable = new Table("StudentsTable", set);
-		        		DatabaseJTable table3 = new DatabaseJTable(studentTable);
-		        		add(new JScrollPane(table3), BorderLayout.SOUTH);
-		        		validate();
-		        		repaint();
-		        		//GradeCalculator.getGrades(1, "");
-		        		
-		        	}
+		        if (me.getClickCount() == 2) {
+					String value = (table.getValueAt(table.getSelectedRow(), 0).toString());
+					//String value = "1";
+					//SELECT * FROM Students JOIN Enrollments ON Students.studentId = Enrollments.studentId WHERE Enrollments.courseId = "1"
+					ResultSet set = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[]{TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, value);
+					Table joinedTable = new Table("StudentsTable", set);
+
+					// Remove the previous gradeTable if it exists
+					if (gradeTable != null) {
+						System.out.println("Removing");
+						thisInterface.remove(gradeTable);
+						thisInterface.remove(gradeTable.getTableHeader());
+					}
+
+					gradeTable = new DatabaseJTable(joinedTable);
+
+					thisInterface.add(gradeTable.getTableHeader());
+					thisInterface.add(gradeTable);
+
+					validate();
+					repaint();
 		        }
 		    }
 		});
-		tablePane = new JScrollPane(table);
+
+		add(table.getTableHeader());
+		add(table);
 	}
 	private void initList() 
 	{

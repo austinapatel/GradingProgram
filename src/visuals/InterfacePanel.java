@@ -30,4 +30,10 @@ public abstract class InterfacePanel extends JPanel implements KeyListener {
 
         return contentPanel.add(basePanel);
     }
+
+//    @Override
+//    public void remove(Component toRemove) {
+//        System.out.println("Removing yay override");
+//
+//    }
 }
