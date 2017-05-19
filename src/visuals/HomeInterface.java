@@ -51,6 +51,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
             put("View Class Grades", new GradesInterface());
             put("Add Student", new StudentInterface());
             put("Enroll Student", new EnrollmentsInterface());
+            put("Test Interface", new TestInterface());
         }};
     }
 
