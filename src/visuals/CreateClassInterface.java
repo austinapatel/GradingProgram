@@ -1,6 +1,7 @@
 package visuals;
 
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,13 +31,15 @@ public class CreateClassInterface extends InterfacePanel
 	private JCheckBox chckbxCustomYear;
 	private JButton btnCreateClass, enrollButton;
 	private StudentInterface studentInterface;
-	private EnrollmentsInterface enrollmentInterface;
 	private DatabaseJTable studentsJTable;
 	private int courseId;
 	
 	public CreateClassInterface()
 	{
 		initClassInterface();
+		
+		Dimension studentSize = new Dimension((int) getPreferredSize().getWidth(), (int) studentInterface.getPreferredSize().getHeight());
+		studentInterface.setMinimumSize(studentSize);
 	}
 
 	private void initClassInterface()
@@ -81,13 +84,14 @@ public class CreateClassInterface extends InterfacePanel
 		add(btnCreateClass);
 		btnCreateClass.setEnabled(false);
 		
-		JLabel label1 = new JLabel("Add New");
-		add(label1);
+		JLabel lbl1 = new JLabel("                               Add New                  ");
+		lbl1.setFont(new Font("Tahoma", Font.PLAIN, 32));
+		add(lbl1);
 		
 		studentInterface = new StudentInterface();
 		studentInterface.setStudentButtonEnabled(false);
 		add(studentInterface);
-
+		
 		add(new JLabel("Add Existing Students"));
 		
 		studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME);
