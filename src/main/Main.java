@@ -31,20 +31,6 @@ public class Main {
 
 	public static void main(String[] args) 
 	{
-
-      try
-		{
-			UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
-			//com.jtattoo.plaf.acryl.AcrylLookAndFeel
-			//com.jtattoo.plaf.smart.SmartLookAndFeel
-		}
-		catch (Exception error)
-		{
-			// TODO Auto-generated catch block
-			error.printStackTrace();
-		}
-
-
 		System.setProperty("awt.useSystemAAFontSettings", "on");
 		System.setProperty("swing.aatext", "true");
 		if (args.length == 1)
