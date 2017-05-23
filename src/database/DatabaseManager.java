@@ -115,7 +115,21 @@ public class DatabaseManager {
 
         return null;
     }
+    
+    
+    public static ResultSet executeSqlStatement(String sql) 
+    {
+       try {
+           System.out.println(sql);
+           Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+           ResultSet rs = stmt.executeQuery(sql);
+           return rs;
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
 
+       return null;
+   }
 
     public static ResultSet getJoinedTable(String table1Name, String table2Name, String[] tableAndColumnNames, String table1JoinColumn, String table2JoinColumn, String tableNameAndFilter, String filterValue) {
         //table1        table2         table1.column       table2.column               table2 filter name  filter value

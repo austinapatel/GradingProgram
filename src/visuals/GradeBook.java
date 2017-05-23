@@ -12,6 +12,7 @@ import javax.swing.*;
 
 import database.DatabaseCellEditor;
 import database.DatabaseManager;
+import database.SqlBuilder;
 import database.Table;
 import database.TableProperties;
 
@@ -44,9 +45,22 @@ public class GradeBook extends InterfacePanel
 					String value = (table.getValueAt(table.getSelectedRow(), 0).toString());
 					//String value = "1";
 					//SELECT * FROM Students JOIN Enrollments ON Students.studentId = Enrollments.studentId WHERE Enrollments.courseId = "1"
-					ResultSet set = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[]{TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, value);
-					Table joinedTable = new Table("StudentsTable", set);
-
+					//ResultSet set = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[]{TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, value);
+					//Table joinedTable = new Table("StudentsTable", set);
+					
+					
+					String select = SqlBuilder.Selection(new String[][] {{TableProperties.STUDENTS_TABLE_NAME, TableProperties.FIRST_NAME, TableProperties.LAST_NAME, TableProperties.STUDENT_ID}, {TableProperties.ENROLLMENTS_TABLE_NAME, TableProperties.ENROLLMENT_ID}, {TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.ASSIGNMENTS_VALUE}, {TableProperties.GRADES_TABLE_NAME, TableProperties.GRADE_VALUE}}, new String[] {TableProperties.STUDENTS_TABLE_NAME});
+					System.out.println("DASFASDSD SAFDASDFASF" + select);
+					String join1 = SqlBuilder.getJoinString(SqlBuilder.JoinType.JOIN, TableProperties.ENROLLMENTS_TABLE_NAME, TableProperties.STUDENTS_TABLE_NAME, TableProperties.STUDENT_ID);
+					String join2 = SqlBuilder.getJoinString(SqlBuilder.JoinType.JOIN, TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, TableProperties.COURSE_ID);
+					String join3 = SqlBuilder.getJoinString(SqlBuilder.JoinType.JOIN, TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENTS_TABLE_NAME, TableProperties.STUDENT_ID);
+					String join4 = SqlBuilder.getOperatorJoin(SqlBuilder.Operator.AND, SqlBuilder.JoinType.JOIN, TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.GRADES_TABLE_NAME, TableProperties.ASSIGNMENT_ID);
+					String filter = SqlBuilder.Filter(TableProperties.ENROLLMENTS_TABLE_NAME, TableProperties.COURSE_ID, value);
+					String sql = select + join1 + join2 + join3 + join4 + filter;
+					ResultSet set = DatabaseManager.executeSqlStatement(sql);
+					
+					Table joinedTable = new Table("GradeBook", set);
+					
 					// Remove the previous gradeTable if it exists
 					if (gradeTable != null) {
 						System.out.println("Removing");

@@ -3,7 +3,7 @@ public class SqlBuilder
 {	
 	public enum JoinType
 	{		
-		INNER_JOIN("INNER JOIN"), LEFT_JOIN("LEFT JOIN"), RIGHT_JOIN("RIGHT JOIN"), FULL_OUTER_JOIN("FULL OUTER JOIN");
+		JOIN("JOIN"), INNER_JOIN("INNER JOIN"), LEFT_JOIN("LEFT JOIN"), RIGHT_JOIN("RIGHT JOIN"), FULL_OUTER_JOIN("FULL OUTER JOIN");
 		
 		private String joinText;
 
@@ -18,19 +18,43 @@ public class SqlBuilder
 		}
 	}
 	
+	
+	public enum Operator
+	{
+		OR("OR"), AND("AND");
+		
+		private String operatorText;
+		
+		private Operator(String operatorText)
+		{
+			this.operatorText = operatorText;
+		}
+		public String getOperatorType()
+		{
+			return operatorText;
+		}
+	}
+	
+	
+	public static String getOperatorJoin(Operator operator, JoinType type, String JoinTable, String PriorTable, String joinColumn)
+	{
+		return " " + operator.getOperatorType() + " " +  PriorTable + "." + joinColumn + " = " + JoinTable + "."  + joinColumn;	
+	}
+	
+	
 	public static String getJoinString(JoinType type, String JoinTable, String PriorTable, String joinColumn)
 	{
-		return "JOIN " + JoinTable + " ON " + PriorTable + "." + joinColumn + " = " + JoinTable + "."  + joinColumn;	
+		return " JOIN " + JoinTable + " ON " + PriorTable + "." + joinColumn + " = " + JoinTable + "."  + joinColumn;	
 	}
 		
 	public static String Filter(String TableName, String TableColumn, String filterValue)
 	{
-		return "WHERE " + TableName + "." + TableColumn + " = " + filterValue;
+		return " WHERE " + TableName + "." + TableColumn + " = " + filterValue;
 	}
 	
 	public static String Selection(String[][] Selection, String[] Tables)
 	{
-		String selection = "";
+		String selection = "SELECT ";
 		if (Selection.length > 1)
 		{
 		for (int i = 0; i < Selection.length; i++)
