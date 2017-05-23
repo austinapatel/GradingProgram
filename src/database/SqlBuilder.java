@@ -38,23 +38,23 @@ public class SqlBuilder
 	
 	public static String getOperatorJoin(Operator operator, JoinType type, String JoinTable, String PriorTable, String joinColumn)
 	{
-		return operator.getOperatorType() +  PriorTable + "." + joinColumn + " = " + JoinTable + "."  + joinColumn;	
+		return " " + operator.getOperatorType() + " " +  PriorTable + "." + joinColumn + " = " + JoinTable + "."  + joinColumn;	
 	}
 	
 	
 	public static String getJoinString(JoinType type, String JoinTable, String PriorTable, String joinColumn)
 	{
-		return "JOIN " + JoinTable + " ON " + PriorTable + "." + joinColumn + " = " + JoinTable + "."  + joinColumn;	
+		return " JOIN " + JoinTable + " ON " + PriorTable + "." + joinColumn + " = " + JoinTable + "."  + joinColumn;	
 	}
 		
 	public static String Filter(String TableName, String TableColumn, String filterValue)
 	{
-		return "WHERE " + TableName + "." + TableColumn + " = " + filterValue;
+		return " WHERE " + TableName + "." + TableColumn + " = " + filterValue;
 	}
 	
 	public static String Selection(String[][] Selection, String[] Tables)
 	{
-		String selection = "";
+		String selection = "SELECT ";
 		if (Selection.length > 1)
 		{
 		for (int i = 0; i < Selection.length; i++)
