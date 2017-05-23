@@ -3,7 +3,7 @@ public class SqlBuilder
 {	
 	public enum JoinType
 	{		
-		INNER_JOIN("INNER JOIN"), LEFT_JOIN("LEFT JOIN"), RIGHT_JOIN("RIGHT JOIN"), FULL_OUTER_JOIN("FULL OUTER JOIN");
+		JOIN("JOIN"), INNER_JOIN("INNER JOIN"), LEFT_JOIN("LEFT JOIN"), RIGHT_JOIN("RIGHT JOIN"), FULL_OUTER_JOIN("FULL OUTER JOIN");
 		
 		private String joinText;
 
@@ -17,6 +17,30 @@ public class SqlBuilder
 			return joinText;
 		}
 	}
+	
+	
+	public enum Operator
+	{
+		OR("OR"), AND("AND");
+		
+		private String operatorText;
+		
+		private Operator(String operatorText)
+		{
+			this.operatorText = operatorText;
+		}
+		public String getOperatorType()
+		{
+			return operatorText;
+		}
+	}
+	
+	
+	public static String getOperatorJoin(Operator operator, JoinType type, String JoinTable, String PriorTable, String joinColumn)
+	{
+		return operator.getOperatorType() +  PriorTable + "." + joinColumn + " = " + JoinTable + "."  + joinColumn;	
+	}
+	
 	
 	public static String getJoinString(JoinType type, String JoinTable, String PriorTable, String joinColumn)
 	{
