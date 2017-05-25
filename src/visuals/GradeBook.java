@@ -6,15 +6,15 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Array;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
-import database.DatabaseCellEditor;
-import database.DatabaseManager;
-import database.SqlBuilder;
-import database.Table;
-import database.TableProperties;
+import database.*;
 
 public class GradeBook extends InterfacePanel
 {	
@@ -43,11 +43,51 @@ public class GradeBook extends InterfacePanel
 		table.setCellEditor(new DatabaseCellEditor());
 		 table.addMouseListener(new MouseAdapter() {
 		    public void mousePressed(MouseEvent me) {
-		    	DatabaseJTable table2 =(DatabaseJTable) me.getSource();
-		        Point p = me.getPoint();
-		        int row = table2.rowAtPoint(p);
-		        if (me.getClickCount() == 2) {
-					String value = (table.getValueAt(table.getSelectedRow(), 0).toString());
+				if (me.getClickCount() == 2) {
+					Point p = me.getPoint();
+					DatabaseJTable table2 =(DatabaseJTable) me.getSource();
+
+					int row = table2.rowAtPoint(p);
+
+					int courseID = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
+					String value = courseID + "";
+
+
+					Table studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
+					Table assignmentsTable = TableManager.getTable(TableProperties.ASSIGNMENTS_TABLE_NAME);
+					Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
+
+					ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, TableProperties.COURSE_ID, courseID + ""));
+					ArrayList<Integer> assignmentIds = DataTypeManager.toIntegerArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENT_ID, TableProperties.COURSE_ID, courseID + ""));
+
+					System.out.println("student ids:");
+					for (int studentID : studentIds) {
+						System.out.println(studentID);
+					}
+
+					System.out.println("assignment ids");
+					for (int assignmentId : assignmentIds) {
+						System.out.println(assignmentId);
+					}
+
+					Object rows[][] = { { "AMZN", "Amazon", "67 9/16" },
+							{ "AOL", "America Online", "68 3/4" },
+							{ "BOUT", "About.com", "56 3/8" },
+							{ "CDNW", "CDnow", "4 7/16" },
+							{ "DCLK", "DoubleClick", "87 3/16" },
+							{ "EBAY", "eBay", "180 7/8" },
+							{ "EWBX", "EarthWeb", "18 1/4" },
+							{ "MKTW", "MarketWatch", "29" },
+							{ "TGLO", "Theglobe.com", "4 15/16" },
+							{ "YHOO", "Yahoo!", "151 1/8" } };
+					Object columns[] = { "Symbol", "Name", "Price" };
+
+					DefaultTableModel model = new DefaultTableModel(rows, columns);
+
+					JTable gradesTable = new JTable(model);
+
+					add(gradesTable);
+
 					//String value = "1";
 					//SELECT * FROM Students JOIN Enrollments ON Students.studentId = Enrollments.studentId WHERE Enrollments.courseId = "1"
 					//ResultSet set = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[]{TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, value);
