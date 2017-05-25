@@ -29,7 +29,12 @@ public class GradeBook extends InterfacePanel
 		add(table.getTableHeader());
 		add(table, BorderLayout.NORTH);
 	}
-	
+
+	@Override
+	public void onLayoutOpened() {
+
+	}
+
 	public void initClassTable()
 	{
 		GradeBook thisInterface = this;

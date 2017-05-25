@@ -26,6 +26,7 @@ import grading.GradeCalculator;
 import grading.GradingScale;
 
 public class GradesInterface extends InterfacePanel {
+
 	private JButton backButton, printButton;
 	private DatabaseJTable table;
 	private JComboBox scaleList;
@@ -39,6 +40,11 @@ public class GradesInterface extends InterfacePanel {
 		initButton();
 		initTable();
 		initPanel();
+	}
+
+	@Override
+	public void onLayoutOpened() {
+
 	}
 
 	private void initButton()

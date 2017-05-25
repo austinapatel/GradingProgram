@@ -28,6 +28,8 @@ public class BaseInterface extends JFrame {
     private ArrayList<JPanel> interfaces;
     private HomeInterface homeInterface;
 
+    private JPanel contentPanel;
+
     public static void setDefaultSize(int size) {
         Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
         Object[] keys = keySet.toArray(new Object[keySet.size()]);
@@ -46,6 +48,9 @@ public class BaseInterface extends JFrame {
     public BaseInterface() {
         interfaces = new ArrayList<>();
 
+        contentPanel = new JPanel();
+        add(contentPanel);
+
         setDefaultSize(size);
         initContent();
         initFrame();
@@ -54,17 +59,19 @@ public class BaseInterface extends JFrame {
     public void initContent() {
         homeInterface = new HomeInterface(this);
         interfaces.add(homeInterface);
-        add(homeInterface);
+        contentPanel.add(homeInterface);
     }
 
 
-    public void showInterface(JPanel panel) {
+    public void showInterface(InterfacePanel panel) {
         if (interfaces.size() > 0)
-            remove(interfaces.get(interfaces.size() - 1));
+            contentPanel.remove(interfaces.get(interfaces.size() - 1));
 
         interfaces.add(panel);
 
-        add(panel);
+        contentPanel.add(panel);
+
+        panel.onLayoutOpened();
 
         getContentPane().revalidate();
         getContentPane().repaint();
@@ -76,9 +83,9 @@ public class BaseInterface extends JFrame {
 
 
         JPanel toRemove = interfaces.remove(interfaces.size() - 1);
-        remove(toRemove);
+        contentPanel.remove(toRemove);
 
-        add(interfaces.get(interfaces.size() - 1));
+        contentPanel.add(interfaces.get(interfaces.size() - 1));
 
         getContentPane().revalidate();
         getContentPane().repaint();

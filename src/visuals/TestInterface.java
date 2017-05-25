@@ -6,17 +6,15 @@ import java.awt.event.KeyEvent;
 public class TestInterface extends InterfacePanel {
 
     public TestInterface() {
-//        System.out.println("Base interface type: " + getla);
+        add(new JButton("test"));
+        add(new JTextField("test"));
+        add(new JLabel("test"));
+        add(new JCheckBox("test"));
+    }
 
-        JPanel panel = new JPanel();
+    @Override
+    public void onLayoutOpened() {
 
-
-        panel.add(new JButton("test"));
-        panel.add(new JTextField("test"));
-        panel.add(new JLabel("test"));
-        panel.add(new JCheckBox("test"));
-
-        add(panel);
     }
 
     @Override

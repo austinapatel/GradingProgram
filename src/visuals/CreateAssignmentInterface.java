@@ -32,6 +32,11 @@ public class CreateAssignmentInterface extends InterfacePanel implements ActionL
         initInterface();
     }
 
+    @Override
+    public void onLayoutOpened() {
+
+    }
+
     private void initPanel() {
         contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));

@@ -42,6 +42,11 @@ public class CreateClassInterface extends InterfacePanel
 		studentInterface.setMinimumSize(studentSize);
 	}
 
+	@Override
+	public void onLayoutOpened() {
+
+	}
+
 	private void initClassInterface()
 	{
 		txtStartYear = new JTextField();

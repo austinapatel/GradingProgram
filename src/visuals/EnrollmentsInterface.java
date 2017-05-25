@@ -30,6 +30,11 @@ public class EnrollmentsInterface extends InterfacePanel
 		initTables();
 	}
 
+	@Override
+	public void onLayoutOpened() {
+
+	}
+
 	private void initTables()
 	{
 		studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME);

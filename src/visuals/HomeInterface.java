@@ -98,4 +98,9 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     public void keyReleased(KeyEvent e) {
         gridPanel.keyReleased(e);
     }
+
+    @Override
+    public void onLayoutOpened() {
+
+    }
 }

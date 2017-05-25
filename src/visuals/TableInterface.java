@@ -43,6 +43,11 @@ public class TableInterface extends InterfacePanel {
         initTable();
     }
 
+    @Override
+    public void onLayoutOpened() {
+
+    }
+
     private void initPanel() {
         setLayout(new BorderLayout());
     }

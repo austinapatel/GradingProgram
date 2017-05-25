@@ -29,6 +29,11 @@ public class ConsolePanel extends InterfacePanel {
     }
 
     @Override
+    public void onLayoutOpened() {
+
+    }
+
+    @Override
     public void keyTyped(KeyEvent e) {
 
     }

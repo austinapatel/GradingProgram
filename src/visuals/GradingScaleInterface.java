@@ -86,7 +86,12 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
 		letterTable.setShowVerticalLines(true);
 		initScale();
 	}
-	
+
+	@Override
+	public void onLayoutOpened() {
+
+	}
+
 
 	private void initScale()
 	{

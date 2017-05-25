@@ -64,6 +64,11 @@ public class StudentInterface extends InterfacePanel
 		initSplitPane();
 	}
 
+	@Override
+	public void onLayoutOpened() {
+
+	}
+
 	private void initStudentsPane()
 	{
 		studentsPane = new JPanel();
