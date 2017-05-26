@@ -231,4 +231,36 @@ public class Table
 		ResultSet filter = DatabaseManager.getFilterdTable(this, searchColumnName, searchQuery);
 		return getAllFromColumn(returnColumnName, filter);
 	}
+
+	public ArrayList<Object> getSomeFromColummn(String returnColumnName, Search... searches) {
+		String sql = "";
+		String select = SqlBuilder.selection(new String[][] {{name, returnColumnName}}, new String[] {name});
+
+		sql += select;
+		System.out.println("Selection: " + select);
+
+		String[][] filters = new String[searches.length][2];
+
+		for (int i = 0; i < searches.length; i++) {
+			Search search = searches[i];
+
+			sql += " " + SqlBuilder.filter(name, search.getColumnName(), search.getSearchValue() + "");
+
+			if (i < searches.length - 1)
+				sql += " AND ";
+		}
+
+//		String filter = SqlBuilder.filter(TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENT_ID, studentId + "");
+//		String filter2 = SqlBuilder.filter(TableProperties.GRADES_TABLE_NAME, TableProperties.ASSIGNMENT_ID, assignmentId + "");
+//
+//		String sql = select + " " + filter + " AND " + filter2;
+
+		System.out.println("Austin:" + sql);
+		return new ArrayList<>();
+
+//		ResultSet set = DatabaseManager.executeSqlStatement(sql);
+//		Table table = new Table("Table", set);
+//		ArrayList<Object> result = table.getAllFromColumn(TableProperties.GRADE_ID);
+
+	}
 }

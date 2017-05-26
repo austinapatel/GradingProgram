@@ -305,7 +305,7 @@ public class TableInterface extends InterfacePanel {
         tableScrollPane = new JScrollPane(jTable);
         add(tableScrollPane, BorderLayout.CENTER);
 
-        databaseTableModel = new DatabaseTableModel(this);
+        databaseTableModel = new DatabaseTableModel();
 
         setTable(TableManager.getTable(tableList.getSelectedValue()));
     }

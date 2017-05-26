@@ -19,10 +19,9 @@ public class DatabaseTableModel extends AbstractTableModel {
 
 	private Table table;
 	private ResultSet resultSet;
-	private TableInterface tableInterface;
 
-	public DatabaseTableModel(TableInterface tableInterface) {
-		this.tableInterface = tableInterface;
+	public DatabaseTableModel() {
+
 	}
 
 	/** Changes the table of the model. */
