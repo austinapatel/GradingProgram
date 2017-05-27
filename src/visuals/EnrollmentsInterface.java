@@ -107,7 +107,7 @@ public class EnrollmentsInterface extends InterfacePanel
 							put(TableProperties.COURSE_ID, courseId);
 						}
 					};
-					TableManager.insertValuesIntoNewRow(enrollmentsTable, enrollmentsVals);
+					enrollmentsTable.addRow(enrollmentsVals);
 				};
 			}
 		});

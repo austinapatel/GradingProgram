@@ -11,256 +11,263 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  * Lets tables utilize the operations in the DatabaseManager class and adds
  * common methods for all tables.
  */
-public class Table
-{
+public class Table {
 
-	private String name, primaryKey;
-	private TableColumn[] tableColumns;
-	private ResultSet resultSet;
+    private String name, primaryKey;
+    private TableColumn[] tableColumns;
+    private ResultSet resultSet;
 
-	public Table(String name, TableColumn[] tableColumns)
-	{
-		this.name = name;
-		init(name, tableColumns, DatabaseManager.getTable(this));
-		if (TableManager.createTable)
-			createTable();
-	}
+    public Table(String name, TableColumn[] tableColumns) {
+        this.name = name;
+        init(name, tableColumns, DatabaseManager.getTable(this));
+        if (TableManager.createTable)
+            createTable();
+    }
 
-	public Table(String tableName, ResultSet resultSet)
-	{
-		TableColumn[] tableColumns = null;
+    public Table(String tableName, ResultSet resultSet) {
+        TableColumn[] tableColumns = null;
 
-		try
-		{
-			ResultSetMetaData metaData = resultSet.getMetaData();
+        try {
+            ResultSetMetaData metaData = resultSet.getMetaData();
 
-			tableColumns = new TableColumn[metaData.getColumnCount()];
-			tableColumns[0] = new TableColumn(metaData.getColumnName(1), metaData.getColumnTypeName(1), null);
-			for (int i = 1; i <= metaData.getColumnCount(); i++)
-			{
-				tableColumns[i - 1] = new TableColumn(metaData.getColumnName(i), metaData.getColumnTypeName(i), null);
-			}
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
+            tableColumns = new TableColumn[metaData.getColumnCount()];
+            tableColumns[0] = new TableColumn(metaData.getColumnName(1), metaData.getColumnTypeName(1), null);
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                tableColumns[i - 1] = new TableColumn(metaData.getColumnName(i), metaData.getColumnTypeName(i), null);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-		init(tableName, tableColumns, resultSet);
-	}
+        init(tableName, tableColumns, resultSet);
+    }
 
-	private void init(String name, TableColumn[] tableColumns, ResultSet resultSet)
-	{
-		this.tableColumns = tableColumns;
+    private void init(String name, TableColumn[] tableColumns, ResultSet resultSet) {
+        this.tableColumns = tableColumns;
 
-		this.name = name;
-		this.primaryKey = tableColumns[0].getName();
+        this.name = name;
+        this.primaryKey = tableColumns[0].getName();
 
-		this.resultSet = resultSet;
-	}
+        this.resultSet = resultSet;
+    }
 
-	/** Creates the table. */
-	private void createTable()
-	{
-		DatabaseManager.createTable(this);
-	}
+    /**
+     * Creates the table.
+     */
+    private void createTable() {
+        DatabaseManager.createTable(this);
+    }
 
-	public void update()
-	{
-		resultSet = DatabaseManager.getTable(this);
-	}
+    public void update() {
+        resultSet = DatabaseManager.getTable(this);
+    }
 
-	public String getName()
-	{
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getPrimaryKey()
-	{
-		return primaryKey;
-	}
+    public String getPrimaryKey() {
+        return primaryKey;
+    }
 
-	public ResultSet getResultSet()
-	{
-		return resultSet;
-	}
+    public ResultSet getResultSet() {
+        return resultSet;
+    }
 
-	public TableColumn[] getTableColumns()
-	{
-		return tableColumns;
-	}
+    public TableColumn[] getTableColumns() {
+        return tableColumns;
+    }
 
-	/**Determines the number of rows in the table.*/
-	public int getRowCount()
-	{
-		int rows = 0;
+    /**
+     * Determines the number of rows in the table.
+     */
+    public int getRowCount() {
+        int rows = -1;
 
-		try
-		{
-			//			resultSet.beforeFirst();
-			//
-			//			while (resultSet.next())
-			//				rows++;
-			//
-			//			resultSet.first();
+        try {
+            resultSet.last();
+            rows = resultSet.getRow();
+        } catch (SQLException e) {
+            System.out.println("Failed to determine the number of rows in " + name);
+        }
 
-			resultSet.last();
-			rows = resultSet.getRow();
-		}
-		catch (SQLException e)
-		{
-			System.out.println("Failed to determine the number of rows in " + name);
-		}
+        return rows;
+    }
 
-		return rows;
-	}
+    /**Adds a new row to the table with given values.*/
+    public void addRow() {
+        try {
+            int desiredRowID = getInsertID();
 
-	/**
-	 * Adds a row to the table with blank data. Do not call this function if you want to add a row.
-	 * Use TableManager.insertValuesIntoNewRow();
-	 */
-	public void startRowCreation()
-	{
+            resultSet.moveToInsertRow();
 
-		int desiredRowID = getInsertID();
-		DatabaseManager.beginRowInsert(this);
+            setValueAt(-1, 0, desiredRowID);
 
-		DatabaseManager.addToRow(this, desiredRowID, 0);
+            for (int i = 1; i < tableColumns.length; i++)
+                setValueAt(-1, i, null);
 
-		for (int i = 1; i < tableColumns.length; i++)
-			DatabaseManager.addToRow(this, null, i);
+            DatabaseManager.endRowInsert(this);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to insertValueIntoNewRow");
+        }
+    }
 
-		DatabaseManager.endRowInsert(this);
-	}
+    public void addRow(HashMap<String, Object> values) {
+        addRow();
+        setValuesAt(getRowCount(), values);
+    }
 
-	private int getInsertID()
-	{
-		ArrayList<Integer> currentIDs = DataTypeManager.toIntegerArrayList(getAllFromColumn(tableColumns[0].getName()));
+    public void setValuesAt(int rowIndex, HashMap<String, Object> values) {
+        Object[] keySetObjects = values.keySet().toArray();
+        String[] keys = new String[keySetObjects.length];
 
-		//		resultSet.first();
+        for (int i = 0; i < keySetObjects.length; i++)
+            keys[i] = keySetObjects[i].toString();
 
-		int largest = 0;
-		for (int i : currentIDs)
-			largest = (i > largest) ? i : largest;
+        for (int i = 0; i < keys.length; i++) {
+            int columnIndex = getColumnIndex(keys[i]);
+            String currentKey = keys[i];
+            Object value = values.get(currentKey);
 
-		return largest + 1;
-	}
+            setValueAt(rowIndex, columnIndex, value);
 
-	/**
-	 * Removes a row from the table given a value and the column that value is
-	 * in. Returns the index of the row that was deleted.
-	 */
-	public int deleteRow(Object value, int column)
-	{
-		try
-		{
-			resultSet.beforeFirst();
+            try {
+                resultSet.updateRow();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-			while (resultSet.next())
-			{
-				if (resultSet.getObject(column).toString().equals(value.toString()))
-				{
-					resultSet.deleteRow();
-					return resultSet.getRow();
-				}
-			}
-		}
-		catch (SQLException e)
-		{
-			System.out.println("Failed to delete row.");
-		}
+    /**
+     * Adds a value of the correct type to a table row ResultSet.  If rowIndex is -1 then row will not change
+     */
+    public void setValueAt(int rowIndex, int columnIndex, Object value) {
+        TableColumn.DataType type = DatabaseManager.getSQLType(tableColumns[columnIndex].getType());
 
-		return -1;
-	}
+        columnIndex++; // columnIndex starts at 1, not 0
 
-	public int getColumnIndex(String columnName)
-	{
-		for (int i = 0; i < tableColumns.length; i++)
-			if (tableColumns[i].getName().equals(columnName))
-				return i;
+        try {
+            if (rowIndex != -1)
+                resultSet.absolute(rowIndex);
 
-		return -1;
-	}
+            if (type == TableColumn.DataType.String) {
+                if (value == null)
+                    value = "";
 
-	public ArrayList<Object> getAllFromColumn(String columnName)
-	{
-		return getAllFromColumn(columnName, resultSet);
-	}
+                resultSet.updateString(columnIndex, value.toString());
+            } else if (type == TableColumn.DataType.Integer) {
+                if (value == null)
+                    value = 0;
 
-	private ArrayList<Object> getAllFromColumn(String columnName, ResultSet resultSet)
-	{
-		ArrayList<Object> data = new ArrayList<>();
-		int columnIndex = getColumnIndex(columnName) + 1;
+                Integer newValue = Integer.parseInt(value.toString());
 
-		try
-		{
-			resultSet.beforeFirst();
+                resultSet.updateInt(columnIndex, newValue);
+            } else if (type == TableColumn.DataType.Double) {
+                if (value == null)
+                    value = 0d;
 
-			if (!resultSet.next())
-			{ // Checks if ResultSet is empty
-				resultSet.beforeFirst();
-				return data;
-			}
+                resultSet.updateDouble(columnIndex, Double.class.cast(value));
+            } else if (type == TableColumn.DataType.Date) {
+                if (value == null)
+                    value = 0;
+                resultSet.updateDate(columnIndex, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+            }
 
-			resultSet.first();
 
-			while (!resultSet.isAfterLast())
-			{
-				Object currentValue = resultSet.getObject(columnIndex);
-				data.add(currentValue);
+        } catch (Exception e) {
+            System.out.println("Unable to add value " + value + " to " + name + " Column index: " + columnIndex + " Column Name: " + tableColumns[columnIndex].getName() + ".");
+        }
 
-				resultSet.next();
-			}
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
+    }
 
-		return data;
-	}
+    private int getInsertID() {
+        ArrayList<Integer> currentIDs = DataTypeManager.toIntegerArrayList(getAllFromColumn(tableColumns[0].getName()));
 
-	public ArrayList<Object> getSomeFromColumn(String returnColumnName, String searchColumnName, String searchQuery)
-	{
-		ResultSet filter = DatabaseManager.getFilterdTable(this, searchColumnName, searchQuery);
-		return getAllFromColumn(returnColumnName, filter);
-	}
+        //		resultSet.first();
 
-	public ArrayList<Object> getSomeFromColummn(String returnColumnName, Search... searches) {
-		String sql = "";
-		String select = SqlBuilder.selection(new String[][] {{name, returnColumnName}}, new String[] {name});
+        int largest = 0;
+        for (int i : currentIDs)
+            largest = (i > largest) ? i : largest;
 
-		sql += select;
-		System.out.println("Selection: " + select);
+        return largest + 1;
+    }
 
-		String[][] filters = new String[searches.length][2];
+    /**
+     * Removes a row from the table given a value and the column that value is
+     * in. Returns the index of the row that was deleted.
+     */
+    public int deleteRow(Object value, int column) {
+        try {
+            resultSet.beforeFirst();
 
-		for (int i = 0; i < searches.length; i++) {
-			Search search = searches[i];
+            while (resultSet.next()) {
+                if (resultSet.getObject(column).toString().equals(value.toString())) {
+                    resultSet.deleteRow();
+                    return resultSet.getRow();
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to delete row.");
+        }
 
-			sql += " " + SqlBuilder.filter(name, search.getColumnName(), search.getSearchValue() + "");
+        return -1;
+    }
 
-			if (i < searches.length - 1)
-				sql += " AND ";
-		}
+    public int getColumnIndex(String columnName) {
+        for (int i = 0; i < tableColumns.length; i++)
+            if (tableColumns[i].getName().equals(columnName))
+                return i;
 
-//		String filter = SqlBuilder.filter(TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENT_ID, studentId + "");
-//		String filter2 = SqlBuilder.filter(TableProperties.GRADES_TABLE_NAME, TableProperties.ASSIGNMENT_ID, assignmentId + "");
-//
-//		String sql = select + " " + filter + " AND " + filter2;
+        return -1;
+    }
 
-		System.out.println("Austin:" + sql);
-		return new ArrayList<>();
+    public ArrayList<Object> getAllFromColumn(String columnName) {
+        return getAllFromColumn(getColumnIndex(columnName), resultSet);
+    }
 
-//		ResultSet set = DatabaseManager.executeSqlStatement(sql);
-//		Table table = new Table("Table", set);
-//		ArrayList<Object> result = table.getAllFromColumn(TableProperties.GRADE_ID);
+    private static ArrayList<Object> getAllFromColumn(int columnIndex, ResultSet resultSet) {
+        ArrayList<Object> data = new ArrayList<>();
 
-	}
+        columnIndex++;
+
+        try {
+            resultSet.beforeFirst();
+
+            if (!resultSet.next()) { // Checks if ResultSet is empty
+                resultSet.beforeFirst();
+                return data;
+            }
+
+            resultSet.first();
+
+            while (!resultSet.isAfterLast()) {
+                Object currentValue = resultSet.getObject(columnIndex);
+                data.add(currentValue);
+
+                resultSet.next();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return data;
+    }
+
+    public ArrayList<Object> getSomeFromColumn(String returnColumnName, Search... searches) {
+        for (Search search : searches)
+            search.setTableName(name);
+
+        ResultSet searchResultSet = DatabaseManager.select(new String[][]{{name, returnColumnName}}, searches);
+
+        return Table.getAllFromColumn(0, searchResultSet);
+    }
 }

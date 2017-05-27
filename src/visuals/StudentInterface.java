@@ -29,10 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
-import database.DataTypeManager;
-import database.Table;
-import database.TableManager;
-import database.TableProperties;
+import database.*;
 import table.Date;
 import table.Student;
 import utilities.KeyboardTools;
@@ -120,7 +117,7 @@ public class StudentInterface extends InterfacePanel
 
 			if (counselorId != 0)
 				counselorName = TableManager.getTable(TableProperties.COUNSELORS_TABLE_NAME)
-							.getSomeFromColumn(TableProperties.NAME, TableProperties.COUNSELOR_ID, String.valueOf(counselorId))
+							.getSomeFromColumn(TableProperties.NAME, new Search(TableProperties.COUNSELOR_ID, String.valueOf(counselorId)))
 							.get(0).toString();
 
 			lblStudentInfo.setText(toHTML(student.toString() + "\nCounselor: " + counselorName));
@@ -326,7 +323,7 @@ public class StudentInterface extends InterfacePanel
 						{
 							ArrayList<Integer> counselorSearch = DataTypeManager.toIntegerArrayList(
 										TableManager.getTable(TableProperties.COUNSELORS_TABLE_NAME).getSomeFromColumn(
-													TableProperties.COUNSELOR_ID, TableProperties.NAME, counselorName));
+													TableProperties.COUNSELOR_ID, new Search(TableProperties.NAME, counselorName)));
 							if (counselorSearch.size() == 1)
 							{
 								int counselorId = counselorSearch.get(0);
@@ -387,13 +384,12 @@ public class StudentInterface extends InterfacePanel
 							}
 						};
 
-						System.out.println("Added a student");
-						TableManager.insertValuesIntoNewRow(studentsTable, studentVals);
+						studentsTable.addRow(studentVals);
 					}
 
 					int curStudentDatabaseID = DataTypeManager
 								.toIntegerArrayList(studentsTable.getSomeFromColumn(TableProperties.STUDENT_ID,
-											TableProperties.STUDENT_REDWOOD_ID, "" + studentID))
+											new Search(TableProperties.STUDENT_REDWOOD_ID, studentID)))
 								.get(0);
 
 					//Adds new Enrollment
@@ -413,7 +409,7 @@ public class StudentInterface extends InterfacePanel
 						}
 					};
 
-					TableManager.insertValuesIntoNewRow(enrollmentsTable, enrollmentsVals);
+					enrollmentsTable.addRow(enrollmentsVals);
 					listStudentsModel.addElement(student.getFirstName() + " " + student.getLastName());
 
 					txtFirstName.setText("");

@@ -137,7 +137,7 @@ public class CreateAssignmentInterface extends InterfacePanel implements ActionL
                 put(TableProperties.NAME, txtName.getText());
             }};
 
-            TableManager.insertValuesIntoNewRow(assignmentsTable, values);
+            assignmentsTable.addRow(values);
             
             txtName.setText("");
             txtPointValue.setText("");

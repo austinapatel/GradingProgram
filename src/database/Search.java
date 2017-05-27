@@ -6,11 +6,16 @@ public class Search {
     private String columnName;
     private String searchValue;
 
-//    private String tableName;
+    private String tableName;
 
-    public Search(String columnName, String searchValue) {
+    public Search(String tableName, String columnName, Object searchValue) {
+        this(columnName, searchValue);
+        this.tableName = tableName;
+    }
+
+    public Search(String columnName, Object searchValue) {
         this.columnName = columnName;
-        this.searchValue = searchValue;
+        this.searchValue = searchValue.toString();
     }
 
     public String getColumnName() {
@@ -29,12 +34,12 @@ public class Search {
         this.searchValue = searchValue;
     }
 
-//    public String getTableName() {
-//        return tableName;
-//    }
+    public String getTableName() {
+        return tableName;
+    }
 
-//    public void setTableName(String tableName) {
-//        this.tableName = tableName;
-//    }
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
 
 }

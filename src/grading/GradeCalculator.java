@@ -55,7 +55,7 @@ public class GradeCalculator {
 
         // Calculate the total number of possible points
         Table assignmentsTable = TableManager.getTable(TableProperties.ASSIGNMENTS_TABLE_NAME);
-        ArrayList<Double> assignmentPoints = DataTypeManager.toDoubleArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENTS_VALUE, TableProperties.COURSE_ID, String.valueOf(courseId)));
+        ArrayList<Double> assignmentPoints = DataTypeManager.toDoubleArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENTS_VALUE, new Search(TableProperties.COURSE_ID, courseId)));
         double totalPoints = 0;
         for (double d : assignmentPoints)
             totalPoints += d;

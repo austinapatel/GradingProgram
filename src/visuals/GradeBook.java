@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.sql.Array;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -49,6 +50,9 @@ public class GradeBook extends InterfacePanel
 
 	public void initClassTable()
 	{
+		// Hashmap: first is student id, which gives hashmap that needs assignment id which gives the students grade on the assignment
+//		HashMap<Integer, HashMap<Integer, Integer>> assignmentScores = new HashMap<>();
+
 		table = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
 		table.setCellEditor(new DatabaseCellEditor());
 		table.addMouseListener(new MouseAdapter() {
@@ -56,8 +60,8 @@ public class GradeBook extends InterfacePanel
 				if (me.getClickCount() == 2) {
 					int courseID = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
 
-					ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, TableProperties.COURSE_ID, courseID + ""));
-					ArrayList<Integer> assignmentIds = DataTypeManager.toIntegerArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENT_ID, TableProperties.COURSE_ID, courseID + ""));
+					ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, new Search(TableProperties.COURSE_ID, courseID)));
+					ArrayList<Integer> assignmentIds = DataTypeManager.toIntegerArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENT_ID, new Search(TableProperties.COURSE_ID, courseID)));
 
 					System.out.println("student ids:");
 					for (int studentID : studentIds) {
@@ -69,6 +73,8 @@ public class GradeBook extends InterfacePanel
 						System.out.println(assignmentId);
 					}
 
+					System.out.println("NUMBER OF ASSIGNMENTS: " + assignmentIds.size());
+
 					// Get the data and put it into the row
 					ArrayList<ArrayList<String>> rows = new ArrayList<>();
 
@@ -77,15 +83,20 @@ public class GradeBook extends InterfacePanel
 
 						ArrayList<String> currentRow = new ArrayList<>();
 						// Convert a student id to a name
-						String firstName = DataTypeManager.toStringArrayList(studentsTable.getSomeFromColumn(TableProperties.FIRST_NAME, TableProperties.STUDENT_ID, studentId + "")).get(0);
-						String lastName = DataTypeManager.toStringArrayList(studentsTable.getSomeFromColumn(TableProperties.LAST_NAME, TableProperties.STUDENT_ID, studentId + "")).get(0);
+						String firstName = DataTypeManager.toStringArrayList(studentsTable.getSomeFromColumn(TableProperties.FIRST_NAME, new Search(TableProperties.STUDENT_ID, studentId))).get(0);
+						String lastName = DataTypeManager.toStringArrayList(studentsTable.getSomeFromColumn(TableProperties.LAST_NAME, new Search(TableProperties.STUDENT_ID, studentId + ""))).get(0);
 
 						currentRow.add(firstName + " " + lastName);
 
 						// Now add each of the student's scores to the row
 						for (int j = 0; j < assignmentIds.size(); j++) {
 							int assignmentId = assignmentIds.get(j);
-							ArrayList<Integer> scores = DataTypeManager.toIntegerArrayList(gradesTable.getSomeFromColummn(TableProperties.GRADE_ID, new Search(TableProperties.STUDENT_ID, studentId + ""), new Search(TableProperties.ASSIGNMENT_ID, assignmentId + "")));
+							ArrayList<Double> grades = DataTypeManager.toDoubleArrayList(gradesTable.getSomeFromColumn(TableProperties.GRADE_VALUE, new Search(TableProperties.STUDENT_ID, studentId), new Search(TableProperties.ASSIGNMENT_ID, assignmentId)));
+
+							if (grades.size() > 0)
+								currentRow.add(grades.get(0) + "");
+							else
+								currentRow.add("Missing");
 
 //							ArrayList<Integer> returnedScores = DataTypeManager.toIntegerArrayList(gradesTable.getSomeFromColumn(TableProperties.GRADE_VALUE, TableProperties.ASSIGNMENT_ID, assignmentIds.get(i) + ""));
 						}
@@ -93,7 +104,7 @@ public class GradeBook extends InterfacePanel
 						rows.add(currentRow);
 					}
 
-					String[][] rowsFormatted = new String[rows.size()][rows.get(0).size()];
+					String[][] rowsFormatted = new String[rows.size()][assignmentIds.size() + 1];
 
 					for (int x = 0; x < rowsFormatted.length; x++) {
 						for (int y = 0; y < rowsFormatted[x].length; y++) {
@@ -105,8 +116,8 @@ public class GradeBook extends InterfacePanel
 					columns.add("Student Name");
 
 					for (int i = 0; i < assignmentIds.size(); i++) {
-						String assignmentName = DataTypeManager.toStringArrayList(assignmentsTable.getSomeFromColumn(TableProperties.NAME, TableProperties.ASSIGNMENT_ID, assignmentIds.get(i) + "")).get(0);
-						int assignmentValue = DataTypeManager.toIntegerArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENTS_VALUE, TableProperties.ASSIGNMENT_ID, assignmentIds.get(i) + "")).get(0);
+						String assignmentName = DataTypeManager.toStringArrayList(assignmentsTable.getSomeFromColumn(TableProperties.NAME, new Search(TableProperties.ASSIGNMENT_ID, assignmentIds.get(i)))).get(0);
+						int assignmentValue = DataTypeManager.toIntegerArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENTS_VALUE, new Search(TableProperties.ASSIGNMENT_ID, assignmentIds.get(i)))).get(0);
 
 						columns.add(assignmentName + " (" + assignmentValue + ")");
 					}
@@ -135,8 +146,8 @@ public class GradeBook extends InterfacePanel
 //					String join2 = SqlBuilder.getJoinString(SqlBuilder.JoinType.JOIN, TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, TableProperties.COURSE_ID);
 //					String join3 = SqlBuilder.getJoinString(SqlBuilder.JoinType.JOIN, TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENTS_TABLE_NAME, TableProperties.STUDENT_ID);
 //					String join4 = SqlBuilder.getOperatorJoin(SqlBuilder.Operator.AND, SqlBuilder.JoinType.JOIN, TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.GRADES_TABLE_NAME, TableProperties.ASSIGNMENT_ID);
-//					String filter = SqlBuilder.Filter(TableProperties.ENROLLMENTS_TABLE_NAME, TableProperties.COURSE_ID, value);
-//					String sql = select + join1 + join2 + join3 + join4 + filter;
+//					String filterSQL = SqlBuilder.Filter(TableProperties.ENROLLMENTS_TABLE_NAME, TableProperties.COURSE_ID, value);
+//					String sql = select + join1 + join2 + join3 + join4 + filterSQL;
 //					ResultSet set = DatabaseManager.executeSqlStatement(sql);
 //
 //					Table joinedTable = new Table("GradeBook", set);
@@ -166,27 +177,6 @@ public class GradeBook extends InterfacePanel
 
 		add(table.getTableHeader());
 		add(table);
-	}
-	private void initList() 
-	{
-		listModel = new DefaultListModel();
-		listModel.addElement("hello");
-		classList = new JList(listModel);
-		classList.setBackground(getBackground());
-		classList.setFont(new Font("Helvetica", Font.BOLD, 15));
-		classList.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent evt) {
-				JList list = (JList) evt.getSource();
-				if (evt.getClickCount() == 2) 
-				{
-					System.out.println("Double Click ");
-				} else if (evt.getClickCount() == 3)
-				{
-
-					int index = list.locationToIndex(evt.getPoint());
-				}
-			}
-		});
 	}
 
 	@Override

@@ -19,10 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import database.DataTypeManager;
-import database.Table;
-import database.TableManager;
-import database.TableProperties;
+import database.*;
 
 public class CreateClassInterface extends InterfacePanel
 {
@@ -126,7 +123,8 @@ public class CreateClassInterface extends InterfacePanel
 					}
 				};
 
-				TableManager.insertValuesIntoNewRow(enrollmentsTable, enrollmentsVals);
+				enrollmentsTable.addRow(enrollmentsVals);
+				enrollmentsTable.addRow(enrollmentsVals);
 			}
 		});
 		CreateClassInterface thisInterface = this;
@@ -151,8 +149,8 @@ public class CreateClassInterface extends InterfacePanel
 						}
 					};
 					System.out.println(className + classPeriod + startYear + endYear);
-					TableManager.insertValuesIntoNewRow(coursesTable, coursesVals);
-					courseId = (int) TableManager.getTable(TableProperties.COURSES_TABLE_NAME).getSomeFromColumn(TableProperties.COURSE_ID, TableProperties.NAME, className).get(0);
+					coursesTable.addRow(coursesVals);
+					courseId = (int) TableManager.getTable(TableProperties.COURSES_TABLE_NAME).getSomeFromColumn(TableProperties.COURSE_ID, new Search(TableProperties.NAME, className)).get(0);
 					enrollButton.setEnabled(true);
 					studentInterface.setStudentButtonEnabled(true);
 					

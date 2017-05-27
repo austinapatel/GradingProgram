@@ -68,44 +68,12 @@ public class DatabaseManager {
 
     }
 
-
-    public static Object[][] ResultSetToObjectArray(ResultSet rs) {
-
-        Object[][] rowData = null;
-        ResultSetMetaData data = null;
-        int columnCount = 0;
-        try {
-            data = rs.getMetaData();
-            columnCount = data.getColumnCount();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        try {
-            rowData = new Object[columnCount][((Object[]) rs.getArray(1).getArray()).length];
-            for (int i = 0; i < columnCount; i++) {
-                try {
-                    rowData[i] = (Object[]) rs.getArray(i + 1).getArray();
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return rowData;
-    }
-
-
     public static ResultSet getFilterdTable(Table table, String filter, String filterValue) {
 
         // SELECT * FROM GRADES WHERE GRADES_STUDENT_ID = value
 
         try {
             String sql = "SELECT * FROM " + table.getName() + " WHERE " + filter + " = " + '\"' + filterValue + '\"';
-            System.out.println(sql);
             Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = stmt.executeQuery(sql);
             return rs;
@@ -120,7 +88,6 @@ public class DatabaseManager {
     public static ResultSet executeSqlStatement(String sql) 
     {
        try {
-           System.out.println(sql);
            Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
            ResultSet rs = stmt.executeQuery(sql);
            return rs;
@@ -132,7 +99,7 @@ public class DatabaseManager {
    }
 
     public static ResultSet getJoinedTable(String table1Name, String table2Name, String[] tableAndColumnNames, String table1JoinColumn, String table2JoinColumn, String tableNameAndFilter, String filterValue) {
-        //table1        table2         table1.column       table2.column               table2 filter name  filter value
+        //table1        table2         table1.column       table2.column               table2 filterSQL name  filterSQL value
 
         String selection = "";
         if (tableAndColumnNames.length > 1) {
@@ -159,6 +126,13 @@ public class DatabaseManager {
         return null;
 
 
+    }
+
+    public static ResultSet select(String[][] selection, Search... searches) {
+        String select = SqlBuilder.selectionSQL(selection);
+        String filter = SqlBuilder.filterSQL(searches);
+
+        return DatabaseManager.executeSqlStatement(select + filter);
     }
 
     public static ResultSet getTripleJoinedTable(String table1Name, String table2Name, String table3Name, String[][] tableAndColumnNames, String table1JoinColumn, String table2JoinColumn, String table1SecondJoinColumn, String table3JoinColumn, String tableNameAndFilter, String filterValue, String groupByTableNameAndColumn) {
@@ -208,19 +182,6 @@ public class DatabaseManager {
     }
 
     /**
-     * Gets a table ready to be inserted into.
-     */
-    public static void beginRowInsert(Table table) {
-        ResultSet resultSet = table.getResultSet();
-        try {
-            if (resultSet.getConcurrency() == ResultSet.CONCUR_UPDATABLE)
-                resultSet.moveToInsertRow();
-        } catch (SQLException e) {
-            System.out.println("Unable to begin inserting a row into the table: " + table.getName());
-        }
-    }
-
-    /**
      * Finishes the insert process for a row into a table.
      */
     public static void endRowInsert(Table table) {
@@ -234,46 +195,6 @@ public class DatabaseManager {
             System.out.println(
                     "Insert row already added. Change values that need to be unique in row before adding a new row.");
         }
-    }
-
-    /**
-     * Adds a value of the correct type to a table row ResultSet.
-     */
-    public static void addToRow(Table table, Object value, int columnIndex) {
-        DataType type = DatabaseManager.getSQLType(table.getTableColumns()[columnIndex].getType());
-        ResultSet resultSet = table.getResultSet();
-
-        columnIndex++; // columnIndex starts at 1, not 0
-
-        try {
-            if (type == DataType.String) {
-                if (value == null)
-                    value = "";
-
-                resultSet.updateString(columnIndex, value.toString());
-            } else if (type == DataType.Integer) {
-                if (value == null)
-                    value = 0;
-
-                Integer newValue = Integer.parseInt(value.toString());
-
-                resultSet.updateInt(columnIndex, newValue);
-            } else if (type == DataType.Double) {
-                if (value == null)
-                    value = 0d;
-
-                resultSet.updateDouble(columnIndex, Double.class.cast(value));
-            } else if (type == DataType.Date) {
-                if (value == null)
-                    value = 0;
-                resultSet.updateDate(columnIndex, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
-            }
-
-
-        } catch (Exception e) {
-            System.out.println("Unable to add value " + value.toString() + " to " + table.getName() + " Column index: " + columnIndex + " Column Name: " + table.getTableColumns()[columnIndex].getName() + ".");
-        }
-
     }
 
     /**

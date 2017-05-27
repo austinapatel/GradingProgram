@@ -1,5 +1,6 @@
 package database;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class SqlBuilder {
@@ -42,38 +43,47 @@ public class SqlBuilder {
         return " JOIN " + JoinTable + " ON " + PriorTable + "." + joinColumn + " = " + JoinTable + "." + joinColumn;
     }
 
-    public static String filter(String TableName, String TableColumn, String filterValue) {
-        return " WHERE " + TableName + "." + TableColumn + " = " + filterValue;
+    public static String filterSQL(Search... searches) {
+        String filter = " WHERE ";
+
+        for (int i = 0; i < searches.length; i++) {
+            Search search = searches[i];
+
+            filter += search.getTableName() + "." + search.getColumnName() + " = \"" + search.getSearchValue() + "\" ";
+
+            if (i < searches.length - 1)
+                filter += "AND ";
+        }
+
+        return filter;
     }
 
-    public static String selection(String[][] Selection, String[] Tables) {
-        String selection = "SELECT ";
-        if (Selection.length > 1) {
-            for (int i = 0; i < Selection.length; i++) {
+    public static String selectionSQL(String[][] selection) {
+        String sql = "SELECT ";
+        if (selection.length > 1) {
+            for (int i = 0; i < selection.length; i++) {
 
-                for (int j = 1; j < Selection[i].length; j++) {
-                    selection += Selection[i][0] + "." + Selection[i][j];
+                for (int j = 1; j < selection[i].length; j++) {
+                    sql += selection[i][0] + "." + selection[i][j];
 
-                    if (i != Selection.length - 1) {
-                        selection += ", ";
-                    } else if (j != Selection[i].length - 1) {
-                        selection += ", ";
+                    if (i != selection.length - 1) {
+                        sql += ", ";
+                    } else if (j != selection[i].length - 1) {
+                        sql += ", ";
                     }
                 }
-                selection += " ";
+                sql += " ";
             }
         } else
-            selection += Selection[0][0] + "." + Selection[0][1];
+            sql += selection[0][0] + "." + selection[0][1];
 
         String tableNames = "";
-        if (Tables.length > 1) {
-            for (int i = 0; i < Tables.length - 1; i++) {
-                tableNames += Tables[i] + ", ";
-            }
-            tableNames += Tables[Tables.length - 1];
-        } else {
-            tableNames += Tables[0];
-        }
-        return selection + " FROM " + tableNames;
+        for (int x = 0; x < selection.length - 1; x++)
+            tableNames += selection[x][0] + ", ";
+
+        tableNames += selection[selection.length - 1][0];
+
+        return sql + " FROM " + tableNames;
     }
+
 }

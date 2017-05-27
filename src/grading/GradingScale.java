@@ -49,7 +49,7 @@ public class GradingScale
 			if (scaleNames.get(i).equals(name))
 				table.deleteRow(name, table.getColumnIndex(TableProperties.SCALE_DESCRIPTION));
 		
-		TableManager.insertValuesIntoNewRow(table, newValues);
+		table.addRow(newValues);
 	}
 	
 

@@ -59,7 +59,7 @@ public class TableInterface extends InterfacePanel {
     }
 
     public void addRow() {
-        table.startRowCreation();
+        table.addRow();
 
         databaseTableModel.fireTableDataChanged();
 
