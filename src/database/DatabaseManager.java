@@ -124,15 +124,13 @@ public class DatabaseManager {
         }
 
         return null;
-
-
     }
 
-    public static ResultSet select(String[][] selection, Search... searches) {
-        String select = SqlBuilder.selectionSQL(selection);
-        String filter = SqlBuilder.filterSQL(searches);
+    public static ResultSet select(String tableName, Selection selection, Filter filter) {
+        selection.setTableName(tableName);
+        filter.setTableName(tableName);
 
-        return DatabaseManager.executeSqlStatement(select + filter);
+        return DatabaseManager.executeSqlStatement(selection + "" + filter);
     }
 
     public static ResultSet getTripleJoinedTable(String table1Name, String table2Name, String table3Name, String[][] tableAndColumnNames, String table1JoinColumn, String table2JoinColumn, String table1SecondJoinColumn, String table3JoinColumn, String tableNameAndFilter, String filterValue, String groupByTableNameAndColumn) {

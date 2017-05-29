@@ -10,10 +10,11 @@ import java.awt.*;
 
 public class ColoredTableCellRenderer extends DefaultTableCellRenderer {
 
-    Color desiredColor;
+    private static JPanel panel = new JPanel();
+    private Color desiredColor = panel.getBackground();
 
     public ColoredTableCellRenderer() {
-        desiredColor = new JPanel().getBackground();
+
     }
 
     @Override

@@ -1,9 +1,6 @@
 package grading;
 
-import java.sql.Array;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,7 +14,7 @@ public class GradeCalculator {
     public static ArrayList<GradingScale> getScales() {
         scales.clear();
 
-        TableManager.getTable(TableProperties.SCALE_TABLE_NAME).update();
+        TableManager.getTable(TableProperties.SCALE_TABLE_NAME).refresh();
         ArrayList<String> scaleStrings = DataTypeManager.toStringArrayList(TableManager.getTable(TableProperties.SCALE_TABLE_NAME).getAllFromColumn(TableProperties.SCALE_DATA));
         ArrayList<String> scaleNames = DataTypeManager.toStringArrayList(TableManager.getTable(TableProperties.SCALE_TABLE_NAME).getAllFromColumn(TableProperties.SCALE_DESCRIPTION));
 
@@ -36,7 +33,7 @@ public class GradeCalculator {
         ResultSet rs = getGrades(courseId, null);
         ArrayList<Grade> studentGrades = new ArrayList();
         // Get assignment scores from table
-        Table table = new Table("Grade Calculator", rs);
+        Table table = new Table(rs);
         Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
 
        // ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, TableProperties.COURSE_ID, String.valueOf(courseId)));

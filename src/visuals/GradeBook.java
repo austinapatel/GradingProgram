@@ -1,87 +1,81 @@
 package visuals;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Array;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 import database.*;
 
-public class GradeBook extends InterfacePanel
-{	
-	private JList classList;
-	private DefaultListModel listModel;
-	private DatabaseJTable table;
+public class GradeBook extends InterfacePanel {
 
-	public GradeBook ()
-	{		
-		initClassTable();
-		initClassPicker();
-	}
+    private DatabaseJTable classTable;
+    private JTable gradesTable;
+    private GradeBookTableModel gradesTableModel;
 
-	private void initClassPicker() {
-		add(table.getTableHeader());
-		add(table, BorderLayout.NORTH);
-	}
+    public GradeBook() {
+        initClassTable();
+        initClassPicker();
+    }
 
-	@Override
-	public void onLayoutOpened() {
+    private void initClassPicker() {
+        add(classTable.getTableHeader());
+        add(classTable, BorderLayout.NORTH);
+    }
 
-	}
+    @Override
+    public void onLayoutOpened() {
+        if (gradesTableModel != null) {
+            gradesTableModel.refresh();
+            gradesTableModel.fireTableDataChanged();
+        }
+    }
 
-	public void initClassTable()
-	{
-		// Hashmap: first is student id, which gives hashmap that needs assignment id which gives the students grade on the assignment
-//		HashMap<Integer, HashMap<Integer, Integer>> assignmentScores = new HashMap<>();
+    public void initClassTable() {
+        classTable = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
+        classTable.setCellEditor(new DatabaseCellEditor());
 
-		table = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
-		table.setCellEditor(new DatabaseCellEditor());
-		table.addMouseListener(new MouseAdapter() {
-		    public void mousePressed(MouseEvent me) {
-				if (me.getClickCount() == 2) {
-					int courseId = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
+        classTable.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent me) {
+            if (me.getClickCount() == 2) {
+                // Remove the previous grades table
+                if (gradesTable != null) {
+                    remove(gradesTable.getTableHeader());
+                    remove(gradesTable);
+                }
 
+                // Add the new grades table
+                int courseId = Integer.parseInt(classTable.getValueAt(classTable.getSelectedRow(), 0).toString());
 
+                gradesTable = new JTable(gradesTableModel = new GradeBookTableModel(courseId));
 
-//					DefaultTableModel model = new DefaultTableModel(rowsFormatted, columnsFormatted);
+                add(gradesTable.getTableHeader());
+                add(gradesTable);
 
-					JTable gradesTable = new JTable(new GradeBookTableModel(courseId));
+                validate();
+                repaint();
+            }
+            }
+        });
 
-					add(gradesTable.getTableHeader());
-					add(gradesTable);
+        add(classTable.getTableHeader());
+        add(classTable);
+    }
 
-					validate();
-					repaint();
-		        }
-		    }
-		});
+    @Override
+    public void keyTyped(KeyEvent e) {
 
-		add(table.getTableHeader());
-		add(table);
-	}
+    }
 
-	@Override
-	public void keyTyped(KeyEvent e) {
+    @Override
+    public void keyPressed(KeyEvent e) {
 
-	}
+    }
 
-	@Override
-	public void keyPressed(KeyEvent e) {
+    @Override
+    public void keyReleased(KeyEvent e) {
 
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
-	}
+    }
 }

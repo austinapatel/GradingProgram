@@ -29,10 +29,7 @@ public class Main {
 
 	static PasswordField login;
 
-	public static void main(String[] args) 
-	{
-		System.setProperty("awt.useSystemAAFontSettings", "on");
-		System.setProperty("swing.aatext", "true");
+	public static void main(String[] args) {
 		if (args.length == 1)
 			launchGUI(args[0]);
 		else if (args.length == 4) {
@@ -58,8 +55,6 @@ public class Main {
 	private static void startInterface() {
 		Main.setUpTables();
 		new BaseInterface();
-
-		GradeCalculator.getStudentGrades(1);
 	}
 
 	private static void setUpTables() {

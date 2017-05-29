@@ -23,14 +23,14 @@ public class BaseInterface extends JFrame {
     private static final String FRAME_TITLE = "Grading Program", ESCAPE = "escape";
     private static final int WIDTH = 1200, HEIGHT = 900;
 
-    private static int size = 15;
-
     private ArrayList<JPanel> interfaces;
-    private HomeInterface homeInterface;
 
     private JPanel contentPanel;
 
-    public static void setDefaultSize(int size) {
+    public static void setDefaultFontSize(int size) {
+        System.setProperty("awt.useSystemAAFontSettings", "on");
+        System.setProperty("swing.aatext", "true");
+
         Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
         Object[] keys = keySet.toArray(new Object[keySet.size()]);
 
@@ -51,13 +51,13 @@ public class BaseInterface extends JFrame {
         contentPanel = new JPanel();
         add(contentPanel);
 
-        setDefaultSize(size);
+        setDefaultFontSize(15);
         initContent();
         initFrame();
     }
 
     public void initContent() {
-        homeInterface = new HomeInterface(this);
+        HomeInterface homeInterface = new HomeInterface(this);
         interfaces.add(homeInterface);
         contentPanel.add(homeInterface);
     }

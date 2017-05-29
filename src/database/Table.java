@@ -26,18 +26,20 @@ public class Table {
 
     public Table(String name, TableColumn[] tableColumns) {
         this.name = name;
-        init(name, tableColumns, DatabaseManager.getTable(this));
+        init(tableColumns, DatabaseManager.getTable(this));
+
         if (TableManager.createTable)
             createTable();
     }
 
-    public Table(String tableName, ResultSet resultSet) {
+    public Table(ResultSet resultSet) {
         TableColumn[] tableColumns = null;
 
         try {
             ResultSetMetaData metaData = resultSet.getMetaData();
 
             tableColumns = new TableColumn[metaData.getColumnCount()];
+            // TODO: Fix weird for loop below
             tableColumns[0] = new TableColumn(metaData.getColumnName(1), metaData.getColumnTypeName(1), null);
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 tableColumns[i - 1] = new TableColumn(metaData.getColumnName(i), metaData.getColumnTypeName(i), null);
@@ -46,15 +48,12 @@ public class Table {
             e.printStackTrace();
         }
 
-        init(tableName, tableColumns, resultSet);
+        init(tableColumns, resultSet);
     }
 
-    private void init(String name, TableColumn[] tableColumns, ResultSet resultSet) {
+    private void init(TableColumn[] tableColumns, ResultSet resultSet) {
         this.tableColumns = tableColumns;
-
-        this.name = name;
         this.primaryKey = tableColumns[0].getName();
-
         this.resultSet = resultSet;
     }
 
@@ -65,7 +64,7 @@ public class Table {
         DatabaseManager.createTable(this);
     }
 
-    public void update() {
+    public void refresh() {
         resultSet = DatabaseManager.getTable(this);
     }
 
@@ -263,11 +262,14 @@ public class Table {
     }
 
     public ArrayList<Object> getSomeFromColumn(String returnColumnName, Search... searches) {
-        for (Search search : searches)
-            search.setTableName(name);
+        return Table.getAllFromColumn(0, DatabaseManager.select(name, new Selection(new ColumnIdentifier(returnColumnName)), new Filter(searches)));
+    }
 
-        ResultSet searchResultSet = DatabaseManager.select(new String[][]{{name, returnColumnName}}, searches);
+    public ResultSet select(Selection selection, Filter filter) {
+        return DatabaseManager.select(name, selection, filter);
+    }
 
-        return Table.getAllFromColumn(0, searchResultSet);
+    public ResultSet select(Filter filter) {
+        return DatabaseManager.select(name, new Selection(), filter);
     }
 }

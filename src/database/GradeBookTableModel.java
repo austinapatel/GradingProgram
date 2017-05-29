@@ -1,6 +1,8 @@
 package database;
 
 import javax.swing.table.AbstractTableModel;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class GradeBookTableModel extends AbstractTableModel {
@@ -9,19 +11,22 @@ public class GradeBookTableModel extends AbstractTableModel {
 
     private int courseId;
 
-    private String[][] rows;
-    private String[] columns;
+    private String[][] data;
+    private String[] columnHeaders;
+
+    private ArrayList<Integer> studentIds, assignmentIds;
 
     public GradeBookTableModel(int courseId) {
         this.courseId = courseId;
 
         loadTables();
-        loadData();
+        refresh();
     }
 
-    private void loadData() {
-        ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, new Search(TableProperties.COURSE_ID, courseId)));
-        ArrayList<Integer> assignmentIds = DataTypeManager.toIntegerArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENT_ID, new Search(TableProperties.COURSE_ID, courseId)));
+    /**Loads all of the data into the table.*/
+    public void refresh() {
+        studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, new Search(TableProperties.COURSE_ID, courseId)));
+        assignmentIds = DataTypeManager.toIntegerArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENT_ID, new Search(TableProperties.COURSE_ID, courseId)));
 
         System.out.println("student ids:");
         for (int studentID : studentIds) {
@@ -62,11 +67,11 @@ public class GradeBookTableModel extends AbstractTableModel {
             rowsList.add(currentRow);
         }
 
-        rows = new String[rowsList.size()][assignmentIds.size() + 1];
+        data = new String[rowsList.size()][assignmentIds.size() + 1];
 
-        for (int x = 0; x < rows.length; x++) {
-            for (int y = 0; y < rows[x].length; y++) {
-                rows[x][y] = rowsList.get(x).get(y);
+        for (int x = 0; x < data.length; x++) {
+            for (int y = 0; y < data[x].length; y++) {
+                data[x][y] = rowsList.get(x).get(y);
             }
         }
 
@@ -80,10 +85,10 @@ public class GradeBookTableModel extends AbstractTableModel {
             columnsList.add(assignmentName + " (" + assignmentValue + ")");
         }
 
-        columns = new String[columnsList.size()];
+        columnHeaders = new String[columnsList.size()];
 
-        for (int i = 0; i < columns.length; i++)
-            columns[i] = columnsList.get(i);
+        for (int i = 0; i < columnHeaders.length; i++)
+            columnHeaders[i] = columnsList.get(i);
     }
 
     private void loadTables() {
@@ -95,22 +100,70 @@ public class GradeBookTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return rows.length;
+        return data.length;
     }
 
     @Override
     public int getColumnCount() {
-        return columns.length;
+        return columnHeaders.length;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return rows[rowIndex][columnIndex];
+//        if (columnIndex == 0) {
+//            String first =  DataTypeManager.toStringArrayList(studentsTable.getSomeFromColumn(TableProperties.FIRST_NAME, new Search(TableProperties.STUDENT_ID, studentIds.get(rowIndex)))).get(0);
+//            String last =  DataTypeManager.toStringArrayList(studentsTable.getSomeFromColumn(TableProperties.LAST_NAME, new Search(TableProperties.STUDENT_ID, studentIds.get(rowIndex)))).get(0);
+//
+//            return first + " " + last;
+//        }
+//
+//        int studentId = studentIds.get(rowIndex);
+//        int assignmentId = assignmentIds.get(columnIndex - 1);
+//
+//        ResultSet resultSet = gradesTable.select(new Filter(new Search(TableProperties.STUDENT_ID, studentId), new Search(TableProperties.ASSIGNMENT_ID, assignmentId)));
+//
+//        try {
+//            resultSet.absolute(1);
+//
+//            return resultSet.getDouble(TableProperties.GRADE_VALUE);
+//        } catch (SQLException e) {
+//            return "Missing";
+////            e.printStackTrace();
+//        }
+
+        return data[rowIndex][columnIndex];
     }
 
     @Override
-    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+    public void setValueAt(Object rawValue, int rowIndex, int columnIndex) {
+        int studentId = studentIds.get(rowIndex);
+        int assignmentId = assignmentIds.get(columnIndex - 1);
 
+        ResultSet resultSet = gradesTable.select(new Filter(new Search(TableProperties.STUDENT_ID, studentId), new Search(TableProperties.ASSIGNMENT_ID, assignmentId)));
+
+        try {
+            double value = Double.parseDouble(rawValue.toString());
+
+            resultSet.absolute(1);
+            resultSet.updateDouble(TableProperties.GRADE_VALUE, value);
+            resultSet.updateRow();
+
+            data[rowIndex][columnIndex] = resultSet.getDouble(TableProperties.GRADE_VALUE) + "";
+        } catch (NumberFormatException e) {
+            // Ignore non-double values
+            return;
+        } catch (Exception e) {
+            System.out.println(rawValue);
+            e.printStackTrace();
+        }
+
+//        try {
+//            resultSet.last();
+//            int rowCount = resultSet.getRow();
+//            System.out.println("Return row count: " + rowCount);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -120,6 +173,6 @@ public class GradeBookTableModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(int col) {
-        return columns[col];
+        return columnHeaders[col];
     }
 }

@@ -137,7 +137,7 @@ public class GradesInterface extends InterfacePanel {
 	private void displayClass(int id)
 	{
 		ResultSet joinedResultSet = DatabaseManager.getJoinedTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.ENROLLMENTS_TABLE_NAME, new String[] {TableProperties.STUDENTS_TABLE_NAME +  "." + TableProperties.STUDENT_ID, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.FIRST_NAME, TableProperties.STUDENTS_TABLE_NAME + "." + TableProperties.LAST_NAME}, TableProperties.STUDENT_ID, TableProperties.STUDENT_ID, TableProperties.ENROLLMENTS_TABLE_NAME + "." + TableProperties.COURSE_ID, String.valueOf(id));
-		Table table2 = new Table("test join table", joinedResultSet);
+		Table table2 = new Table(joinedResultSet);
 		
 		DefaultTableModel model = new DefaultTableModel();
 		
