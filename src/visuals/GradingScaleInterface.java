@@ -11,8 +11,6 @@ import org.json.JSONException;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -20,28 +18,25 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GradingScaleInterface extends InterfacePanel implements TableModelListener {
 
-    private final int rows = 13, cols = 5, rowHeight = 50, colWidth = 30;
-    private static final Font STANDARD_FONT = new Font("Calibri", Font.BOLD, 24);
+    private final int rows = 13, cols = 5, rowHeight = 50;
     private JTable letterTable;
     private JSplitPane splitPane;
     private Border blackline, raisedetched, loweredetched, raisedbevel, loweredbevel, empty, compound;
     private int[] disabled_columns = {1, 2, 3};
     private String[] disabled_labels = {"Below", "", "down to"};
-    private int disabled_col = 2, cur_col = 0;
+    private int cur_col = 0;
     private JLabel label1;
     private JScrollPane scrollPane1;
     private JPanel rightPanel, leftPanel, buttonPane;
     private JList scaleList;
     private DefaultListModel listModel;
     private ArrayList<GradingScale> scales = new ArrayList();
-    private JButton newScaleButton, saveAsButton, addRowButton, deleteScale;
+    private JButton newScaleButton, addRowButton, deleteScale;
     private GradingScale openScale;
     private boolean open = false;
-    private int currentRows = rows;
     private GradingScaleTableModel tableModel;
     private static int minCols = 5;
     private static Object[][] template = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83},
@@ -49,7 +44,6 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
             {"F", 0}};
 
     public GradingScaleInterface() {
-
         initButtons();
         initBorders();
         initList();
@@ -70,7 +64,6 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
 
     }
 
-
     private void initScale() {
         scaleList.setSelectedIndex(0);
         if (!scaleList.isSelectionEmpty()) {
@@ -79,89 +72,71 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         }
     }
 
-
     private void initButtons() {
         newScaleButton = new JButton("Create new scale");
         newScaleButton.setFont(new Font("Helvetica", Font.BOLD, 14));
-        // newScaleButton.setForeground(Color.BLUE);
         newScaleButton.setFocusable(false);
         newScaleButton.setVisible(true);
-        newScaleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        newScaleButton.addActionListener(e -> {
+            String name = JOptionPane.showInputDialog("Enter the name for the new scale:   ");
+            if (name != null && !name.trim().equals("")) {
 
-                String name = JOptionPane.showInputDialog("Enter the name for the new scale:   ");
-                if (name != null && !name.trim().equals("")) {
+                Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83},
+                        {"B-", 80}, {"C+", 78}, {"C", 72}, {"C-", 70}, {"D+", 68}, {"D", 63},
+                        {"D-", 60}, {"F", 0}};
 
-                    Object[][] obj = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83},
-                            {"B-", 80}, {"C+", 78}, {"C", 72}, {"C-", 70}, {"D+", 68}, {"D", 63},
-                            {"D-", 60}, {"F", 0}};
-
-                    new GradingScale(name, obj);
-                    scales = GradeCalculator.getScales();
-                    updateList();
-
-                    scaleList.setSelectedIndex(scaleList.getLastVisibleIndex());
-                    clearTable();
-                    openScale();
-
-                }
-            }
-        });
-
-        deleteScale = new JButton("Delete Scale");
-//        deleteScale.setFont(new Font("Helvetica", Font.BOLD, 14));
-        // deleteScale.setForeground(Color.BLUE);
-        deleteScale.setFocusable(false);
-        deleteScale.setVisible(true);
-        deleteScale.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                String temp = "";
-
-                try {
-                    if (scaleList.getSelectedValue().toString() != null)
-                        temp = scaleList.getSelectedValue().toString();
-                } catch (Exception eo) {
-
-                }
-
-                String name = JOptionPane.showInputDialog("Enter the name of the scale you wish to delete:   ", temp);
-                if (name != null && !name.trim().equals("")) {
-                    GradeCalculator.deleteScale(name);
-                }
+                new GradingScale(name, obj);
                 scales = GradeCalculator.getScales();
                 updateList();
-                scaleList.setSelectedIndex(0);
+
+                scaleList.setSelectedIndex(scaleList.getLastVisibleIndex());
                 clearTable();
                 openScale();
             }
         });
 
-        addRowButton = new JButton("Add Row");
-//        addRowButton.setFont(new Font("Helvetica", Font.BOLD, 14));
-        addRowButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    if (letterTable.getRowCount() < rows) {
-                        if (letterTable.getSelectedRow() != -1) {
-                            open = false;
+        deleteScale = new JButton("Delete Scale");
+        deleteScale.setFocusable(false);
+        deleteScale.setVisible(true);
+        deleteScale.addActionListener(e -> {
+            String temp = "";
 
-                            if (letterTable.getSelectedRow() == 0)
-                                letterTable.changeSelection(1, letterTable.getSelectedColumn(), false, false);
+            try {
+                if (scaleList.getSelectedValue().toString() != null)
+                    temp = scaleList.getSelectedValue().toString();
+            } catch (Exception eo) {
 
-                            tableModel.insertRow(letterTable.getSelectedRow(), new String[]{"::::", "0", "0", "0", letterTable.getValueAt(letterTable.getSelectedRow(), letterTable.getColumnCount() - 1).toString()});
-                            open = true;
-                            letterTable.setValueAt("0", letterTable.getRowCount() - 1, letterTable.getColumnCount() - 1);
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
             }
 
+            String name = JOptionPane.showInputDialog("Enter the name of the scale you wish to delete:   ", temp);
+            if (name != null && !name.trim().equals("")) {
+                GradeCalculator.deleteScale(name);
+            }
+            scales = GradeCalculator.getScales();
+            updateList();
+            scaleList.setSelectedIndex(0);
+            clearTable();
+            openScale();
+        });
+
+        addRowButton = new JButton("Add Row");
+        addRowButton.addActionListener(e -> {
+            try {
+                if (letterTable.getRowCount() < rows) {
+                    if (letterTable.getSelectedRow() != -1) {
+                        open = false;
+
+                        if (letterTable.getSelectedRow() == 0)
+                            letterTable.changeSelection(1, letterTable.getSelectedColumn(), false, false);
+
+                        tableModel.insertRow(letterTable.getSelectedRow(), new String[]{"::::", "0", "0", "0", letterTable.getValueAt(letterTable.getSelectedRow(), letterTable.getColumnCount() - 1).toString()});
+                        open = true;
+                        letterTable.setValueAt("0", letterTable.getRowCount() - 1, letterTable.getColumnCount() - 1);
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
 
         buttonPane = new JPanel();
@@ -173,144 +148,29 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
 
     private int getLetterGradeIndex(String grade) {
 
-        for (int i = 0; i < template.length; i++) {
+        for (int i = 0; i < template.length; i++)
             if (template[i][0].toString().equals(grade))
                 return i;
-        }
+
         return -1;
-    }
-
-    private Object[][] formatData(Object[][] data) {
-
-        for (int i = 0; i < data.length; i++) {
-            int index = getLetterGradeIndex(data[i][0].toString());
-            if (index == -1) {
-                if (i == 0) {
-                    data[i][0] = template[0][0];// A+
-                } else {
-
-                    try {
-                        int pindex = getLetterGradeIndex(data[i - 1][0].toString());
-                        data[i][0] = template[pindex + 1][0];
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-            } else if (i != 0 && data[i][0].toString().equals(data[i - 1][0].toString())) {
-
-                try {
-                    int pindex = getLetterGradeIndex(data[i - 1][0].toString());
-                    data[i][0] = template[pindex + 1][0];
-                } catch (Exception e) {
-
-                }
-            } else if (i != 0 && i < data.length - 1) {
-
-                int pastIndex = getLetterGradeIndex(data[i - 1][0].toString());
-                try {
-                    int currIndex = getLetterGradeIndex(data[i][0].toString());
-
-                    if (currIndex <= pastIndex) {
-                        data[i][0] = template[pastIndex + 1][0];
-                    }
-                } catch (Exception e) {
-                    data[i][0] = template[pastIndex][0];
-                    data[i - 1][0] = template[pastIndex - 1][0];
-                    formatData(data);
-
-                }
-            }
-        }
-
-
-        for (Object[] temp : data) {
-//			System.out.println(temp[0].toString() + temp[1].toString());
-        }
-
-
-        while (data[data.length - 2][0].toString().equals("F")) {
-            data = Arrays.copyOf(data, data.length - 1);
-
-
-        }
-        return formatNumbers(data);
-
-    }
-
-
-    private Object[][] formatNumbers(Object[][] data) {
-        for (int i = 0; i < data.length; i++) {
-
-            try {
-                double number = Double.parseDouble(data[i][1].toString());
-
-                if (number <= 0 && i < data.length - 1)
-                    data[i][1] = template[getLetterGradeIndex(data[i][0].toString())][1];
-//				else if (number > 100)
-//					data[i][1] = 100;
-
-
-            } catch (Exception e) {
-                data[i][1] = template[getLetterGradeIndex(data[i][0].toString())][1];
-            }
-        }
-
-        for (int i = 0; i < data.length; i++) {
-            try {
-                double number = Double.parseDouble(data[i][1].toString());
-
-                if (i != 0 && number >= Double.parseDouble(data[i - 1][1].toString())) {
-                    data[i][1] = (Double.parseDouble(data[i - 1][1].toString()) - 1);
-
-
-                }
-
-                if (Double.parseDouble(data[i][1].toString()) < 0) {
-                    while ((Double.parseDouble(data[i][1].toString()) < 0)) {
-                        for (int j = 0; j <= i; j++) {
-                            try {
-                                data[j][1] = Double.parseDouble(data[j][1].toString()) + 1;
-                            } catch (Exception e) {
-
-                            }
-                        }
-                    }
-                }
-
-            } catch (Exception e) {
-                data[i][1] = template[getLetterGradeIndex(data[i][0].toString())][1];
-            }
-        }
-        return data;
     }
 
     private void initList() {
         listModel = new DefaultListModel();
         scaleList = new JList(listModel);
         scaleList.setBackground(getBackground());
-        // scaleList.setBorder(compound);
         scales = GradeCalculator.getScales();
         scaleList.addKeyListener(this);
-//        scaleList.setFont(new Font("Helvetica", Font.BOLD, 15));
 
-        for (GradingScale scale : scales) {
+        for (GradingScale scale : scales)
             listModel.addElement(scale.getName());
-        }
 
         scaleList.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
-                JList list = (JList) evt.getSource();
-                if (evt.getClickCount() == 2) {
-
-                    clearTable();
-                    openScale();
-
-                } else if (evt.getClickCount() == 3) {
-
-                    int index = list.locationToIndex(evt.getPoint());
-                }
+            if (evt.getClickCount() == 2) {
+                clearTable();
+                openScale();
+            }
             }
         });
     }
@@ -323,16 +183,13 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         loweredbevel = BorderFactory.createLoweredBevelBorder();
         empty = BorderFactory.createEmptyBorder();
         compound = BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
-
     }
 
     private void initLabels() {
         label1 = new JLabel("", JLabel.CENTER);
-//        label1.setFont(STANDARD_FONT);
         label1.setText("Scale Description");
         label1.setOpaque(true);
         label1.setVisible(true);
-
     }
 
     private void initPane() {
@@ -350,8 +207,7 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         buttonPane.setMaximumSize(buttonPane.getPreferredSize());
         rightPanel.add(buttonPane);
 
-        JScrollPane tablePanel = new JScrollPane(letterTable);
-        rightPanel.add(tablePanel);
+        rightPanel.add(letterTable);
 
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 
@@ -370,9 +226,9 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         tableModel.addTableModelListener(this);
         letterTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 
-//        letterTable.setFont(new Font("Helvetica", Font.PLAIN, 20));
-        letterTable.setRowHeight(rowHeight);
-        letterTable.setBorder(compound);
+        letterTable.setRowHeight(TableInterface.ROW_HEIGHT);
+        letterTable.setRowHeight(TableInterface.ROW_HEIGHT);
+        letterTable.setBorder(blackline);
         letterTable.setBackground(getBackground());
         letterTable.getTableHeader().setReorderingAllowed(false);
         letterTable.getColumnModel().getColumn(0).setCellEditor(new GradingScaleCellEditor(new JTextField(), letterTable, EditorType.LetterGrade));
@@ -381,41 +237,35 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         for (int i = 0; i < letterTable.getColumnCount(); i++) {
             DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
             centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
             letterTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
             letterTable.setRowSelectionAllowed(false);
+
             final ListSelectionModel sel = letterTable.getColumnModel().getSelectionModel();
-            sel.addListSelectionListener(new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent e) {
-                    // If the column is disabled, reselect previous column
+            sel.addListSelectionListener(e -> {
+                // If the column is disabled, reselect previous column
 
-                    for (int i = 0; i < disabled_columns.length; i++) {
-
-                        if (sel.isSelectedIndex(disabled_columns[i])) {
-                            cur_col += 2;
-                            sel.setSelectionInterval(cur_col, cur_col);
-                            return;
-                        }
+                for (int i1 = 0; i1 < disabled_columns.length; i1++)
+                    if (sel.isSelectedIndex(disabled_columns[i1])) {
+                        cur_col += 2;
+                        sel.setSelectionInterval(cur_col, cur_col);
+                        return;
                     }
-                    // Set current selectionSQL
-                    cur_col = sel.getMaxSelectionIndex();
-                }
+
+                // Set current selectionSQL
+                cur_col = sel.getMaxSelectionIndex();
             });
 
             initValues();
-
         }
     }
 
     private void openScale() {
-
-
         letterTable.clearSelection();
         if (scaleList.isSelectionEmpty()) {
             clearTable();
             return;
         }
-
 
         scales = GradeCalculator.getScales();
         open = false;
@@ -449,41 +299,30 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         }
         letterTable.setValueAt("0", letterTable.getRowCount() - 1, letterTable.getColumnCount() - 1);
         open = true;
-        // updateList();
     }
 
     private void initValues() {
-
         letterTable.setValueAt("From", 0, disabled_columns[0]);
         letterTable.setValueAt(disabled_labels[2], 0, disabled_columns[2]);
         letterTable.setValueAt(Character.toString('\u221E'), 0, disabled_columns[1]);
         letterTable.setValueAt("0", letterTable.getRowCount() - 1, letterTable.getColumnCount() - 1);
 
-        for (int row = 1; row < letterTable.getRowCount(); row++) {
-            for (int col = 0; col < letterTable.getColumnCount(); col++) {
-                if (letterTable.isCellEditable(row, col) == false) {
-
+        for (int row = 1; row < letterTable.getRowCount(); row++)
+            for (int col = 0; col < letterTable.getColumnCount(); col++)
+                if (!letterTable.isCellEditable(row, col))
                     letterTable.setValueAt(disabled_labels[getUneditableIndex(col)], row, col);
-                }
-            }
-        }
     }
 
     public int getUneditableIndex(int col) {
-
-        if (letterTable.isCellEditable(0, col) == false) {
-
-            for (int i = 0; i < disabled_columns.length; i++) {
+        if (!letterTable.isCellEditable(0, col))
+            for (int i = 0; i < disabled_columns.length; i++)
                 if (disabled_columns[i] == col)
                     return i;
-            }
 
-        }
         return -1;
     }
 
     private boolean isDouble(String text) {
-
         try {
             Double.parseDouble(text);
             return true;
@@ -495,39 +334,30 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
     @Override
     public void tableChanged(TableModelEvent arg0) {
         if (open) {
-
             int rowNum = 0;
             int rowNum2 = 0;
-            for (int i = 0; i < letterTable.getRowCount(); i++) {
 
+            for (int i = 0; i < letterTable.getRowCount(); i++) {
                 if (letterTable.getValueAt(i, letterTable.getColumnCount() - 1) != null) {
                     String text = letterTable.getValueAt(i, letterTable.getColumnCount() - 1).toString();
                     if (isDouble(text))
                         rowNum++;
                 }
-                if (letterTable.getValueAt(i, 0) != null) {
-                    rowNum2++;
-                }
-            }
-            rowNum = Math.min(rowNum, rowNum2);
 
+                if (letterTable.getValueAt(i, 0) != null)
+                    rowNum2++;
+            }
+
+            rowNum = Math.min(rowNum, rowNum2);
             Object[][] data = new Object[rowNum][2];
+
             for (int row = 0; row < rowNum; row++) {
                 data[row][0] = letterTable.getValueAt(row, 0);
                 data[row][1] = letterTable.getValueAt(row, letterTable.getColumnCount() - 1);
-//				System.out.println(data[row][1].toString() + data[row][0].toString());
             }
-            //data = formatData(data);
-
             openScale.update(data);
             openScale();
         }
-    }
-
-    @Override
-    public void keyPressed(KeyEvent arg0) {
-        // TODO Auto-generated method stub
-
     }
 
     private void createRows(int row) {
@@ -544,18 +374,14 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
     }
 
     private void updateList() {
-
         listModel.removeAllElements();
         for (GradingScale scale : scales) {
-            {
-                if (!listModel.contains(scale.getName()))
-                    listModel.addElement(scale.getName());
-            }
+            if (!listModel.contains(scale.getName()))
+                listModel.addElement(scale.getName());
         }
     }
 
     public void deleteRow() {
-
         if (letterTable.getSelectedRow() != -1 && letterTable.getRowCount() > minCols) {
             int selectedRow = letterTable.getSelectedRow();
             int selectedColumn = letterTable.getSelectedColumn();
@@ -569,23 +395,19 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         }
     }
 
-    public void deleteRow(int index) {
-        tableModel.removeRow(index);
+    @Override
+    public void keyPressed(KeyEvent arg0) {
+
     }
 
     @Override
     public void keyReleased(KeyEvent key) {
-        // TODO Auto-generated method stub
-
-        if (key.getKeyCode() == KeyEvent.VK_CONTROL && open) {
-
+        if (key.getKeyCode() == KeyEvent.VK_CONTROL && open)
             deleteRow();
-        }
     }
 
     @Override
     public void keyTyped(KeyEvent arg0) {
-        // TODO Auto-generated method stub
 
     }
 }

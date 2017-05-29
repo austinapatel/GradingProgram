@@ -7,6 +7,7 @@ package visuals;
 import database.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableCellEditor;
@@ -22,11 +23,12 @@ import java.text.MessageFormat;
 
 public class TableInterface extends InterfacePanel {
 
+    public static final int ROW_HEIGHT = 17;
+
     private JTable jTable;
-    private JPanel bottomContainer;
+    private JPanel bottomContainer, tableComponents;
     private JList<String> tableList;
     private Table table;
-    private JScrollPane tableScrollPane;
     private DatabaseTableModel databaseTableModel;
 
     public TableInterface() {
@@ -47,7 +49,9 @@ public class TableInterface extends InterfacePanel {
     }
 
     private void initPanel() {
-//        setLayout(new BorderLayout());
+        tableComponents = new JPanel();
+        tableComponents.setLayout(new BorderLayout());
+        add(tableComponents);
     }
 
     private void initBottomContainer() {
@@ -102,12 +106,7 @@ public class TableInterface extends InterfacePanel {
         add(new JButton() {
             {
                 setText("Add Row");
-                addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        addRow();
-                    }
-                });
+                addActionListener(e -> addRow());
             }
         });
 
@@ -139,18 +138,9 @@ public class TableInterface extends InterfacePanel {
         add(new JButton() {
             {
                 setText("Delete Row(s)");
-                addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        deleteRow();
-                    }
-                });
+                addActionListener(e -> deleteRow());
             }
         });
-
-        add(new JButton("Select Row") {{
-            setEnabled(false);
-        }});
     }
 
     /**
@@ -203,7 +193,7 @@ public class TableInterface extends InterfacePanel {
             }
         };
 
-        add(tableList);
+        tableComponents.add(tableList, BorderLayout.WEST);
     }
 
     /**
@@ -217,7 +207,7 @@ public class TableInterface extends InterfacePanel {
 
             {
                 setAutoCreateRowSorter(true);
-                setRowHeight(17);
+                setRowHeight(ROW_HEIGHT);
                 getTableHeader().setReorderingAllowed(false);
 
                 addKeyListener(new KeyListener() {
@@ -242,8 +232,13 @@ public class TableInterface extends InterfacePanel {
             }
         };
 
-        tableScrollPane = new JScrollPane(jTable);
-        add(tableScrollPane);
+        JPanel tablePanel = new JPanel();
+        tablePanel.setLayout(new BorderLayout());
+        tablePanel.add(jTable.getTableHeader(), BorderLayout.NORTH);
+        tablePanel.add(jTable, BorderLayout.CENTER);
+        jTable.setBackground(getBackground());
+
+        tableComponents.add(tablePanel, BorderLayout.CENTER);
 
         databaseTableModel = new DatabaseTableModel();
 

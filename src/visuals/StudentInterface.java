@@ -35,13 +35,11 @@ public class StudentInterface extends InterfacePanel {
     private JTextField txtGradYear;
     private JPanel studentsPane;
     private JLabel lblStudentInfo;
-    private JSplitPane splitPane;
     private ArrayList<Student> students = new ArrayList<>();
 
     public StudentInterface() {
         initStudentsPane();
         initComponents();
-        initSplitPane();
     }
 
     @Override
@@ -55,12 +53,6 @@ public class StudentInterface extends InterfacePanel {
         studentsPane.setLayout(new BorderLayout());
     }
 
-    private void initSplitPane() {
-        //        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, baseContentPane, studentsPane);
-        //        splitPane.setResizeWeight(0.5);
-        //        add(splitPane);
-    }
-
     /**
      * Converts a String into HTML format for use in JLabels.
      */
@@ -69,7 +61,7 @@ public class StudentInterface extends InterfacePanel {
     }
 
     private void initComponents() {
-        JLabel lblStudents = new JLabel("Students");
+        JLabel lblStudents = new JLabel("Add Students");
         lblStudents.setFont(new Font("Tahoma", Font.PLAIN, 32));
         add(lblStudents);
 
@@ -82,9 +74,6 @@ public class StudentInterface extends InterfacePanel {
         DefaultListModel<String> listStudentsModel = (DefaultListModel<String>) listStudents.getModel();
 
         listStudents.addListSelectionListener((ListSelectionEvent l) -> {
-            //            @Override
-            //            public void valueChanged(ListSelectionEvent e)
-            //            {
             if (listStudents.getSelectedIndex() == -1)
                 return;
 
@@ -117,12 +106,9 @@ public class StudentInterface extends InterfacePanel {
         add(txtFirstName);
         txtFirstName.setColumns(10);
 
-        txtFirstName.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!txtFirstName.getText().trim().equals(""))
-                    txtLastName.requestFocus();
-            }
+        txtFirstName.addActionListener(e -> {
+            if (!txtFirstName.getText().trim().equals(""))
+                txtLastName.requestFocus();
         });
 
         txtFirstName.addKeyListener(this);
@@ -133,13 +119,9 @@ public class StudentInterface extends InterfacePanel {
         add(txtLastName);
 
         txtLastName.setColumns(10);
-        txtLastName.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!txtLastName.getText().trim().equals(""))
-                    txtStudentID.requestFocus();
-            }
+        txtLastName.addActionListener(e -> {
+            if (!txtLastName.getText().trim().equals(""))
+                txtStudentID.requestFocus();
         });
 
         txtLastName.addKeyListener(this);
@@ -147,15 +129,12 @@ public class StudentInterface extends InterfacePanel {
         // Student id
         add(new JLabel("*Student ID"));
         txtStudentID = new JTextField();
-        txtStudentID.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (isStudentIDValid())
-                    if (btnAddStudent.isEnabled())
-                        btnAddStudent.requestFocus();
-                    else
-                        KeyboardTools.tab();
-            }
+        txtStudentID.addActionListener(e -> {
+            if (isStudentIDValid())
+                if (btnAddStudent.isEnabled())
+                    btnAddStudent.requestFocus();
+                else
+                    KeyboardTools.tab();
         });
         txtStudentID.addKeyListener(this);
 
@@ -193,31 +172,22 @@ public class StudentInterface extends InterfacePanel {
         txtMonth.addKeyListener(this);
         txtYear.addKeyListener(this);
 
-        txtDay.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (isDateValid(txtDay.getText()))
-                    txtYear.requestFocus();
-            }
+        txtDay.addActionListener(e -> {
+            if (isDateValid(txtDay.getText()))
+                txtYear.requestFocus();
         });
 
-        txtMonth.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (isDateValid(txtMonth.getText()))
-                    txtDay.requestFocus();
-            }
+        txtMonth.addActionListener(e -> {
+            if (isDateValid(txtMonth.getText()))
+                txtDay.requestFocus();
         });
 
-        txtYear.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (isDateValid(txtYear.getText()))
-                    if (btnAddStudent.isEnabled())
-                        btnAddStudent.requestFocus();
-                    else
-                        tab();
-            }
+        txtYear.addActionListener(e -> {
+            if (isDateValid(txtYear.getText()))
+                if (btnAddStudent.isEnabled())
+                    btnAddStudent.requestFocus();
+                else
+                    tab();
         });
 
         birthdatePanel.add(txtMonth);
@@ -258,133 +228,130 @@ public class StudentInterface extends InterfacePanel {
 
         JPanel thisPanel = this;
 
-        btnAddStudent.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                try {
-                    Student student = new Student(txtFirstName.getText(), txtLastName.getText(),
-                            Integer.parseInt(txtStudentID.getText()));
+        btnAddStudent.addActionListener(arg0 -> {
+            try {
+                Student student = new Student(txtFirstName.getText(), txtLastName.getText(),
+                        Integer.parseInt(txtStudentID.getText()));
 
-                    if (!isEmpty(txtMonth) && !isEmpty(txtDay) && !isEmpty(txtYear)) {
-                        int month = Integer.parseInt(txtMonth.getText());
-                        int day = Integer.parseInt(txtDay.getText());
-                        int year = Integer.parseInt(txtYear.getText());
+                if (!isEmpty(txtMonth) && !isEmpty(txtDay) && !isEmpty(txtYear)) {
+                    int month = Integer.parseInt(txtMonth.getText());
+                    int day = Integer.parseInt(txtDay.getText());
+                    int year = Integer.parseInt(txtYear.getText());
 
-                        student.setBirthday(new Date(month, day, year));
+                    student.setBirthday(new Date(month, day, year));
+                }
+
+                student.setGender((Character) genderComboBox.getSelectedItem());
+
+                if (!isEmpty(txtGradYear))
+                    student.setGraduationYear(Integer.parseInt(txtGradYear.getText()));
+
+                if (counselorComboBox.getSelectedIndex() > 0) {
+                    String counselorName = counselorComboBox.getSelectedItem().toString();
+
+                    if (!counselorName.equals("")) {
+                        ArrayList<Integer> counselorSearch = DataTypeManager.toIntegerArrayList(
+                                TableManager.getTable(TableProperties.COUNSELORS_TABLE_NAME).getSomeFromColumn(
+                                        TableProperties.COUNSELOR_ID, new Search(TableProperties.NAME, counselorName)));
+                        if (counselorSearch.size() == 1) {
+                            int counselorId = counselorSearch.get(0);
+
+                            student.setCounselorId(counselorId);
+                        } else
+                            System.out.println("Failed to find counselor with name of: " + counselorName);
                     }
+                }
 
-                    student.setGender((Character) genderComboBox.getSelectedItem());
+                students.add(student);
 
-                    if (!isEmpty(txtGradYear))
-                        student.setGraduationYear(Integer.parseInt(txtGradYear.getText()));
+                String firstName = student.getFirstName();
+                String lastName = student.getLastName();
+                int studentID = student.getStudentId();
+                char gender = student.getGender();
+                int graduationYear = student.getGraduationYear();
+                Date birthdate = student.getBirthday();
 
-                    if (counselorComboBox.getSelectedIndex() > 0) {
-                        String counselorName = counselorComboBox.getSelectedItem().toString();
+                int birthMonth = 0;
+                int birthDay = 0;
+                int birthYear = 0;
 
-                        if (!counselorName.equals("")) {
-                            ArrayList<Integer> counselorSearch = DataTypeManager.toIntegerArrayList(
-                                    TableManager.getTable(TableProperties.COUNSELORS_TABLE_NAME).getSomeFromColumn(
-                                            TableProperties.COUNSELOR_ID, new Search(TableProperties.NAME, counselorName)));
-                            if (counselorSearch.size() == 1) {
-                                int counselorId = counselorSearch.get(0);
+                if (birthdate != null) {
+                    birthMonth = birthdate.getMonth();
+                    birthDay = birthdate.getDay();
+                    birthYear = birthdate.getYear();
+                }
 
-                                student.setCounselorId(counselorId);
-                            } else
-                                System.out.println("Failed to find counselor with name of: " + counselorName);
-                        }
-                    }
+                final int monthFinal = birthMonth;
+                final int dayFinal = birthDay;
+                final int yearFinal = birthYear;
 
-                    students.add(student);
+                int counselorId = student.getCounselorId();
 
-                    String firstName = student.getFirstName();
-                    String lastName = student.getLastName();
-                    int studentID = student.getStudentId();
-                    char gender = student.getGender();
-                    int graduationYear = student.getGraduationYear();
-                    Date birthdate = student.getBirthday();
+                //adds new Student
+                Table studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
 
-                    int birthMonth = 0;
-                    int birthDay = 0;
-                    int birthYear = 0;
+                ArrayList<Integer> redwoodIds = DataTypeManager
+                        .toIntegerArrayList(studentsTable.getAllFromColumn(TableProperties.STUDENT_REDWOOD_ID));
 
-                    if (birthdate != null) {
-                        birthMonth = birthdate.getMonth();
-                        birthDay = birthdate.getDay();
-                        birthYear = birthdate.getYear();
-                    }
-
-                    final int monthFinal = birthMonth;
-                    final int dayFinal = birthDay;
-                    final int yearFinal = birthYear;
-
-                    int counselorId = student.getCounselorId();
-
-                    //adds new Student
-                    Table studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
-
-                    ArrayList<Integer> redwoodIds = DataTypeManager
-                            .toIntegerArrayList(studentsTable.getAllFromColumn(TableProperties.STUDENT_REDWOOD_ID));
-
-                    if (!redwoodIds.contains(studentID)) {
-                        HashMap<String, Object> studentVals = new HashMap<String, Object>() {
-                            {
-                                put(TableProperties.STUDENT_REDWOOD_ID, studentID);
-                                put(TableProperties.FIRST_NAME, firstName);
-                                put(TableProperties.LAST_NAME, lastName);
-                                put(TableProperties.GENDER, gender);
-                                put(TableProperties.GRADUATION_YEAR, graduationYear);
-                                put(TableProperties.BIRTH_MONTH, monthFinal);
-                                put(TableProperties.BIRTH_DAY, dayFinal);
-                                put(TableProperties.BIRTH_YEAR, yearFinal);
-                                put(TableProperties.COUNSELOR_ID, counselorId);
-                            }
-                        };
-
-                        studentsTable.addRow(studentVals);
-                    }
-
-                    int curStudentDatabaseID = DataTypeManager
-                            .toIntegerArrayList(studentsTable.getSomeFromColumn(TableProperties.STUDENT_ID,
-                                    new Search(TableProperties.STUDENT_REDWOOD_ID, studentID)))
-                            .get(0);
-
-                    //Adds new Enrollment
-                    Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
-
-                    Table coursesTable = TableManager.getTable(TableProperties.COURSES_TABLE_NAME);
-                    ArrayList<Integer> courseIds = DataTypeManager
-                            .toIntegerArrayList(coursesTable.getAllFromColumn(TableProperties.COURSE_ID));
-
-                    int courseId = courseIds.get(courseIds.size() - 1);
-
-                    HashMap<String, Object> enrollmentsVals = new HashMap<String, Object>() {
+                if (!redwoodIds.contains(studentID)) {
+                    HashMap<String, Object> studentVals = new HashMap<String, Object>() {
                         {
-                            put(TableProperties.STUDENT_ID, curStudentDatabaseID);
-                            put(TableProperties.COURSE_ID, courseId);
+                            put(TableProperties.STUDENT_REDWOOD_ID, studentID);
+                            put(TableProperties.FIRST_NAME, firstName);
+                            put(TableProperties.LAST_NAME, lastName);
+                            put(TableProperties.GENDER, gender);
+                            put(TableProperties.GRADUATION_YEAR, graduationYear);
+                            put(TableProperties.BIRTH_MONTH, monthFinal);
+                            put(TableProperties.BIRTH_DAY, dayFinal);
+                            put(TableProperties.BIRTH_YEAR, yearFinal);
+                            put(TableProperties.COUNSELOR_ID, counselorId);
                         }
                     };
 
-                    enrollmentsTable.addRow(enrollmentsVals);
-                    listStudentsModel.addElement(student.getFirstName() + " " + student.getLastName());
-
-                    txtFirstName.setText("");
-                    txtLastName.setText("");
-                    txtStudentID.setText("");
-                    txtGradYear.setText("");
-                    txtDay.setText("");
-                    txtMonth.setText("");
-                    txtYear.setText("");
-                    counselorComboBox.setSelectedIndex(0);
-                    genderComboBox.setSelectedIndex(0);
-
-                    btnAddStudent.setEnabled(false);
-                    listStudents.setSelectedIndex(listStudentsModel.getSize() - 1);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(thisPanel, "Failed to add student");
+                    studentsTable.addRow(studentVals);
                 }
 
-                txtFirstName.requestFocus();
+                int curStudentDatabaseID = DataTypeManager
+                        .toIntegerArrayList(studentsTable.getSomeFromColumn(TableProperties.STUDENT_ID,
+                                new Search(TableProperties.STUDENT_REDWOOD_ID, studentID)))
+                        .get(0);
+
+                //Adds new Enrollment
+                Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
+
+                Table coursesTable = TableManager.getTable(TableProperties.COURSES_TABLE_NAME);
+                ArrayList<Integer> courseIds = DataTypeManager
+                        .toIntegerArrayList(coursesTable.getAllFromColumn(TableProperties.COURSE_ID));
+
+                int courseId = courseIds.get(courseIds.size() - 1);
+
+                HashMap<String, Object> enrollmentsVals = new HashMap<String, Object>() {
+                    {
+                        put(TableProperties.STUDENT_ID, curStudentDatabaseID);
+                        put(TableProperties.COURSE_ID, courseId);
+                    }
+                };
+
+                enrollmentsTable.addRow(enrollmentsVals);
+                listStudentsModel.addElement(student.getFirstName() + " " + student.getLastName());
+
+                txtFirstName.setText("");
+                txtLastName.setText("");
+                txtStudentID.setText("");
+                txtGradYear.setText("");
+                txtDay.setText("");
+                txtMonth.setText("");
+                txtYear.setText("");
+                counselorComboBox.setSelectedIndex(0);
+                genderComboBox.setSelectedIndex(0);
+
+                btnAddStudent.setEnabled(false);
+                listStudents.setSelectedIndex(listStudentsModel.getSize() - 1);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(thisPanel, "Failed to add student");
             }
+
+            txtFirstName.requestFocus();
         });
 
         btnAddStudent.addKeyListener(this);
@@ -415,7 +382,6 @@ public class StudentInterface extends InterfacePanel {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("key pressed in student interface");
         String sourceClassName = e.getSource().getClass().getSimpleName();
         if (KeyboardTools.isArrowKey(e) && !sourceClassName.equals("JList") && !sourceClassName.equals("JComboBox")) {
             if (e.getKeyCode() == KeyEvent.VK_DOWN && !isOnLastTabSpot(e))
@@ -448,12 +414,7 @@ public class StudentInterface extends InterfacePanel {
     private boolean isOnLastTabSpot(KeyEvent e) {
         Object source = e.getSource();
 
-        if (source == btnAddStudent)
-            return true;
-        if (source == counselorComboBox && !btnAddStudent.isEnabled())
-            return true;
-
-        return false;
+        return source == btnAddStudent || (source == counselorComboBox && !btnAddStudent.isEnabled());
     }
 
     @Override

@@ -18,12 +18,6 @@ public class GradeBook extends InterfacePanel {
 
     public GradeBook() {
         initClassTable();
-        initClassPicker();
-    }
-
-    private void initClassPicker() {
-        add(classTable.getTableHeader());
-        add(classTable);
     }
 
     @Override
