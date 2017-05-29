@@ -21,10 +21,15 @@ public class BaseInterface extends JFrame {
 
     private static final String FRAME_TITLE = "Grading Program", ESCAPE = "escape";
     private static final int WIDTH = 1200, HEIGHT = 900;
+    private static final Dimension SIZE = new Dimension(WIDTH, HEIGHT);
 
     private ArrayList<JPanel> interfaces;
 
     private JPanel contentPanel;
+
+    public static Dimension getFrameSize() {
+        return SIZE;
+    }
 
     public static void setDefaultFontSize(int size) {
         System.setProperty("awt.useSystemAAFontSettings", "on");
@@ -49,6 +54,7 @@ public class BaseInterface extends JFrame {
 
         contentPanel = new JPanel();
         add(contentPanel);
+        contentPanel.setLayout(new BorderLayout());
 
         setDefaultFontSize(15);
         initContent();
@@ -58,7 +64,7 @@ public class BaseInterface extends JFrame {
     public void initContent() {
         HomeInterface homeInterface = new HomeInterface(this);
         interfaces.add(homeInterface);
-        contentPanel.add(homeInterface);
+        contentPanel.add(homeInterface, BorderLayout.PAGE_START);
     }
 
 
@@ -68,7 +74,7 @@ public class BaseInterface extends JFrame {
 
         interfaces.add(panel);
 
-        contentPanel.add(panel);
+        contentPanel.add(panel, BorderLayout.PAGE_START);
 
         panel.onLayoutOpened();
 
@@ -84,7 +90,7 @@ public class BaseInterface extends JFrame {
         JPanel toRemove = interfaces.remove(interfaces.size() - 1);
         contentPanel.remove(toRemove);
 
-        contentPanel.add(interfaces.get(interfaces.size() - 1));
+        contentPanel.add(interfaces.get(interfaces.size() - 1), BorderLayout.PAGE_START);
 
         getContentPane().revalidate();
         getContentPane().repaint();

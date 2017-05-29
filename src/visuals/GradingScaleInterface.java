@@ -3,8 +3,8 @@ package visuals;
 import grading.GradeCalculator;
 import grading.GradingScale;
 import grading.GradingScaleTableModel;
-import grading.MyCellEditor;
-import grading.MyCellEditor.EditorType;
+import grading.GradingScaleCellEditor;
+import grading.GradingScaleCellEditor.EditorType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -110,7 +110,7 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         });
 
         deleteScale = new JButton("Delete Scale");
-        deleteScale.setFont(new Font("Helvetica", Font.BOLD, 14));
+//        deleteScale.setFont(new Font("Helvetica", Font.BOLD, 14));
         // deleteScale.setForeground(Color.BLUE);
         deleteScale.setFocusable(false);
         deleteScale.setVisible(true);
@@ -140,7 +140,7 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         });
 
         addRowButton = new JButton("Add Row");
-        addRowButton.setFont(new Font("Helvetica", Font.BOLD, 14));
+//        addRowButton.setFont(new Font("Helvetica", Font.BOLD, 14));
         addRowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -293,7 +293,7 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         // scaleList.setBorder(compound);
         scales = GradeCalculator.getScales();
         scaleList.addKeyListener(this);
-        scaleList.setFont(new Font("Helvetica", Font.BOLD, 15));
+//        scaleList.setFont(new Font("Helvetica", Font.BOLD, 15));
 
         for (GradingScale scale : scales) {
             listModel.addElement(scale.getName());
@@ -328,7 +328,7 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
 
     private void initLabels() {
         label1 = new JLabel("", JLabel.CENTER);
-        label1.setFont(STANDARD_FONT);
+//        label1.setFont(STANDARD_FONT);
         label1.setText("Scale Description");
         label1.setOpaque(true);
         label1.setVisible(true);
@@ -370,13 +370,13 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         tableModel.addTableModelListener(this);
         letterTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 
-        letterTable.setFont(new Font("Helvetica", Font.PLAIN, 20));
+//        letterTable.setFont(new Font("Helvetica", Font.PLAIN, 20));
         letterTable.setRowHeight(rowHeight);
         letterTable.setBorder(compound);
         letterTable.setBackground(getBackground());
         letterTable.getTableHeader().setReorderingAllowed(false);
-        letterTable.getColumnModel().getColumn(0).setCellEditor(new MyCellEditor(new JTextField(), letterTable, EditorType.LetterGrade));
-        letterTable.getColumnModel().getColumn(letterTable.getColumnCount() - 1).setCellEditor(new MyCellEditor(new JTextField(), letterTable, EditorType.PercentGrade));
+        letterTable.getColumnModel().getColumn(0).setCellEditor(new GradingScaleCellEditor(new JTextField(), letterTable, EditorType.LetterGrade));
+        letterTable.getColumnModel().getColumn(letterTable.getColumnCount() - 1).setCellEditor(new GradingScaleCellEditor(new JTextField(), letterTable, EditorType.PercentGrade));
 
         for (int i = 0; i < letterTable.getColumnCount(); i++) {
             DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();

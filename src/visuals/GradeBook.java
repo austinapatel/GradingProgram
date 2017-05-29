@@ -23,7 +23,7 @@ public class GradeBook extends InterfacePanel {
 
     private void initClassPicker() {
         add(classTable.getTableHeader());
-        add(classTable, BorderLayout.NORTH);
+        add(classTable);
     }
 
     @Override

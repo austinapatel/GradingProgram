@@ -37,7 +37,7 @@ public class CreateClassInterface extends InterfacePanel {
         txtStartYear = new JTextField();
         txtEndYear = new JTextField();
 
-        JLabel lblClass = new JLabel("Class                  ");
+        JLabel lblClass = new JLabel("Class");
         lblClass.setFont(new Font("Tahoma", Font.PLAIN, 32));
         add(lblClass);
 
@@ -73,10 +73,6 @@ public class CreateClassInterface extends InterfacePanel {
 
         add(btnCreateClass);
         btnCreateClass.setEnabled(false);
-
-        JLabel lbl1 = new JLabel("                               Add New                  ");
-        lbl1.setFont(new Font("Tahoma", Font.PLAIN, 32));
-        add(lbl1);
 
         studentInterface = new StudentInterface();
         studentInterface.setStudentButtonEnabled(false);

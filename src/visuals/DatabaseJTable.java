@@ -4,66 +4,52 @@
 
 package visuals;
 
-import database.DataTypeManager;
-import database.Table;
-import database.TableColumn;
-import database.TableManager;
+import database.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 
+/**A JTable containing information in a database table.*/
 public class DatabaseJTable extends JTable {
 
-    private String tableName;
     private SelectableTableModel model;
     private Table table;
     private String[] columnNames;
 
-    public DatabaseJTable(String tableName) {
-        this(TableManager.getTable(tableName));
-    }
-
-    public DatabaseJTable(Table table) {
+    /**columnNames parameter are for specifically stating which columns should be shown
+     * Defaults to all columns shown if no columnNames are passed in.*/
+    public DatabaseJTable(String tableName, String... columnNames) {
         super(new SelectableTableModel());
 
-        this.tableName = table.getName();
         model = (SelectableTableModel) getModel();
-        this.table = table;
+        table = TableManager.getTable(tableName);
+        this.columnNames = columnNames;
 
         refreshTableContent();
 
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
-//    public int getColumnIndex(String columnName)
-//    {
-//
-//    	for (int i = 0; i < this.getColumnCount(); i ++)
-//    		columnNames[i] = this.getColumnModel().getColumn(i).getHeaderValue().toString();
-//    	for (int i = 0; i < this.getColumnCount(); i++)
-//    	{
-//    		if (this.getColumnName(i).equals(columnName))
-//    			return i;
-//    	}
-//    	return -1;
-//    }
-
     public void refreshTableContent() {
-        TableColumn[] tableColumns = table.getTableColumns();
-        ArrayList<ArrayList<String>> tableContent = new ArrayList<>();
-        String[] columnNames = new String[tableColumns.length];
+        if (columnNames.length == 0) {
+            TableColumn[] tableColumns = table.getTableColumns();
 
-        for (int i = 0; i < tableColumns.length; i++)
-            columnNames[i] = tableColumns[i].getName();
+            columnNames = new String[tableColumns.length];
+
+            for (int i = 0; i < tableColumns.length; i++)
+                columnNames[i] = tableColumns[i].getName();
+        }
+
+        ArrayList<ArrayList<String>> tableContent = new ArrayList<>();
 
         model.setColumnNames(columnNames);
 
-        for (TableColumn tableColumn : tableColumns)
-            tableContent.add(DataTypeManager.toStringArrayList(table.getAllFromColumn(tableColumn.getName())));
+        for (String columnName : columnNames)
+            tableContent.add(DataTypeManager.toStringArrayList(table.getAllFromColumn(columnName)));
 
         model.setRowCount(tableContent.get(0).size());
-        model.setColumnCount(tableContent.size()); // jason got rid of minus 1
+        model.setColumnCount(tableContent.size());
 
         for (int col = 0; col < model.getColumnCount(); col++)
             for (int row = 0; row < model.getRowCount(); row++)
@@ -79,6 +65,7 @@ class SelectableTableModel extends DefaultTableModel {
         this.columnNames = columnNames;
     }
 
+    @Override
     public boolean isCellEditable(int row, int column) {
         return false;
     }
@@ -88,6 +75,7 @@ class SelectableTableModel extends DefaultTableModel {
         String rawName = columnNames[index];
         String columnName = "";
 
+        // Format the column name for readability
         for (Character c : rawName.toCharArray()) {
             if (Character.isUpperCase(c))
                 columnName += ' ';

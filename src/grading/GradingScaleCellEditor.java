@@ -5,7 +5,7 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-public class MyCellEditor extends DefaultCellEditor {
+public class GradingScaleCellEditor extends DefaultCellEditor {
 
     private static final long serialVersionUID = 1L;
     private static final Border red = new LineBorder(Color.red);
@@ -24,7 +24,7 @@ public class MyCellEditor extends DefaultCellEditor {
     }
 
 
-    public MyCellEditor(JTextField textField, JTable table, EditorType type) {
+    public GradingScaleCellEditor(JTextField textField, JTable table, EditorType type) {
         super(textField);
         this.table = table;
         this.type = type;

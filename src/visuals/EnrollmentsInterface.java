@@ -1,22 +1,17 @@
 package visuals;
 
-import database.DataTypeManager;
-import database.Table;
-import database.TableManager;
-import database.TableProperties;
+import database.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by austin.patel on 5/15/2017.
- */
 public class EnrollmentsInterface extends InterfacePanel {
 
     private JButton enrollButton;
@@ -32,7 +27,7 @@ public class EnrollmentsInterface extends InterfacePanel {
     }
 
     private void initTables() {
-        studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME);
+        studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.FIRST_NAME, TableProperties.LAST_NAME);
         coursesJTable = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
 
         add(studentsJTable.getTableHeader());
@@ -87,7 +82,7 @@ public class EnrollmentsInterface extends InterfacePanel {
                         flag = true;
                 }
 
-                if (flag == false) {
+                if (!flag) {
                     HashMap<String, Object> enrollmentsVals = new HashMap<String, Object>() {
                         {
                             put(TableProperties.STUDENT_ID, studentId);
@@ -100,14 +95,6 @@ public class EnrollmentsInterface extends InterfacePanel {
             }
         });
     }
-
-//	void addActionListener(ActionEvent e){
-//		if(studentsJTable.getSelectedRow() != -1 && coursesJTable.getSelectedRow() != -1){
-//			enrollButton.setEnabled(true);
-//		}
-//		else
-//			enrollButton.setEnabled(false);
-//	}
 
     @Override
     public void keyTyped(KeyEvent e) {

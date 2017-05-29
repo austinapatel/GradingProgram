@@ -47,13 +47,13 @@ public class TableInterface extends InterfacePanel {
     }
 
     private void initPanel() {
-        setLayout(new BorderLayout());
+//        setLayout(new BorderLayout());
     }
 
     private void initBottomContainer() {
         bottomContainer = new JPanel();
         bottomContainer.setLayout(new GridLayout());
-        add(bottomContainer, BorderLayout.SOUTH);
+        add(bottomContainer);
     }
 
     public void addRow() {
@@ -203,7 +203,7 @@ public class TableInterface extends InterfacePanel {
             }
         };
 
-        add(tableList, BorderLayout.WEST);
+        add(tableList);
     }
 
     /**
@@ -243,7 +243,7 @@ public class TableInterface extends InterfacePanel {
         };
 
         tableScrollPane = new JScrollPane(jTable);
-        add(tableScrollPane, BorderLayout.CENTER);
+        add(tableScrollPane);
 
         databaseTableModel = new DatabaseTableModel();
 
