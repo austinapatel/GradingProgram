@@ -1,6 +1,8 @@
 package database;
 
-/**Holds a query with a table column and a search value*/
+/**
+ * Holds a query with a table column and a search value
+ */
 public class Search {
 
     private String columnName;

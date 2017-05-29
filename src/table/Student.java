@@ -4,7 +4,9 @@
 
 package table;
 
-/**Stores database information for a student*/
+/**
+ * Stores database information for a student
+ */
 public class Student {
 
     private String firstName, lastName;
@@ -14,9 +16,9 @@ public class Student {
     private Date birthday;
 
     public Student(String firstName, String lastName, int studentId) {
-       this.firstName = firstName;
-       this.lastName = lastName;
-       this.studentId = studentId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.studentId = studentId;
     }
 
     public String getFirstName() {

@@ -1,19 +1,12 @@
 package visuals;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.GridBagLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.TreeMap;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.Timer;
 
 public class HomeInterface extends InterfacePanel implements ActionListener {
 
@@ -36,12 +29,12 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
     private void initPanel() {
         setLayout(new GridBagLayout());
 
-        gridPanel = new KeyboardGridPanel(5,2);
+        gridPanel = new KeyboardGridPanel(5, 2);
         add(gridPanel);
     }
 
     private void initInterfaceHashMap() {
-        interfaces = new TreeMap<String, InterfacePanel>(){{
+        interfaces = new TreeMap<String, InterfacePanel>() {{
             put("Create Class", new CreateClassInterface());
             put("Grade Book", new GradeBook());
             put("Create Assignment", new CreateAssignmentInterface());

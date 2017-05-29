@@ -6,7 +6,9 @@ package grading;
 
 import javax.swing.table.DefaultTableModel;
 
-/**Table Model for the grading scale interface*/
+/**
+ * Table Model for the grading scale interface
+ */
 public class GradingScaleTableModel extends DefaultTableModel {
 
     private int rows, columns;

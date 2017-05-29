@@ -23,9 +23,9 @@ public class DatabaseJTable extends JTable {
     public DatabaseJTable(String tableName) {
         this(TableManager.getTable(tableName));
     }
-    
+
     public DatabaseJTable(Table table) {
-    	super(new SelectableTableModel());
+        super(new SelectableTableModel());
 
         this.tableName = table.getName();
         model = (SelectableTableModel) getModel();
@@ -35,7 +35,7 @@ public class DatabaseJTable extends JTable {
 
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
-    
+
 //    public int getColumnIndex(String columnName)
 //    {
 //
@@ -55,7 +55,7 @@ public class DatabaseJTable extends JTable {
         String[] columnNames = new String[tableColumns.length];
 
         for (int i = 0; i < tableColumns.length; i++)
-        	columnNames[i] = tableColumns[i].getName();
+            columnNames[i] = tableColumns[i].getName();
 
         model.setColumnNames(columnNames);
 
@@ -79,7 +79,7 @@ class SelectableTableModel extends DefaultTableModel {
         this.columnNames = columnNames;
     }
 
-    public boolean isCellEditable(int row, int column){
+    public boolean isCellEditable(int row, int column) {
         return false;
     }
 

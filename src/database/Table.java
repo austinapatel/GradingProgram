@@ -1,4 +1,3 @@
-
 // Austin Patel & Jason Morris
 // APCS
 // Redwood High School
@@ -100,7 +99,9 @@ public class Table {
         return rows;
     }
 
-    /**Adds a new row to the table with given values.*/
+    /**
+     * Adds a new row to the table with given values.
+     */
     public void addRow() {
         try {
             int desiredRowID = getInsertID();

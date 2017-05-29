@@ -2,7 +2,6 @@ package database;
 
 import javax.swing.table.AbstractTableModel;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class GradeBookTableModel extends AbstractTableModel {
@@ -23,7 +22,9 @@ public class GradeBookTableModel extends AbstractTableModel {
         refresh();
     }
 
-    /**Loads all of the data into the table.*/
+    /**
+     * Loads all of the data into the table.
+     */
     public void refresh() {
         studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, new Search(TableProperties.COURSE_ID, courseId)));
         assignmentIds = DataTypeManager.toIntegerArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENT_ID, new Search(TableProperties.COURSE_ID, courseId)));

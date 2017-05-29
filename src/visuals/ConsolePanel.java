@@ -1,13 +1,10 @@
 package visuals;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.KeyEvent;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-
 import utilities.MessageConsole;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class ConsolePanel extends InterfacePanel {
     private JTextPane textComponent;

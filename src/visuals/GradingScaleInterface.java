@@ -4,32 +4,11 @@ import grading.GradeCalculator;
 import grading.GradingScale;
 import grading.GradingScaleTableModel;
 import grading.MyCellEditor;
+import grading.MyCellEditor.EditorType;
+import org.json.JSONArray;
+import org.json.JSONException;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -38,11 +17,10 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import grading.MyCellEditor.EditorType;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GradingScaleInterface extends InterfacePanel implements TableModelListener {
 

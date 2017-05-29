@@ -12,7 +12,6 @@ import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
@@ -56,7 +55,7 @@ public class CreateAssignmentInterface extends InterfacePanel implements ActionL
         txtName.addKeyListener(this);
         contentPanel.add(txtName);
 
-      
+
         wrapInJPanel(new JLabel("Class"));
         coursesJTable = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
         coursesJTable.setPreferredScrollableViewportSize(coursesJTable.getPreferredSize());
@@ -112,7 +111,7 @@ public class CreateAssignmentInterface extends InterfacePanel implements ActionL
 
         try {
             Integer.parseInt(txtPointValue.getText());
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             isEnabled = false;
         }
 
@@ -138,12 +137,12 @@ public class CreateAssignmentInterface extends InterfacePanel implements ActionL
             }};
 
             assignmentsTable.addRow(values);
-            
+
             txtName.setText("");
             txtPointValue.setText("");
             dateModel.setSelected(false);
             coursesJTable.getSelectionModel().clearSelection();
-            
+
             determineIfCreateEnabled();
         }
     }

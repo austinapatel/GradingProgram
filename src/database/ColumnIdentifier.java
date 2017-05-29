@@ -1,6 +1,8 @@
 package database;
 
-/**Encapsulates data for a table name and a column name.*/
+/**
+ * Encapsulates data for a table name and a column name.
+ */
 public class ColumnIdentifier {
 
     private String tableName = null, columnName;

@@ -1,4 +1,3 @@
-
 // Austin Patel & Jason Morris
 // APCS
 // Redwood High School
@@ -7,17 +6,9 @@
 
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Calendar;
-
 import database.TableColumn.DataType;
+
+import java.sql.*;
 
 /**
  * Abstracts mySQL database management operations. "init() must be called before
@@ -83,20 +74,19 @@ public class DatabaseManager {
 
         return null;
     }
-    
-    
-    public static ResultSet executeSqlStatement(String sql) 
-    {
-       try {
-           Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-           ResultSet rs = stmt.executeQuery(sql);
-           return rs;
-       } catch (Exception e) {
-           e.printStackTrace();
-       }
 
-       return null;
-   }
+
+    public static ResultSet executeSqlStatement(String sql) {
+        try {
+            Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = stmt.executeQuery(sql);
+            return rs;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     public static ResultSet getJoinedTable(String table1Name, String table2Name, String[] tableAndColumnNames, String table1JoinColumn, String table2JoinColumn, String tableNameAndFilter, String filterValue) {
         //table1        table2         table1.column       table2.column               table2 filterSQL name  filterSQL value

@@ -1,4 +1,3 @@
-
 // Austin Patel & Jason Morris
 // APCS
 // Redwood High School
@@ -7,12 +6,11 @@
 
 package database;
 
+import database.TableColumn.DataType;
+
+import javax.swing.table.AbstractTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.table.AbstractTableModel;
-
-import database.TableColumn.DataType;
-import visuals.TableInterface;
 
 /**
  * Relates a mySQL database to a JTable TableModel.

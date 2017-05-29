@@ -1,18 +1,9 @@
 package customBorders;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Polygon;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import javax.swing.border.AbstractBorder;
+import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
-
-import javax.swing.border.AbstractBorder;
 
 public class TextBubbleBorder extends AbstractBorder {
 
@@ -50,9 +41,8 @@ public class TextBubbleBorder extends AbstractBorder {
         int bottomPad = pad + pointerSize + strokePad;
         insets = new Insets(pad, pad, bottomPad, pad);
     }
-    
-    
-    
+
+
     public TextBubbleBorder(
             Color color, int thickness, int radii, int pointerSize) {
         this.thickness = thickness;
@@ -144,10 +134,10 @@ public class TextBubbleBorder extends AbstractBorder {
 
         // Paint the BG color of the parent, everywhere outside the clip
         // of the text bubble.
-        Component parent  = c.getParent();
-        if (parent!=null) {
+        Component parent = c.getParent();
+        if (parent != null) {
             Color bg = parent.getBackground();
-            Rectangle rect = new Rectangle(0,0,width, height);
+            Rectangle rect = new Rectangle(0, 0, width, height);
             Area borderRegion = new Area(rect);
             borderRegion.subtract(area);
             g2.setClip(borderRegion);

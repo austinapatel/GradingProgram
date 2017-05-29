@@ -1,4 +1,3 @@
-
 // Austin Patel & Jason Morris
 // APCS
 // Redwood High School
@@ -7,222 +6,213 @@
 
 package visuals;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
 import database.DatabaseManager;
 import database.DatabasePropertiesManager;
 import main.Main;
 import utilities.AES;
 
-/** Password entry prompt for database credentials. */
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+/**
+ * Password entry prompt for database credentials.
+ */
 public class PasswordField extends JFrame implements ActionListener {
-	private final String PROPERTIES_FILE = "db";
+    private final String PROPERTIES_FILE = "db";
 
-	private JTextField userNameField;
-	private JTextField databaseIpField;
-	private JTextField databasePortField;
-	private JTextField databaseNameField;
-	
-	private JPasswordField passwordField;
-	
-	private JCheckBox checkbox1;
-	
-	private JButton testConnectionButton, usePreviousLoginButton, submitButton;
-	
-	private Box box;
+    private JTextField userNameField;
+    private JTextField databaseIpField;
+    private JTextField databasePortField;
+    private JTextField databaseNameField;
 
-	public static void main(String[] args) {
-		PasswordField field = new PasswordField();
-	}
+    private JPasswordField passwordField;
 
-	private final int WIDTH = 255, HEIGHT = 350;
+    private JCheckBox checkbox1;
 
-	public PasswordField() {
-		// DatabasePropertiesManager.deleteFile(PROPERTIES_FILE);
-		setLayout(null);
-		setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
-		setResizable(false);
-		setSize(WIDTH, HEIGHT);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Enter Credentials");
-		setLocationRelativeTo(null);
-		setLayout(null);
+    private JButton testConnectionButton, usePreviousLoginButton, submitButton;
 
-		JLabel label = new JLabel("User Name:");
-		JLabel label2 = new JLabel("Password:");
-		JLabel label3 = new JLabel("Database Ip:");
-		JLabel label4 = new JLabel("Database Port (default 3306):");
-		JLabel label5 = new JLabel("Database Name:");
+    private Box box;
 
-		testConnectionButton = new JButton();
-		testConnectionButton.setText("Test Connection");
-		testConnectionButton.setForeground(Color.BLACK);
-		testConnectionButton.setSize(160, 30);
-		testConnectionButton.setLocation(WIDTH / 2 - 80, 200);
-		testConnectionButton.setFocusable(false); // Don't let the button be
-													// pressed via
-		// ENTER or SPACE
-		testConnectionButton.setVisible(true);
-		testConnectionButton.addActionListener(this);
-		add(testConnectionButton);
+    public static void main(String[] args) {
+        PasswordField field = new PasswordField();
+    }
 
-		usePreviousLoginButton = new JButton();
-		usePreviousLoginButton.setText("Use Previous Login");
-		usePreviousLoginButton.setForeground(Color.BLACK);
-		usePreviousLoginButton.setSize(160, 30);
-		usePreviousLoginButton.setLocation(WIDTH / 2 - 80, 270);
-		usePreviousLoginButton.setFocusable(false); // Don't let the button be
-													// pressed via
+    private final int WIDTH = 255, HEIGHT = 350;
 
-		String filename = PROPERTIES_FILE;
+    public PasswordField() {
+        // DatabasePropertiesManager.deleteFile(PROPERTIES_FILE);
+        setLayout(null);
+        setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
+        setResizable(false);
+        setSize(WIDTH, HEIGHT);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Enter Credentials");
+        setLocationRelativeTo(null);
+        setLayout(null);
 
-		File f = new File(filename);
-		if (f.exists())
-			usePreviousLoginButton.setVisible(true);
-		else
-			usePreviousLoginButton.setVisible(false);
+        JLabel label = new JLabel("User Name:");
+        JLabel label2 = new JLabel("Password:");
+        JLabel label3 = new JLabel("Database Ip:");
+        JLabel label4 = new JLabel("Database Port (default 3306):");
+        JLabel label5 = new JLabel("Database Name:");
 
-		usePreviousLoginButton.setVisible(true);
-		usePreviousLoginButton.addActionListener(this);
-		add(usePreviousLoginButton);
-		checkbox1 = new JCheckBox("<html>Remember Login (Encrypted)</html>");
-		// checkbox1.setBackground(Color.GRAY);
-		checkbox1.setForeground(Color.BLACK);
-		checkbox1.setSize(150, 30);
-		checkbox1.setFocusable(false); // Prevent a "border" around the text
+        testConnectionButton = new JButton();
+        testConnectionButton.setText("Test Connection");
+        testConnectionButton.setForeground(Color.BLACK);
+        testConnectionButton.setSize(160, 30);
+        testConnectionButton.setLocation(WIDTH / 2 - 80, 200);
+        testConnectionButton.setFocusable(false); // Don't let the button be
+        // pressed via
+        // ENTER or SPACE
+        testConnectionButton.setVisible(true);
+        testConnectionButton.addActionListener(this);
+        add(testConnectionButton);
 
-		label.setHorizontalAlignment(JLabel.CENTER);
-		label2.setHorizontalAlignment(JLabel.CENTER);
+        usePreviousLoginButton = new JButton();
+        usePreviousLoginButton.setText("Use Previous Login");
+        usePreviousLoginButton.setForeground(Color.BLACK);
+        usePreviousLoginButton.setSize(160, 30);
+        usePreviousLoginButton.setLocation(WIDTH / 2 - 80, 270);
+        usePreviousLoginButton.setFocusable(false); // Don't let the button be
+        // pressed via
 
-		userNameField = new JTextField(20);
-		passwordField = new JPasswordField();
-		databaseIpField = new JTextField(20);
-		databasePortField = new JTextField(20);
-		databaseNameField = new JTextField(20);
-		box = Box.createVerticalBox(); // vertical box
-		box.add(label);
-		box.add(userNameField);
-		box.add(label2);
-		box.add(passwordField);
-		box.add(label3);
-		box.add(databaseIpField);
-		box.add(label4);
-		box.add(databasePortField);
-		box.add(label5);
-		box.add(databaseNameField);
-		box.add(checkbox1);
-		box.setSize(250, 200);
-		add(box);
-		int subSize = 200;
+        String filename = PROPERTIES_FILE;
 
-		submitButton = new JButton("Submit");
-		submitButton.setSize(subSize, 30);
-		submitButton.setLocation(WIDTH / 2 - subSize / 2, 235);
-		add(submitButton);
-		submitButton.addActionListener(this);
+        File f = new File(filename);
+        if (f.exists())
+            usePreviousLoginButton.setVisible(true);
+        else
+            usePreviousLoginButton.setVisible(false);
 
-		setLocationRelativeTo(null);
-		setVisible(true);
-	}
+        usePreviousLoginButton.setVisible(true);
+        usePreviousLoginButton.addActionListener(this);
+        add(usePreviousLoginButton);
+        checkbox1 = new JCheckBox("<html>Remember Login (Encrypted)</html>");
+        // checkbox1.setBackground(Color.GRAY);
+        checkbox1.setForeground(Color.BLACK);
+        checkbox1.setSize(150, 30);
+        checkbox1.setFocusable(false); // Prevent a "border" around the text
 
-	private String convertUrl() {
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label2.setHorizontalAlignment(JLabel.CENTER);
 
-		return "jdbc:mysql://" + databaseIpField.getText() + ":"
-				+ databasePortField.getText() + "/"
-				+ databaseNameField.getText()
-				+ "?autoReconnect=true&useSSL=false";
-	}
+        userNameField = new JTextField(20);
+        passwordField = new JPasswordField();
+        databaseIpField = new JTextField(20);
+        databasePortField = new JTextField(20);
+        databaseNameField = new JTextField(20);
+        box = Box.createVerticalBox(); // vertical box
+        box.add(label);
+        box.add(userNameField);
+        box.add(label2);
+        box.add(passwordField);
+        box.add(label3);
+        box.add(databaseIpField);
+        box.add(label4);
+        box.add(databasePortField);
+        box.add(label5);
+        box.add(databaseNameField);
+        box.add(checkbox1);
+        box.setSize(250, 200);
+        add(box);
+        int subSize = 200;
 
-	private boolean testConnection() {
-		if (DatabaseManager.testConnection(convertUrl(),
-				userNameField.getText(),
-				new String(passwordField.getPassword()))) {
-			JOptionPane.showMessageDialog(null,
-					"Successfully connected to database.");
-			return true;
+        submitButton = new JButton("Submit");
+        submitButton.setSize(subSize, 30);
+        submitButton.setLocation(WIDTH / 2 - subSize / 2, 235);
+        add(submitButton);
+        submitButton.addActionListener(this);
 
-		} else {
-			JOptionPane.showMessageDialog(null,
-					"Could not connect to database.");
-			return false;
-		}
-	}
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
 
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(usePreviousLoginButton)) {
+    private String convertUrl() {
 
-			JPasswordField pf = new JPasswordField();
-			int okCxl = JOptionPane.showConfirmDialog(null, pf,
-					"Enter Password", JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.PLAIN_MESSAGE);
+        return "jdbc:mysql://" + databaseIpField.getText() + ":"
+                + databasePortField.getText() + "/"
+                + databaseNameField.getText()
+                + "?autoReconnect=true&useSSL=false";
+    }
 
-			if (okCxl == JOptionPane.OK_OPTION) {
-				String password = new String(pf.getPassword());
+    private boolean testConnection() {
+        if (DatabaseManager.testConnection(convertUrl(),
+                userNameField.getText(),
+                new String(passwordField.getPassword()))) {
+            JOptionPane.showMessageDialog(null,
+                    "Successfully connected to database.");
+            return true;
 
-				if (!password.trim().equals("")) {
-					String url = DatabasePropertiesManager.read(password,
-							PROPERTIES_FILE, "url");
-					String username = DatabasePropertiesManager.read(password,
-							PROPERTIES_FILE, "username");
-					String pass = DatabasePropertiesManager.read(password,
-							PROPERTIES_FILE, "password");
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Could not connect to database.");
+            return false;
+        }
+    }
 
-					if (url != null && username != null && pass != null
-							&& DatabaseManager.testConnection(url, username,
-									password)) {
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(usePreviousLoginButton)) {
 
-						Main.main(new String[] { password });
-						dispose();
+            JPasswordField pf = new JPasswordField();
+            int okCxl = JOptionPane.showConfirmDialog(null, pf,
+                    "Enter Password", JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE);
 
-					}
-					else
-						JOptionPane.showMessageDialog(null,"Could not connect to database.");
-				}
-			}
+            if (okCxl == JOptionPane.OK_OPTION) {
+                String password = new String(pf.getPassword());
 
-		}
+                if (!password.trim().equals("")) {
+                    String url = DatabasePropertiesManager.read(password,
+                            PROPERTIES_FILE, "url");
+                    String username = DatabasePropertiesManager.read(password,
+                            PROPERTIES_FILE, "username");
+                    String pass = DatabasePropertiesManager.read(password,
+                            PROPERTIES_FILE, "password");
 
-		if (e.getSource().equals(testConnectionButton))
-			testConnection();
+                    if (url != null && username != null && pass != null
+                            && DatabaseManager.testConnection(url, username,
+                            password)) {
 
-		if (e.getSource().equals(submitButton)) {
-			if (testConnection()) {
-				final String secretKey = new String(
-						passwordField.getPassword());
+                        Main.main(new String[]{password});
+                        dispose();
 
-				if (checkbox1.isSelected()) {
-					DatabasePropertiesManager.write(PROPERTIES_FILE,
-							new String[] { "password", "url", "username" },
-							new String[] { AES.encrypt(secretKey, secretKey),
-									AES.encrypt(convertUrl(), secretKey),
-									AES.encrypt(userNameField.getText(),
-											secretKey) });
-					Main.main(new String[] { secretKey });
-					dispose();
-				} else {
-					DatabasePropertiesManager.deleteFile(PROPERTIES_FILE);
-					Main.main(new String[] { convertUrl(),
-							userNameField.getText(),
-							new String(passwordField.getPassword()) });
-					dispose();
-				}
-			} else
-				JOptionPane.showMessageDialog(null,
-						"Could not connect to database.");
-		}
-	}
+                    } else
+                        JOptionPane.showMessageDialog(null, "Could not connect to database.");
+                }
+            }
+
+        }
+
+        if (e.getSource().equals(testConnectionButton))
+            testConnection();
+
+        if (e.getSource().equals(submitButton)) {
+            if (testConnection()) {
+                final String secretKey = new String(
+                        passwordField.getPassword());
+
+                if (checkbox1.isSelected()) {
+                    DatabasePropertiesManager.write(PROPERTIES_FILE,
+                            new String[]{"password", "url", "username"},
+                            new String[]{AES.encrypt(secretKey, secretKey),
+                                    AES.encrypt(convertUrl(), secretKey),
+                                    AES.encrypt(userNameField.getText(),
+                                            secretKey)});
+                    Main.main(new String[]{secretKey});
+                    dispose();
+                } else {
+                    DatabasePropertiesManager.deleteFile(PROPERTIES_FILE);
+                    Main.main(new String[]{convertUrl(),
+                            userNameField.getText(),
+                            new String(passwordField.getPassword())});
+                    dispose();
+                }
+            } else
+                JOptionPane.showMessageDialog(null,
+                        "Could not connect to database.");
+        }
+    }
 }

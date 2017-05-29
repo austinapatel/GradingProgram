@@ -13,9 +13,11 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.util.ArrayList;
 
-/**Contains information regarding the content of a JComboBox that refers to data
+/**
+ * Contains information regarding the content of a JComboBox that refers to data
  * in that database to facilitate updating its content to respond to changes that
- * occur to the data in the database.*/
+ * occur to the data in the database.
+ */
 public class DatabaseJComboBox extends JComboBox<String> implements PopupMenuListener {
 
     private String tableName;

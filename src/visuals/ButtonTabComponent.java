@@ -27,24 +27,20 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package visuals;
 
 import javax.swing.*;
-import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
-
-import customBorders.TextBubbleBorder;
-
 import java.awt.*;
 import java.awt.event.*;
 
 /**
  * Component to be used as tabComponent;
- * Contains a JLabel to show the text and 
- * a JButton to close the tab it belongs to 
- */ 
+ * Contains a JLabel to show the text and
+ * a JButton to close the tab it belongs to
+ */
 public class ButtonTabComponent extends JPanel {
     private final JTabbedPane pane;
     private JLabel label;
@@ -57,26 +53,22 @@ public class ButtonTabComponent extends JPanel {
         }
         this.pane = pane;
         setOpaque(false);
-        
+
         //make JLabel read titles from JTabbedPane
-       
-        
-         label = new JLabel() {
+
+
+        label = new JLabel() {
             public String getText() {
                 int i = pane.indexOfTabComponent(ButtonTabComponent.this);
                 if (i != -1) {
-                	label.setIcon(pane.getIconAt(i));
-                	return pane.getTitleAt(i);
+                    label.setIcon(pane.getIconAt(i));
+                    return pane.getTitleAt(i);
                 }
                 return null;
             }
         };
-        
-        
-    
-        
-        
-        
+
+
         add(label);
         //add more space between the label and the button
         label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
@@ -85,7 +77,7 @@ public class ButtonTabComponent extends JPanel {
         add(button);
         //add more space to the top of the component
         setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
-       //this.setBorder(new TextBubbleBorder(Color.BLUE, 2, 10));
+        //this.setBorder(new TextBubbleBorder(Color.BLUE, 2, 10));
     }
 
     private class TabButton extends JButton implements ActionListener {
@@ -101,7 +93,7 @@ public class ButtonTabComponent extends JPanel {
             setFocusable(false);
             //this.setBorder(new TextBubbleBorder(Color.GREEN, 2, 10));
             setBorder(BorderFactory.createEtchedBorder());
-           setBorderPainted(false);
+            setBorderPainted(false);
             //Making nice rollover effect
             //we use the same listener for all buttons
             addMouseListener(buttonMouseListener);

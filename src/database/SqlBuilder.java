@@ -1,8 +1,5 @@
 package database;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
-
 public class SqlBuilder {
     public enum JoinType {
         JOIN("JOIN"), INNER_JOIN("INNER JOIN"), LEFT_JOIN("LEFT JOIN"), RIGHT_JOIN("RIGHT JOIN"), FULL_OUTER_JOIN("FULL OUTER JOIN");

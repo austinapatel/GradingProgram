@@ -1,4 +1,3 @@
-
 // Austin Patel & Jason Morris
 // APCS
 // Redwood High School
@@ -7,12 +6,9 @@
 
 package database;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
 /**
  * Holds all of the tables for easy accessibility.

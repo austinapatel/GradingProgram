@@ -4,7 +4,9 @@
 
 package table;
 
-/**Stores information for a date*/
+/**
+ * Stores information for a date
+ */
 public class Date {
 
     private int month, day, year;

@@ -2,7 +2,9 @@ package database;
 
 import java.util.ArrayList;
 
-/**Manages conversions between data types*/
+/**
+ * Manages conversions between data types
+ */
 public class DataTypeManager {
 
     public DataTypeManager() {

@@ -1,11 +1,11 @@
 package grading;
 
+import database.*;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import database.*;
 
 public class GradeCalculator {
 
@@ -36,7 +36,7 @@ public class GradeCalculator {
         Table table = new Table(rs);
         Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
 
-       // ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, TableProperties.COURSE_ID, String.valueOf(courseId)));
+        // ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID, TableProperties.COURSE_ID, String.valueOf(courseId)));
         ArrayList<Double> pointValues = DataTypeManager.toDoubleArrayList(table.getAllFromColumn(TableProperties.GRADE_VALUE));
         ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(table.getAllFromColumn(TableProperties.STUDENT_ID));
 
@@ -58,9 +58,8 @@ public class GradeCalculator {
             totalPoints += d;
 
         Iterator<Integer> uniqueStudentIds = grades.keySet().iterator();
-       
-        while (uniqueStudentIds.hasNext())
-        {
+
+        while (uniqueStudentIds.hasNext()) {
             int id = uniqueStudentIds.next();
             System.out.println("Student id: " + id + " got a sum of " + grades.get(id) + " a percent grade of " + (grades.get(id) * 100 / totalPoints) + "%");
 

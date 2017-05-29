@@ -1,6 +1,8 @@
 package database;
 
-/**Filter for an SQL statement -- the WHERE clause*/
+/**
+ * Filter for an SQL statement -- the WHERE clause
+ */
 public class Filter {
 
     private Search[] searches;

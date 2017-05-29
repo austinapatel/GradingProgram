@@ -2,7 +2,9 @@ package database;
 
 import java.util.ArrayList;
 
-/**Holds information for a SQL selection*/
+/**
+ * Holds information for a SQL selection
+ */
 public class Selection {
 
     private boolean selectAll;
@@ -10,12 +12,16 @@ public class Selection {
     private String tableName = null;
     private ColumnIdentifier[] columnIdentifiers;
 
-    /**Defaults to selecting all columns.*/
+    /**
+     * Defaults to selecting all columns.
+     */
     public Selection() {
         selectAll = true;
     }
 
-    /**Takes specific columns.*/
+    /**
+     * Takes specific columns.
+     */
     public Selection(ColumnIdentifier... columnIdentifiers) {
         this.columnIdentifiers = columnIdentifiers;
     }

@@ -1,11 +1,10 @@
 package utilities;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Shape;
+import javax.swing.*;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.print.PageFormat;
@@ -13,17 +12,12 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.text.MessageFormat;
 
-import javax.swing.JTable;
-
 /*
  * @(#)TablePrintable.java	1.39 03/12/19
  *
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 
 /**
  * An implementation of <code>Printable</code> for printing
@@ -56,16 +50,16 @@ import javax.swing.table.TableColumnModel;
  * cannot fit items appropriately, resulting in clipped output.
  * These are:
  * <ul>
- *   <li>In any mode, when the header or footer text is too wide to
- *       fit completely in the printable area. The implementation
- *       prints as much of the text as possible starting from the beginning,
- *       as determined by the table's <code>ComponentOrientation</code>.
- *   <li>In any mode, when a row is too tall to fit in the
- *       printable area. The upper most portion of the row
- *       is printed and no lower border is shown.
- *   <li>In <code>JTable.PrintMode.NORMAL</code> when a column
- *       is too wide to fit in the printable area. The center of the
- *       column is printed and no left and right borders are shown.
+ * <li>In any mode, when the header or footer text is too wide to
+ * fit completely in the printable area. The implementation
+ * prints as much of the text as possible starting from the beginning,
+ * as determined by the table's <code>ComponentOrientation</code>.
+ * <li>In any mode, when a row is too tall to fit in the
+ * printable area. The upper most portion of the row
+ * is printed and no lower border is shown.
+ * <li>In <code>JTable.PrintMode.NORMAL</code> when a column
+ * is too wide to fit in the printable area. The center of the
+ * column is printed and no left and right borders are shown.
  * </ul>
  * <p>
  * It is entirely valid for a developer to wrap this <code>Printable</code>
@@ -86,65 +80,101 @@ import javax.swing.table.TableColumnModel;
  * The behavior of this <code>Printable</code> is undefined if the table is
  * changed at any time after creation.
  *
- * @author  Shannon Hickey
+ * @author Shannon Hickey
  * @version 1.39 12/19/03
  */
 public class TablePrintable implements Printable {
 
-    /** The table to print. */
+    /**
+     * The table to print.
+     */
     private JTable table;
 
-    /** For quick reference to the table's header. */
+    /**
+     * For quick reference to the table's header.
+     */
     private JTableHeader header;
 
-    /** For quick reference to the table's column model. */
+    /**
+     * For quick reference to the table's column model.
+     */
     private TableColumnModel colModel;
 
-    /** To save multiple calculations of total column width. */
+    /**
+     * To save multiple calculations of total column width.
+     */
     private int totalColWidth;
 
-    /** The printing mode of this printable. */
+    /**
+     * The printing mode of this printable.
+     */
     private JTable.PrintMode printMode;
 
-    /** Provides the header text for the table. */
+    /**
+     * Provides the header text for the table.
+     */
     private MessageFormat headerFormat;
 
-    /** Provides the footer text for the table. */
+    /**
+     * Provides the footer text for the table.
+     */
     private MessageFormat footerFormat;
 
-    /** The most recent page index asked to print. */
+    /**
+     * The most recent page index asked to print.
+     */
     private int last = -1;
 
-    /** The next row to print. */
+    /**
+     * The next row to print.
+     */
     private int row = 0;
 
-    /** The next column to print. */
+    /**
+     * The next column to print.
+     */
     private int col = 0;
 
-    /** Used to store an area of the table to be printed. */
+    /**
+     * Used to store an area of the table to be printed.
+     */
     private final Rectangle clip = new Rectangle(0, 0, 0, 0);
 
-    /** Used to store an area of the table's header to be printed. */
+    /**
+     * Used to store an area of the table's header to be printed.
+     */
     private final Rectangle hclip = new Rectangle(0, 0, 0, 0);
 
-    /** Saves the creation of multiple rectangles. */
+    /**
+     * Saves the creation of multiple rectangles.
+     */
     private final Rectangle tempRect = new Rectangle(0, 0, 0, 0);
 
-    /** Vertical space to leave between table and header/footer text. */
+    /**
+     * Vertical space to leave between table and header/footer text.
+     */
     private static final int H_F_SPACE = 8;
 
-    /** Font size for the header text. */
+    /**
+     * Font size for the header text.
+     */
     private static final float HEADER_FONT_SIZE = 18.0f;
 
-    /** Font size for the footer text. */
+    /**
+     * Font size for the footer text.
+     */
     private static final float FOOTER_FONT_SIZE = 12.0f;
 
-    /** The font to use in rendering header text. */
+    /**
+     * The font to use in rendering header text.
+     */
     private Font headerFont;
 
-    /** The font to use in rendering footer text. */
+    /**
+     * The font to use in rendering footer text.
+     */
     private Font footerFont;
-    
+
     private boolean updateColumnWidths;
 
     /**
@@ -153,12 +183,12 @@ public class TablePrintable implements Printable {
      * two <code>MessageFormat</code> parameters. When called upon to provide
      * a String, each format is given the current page number.
      *
-     * @param  table         the table to print
-     * @param  printMode     the printing mode for this printable
-     * @param  headerFormat  a <code>MessageFormat</code> specifying the text to
-     *                       be used in printing a header, or null for none
-     * @param  footerFormat  a <code>MessageFormat</code> specifying the text to
-     *                       be used in printing a footer, or null for none
+     * @param table        the table to print
+     * @param printMode    the printing mode for this printable
+     * @param headerFormat a <code>MessageFormat</code> specifying the text to
+     *                     be used in printing a header, or null for none
+     * @param footerFormat a <code>MessageFormat</code> specifying the text to
+     *                     be used in printing a footer, or null for none
      * @throws IllegalArgumentException if passed an invalid print mode
      */
     public TablePrintable(JTable table,
@@ -171,7 +201,7 @@ public class TablePrintable implements Printable {
         header = table.getTableHeader();
         colModel = table.getColumnModel();
         totalColWidth = colModel.getTotalColumnWidth();
-        
+
         if (header != null) {
             // the header clip height can be set once since it's unchanging
             hclip.height = header.getHeight();
@@ -184,33 +214,33 @@ public class TablePrintable implements Printable {
 
         // derive the header and footer font from the table's font
         headerFont = table.getFont().deriveFont(Font.BOLD,
-                                                HEADER_FONT_SIZE);
+                HEADER_FONT_SIZE);
         footerFont = table.getFont().deriveFont(Font.PLAIN,
-                                                FOOTER_FONT_SIZE);
+                FOOTER_FONT_SIZE);
     }
 
     /**
      * Prints the specified page of the table into the given {@link Graphics}
      * context, in the specified format.
      *
-     * @param   graphics    the context into which the page is drawn
-     * @param   pageFormat  the size and orientation of the page being drawn
-     * @param   pageIndex   the zero based index of the page to be drawn
-     * @return  PAGE_EXISTS if the page is rendered successfully, or
-     *          NO_SUCH_PAGE if a non-existent page index is specified
-     * @throws  PrinterException if an error causes printing to be aborted
+     * @param graphics   the context into which the page is drawn
+     * @param pageFormat the size and orientation of the page being drawn
+     * @param pageIndex  the zero based index of the page to be drawn
+     * @return PAGE_EXISTS if the page is rendered successfully, or
+     * NO_SUCH_PAGE if a non-existent page index is specified
+     * @throws PrinterException if an error causes printing to be aborted
      */
     public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
-                                                       throws PrinterException {
+            throws PrinterException {
 
         // for easy access to these values
-        final int imgWidth = (int)pageFormat.getImageableWidth();
-        final int imgHeight = (int)pageFormat.getImageableHeight();
+        final int imgWidth = (int) pageFormat.getImageableWidth();
+        final int imgHeight = (int) pageFormat.getImageableHeight();
 
         if (imgWidth <= 0) {
             throw new PrinterException("Width of printable area is too small.");
         }
-   
+
         if (!updateColumnWidths) {
 
             // Only update the column widths if the current total column width
@@ -238,7 +268,7 @@ public class TablePrintable implements Printable {
             updateColumnWidths = true;
 
         }
-           
+
         // to pass the page number when formatting the header and footer text
         Object[] pageNumber = new Object[]{new Integer(pageIndex + 1)};
 
@@ -270,9 +300,9 @@ public class TablePrintable implements Printable {
         if (headerText != null) {
             graphics.setFont(headerFont);
             hRect = graphics.getFontMetrics().getStringBounds(headerText,
-                                                              graphics);
+                    graphics);
 
-            headerTextSpace = (int)Math.ceil(hRect.getHeight());
+            headerTextSpace = (int) Math.ceil(hRect.getHeight());
             availableSpace -= headerTextSpace + H_F_SPACE;
         }
 
@@ -281,9 +311,9 @@ public class TablePrintable implements Printable {
         if (footerText != null) {
             graphics.setFont(footerFont);
             fRect = graphics.getFontMetrics().getStringBounds(footerText,
-                                                              graphics);
+                    graphics);
 
-            footerTextSpace = (int)Math.ceil(fRect.getHeight());
+            footerTextSpace = (int) Math.ceil(fRect.getHeight());
             availableSpace -= footerTextSpace + H_F_SPACE;
         }
 
@@ -302,7 +332,7 @@ public class TablePrintable implements Printable {
             // it must be, according to the if-condition, since imgWidth > 0
             assert totalColWidth > 1;
 
-            sf = (double)imgWidth / (double)totalColWidth;
+            sf = (double) imgWidth / (double) totalColWidth;
         }
 
         // dictated by the previous two assertions
@@ -324,8 +354,8 @@ public class TablePrintable implements Printable {
             // rather than multiplying every row and column by the scale factor
             // in findNextClip, just pass a width and height that have already
             // been divided by it
-            int scaledWidth = (int)(imgWidth / sf);
-            int scaledHeight = (int)((availableSpace - hclip.height) / sf);
+            int scaledWidth = (int) (imgWidth / sf);
+            int scaledHeight = (int) ((availableSpace - hclip.height) / sf);
 
             // calculate the area of the table to be printed for this page
             findNextClip(scaledWidth, scaledHeight);
@@ -334,12 +364,12 @@ public class TablePrintable implements Printable {
         }
 
         // translate into the co-ordinate system of the pageFormat
-        Graphics2D g2d = (Graphics2D)graphics;
+        Graphics2D g2d = (Graphics2D) graphics;
         g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-        
+
         // to save and store the transform
         AffineTransform oldTrans;
-        
+
         // if there's footer text, print it at the bottom of the imageable area
         if (footerText != null) {
             oldTrans = g2d.getTransform();
@@ -371,8 +401,8 @@ public class TablePrintable implements Printable {
         if (sf != 1.0D) {
             g2d.scale(sf, sf);
 
-        // otherwise, ensure that the current portion of the table is
-        // centered horizontally
+            // otherwise, ensure that the current portion of the table is
+            // centered horizontally
         } else {
             int diff = (imgWidth - clip.width) / 2;
             g2d.translate(diff, 0);
@@ -404,11 +434,11 @@ public class TablePrintable implements Printable {
         g2d.translate(-clip.x, -clip.y);
         g2d.clip(clip);
         table.print(g2d);
-        
+
         // restore the original transform and clip
         g2d.setTransform(oldTrans);
         g2d.setClip(oldClip);
-        
+
         // draw a box around the table
         g2d.setColor(Color.BLACK);
         g2d.drawRect(0, 0, clip.width, hclip.height + clip.height);
@@ -420,12 +450,12 @@ public class TablePrintable implements Printable {
      * A helper method that encapsulates common code for rendering the
      * header and footer text.
      *
-     * @param  g2d       the graphics to draw into
-     * @param  text      the text to draw, non null
-     * @param  rect      the bounding rectangle for this text,
-     *                   as calculated at the given font, non null
-     * @param  font      the font to draw the text in, non null
-     * @param  imgWidth  the width of the area to draw into
+     * @param g2d      the graphics to draw into
+     * @param text     the text to draw, non null
+     * @param rect     the bounding rectangle for this text,
+     *                 as calculated at the given font, non null
+     * @param font     the font to draw the text in, non null
+     * @param imgWidth the width of the area to draw into
      */
     private void printText(Graphics2D g2d,
                            String text,
@@ -433,38 +463,38 @@ public class TablePrintable implements Printable {
                            Font font,
                            int imgWidth) {
 
-            int tx;
+        int tx;
 
-            // if the text is small enough to fit, center it
-            if (rect.getWidth() < imgWidth) {
-                tx = (int)((imgWidth - rect.getWidth()) / 2);
+        // if the text is small enough to fit, center it
+        if (rect.getWidth() < imgWidth) {
+            tx = (int) ((imgWidth - rect.getWidth()) / 2);
 
             // otherwise, if the table is LTR, ensure the left side of
             // the text shows; the right can be clipped
-            } else if (table.getComponentOrientation().isLeftToRight()) {
-                tx = 0;
+        } else if (table.getComponentOrientation().isLeftToRight()) {
+            tx = 0;
 
             // otherwise, ensure the right side of the text shows
-            } else {
-                tx = -(int)(Math.ceil(rect.getWidth()) - imgWidth);
-            }
+        } else {
+            tx = -(int) (Math.ceil(rect.getWidth()) - imgWidth);
+        }
 
-            int ty = (int)Math.ceil(Math.abs(rect.getY()));
-            g2d.setColor(Color.BLACK);
-            g2d.setFont(font);
-            g2d.drawString(text, tx, ty);
+        int ty = (int) Math.ceil(Math.abs(rect.getY()));
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(font);
+        g2d.drawString(text, tx, ty);
     }
 
     /**
      * Calculate the area of the table to be printed for
      * the next page. This should only be called if there
      * are rows and columns left to print.
-     *
+     * <p>
      * To avoid an infinite loop in printing, this will
      * always put at least one cell on each page.
      *
-     * @param  pw  the width of the area to print in
-     * @param  ph  the height of the area to print in
+     * @param pw the width of the area to print in
+     * @param ph the height of the area to print in
      */
     private void findNextClip(int pw, int ph) {
         final boolean ltr = table.getComponentOrientation().isLeftToRight();
@@ -481,7 +511,7 @@ public class TablePrintable implements Printable {
 
             // adjust clip to the top of the next set of rows
             clip.y += clip.height;
-            
+
             // adjust clip width and height to be zero
             clip.width = 0;
             clip.height = 0;
