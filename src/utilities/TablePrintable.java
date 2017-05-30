@@ -15,7 +15,7 @@ import java.text.MessageFormat;
 /*
  * @(#)TablePrintable.java	1.39 03/12/19
  *
- * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.S
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
