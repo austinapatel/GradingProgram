@@ -47,15 +47,6 @@ public class CreateClassInterface extends InterfacePanel {
         txtClassName = new JTextField();
         add(txtClassName);
         txtClassName.setColumns(10);
-//		txtClassName.addActionListener(new ActionListener()
-//		{
-//			@Override
-//			public void actionPerformed(ActionEvent e)
-//			{
-//				if (!txtClassName.getText().trim().equals(""))
-//					txtFirstName.requestFocus();
-//			}
-//		});
 
         txtClassName.addKeyListener(this);
 
@@ -80,7 +71,7 @@ public class CreateClassInterface extends InterfacePanel {
 
         add(new JLabel("Add Existing Students"));
 
-        studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME);
+        studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.STUDENT_REDWOOD_ID, TableProperties.FIRST_NAME, TableProperties.LAST_NAME);
 
         add(studentsJTable.getTableHeader());
         add(studentsJTable);

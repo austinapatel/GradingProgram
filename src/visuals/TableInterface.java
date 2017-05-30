@@ -103,14 +103,18 @@ public class TableInterface extends InterfacePanel {
     }
 
     private void initBottomButtons() {
-        add(new JButton() {
+        JPanel buttonPanel = new JPanel();
+
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+
+        buttonPanel.add(new JButton() {
             {
                 setText("Add Row");
                 addActionListener(e -> addRow());
             }
         });
 
-        add(new JButton() {
+        buttonPanel.add(new JButton() {
             {
                 setText("PrintTable");
                 addActionListener(new ActionListener() {
@@ -135,12 +139,14 @@ public class TableInterface extends InterfacePanel {
             }
         });
 
-        add(new JButton() {
+        buttonPanel.add(new JButton() {
             {
                 setText("Delete Row(s)");
                 addActionListener(e -> deleteRow());
             }
         });
+
+        add(buttonPanel);
     }
 
     /**

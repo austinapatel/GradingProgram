@@ -3,6 +3,7 @@ package database;
 import javax.swing.table.AbstractTableModel;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GradeBookTableModel extends AbstractTableModel {
 
@@ -111,27 +112,6 @@ public class GradeBookTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-//        if (columnIndex == 0) {
-//            String first =  DataTypeManager.toStringArrayList(studentsTable.getSomeFromColumn(TableProperties.FIRST_NAME, new Search(TableProperties.STUDENT_ID, studentIds.get(rowIndex)))).get(0);
-//            String last =  DataTypeManager.toStringArrayList(studentsTable.getSomeFromColumn(TableProperties.LAST_NAME, new Search(TableProperties.STUDENT_ID, studentIds.get(rowIndex)))).get(0);
-//
-//            return first + " " + last;
-//        }
-//
-//        int studentId = studentIds.get(rowIndex);
-//        int assignmentId = assignmentIds.get(columnIndex - 1);
-//
-//        ResultSet resultSet = gradesTable.select(new Filter(new Search(TableProperties.STUDENT_ID, studentId), new Search(TableProperties.ASSIGNMENT_ID, assignmentId)));
-//
-//        try {
-//            resultSet.absolute(1);
-//
-//            return resultSet.getDouble(TableProperties.GRADE_VALUE);
-//        } catch (SQLException e) {
-//            return "Missing";
-////            e.printStackTrace();
-//        }
-
         return data[rowIndex][columnIndex];
     }
 
@@ -142,8 +122,10 @@ public class GradeBookTableModel extends AbstractTableModel {
 
         ResultSet resultSet = gradesTable.select(new Filter(new Search(TableProperties.STUDENT_ID, studentId), new Search(TableProperties.ASSIGNMENT_ID, assignmentId)));
 
+        double value = 0;
+
         try {
-            double value = Double.parseDouble(rawValue.toString());
+            value = Double.parseDouble(rawValue.toString());
 
             resultSet.absolute(1);
             resultSet.updateDouble(TableProperties.GRADE_VALUE, value);
@@ -153,18 +135,21 @@ public class GradeBookTableModel extends AbstractTableModel {
         } catch (NumberFormatException e) {
             // Ignore non-double values
             return;
-        } catch (Exception e) {
-            System.out.println(rawValue);
-            e.printStackTrace();
+        } catch (Exception e) { // Row does not exist
+            // Create the row in the grades table and set the value
+            double finalValue = value;
+            gradesTable.addRow(new HashMap<String, Object>() {{
+                put(TableProperties.STUDENT_ID, studentId);
+                put(TableProperties.GRADE_VALUE, finalValue);
+                put(TableProperties.ASSIGNMENT_ID, assignmentId);
+            }});
         }
 
-//        try {
-//            resultSet.last();
-//            int rowCount = resultSet.getRow();
-//            System.out.println("Return row count: " + rowCount);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            data[rowIndex][columnIndex] = resultSet.getDouble(TableProperties.GRADE_VALUE) + "";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
