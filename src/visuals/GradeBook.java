@@ -58,7 +58,7 @@ public class GradeBook extends InterfacePanel {
         add(classTable.getTableHeader());
         add(classTable);
     }
-
+    
     @Override
     public void keyTyped(KeyEvent e) {
 
