@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.print.Printable;
+import java.awt.print.PrinterException;
 import java.text.MessageFormat;
 
 public class GradeBook extends InterfacePanel implements ActionListener  {
@@ -112,7 +113,12 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
 	{
 		if (e.getSource().equals(printTable))
 		{
-	
+			try {
+				gradesTable.print();
+			} catch (PrinterException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 }
