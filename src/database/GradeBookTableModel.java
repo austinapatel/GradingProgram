@@ -176,6 +176,9 @@ public class GradeBookTableModel extends AbstractTableModel
 
 		try
 		{
+			if(rawValue.equals("ex")){
+				rawValue = -1;
+			}
 			double value = Double.parseDouble(rawValue.toString());
 
 			resultSet.absolute(1);
@@ -202,6 +205,10 @@ public class GradeBookTableModel extends AbstractTableModel
 		//        } catch (SQLException e) {
 		//            e.printStackTrace();
 		//        }
+		
+		if (Double.parseDouble(data[rowIndex][columnIndex]) == -1) {
+			data[rowIndex][columnIndex] = "Excused";
+		}
 	}
 
 	@Override
