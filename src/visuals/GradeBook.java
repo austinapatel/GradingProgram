@@ -6,17 +6,25 @@ import database.TableProperties;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.MessageFormat;
 
-public class GradeBook extends InterfacePanel {
+public class GradeBook extends InterfacePanel implements ActionListener  {
 
     private DatabaseJTable classTable;
     private JTable gradesTable;
     private GradeBookTableModel gradesTableModel;
+    private JButton printTable;
 
-    public GradeBook() {
+    public GradeBook()
+    {
+        printTable = new JButton("Print Table");
+        printTable.addActionListener(this);
+        
         initClassTable();
     }
 
@@ -48,7 +56,11 @@ public class GradeBook extends InterfacePanel {
 
                     add(gradesTable.getTableHeader());
                     add(gradesTable);
-
+                    add(printTable);
+                    
+                   
+                    
+                    
                     validate();
                     repaint();
                 }
@@ -59,6 +71,16 @@ public class GradeBook extends InterfacePanel {
         add(classTable);
     }
 
+    private void printTable(JTable table)
+    {
+    	MessageFormat header = new MessageFormat("Page {0,number,integer}");
+    	try {
+    	    table.print(JTable.PrintMode.FIT_WIDTH, header, null);
+    	} catch (java.awt.print.PrinterException e) {
+    	    System.err.format("Cannot print %s%n", e.getMessage());
+    	}
+    }
+    
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -73,4 +95,13 @@ public class GradeBook extends InterfacePanel {
     public void keyReleased(KeyEvent e) {
 
     }
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource().equals(printTable))
+		{
+			printTable(gradesTable);
+		}
+	}
 }
