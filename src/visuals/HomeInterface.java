@@ -55,7 +55,12 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
         keys = interfaces.keySet().toArray(keys);
 
         for (String key : keys)
-            buttons.add(new JButton(key));
+        {     
+        	
+        	JButton newbutton = new JButton(key);
+        	newbutton.setFont( new Font ("Arial", Font.BOLD , 32));
+        	buttons.add(newbutton);
+        }
 
         for (JButton button : buttons) {
             button.addActionListener(this);
