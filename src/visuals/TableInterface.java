@@ -5,6 +5,7 @@
 package visuals;
 
 import database.*;
+import utilities.PrintTable;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -120,20 +121,7 @@ public class TableInterface extends InterfacePanel {
                 addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        try {
-                            MessageFormat header = new MessageFormat(
-                                    jTable.getTableHeader()
-                                            + " Page {0,number,integer}");
-                            jTable.print(JTable.PrintMode.FIT_WIDTH, header,
-                                    null);
-                            JOptionPane.showMessageDialog(null,
-                                    "Printing Succesful");
-
-                        } catch (PrinterException e1) {
-                            JOptionPane.showMessageDialog(null,
-                                    "Unable To Print");
-                            e1.printStackTrace();
-                        }
+                  	  new PrintTable(jTable);
                     }
                 });
             }

@@ -19,7 +19,7 @@ import database.DatabaseCellEditor;
 import database.GradeBookTableModel;
 import database.TableProperties;
 import utilities.ColumnsAutoSizer;
-import utilities.TablePrintable;
+import utilities.PrintTable;
 
 public class GradeBook extends InterfacePanel implements ActionListener  {
 
@@ -78,15 +78,7 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
         add(classTable);
     }
 
-    private void printTable(JTable table)
-    {
-    	MessageFormat header = new MessageFormat("Page {0,number,integer}");
-    	try {
-    	    table.print(JTable.PrintMode.FIT_WIDTH, header, null);
-    	} catch (java.awt.print.PrinterException e) {
-    	    System.err.format("Cannot print %s%n", e.getMessage());
-    	}
-    }
+ 
     
     @Override
     public void keyTyped(KeyEvent e)
@@ -108,8 +100,8 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
 	{
 		if (e.getSource().equals(printTable))
 		{
-			printTable(gradesTable);
-		
+			new PrintTable(gradesTable);
+			
 		}
 	}
 }

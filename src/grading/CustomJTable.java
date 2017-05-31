@@ -3,7 +3,6 @@ package grading;
 import database.DataTypeManager;
 import database.Table;
 import database.TableColumn;
-import utilities.TablePrintable;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -12,11 +11,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 
 public class CustomJTable extends JTable {
-    @Override
-    public Printable getPrintable(PrintMode printMode, MessageFormat headerFormat, MessageFormat footerFormat) {
-        return new TablePrintable(this, printMode, headerFormat, footerFormat);
-    }
-
+   
     public CustomJTable(Table table2, DefaultTableModel model) {
         super(model);
         TableColumn[] tableColumns = table2.getTableColumns();
