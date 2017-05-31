@@ -69,6 +69,7 @@ public class CreateAssignmentInterface extends InterfacePanel implements ActionL
         txtPointValue.addKeyListener(this);
         contentPanel.add(txtPointValue);
 
+        wrapInJPanel(new JLabel("Date"));
         dateModel = new UtilDateModel();
         datePanel = new JDatePanelImpl(dateModel);
         datePanel.setPreferredSize(contentPanel.getPreferredSize());

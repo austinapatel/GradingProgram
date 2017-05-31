@@ -27,9 +27,10 @@ public class EnrollmentsInterface extends InterfacePanel {
     }
 
     private void initTables() {
-        studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.FIRST_NAME, TableProperties.LAST_NAME);
+        studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.GRADUATION_YEAR, TableProperties.STUDENT_REDWOOD_ID, TableProperties.FIRST_NAME, TableProperties.LAST_NAME);
         coursesJTable = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
 
+        add(new JLabel("Select a Student"));
         add(studentsJTable.getTableHeader());
         add(studentsJTable);
 
@@ -42,6 +43,7 @@ public class EnrollmentsInterface extends InterfacePanel {
             }
         });
 
+        add(new JLabel("Select a Course"));
         add(coursesJTable.getTableHeader());
         add(coursesJTable);
         coursesJTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
