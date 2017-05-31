@@ -29,7 +29,8 @@ public class GradesInterface extends InterfacePanel {
     private int currentCourse = 0;
     private String percentage = "Percentage", totalPoints = "Total Points", letterGrade = "Letter Grade", points = "Points";
     private CustomJTable jTable;
-
+    private JLabel courseLabel, gradesLabel;
+    
     public GradesInterface() {
         initButton();
         initTable();
@@ -42,6 +43,7 @@ public class GradesInterface extends InterfacePanel {
     }
 
     private void initButton() {
+   	 gradesLabel = new JLabel("Grades");
         backButton = new JButton("Back");
         backButton.setFont(new Font("Helvetica", Font.PLAIN, 18));
         // backButton.setForeground(Color.BLUE);
@@ -50,12 +52,15 @@ public class GradesInterface extends InterfacePanel {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+            	remove(gradesLabel);
                 remove(tablePane2);
                 remove(scaleList);
+                add(courseLabel);
                 add(tablePane);
+                
                 remove(backButton);
                 remove(printButton);
+                
             }
 
         });
@@ -93,6 +98,7 @@ public class GradesInterface extends InterfacePanel {
 
     private void initTable() {
         table = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
+        courseLabel = new JLabel("Select a Course");
         tablePane = new JScrollPane(table);
         table.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent me) {
@@ -163,8 +169,10 @@ public class GradesInterface extends InterfacePanel {
 
         //jTable.getColumnModel().removeColumn(jTable.getColumnModel().getColumn(jTable.getColumnIndex(TableProperties.STUDENT_ID)));
         jTable.setMinimumSize(jTable.getPreferredSize());
+        remove(courseLabel);
         remove(tablePane);
         this.revalidate();
+        add(gradesLabel);
         add(backButton);
         add(printButton);
         add(scaleList);
@@ -194,6 +202,7 @@ public class GradesInterface extends InterfacePanel {
 
     private void initPanel() {
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        this.add(courseLabel);
         this.add(tablePane);
         this.setVisible(true);
     }
