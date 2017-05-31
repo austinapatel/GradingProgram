@@ -103,7 +103,6 @@ public class GradesInterface extends InterfacePanel {
                     {
                         currentCourse = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString());
                         displayClass(currentCourse);
-
                     }
                 }
             }
