@@ -1,22 +1,25 @@
 package visuals;
 
-import database.DatabaseCellEditor;
-import database.GradeBookTableModel;
-import database.TableProperties;
-import utilities.TablePrintable;
-
-import javax.swing.*;
-import javax.swing.JTable.PrintMode;
-
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.print.Printable;
-import java.awt.print.PrinterException;
 import java.text.MessageFormat;
+
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+
+
+
+import database.DatabaseCellEditor;
+import database.GradeBookTableModel;
+import database.TableProperties;
+import utilities.ColumnsAutoSizer;
+import utilities.TablePrintable;
 
 public class GradeBook extends InterfacePanel implements ActionListener  {
 
@@ -57,22 +60,14 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
                     // Add the new grades table
                     int courseId = Integer.parseInt(classTable.getValueAt(classTable.getSelectedRow(), 0).toString());
 
-                    gradesTable = new JTable(gradesTableModel = new GradeBookTableModel(courseId) ){
+                    gradesTable = new JTable(gradesTableModel = new GradeBookTableModel(courseId));
                     
-	                    @Override
-	                    public Printable getPrintable(PrintMode printMode, MessageFormat headerFormat, MessageFormat footerFormat) {
-	                        return new TablePrintable(this, printMode, headerFormat, footerFormat);
-	                    }
-                    };
-                    		
+             
                 
                     add(gradesTable.getTableHeader());
                     add(gradesTable);
                     add(printTable);
-                    
-                   
-                    
-                    
+                    ColumnsAutoSizer.sizeColumnsToFit(gradesTable);
                     validate();
                     repaint();
                 }
@@ -94,8 +89,8 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
     }
     
     @Override
-    public void keyTyped(KeyEvent e) {
-
+    public void keyTyped(KeyEvent e)
+    {
     }
 
     @Override
@@ -113,12 +108,8 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
 	{
 		if (e.getSource().equals(printTable))
 		{
-			try {
-				gradesTable.print();
-			} catch (PrinterException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			printTable(gradesTable);
+		
 		}
 	}
 }
