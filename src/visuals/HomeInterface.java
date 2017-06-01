@@ -1,6 +1,9 @@
 package visuals;
 
 import javax.swing.*;
+
+import customBorders.RoundedCornerBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -59,6 +62,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
         	
         	JButton newbutton = new JButton(key);
         	newbutton.setFont( new Font ("Arial", Font.BOLD , 32));
+        	newbutton.setBorder(new RoundedCornerBorder());
         	buttons.add(newbutton);
         }
 
