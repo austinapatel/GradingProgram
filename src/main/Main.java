@@ -7,6 +7,9 @@
 package main;
 
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import database.*;
 import visuals.BaseInterface;
 import visuals.PasswordField;
@@ -15,6 +18,9 @@ import visuals.PasswordField;
 /**
  * Driver class for entire program.
  */
+
+
+
 public class Main {
 
     static PasswordField login;
@@ -41,8 +47,17 @@ public class Main {
         startInterface();
     }
 
-    private static void startInterface() {
-        Main.setUpTables();
+    private static void startInterface() 
+    {
+        try {
+			UIManager.setLookAndFeel("com.jtattoo.plaf.luna.LunaLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    	Main.setUpTables();
         new BaseInterface();
     }
 
