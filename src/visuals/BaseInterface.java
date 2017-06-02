@@ -101,12 +101,21 @@ public class BaseInterface extends JFrame {
      */
     private void initFrame() {
         
+   	 try
+   	 {
+   		 
+   	 
    	 if (System.getProperty("user.name").equals("jason.morris") || System.getProperty("user.name").equals("achinthya.poduval"))
    	 {
       	 setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
    	 }
    	 else
       	 setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon2.png")).getImage());
+   	 }
+   	 catch(Exception e)
+   	 {
+   		 
+   	 }
 
    	 
         setSize(WIDTH, HEIGHT);
