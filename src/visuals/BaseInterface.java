@@ -100,7 +100,15 @@ public class BaseInterface extends JFrame {
      * Initializes properties of the JFrame.
      */
     private void initFrame() {
-        setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
+        
+   	 if (System.getProperty("user.name").equals("jason.morris") || System.getProperty("user.name").equals("achinthya.poduval"))
+   	 {
+      	 setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
+   	 }
+   	 else
+      	 setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon2.png")).getImage());
+
+   	 
         setSize(WIDTH, HEIGHT);
         setTitle(BaseInterface.FRAME_TITLE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
