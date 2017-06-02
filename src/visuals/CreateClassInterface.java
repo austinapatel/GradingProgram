@@ -86,9 +86,12 @@ public class CreateClassInterface extends InterfacePanel
 
 		studentInterface = new StudentInterface();
 		studentInterface.setStudentButtonEnabled(false);
+		studentInterface.setBorder(new EmptyBorder(new Insets(0,-100,0,-100)));
 		add(studentInterface);
-
-		add(new JLabel("Add Existing Students"));
+		
+		JLabel existingStudentsLabel = new JLabel("Add Existing Students");
+		existingStudentsLabel.setFont(new Font("Tahoma", Font.PLAIN, 32));
+		add(existingStudentsLabel);
 
 		studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.STUDENT_REDWOOD_ID,
 					TableProperties.FIRST_NAME, TableProperties.LAST_NAME);
