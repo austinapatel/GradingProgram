@@ -73,7 +73,6 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
         	buttons.add(newbutton);
         }
 
-
         for (JButton button : buttons) {
             button.addActionListener(this);
             JPanel border = new JPanel();
