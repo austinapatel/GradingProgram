@@ -25,7 +25,16 @@ public class Main {
 
     static PasswordField login;
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
+       try {
+ 			UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
+ 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+ 				| UnsupportedLookAndFeelException e) {
+ 			// TODO Auto-generated catch block
+ 			e.printStackTrace();
+ 		}
+
         if (args.length == 1)
             launchGUI(args[0]);
         else if (args.length == 4) {
@@ -49,13 +58,6 @@ public class Main {
 
     private static void startInterface() 
     {
-        try {
-			UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
     	Main.setUpTables();
         new BaseInterface();
