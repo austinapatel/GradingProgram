@@ -50,7 +50,7 @@ public class Main {
     private static void startInterface() 
     {
         try {
-			UIManager.setLookAndFeel("com.jtattoo.plaf.luna.LunaLookAndFeel");
+			UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) {
 			// TODO Auto-generated catch block
