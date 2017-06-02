@@ -1,15 +1,20 @@
 package visuals;
 
-import javax.swing.*;
-
-import customBorders.RoundedCornerBorder;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.TreeMap;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+
+import customBorders.RoundedCornerBorder;
 
 public class HomeInterface extends InterfacePanel implements ActionListener {
 
@@ -56,15 +61,21 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
 
         String[] keys = new String[0];
         keys = interfaces.keySet().toArray(keys);
+        
+        Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+        Border compound = BorderFactory.createCompoundBorder(
+                 raisedbevel, loweredbevel);
 
         for (String key : keys)
         {     
         	
         	JButton newbutton = new JButton(key);
         	newbutton.setFont( new Font ("Arial", Font.BOLD , 32));
-        	newbutton.setBorder(new RoundedCornerBorder());
+        	newbutton.setBorder(compound);
         	buttons.add(newbutton);
         }
+
 
         for (JButton button : buttons) {
             button.addActionListener(this);
