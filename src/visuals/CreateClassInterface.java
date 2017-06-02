@@ -1,10 +1,8 @@
 package visuals;
 
-
-import database.*;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,226 +10,274 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class CreateClassInterface extends InterfacePanel {
-    private JTextField txtClassName, txtStartYear, txtEndYear;
-    private JComboBox<Integer> periodComboBox;
-    private JCheckBox chckbxCustomYear;
-    private JButton btnCreateClass, enrollButton;
-    private StudentInterface studentInterface;
-    private DatabaseJTable studentsJTable;
-    private int courseId;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
-    public CreateClassInterface() {
-        initClassInterface();
+import database.DataTypeManager;
+import database.Search;
+import database.Table;
+import database.TableManager;
+import database.TableProperties;
 
-        Dimension studentSize = new Dimension((int) getPreferredSize().getWidth(), (int) studentInterface.getPreferredSize().getHeight());
-        studentInterface.setMinimumSize(studentSize);
-    }
+public class CreateClassInterface extends InterfacePanel
+{
+	private JTextField txtClassName, txtStartYear, txtEndYear;
+	private JComboBox<Integer> periodComboBox;
+	private JCheckBox chckbxCustomYear;
+	private JButton btnCreateClass, enrollButton;
+	private StudentInterface studentInterface;
+	private DatabaseJTable studentsJTable;
+	private int courseId;
 
-    @Override
-    public void onLayoutOpened() {
+	public CreateClassInterface()
+	{
+		initClassInterface();
 
-    }
+		Dimension studentSize = new Dimension((int) getPreferredSize().getWidth(),
+					(int) studentInterface.getPreferredSize().getHeight());
+		studentInterface.setMinimumSize(studentSize);
+	}
 
-    private void initClassInterface() {
-        txtStartYear = new JTextField();
-        txtEndYear = new JTextField();
+	@Override
+	public void onLayoutOpened()
+	{
 
-        JLabel lblClass = new JLabel("Class");
-        lblClass.setFont(new Font("Tahoma", Font.PLAIN, 32));
-        add(lblClass);
+	}
 
-        JLabel lblClassName = new JLabel("Name");
-        add(lblClassName);
+	private void initClassInterface()
+	{
+		txtStartYear = new JTextField();
+		txtEndYear = new JTextField();
 
-        txtClassName = new JTextField();
-        add(txtClassName);
-        txtClassName.setColumns(10);
+		JLabel lblClass = new JLabel("Class");
+		lblClass.setFont(new Font("Tahoma", Font.PLAIN, 32));
+		add(lblClass);
 
-        txtClassName.addKeyListener(this);
+		JLabel lblClassName = new JLabel("Name");
+		add(lblClassName);
 
-        add(new JLabel("Period"));
+		txtClassName = new JTextField();
+		add(txtClassName);
+		txtClassName.setColumns(10);
 
-        periodComboBox = new JComboBox<Integer>(new Integer[]{1, 2, 3, 4, 5, 6, 7});
-        periodComboBox.addKeyListener(this);
-        add(periodComboBox);
+		txtClassName.addKeyListener(this);
 
-        initYearPicker();
+		add(new JLabel("Period"));
 
-        btnCreateClass = new JButton();
-        btnCreateClass.setText("Create Class");
-        btnCreateClass.addKeyListener(this);
+		periodComboBox = new JComboBox<Integer>(new Integer[] {1, 2, 3, 4, 5, 6, 7});
+		periodComboBox.addKeyListener(this);
+		add(periodComboBox);
 
-        add(btnCreateClass);
-        btnCreateClass.setEnabled(false);
+		initYearPicker();
 
-        studentInterface = new StudentInterface();
-        studentInterface.setStudentButtonEnabled(false);
-        add(studentInterface);
+		btnCreateClass = new JButton();
+		btnCreateClass.setText("Create Class");
+		btnCreateClass.addKeyListener(this);
 
-        add(new JLabel("Add Existing Students"));
+		add(btnCreateClass);
+		btnCreateClass.setEnabled(false);
 
-        studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.STUDENT_REDWOOD_ID, TableProperties.FIRST_NAME, TableProperties.LAST_NAME);
+		studentInterface = new StudentInterface();
+		studentInterface.setStudentButtonEnabled(false);
+		studentInterface.setBorder(new EmptyBorder(new Insets(0,-100,0,-100)));
+		add(studentInterface);
+		
+		JLabel existingStudentsLabel = new JLabel("Add Existing Students");
+		existingStudentsLabel.setFont(new Font("Tahoma", Font.PLAIN, 32));
+		add(existingStudentsLabel);
 
-        add(studentsJTable.getTableHeader());
-        add(studentsJTable);
+		studentsJTable = new DatabaseJTable(TableProperties.STUDENTS_TABLE_NAME, TableProperties.STUDENT_REDWOOD_ID,
+					TableProperties.FIRST_NAME, TableProperties.LAST_NAME);
 
-        add(enrollButton = new JButton("Enroll Student"));
-        enrollButton.setEnabled(false);
-        enrollButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Table studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
-                ArrayList<Integer> studentIds = DataTypeManager.toIntegerArrayList(studentsTable.getAllFromColumn(TableProperties.STUDENT_ID));
+		add(studentsJTable.getTableHeader());
+		add(studentsJTable);
 
-                int studentId = studentIds.get(studentsJTable.getSelectedRow());
+		add(enrollButton = new JButton("Enroll Student"));
+		enrollButton.setEnabled(false);
+		enrollButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Table studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
+				ArrayList<Integer> studentIds = DataTypeManager
+							.toIntegerArrayList(studentsTable.getAllFromColumn(TableProperties.STUDENT_ID));
 
-                Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
+				int studentId = studentIds.get(studentsJTable.getSelectedRow());
 
-                HashMap<String, Object> enrollmentsVals = new HashMap<String, Object>() {
-                    {
-                        put(TableProperties.STUDENT_ID, studentId);
-                        put(TableProperties.COURSE_ID, courseId);
-                    }
-                };
+				Table enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
 
-                enrollmentsTable.addRow(enrollmentsVals);
-                enrollmentsTable.addRow(enrollmentsVals);
-            }
-        });
-        CreateClassInterface thisInterface = this;
+				HashMap<String, Object> enrollmentsVals = new HashMap<String, Object>()
+				{
+					{
+						put(TableProperties.STUDENT_ID, studentId);
+						put(TableProperties.COURSE_ID, courseId);
+					}
+				};
 
-        btnCreateClass.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    String className = txtClassName.getText();
-                    int classPeriod = Integer.parseInt(periodComboBox.getSelectedItem().toString());
-                    int startYear = Integer.parseInt(txtStartYear.getText());
-                    int endYear = Integer.parseInt(txtEndYear.getText());
+				enrollmentsTable.addRow(enrollmentsVals);
+				enrollmentsTable.addRow(enrollmentsVals);
+			}
+		});
+		CreateClassInterface thisInterface = this;
 
-                    // Create the class
-                    Table coursesTable = TableManager.getTable(TableProperties.COURSES_TABLE_NAME);
-                    HashMap<String, Object> coursesVals = new HashMap<String, Object>() {
-                        {
-                            put(TableProperties.NAME, className);
-                            put(TableProperties.PERIOD, classPeriod);
-                            put(TableProperties.START_YEAR, startYear);
-                            put(TableProperties.END_YEAR, endYear);
-                        }
-                    };
-                    System.out.println(className + classPeriod + startYear + endYear);
-                    coursesTable.addRow(coursesVals);
-                    courseId = (int) TableManager.getTable(TableProperties.COURSES_TABLE_NAME).getSomeFromColumn(TableProperties.COURSE_ID, new Search(TableProperties.NAME, className)).get(0);
-                    enrollButton.setEnabled(true);
-                    studentInterface.setStudentButtonEnabled(true);
+		btnCreateClass.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					String className = txtClassName.getText();
+					int classPeriod = Integer.parseInt(periodComboBox.getSelectedItem().toString());
+					int startYear = Integer.parseInt(txtStartYear.getText());
+					int endYear = Integer.parseInt(txtEndYear.getText());
 
-                    txtClassName.setText("");
-                    periodComboBox.setSelectedIndex(0);
+					// Create the class
+					Table coursesTable = TableManager.getTable(TableProperties.COURSES_TABLE_NAME);
+					HashMap<String, Object> coursesVals = new HashMap<String, Object>()
+					{
+						{
+							put(TableProperties.NAME, className);
+							put(TableProperties.PERIOD, classPeriod);
+							put(TableProperties.START_YEAR, startYear);
+							put(TableProperties.END_YEAR, endYear);
+						}
+					};
+					System.out.println(className + classPeriod + startYear + endYear);
+					coursesTable.addRow(coursesVals);
+					courseId = (int) TableManager.getTable(TableProperties.COURSES_TABLE_NAME)
+								.getSomeFromColumn(TableProperties.COURSE_ID, new Search(TableProperties.NAME, className))
+								.get(0);
+					enrollButton.setEnabled(true);
+					studentInterface.setStudentButtonEnabled(true);
 
-                } catch (Exception e1) {
-                    JOptionPane.showMessageDialog(thisInterface, "Failed to create class");
-                }
-            }
-        });
-    }
+					txtClassName.setText("");
+					periodComboBox.setSelectedIndex(0);
 
-    private void initYearPicker() {
-        JLabel lblStartYear = new JLabel("Start Year");
-        add(lblStartYear);
+				}
+				catch (Exception e1)
+				{
+					JOptionPane.showMessageDialog(thisInterface, "Failed to create class");
+				}
+			}
+		});
+	}
 
-        int year = Calendar.getInstance().get(Calendar.YEAR);
+	private void initYearPicker()
+	{
+		JLabel lblStartYear = new JLabel("Start Year");
+		add(lblStartYear);
 
-        chckbxCustomYear = new JCheckBox("Custom Year");
-        chckbxCustomYear.addKeyListener(this);
+		int year = Calendar.getInstance().get(Calendar.YEAR);
 
-        add(chckbxCustomYear);
+		chckbxCustomYear = new JCheckBox("Custom Year");
+		chckbxCustomYear.addKeyListener(this);
 
-        chckbxCustomYear.addActionListener(e -> {
-            txtStartYear.setEnabled(!txtStartYear.isEnabled());
-            txtEndYear.setEnabled(!txtEndYear.isEnabled());
+		add(chckbxCustomYear);
 
-            txtStartYear.setText(String.valueOf(year));
-            txtEndYear.setText(String.valueOf(year + 1));
-        });
+		chckbxCustomYear.addActionListener(e -> {
+			txtStartYear.setEnabled(!txtStartYear.isEnabled());
+			txtEndYear.setEnabled(!txtEndYear.isEnabled());
 
-        JPanel panel = new JPanel();
-        add(panel);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+			txtStartYear.setText(String.valueOf(year));
+			txtEndYear.setText(String.valueOf(year + 1));
+		});
 
-        txtStartYear = new JTextField();
-        panel.add(txtStartYear);
-        txtStartYear.setText(String.valueOf(year));
-        txtStartYear.setEnabled(false);
-        txtStartYear.addKeyListener(this);
+		JPanel panel = new JPanel();
+		add(panel);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
-        txtEndYear = new JTextField();
-        panel.add(txtEndYear);
-        txtEndYear.setText(String.valueOf(year + 1));
-        txtEndYear.setEnabled(false);
-        txtEndYear.addKeyListener(this);
-    }
+		txtStartYear = new JTextField();
+		panel.add(txtStartYear);
+		txtStartYear.setText(String.valueOf(year));
+		txtStartYear.setEnabled(false);
+		txtStartYear.addKeyListener(this);
 
-    private String toHTML(String text) {
-        return "<html>" + text.replaceAll("\n", "<br>") + "</html>";
-    }
+		txtEndYear = new JTextField();
+		panel.add(txtEndYear);
+		txtEndYear.setText(String.valueOf(year + 1));
+		txtEndYear.setEnabled(false);
+		txtEndYear.addKeyListener(this);
+	}
 
-    private boolean isEmpty(JTextField jTextField) {
-        return jTextField.getText().trim().equals("");
-    }
+	private String toHTML(String text)
+	{
+		return "<html>" + text.replaceAll("\n", "<br>") + "</html>";
+	}
 
-//	private boolean isStudentIDValid()
-//	{
-//		String t = txtStudentID.getText();
-//
-//		if (t.equals(""))
-//			return false;
-//
-//		boolean isValid = true;
-//		try
-//		{
-//			Integer.parseInt(t);
-//		}
-//		catch (Exception exp)
-//		{
-//			isValid = false;
-//		}
-//
-//		return t.length() == 6 && isValid;
-//	}
+	private boolean isEmpty(JTextField jTextField)
+	{
+		return jTextField.getText().trim().equals("");
+	}
 
-    private boolean isDateValid(String text) {
-        if (text.equals(""))
-            return false;
+	//	private boolean isStudentIDValid()
+	//	{
+	//		String t = txtStudentID.getText();
+	//
+	//		if (t.equals(""))
+	//			return false;
+	//
+	//		boolean isValid = true;
+	//		try
+	//		{
+	//			Integer.parseInt(t);
+	//		}
+	//		catch (Exception exp)
+	//		{
+	//			isValid = false;
+	//		}
+	//
+	//		return t.length() == 6 && isValid;
+	//	}
 
-        try {
-            Integer.parseInt(text);
-        } catch (Exception e) {
-            return false;
-        }
+	private boolean isDateValid(String text)
+	{
+		if (text.equals(""))
+			return false;
 
-        return text.length() > 0;
-    }
+		try
+		{
+			Integer.parseInt(text);
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
 
-    // Checks if a JTextField has any text in it
-    private boolean isNotEmpty(JTextField jTextField) {
-        return !jTextField.getText().trim().equals("");
-    }
+		return text.length() > 0;
+	}
 
-    @Override
-    public void keyTyped(KeyEvent e) {
+	// Checks if a JTextField has any text in it
+	private boolean isNotEmpty(JTextField jTextField)
+	{
+		return !jTextField.getText().trim().equals("");
+	}
 
-    }
+	@Override
+	public void keyTyped(KeyEvent e)
+	{
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // Determine if the finish button should be enabled
-        btnCreateClass.setEnabled(!txtClassName.getText().equals(""));
-    }
+	}
 
-    @Override
-    public void keyPressed(KeyEvent e) {
+	@Override
+	public void keyReleased(KeyEvent e)
+	{
+		// Determine if the finish button should be enabled
+		btnCreateClass.setEnabled(!txtClassName.getText().equals(""));
+	}
 
-    }
+	@Override
+	public void keyPressed(KeyEvent e)
+	{
+
+	}
 
 }

@@ -89,6 +89,7 @@ public class PasswordField extends JFrame implements ActionListener {
 
         usePreviousLoginButton.setVisible(true);
         usePreviousLoginButton.addActionListener(this);
+        
         add(usePreviousLoginButton);
         checkbox1 = new JCheckBox("<html>Remember Login (Encrypted)</html>");
         // checkbox1.setBackground(Color.GRAY);
@@ -127,6 +128,8 @@ public class PasswordField extends JFrame implements ActionListener {
         submitButton.addActionListener(this);
 
         setLocationRelativeTo(null);
+        usePreviousLoginButton.requestFocus();
+
         setVisible(true);
     }
 

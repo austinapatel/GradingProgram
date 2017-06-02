@@ -3,12 +3,9 @@ package visuals;
 import database.DatabaseCellEditor;
 import database.GradeBookTableModel;
 import database.TableProperties;
-import utilities.TablePrintable;
+import utilities.PrintTable;
 
 import javax.swing.*;
-import javax.swing.JTable.PrintMode;
-
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -57,13 +54,7 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
                     // Add the new grades table
                     int courseId = Integer.parseInt(classTable.getValueAt(classTable.getSelectedRow(), 0).toString());
 
-                    gradesTable = new JTable(gradesTableModel = new GradeBookTableModel(courseId) ){
-                    
-	                    @Override
-	                    public Printable getPrintable(PrintMode printMode, MessageFormat headerFormat, MessageFormat footerFormat) {
-	                        return new TablePrintable(this, printMode, headerFormat, footerFormat);
-	                    }
-                    };
+                    gradesTable = new JTable(gradesTableModel = new GradeBookTableModel(courseId));
 
                     add(gradesTable.getTableHeader());
                     add(gradesTable);
@@ -102,7 +93,7 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
     @Override
     public void keyReleased(KeyEvent e) {
 
-    }
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e)
@@ -114,6 +105,9 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
 			} catch (PrinterException e1) {
 				e1.printStackTrace();
 			}
+			new PrintTable(gradesTable);
+
+			printTable(gradesTable);
 		}
 	}
 }

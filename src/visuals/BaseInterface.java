@@ -100,7 +100,24 @@ public class BaseInterface extends JFrame implements KeyListener {
      * Initializes properties of the JFrame.
      */
     private void initFrame() {
-        setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
+        
+   	 try
+   	 {
+   		 
+   	 
+   	 if (System.getProperty("user.name").equals("jason.morris") || System.getProperty("user.name").equals("achinthya.poduval"))
+   	 {
+      	 setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
+   	 }
+   	 else
+      	 setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon2.png")).getImage());
+   	 }
+   	 catch(Exception e)
+   	 {
+   		 
+   	 }
+
+   	 
         setSize(WIDTH, HEIGHT);
         setTitle(BaseInterface.FRAME_TITLE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

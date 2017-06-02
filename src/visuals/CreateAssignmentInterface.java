@@ -55,7 +55,6 @@ public class CreateAssignmentInterface extends InterfacePanel implements ActionL
         txtName.addKeyListener(this);
         contentPanel.add(txtName);
 
-
         wrapInJPanel(new JLabel("Class"));
         coursesJTable = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
         coursesJTable.setPreferredScrollableViewportSize(coursesJTable.getPreferredSize());
@@ -69,6 +68,7 @@ public class CreateAssignmentInterface extends InterfacePanel implements ActionL
         txtPointValue.addKeyListener(this);
         contentPanel.add(txtPointValue);
 
+        wrapInJPanel(new JLabel("Date"));
         dateModel = new UtilDateModel();
         datePanel = new JDatePanelImpl(dateModel);
         datePanel.setPreferredSize(contentPanel.getPreferredSize());
@@ -91,18 +91,25 @@ public class CreateAssignmentInterface extends InterfacePanel implements ActionL
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent e) 
+    {
 
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-
+    public void keyPressed(KeyEvent e) 
+    {
+   	 if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+   	 {
+   		 datePanel.setVisible(false);
+   	 }
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        determineIfCreateEnabled();
+    public void keyReleased(KeyEvent e)
+    {
+
+   	 determineIfCreateEnabled();
     }
 
     private void determineIfCreateEnabled() {

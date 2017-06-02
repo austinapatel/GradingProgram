@@ -46,7 +46,7 @@ public class StudentInterface extends InterfacePanel {
     public void onLayoutOpened() {
 
     }
-
+    
     private void initStudentsPane() {
         studentsPane = new JPanel();
         studentsPane.setBorder(BorderFactory.createEtchedBorder());
