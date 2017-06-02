@@ -14,6 +14,7 @@ public abstract class InterfacePanel extends JPanel implements KeyListener {
     public InterfacePanel() {
         gridBagConstraints = new GridBagConstraints();
 
+        gridBagConstraints.insets.set(0, 100, 0, 100);
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1;
         gridBagConstraints.gridx = 0;

@@ -34,9 +34,7 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
         this.mainInterface = mainInterface;
     }
 
-    private void initPanel() {
-        setLayout(new GridBagLayout());
-
+    private void initPanel() {        
         gridPanel = new KeyboardGridPanel(5, 2);
         add(gridPanel);
     }
