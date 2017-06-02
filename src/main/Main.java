@@ -8,6 +8,7 @@ package main;
 
 
 import database.*;
+import grading.GradeCalculator;
 import visuals.BaseInterface;
 import visuals.PasswordField;
 
@@ -44,6 +45,8 @@ public class Main {
     private static void startInterface() {
         Main.setUpTables();
         new BaseInterface();
+
+        GradeCalculator.init();
     }
 
     private static void setUpTables() {

@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -17,13 +18,13 @@ import java.util.Set;
  * BaseInterface for the program.
  */
 @SuppressWarnings("serial")
-public class BaseInterface extends JFrame {
+public class BaseInterface extends JFrame implements KeyListener {
 
     private static final String FRAME_TITLE = "Grading Program", ESCAPE = "escape";
     private static final int WIDTH = 1200, HEIGHT = 900;
     private static final Dimension SIZE = new Dimension(WIDTH, HEIGHT);
 
-    private ArrayList<JPanel> interfaces;
+    private ArrayList<InterfacePanel> interfaces;
 
     private JPanel contentPanel;
 
@@ -66,7 +67,6 @@ public class BaseInterface extends JFrame {
         interfaces.add(homeInterface);
         contentPanel.add(homeInterface, BorderLayout.PAGE_START);
     }
-
 
     public void showInterface(InterfacePanel panel) {
         if (interfaces.size() > 0)
@@ -116,5 +116,20 @@ public class BaseInterface extends JFrame {
                 backAnInterface();
             }
         });
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        interfaces.get(interfaces.size() - 1).keyTyped(e);
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        interfaces.get(interfaces.size() - 1).keyPressed(e);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        interfaces.get(interfaces.size() - 1).keyReleased(e);
     }
 }

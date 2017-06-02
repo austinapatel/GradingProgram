@@ -1,5 +1,9 @@
 package database;
 
+import grading.Grade;
+import grading.GradeCalculator;
+import grading.GradingScale;
+
 import javax.swing.table.AbstractTableModel;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -7,6 +11,7 @@ import java.util.HashMap;
 
 public class GradeBookTableModel extends AbstractTableModel
 {
+	private static final String NAME_HEADER = "Student Name", LETTER_GRADE_HEADER = "Letter", PERCENT_HEADER = "Percent";
 
 	private Table studentsTable, assignmentsTable, enrollmentsTable, gradesTable;
 
@@ -14,6 +19,8 @@ public class GradeBookTableModel extends AbstractTableModel
 
 	private String[][] data;
 	private String[] columnHeaders;
+
+	private int nonGradeColumns;
 
 	private ArrayList<Integer> studentIds, assignmentIds;
 
@@ -28,24 +35,11 @@ public class GradeBookTableModel extends AbstractTableModel
 	/**
 	  * Loads all of the data into the table.
 	  */
-	public void refresh()
-	{
+	public void refresh() {
 		studentIds = DataTypeManager.toIntegerArrayList(enrollmentsTable.getSomeFromColumn(TableProperties.STUDENT_ID,
 					new Search(TableProperties.COURSE_ID, courseId)));
 		assignmentIds = DataTypeManager.toIntegerArrayList(assignmentsTable
 					.getSomeFromColumn(TableProperties.ASSIGNMENT_ID, new Search(TableProperties.COURSE_ID, courseId)));
-
-		System.out.println("student ids:");
-		for (int studentID : studentIds)
-		{
-			System.out.println(studentID);
-		}
-
-		System.out.println("assignment ids");
-		for (int assignmentId : assignmentIds)
-		{
-			System.out.println(assignmentId);
-		}
 
 		System.out.println("NUMBER OF ASSIGNMENTS: " + assignmentIds.size());
 
@@ -65,6 +59,8 @@ public class GradeBookTableModel extends AbstractTableModel
 						new Search(TableProperties.STUDENT_ID, studentId + ""))).get(0);
 
 			currentRow.add(firstName + " " + lastName);
+			currentRow.add("");
+			currentRow.add("");
 
 			// Now add each of the student's scores to the row
 			for (int j = 0; j < assignmentIds.size(); j++)
@@ -86,29 +82,23 @@ public class GradeBookTableModel extends AbstractTableModel
 			rowsList.add(currentRow);
 		}
 
-		data = new String[rowsList.size()][assignmentIds.size() + 1];
-
-		for (int x = 0; x < data.length; x++)
-		{
-			for (int y = 0; y < data[x].length; y++)
-			{
-				data[x][y] = rowsList.get(x).get(y);
-			}
-		}
-
 		ArrayList<String> columnsList = new ArrayList<>();
-		columnsList.add("Student Name");
+		columnsList.add(NAME_HEADER);
+		columnsList.add(LETTER_GRADE_HEADER);
+		columnsList.add(PERCENT_HEADER);
+
+		nonGradeColumns = columnsList.size();
 
 		for (int i = 0; i < assignmentIds.size(); i++)
 		{
 			String assignmentName = DataTypeManager
-						.toStringArrayList(assignmentsTable.getSomeFromColumn(TableProperties.NAME,
-									new Search(TableProperties.ASSIGNMENT_ID, assignmentIds.get(i))))
-						.get(0);
+					.toStringArrayList(assignmentsTable.getSomeFromColumn(TableProperties.NAME,
+							new Search(TableProperties.ASSIGNMENT_ID, assignmentIds.get(i))))
+					.get(0);
 			int assignmentValue = DataTypeManager
-						.toIntegerArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENTS_VALUE,
-									new Search(TableProperties.ASSIGNMENT_ID, assignmentIds.get(i))))
-						.get(0);
+					.toIntegerArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENTS_VALUE,
+							new Search(TableProperties.ASSIGNMENT_ID, assignmentIds.get(i))))
+					.get(0);
 
 			columnsList.add(assignmentName + " (" + assignmentValue + ")");
 		}
@@ -117,10 +107,33 @@ public class GradeBookTableModel extends AbstractTableModel
 
 		for (int i = 0; i < columnHeaders.length; i++)
 			columnHeaders[i] = columnsList.get(i);
+
+		data = new String[rowsList.size()][columnHeaders.length];
+
+		for (int x = 0; x < data.length; x++)
+			for (int y = 0; y < data[x].length; y++)
+				data[x][y] = rowsList.get(x).get(y);
+
+		loadGradeData();
 	}
 
-	private void loadTables()
-	{
+	// TODO: Set grading scale to match the one for the class, need to make way of linking class and grading scale in database
+	private void loadGradeData() {
+		int percentColumnIndex = getColumnIndex(PERCENT_HEADER);
+		int letterGradeColumnIndex = getColumnIndex(LETTER_GRADE_HEADER);
+		GradingScale gradingScale = new GradingScale();
+
+		for (int i = 0; i < studentIds.size(); i++) {
+			Grade grade = GradeCalculator.getGrade(studentIds.get(i), courseId);
+
+			data[i][percentColumnIndex] = grade.getPercentage() + "%";
+			data[i][letterGradeColumnIndex] = grade.getLetterGrade(gradingScale);
+		}
+
+		fireTableDataChanged();
+	}
+
+	private void loadTables() {
 		studentsTable = TableManager.getTable(TableProperties.STUDENTS_TABLE_NAME);
 		assignmentsTable = TableManager.getTable(TableProperties.ASSIGNMENTS_TABLE_NAME);
 		enrollmentsTable = TableManager.getTable(TableProperties.ENROLLMENTS_TABLE_NAME);
@@ -128,14 +141,12 @@ public class GradeBookTableModel extends AbstractTableModel
 	}
 
 	@Override
-	public int getRowCount()
-	{
+	public int getRowCount() {
 		return data.length;
 	}
 
 	@Override
-	public int getColumnCount()
-	{
+	public int getColumnCount() {
 		return columnHeaders.length;
 	}
 
@@ -148,7 +159,7 @@ public class GradeBookTableModel extends AbstractTableModel
 	public void setValueAt(Object rawValue, int rowIndex, int columnIndex)
 	{
         int studentId = studentIds.get(rowIndex);
-        int assignmentId = assignmentIds.get(columnIndex - 1);
+        int assignmentId = assignmentIds.get(columnIndex - nonGradeColumns);
 
         ResultSet resultSet = gradesTable.select(new Filter(new Search(TableProperties.STUDENT_ID, studentId), new Search(TableProperties.ASSIGNMENT_ID, assignmentId)));
 
@@ -181,12 +192,19 @@ public class GradeBookTableModel extends AbstractTableModel
         try {
             data[rowIndex][columnIndex] = resultSet.getDouble(TableProperties.GRADE_VALUE) + "";
         } catch (Exception e) {
-            e.printStackTrace();
+			e.printStackTrace();
         }
 
-        if (Double.parseDouble(data[rowIndex][columnIndex]) == -1) {
-            data[rowIndex][columnIndex] = "Excused";
-        }
+        try {
+			if (Double.parseDouble(data[rowIndex][columnIndex]) == -1) {
+				data[rowIndex][columnIndex] = "Excused";
+			}
+		} catch (Exception e) {
+        	e.printStackTrace();
+		}
+
+        // Recalculate grades
+        loadGradeData();
 	}
 
 	@Override
@@ -199,5 +217,13 @@ public class GradeBookTableModel extends AbstractTableModel
 	public String getColumnName(int col)
 	{
 		return columnHeaders[col];
+	}
+
+	private int getColumnIndex(String name) {
+		for (int i = 0; i < columnHeaders.length; i++)
+			if (columnHeaders[i].equals(name))
+				return i;
+
+		return -1;
 	}
 }

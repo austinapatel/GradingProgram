@@ -23,7 +23,6 @@ public class GradingScale {
                 letterGrades = new JSONArray(jsonText);
             }
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -45,51 +44,43 @@ public class GradingScale {
             if (scaleNames.get(i).equals(name))
                 table.deleteRow(name, table.getColumnIndex(TableProperties.SCALE_DESCRIPTION));
 
-        table.addRow(newValues);
+//        table.addRow(newValues);
     }
-
 
     public GradingScale() {
         this("Default", template);
     }
 
     public JSONArray objectToJSON(Object[][] data) {
-
         if (data != null) {
             JSONArray array = new JSONArray();
             for (int i = 0; i < data.length; i++) {
                 JSONObject obj = new JSONObject();
                 try {
-
-
                     if (data[i][0] != null && data[i][1] != null) {
                         obj.put(data[i][0].toString(), data[i][1].toString());
                         array.put(obj);
                     }
                 } catch (JSONException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
-
             return array;
         }
-        return null;
 
+        return null;
     }
 
     public void update(Object[][] data) {
-
         letterGrades = new JSONArray();
         letterGrades = objectToJSON(data);
-        //System.out.println(letterGrades.toString());
         UpdateDatabaseItemRunnable test = new UpdateDatabaseItemRunnable(2, 1, (Object) letterGrades.toString(), DatabaseManager.getFilterdTable(TableManager.getTable(TableProperties.SCALE_TABLE_NAME), TableProperties.SCALE_DESCRIPTION, name), DataType.String);
+
         Thread myThread = new Thread(test);
         myThread.start();
         try {
             myThread.join();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

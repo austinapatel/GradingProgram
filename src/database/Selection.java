@@ -24,6 +24,12 @@ public class Selection {
      */
     public Selection(ColumnIdentifier... columnIdentifiers) {
         this.columnIdentifiers = columnIdentifiers;
+
+        for (ColumnIdentifier columnIdentifier : columnIdentifiers)
+            if (columnIdentifier.getTableName() != null) {
+                tableName = columnIdentifier.getTableName();
+                break;
+            }
     }
 
     public boolean isSelectAll() {

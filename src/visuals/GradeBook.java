@@ -64,14 +64,10 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
 	                        return new TablePrintable(this, printMode, headerFormat, footerFormat);
 	                    }
                     };
-                    		
-                
+
                     add(gradesTable.getTableHeader());
                     add(gradesTable);
                     add(printTable);
-                    
-                   
-                    
                     
                     validate();
                     repaint();
@@ -116,7 +112,6 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
 			try {
 				gradesTable.print();
 			} catch (PrinterException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}

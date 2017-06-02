@@ -10,6 +10,11 @@ public class Search {
 
     private String tableName;
 
+    public Search(String tableName, String columnName, Object searchValue) {
+        this(columnName, searchValue);
+        this.tableName = tableName;
+    }
+
     public Search(String columnName, Object searchValue) {
         this.columnName = columnName;
         this.searchValue = searchValue.toString();

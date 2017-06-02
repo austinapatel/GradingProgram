@@ -3,14 +3,10 @@ package grading;
 public class Grade {
     private double totalPoints;
     private double points;
-    private double percent;
-    private String letterGrade, firstname, lastname;
-    private int studentId;
 
-    public Grade(double totalPoints, double points, int studentId) {
+    public Grade(double totalPoints, double points) {
         this.totalPoints = totalPoints;
         this.points = points;
-        this.studentId = studentId;
     }
 
     public double getPercentage() {
@@ -19,10 +15,6 @@ public class Grade {
 
     public String getLetterGrade(GradingScale scale) {
         return scale.getGradeLetter(getPercentage());
-    }
-
-    public int getStudentId() {
-        return studentId;
     }
 
     public double getPoints() {
