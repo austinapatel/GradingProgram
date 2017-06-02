@@ -1,117 +1,97 @@
 package visuals;
 
+import database.DatabaseCellEditor;
+import database.GradeBookTableModel;
+import database.TableProperties;
+import utilities.PrintTable;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
 import java.text.MessageFormat;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTable;
+public class GradeBook extends InterfacePanel implements ActionListener  {
 
-import database.DatabaseCellEditor;
-import database.GradeBookTableModel;
-import database.TableProperties;
-import utilities.ColumnsAutoSizer;
-import utilities.PrintTable;
+    private DatabaseJTable classTable;
+    private JTable gradesTable;
+    private GradeBookTableModel gradesTableModel;
+    private JButton printTable;
 
+    public GradeBook()
+    {
+        printTable = new JButton("Print Table");
+        printTable.addActionListener(this);
+        
+        initClassTable();
+    }
 
-public class GradeBook extends InterfacePanel implements ActionListener
-{
+    @Override
+    public void onLayoutOpened() {
+        if (gradesTableModel != null) {
+            gradesTableModel.refresh();
+            gradesTableModel.fireTableDataChanged();
+        }
+    }
 
-	private DatabaseJTable classTable;
-	private JTable gradesTable;
-	private GradeBookTableModel gradesTableModel;
-	private JButton printTable;
-	private final JLabel gradeLabel = new JLabel("Grades");
+    public void initClassTable() {
+        classTable = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
+        classTable.setCellEditor(new DatabaseCellEditor());
 
-	public GradeBook()
-	{
-		printTable = new JButton("Print Table");
-		printTable.addActionListener(this);
+        classTable.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent me) {
+                if (me.getClickCount() == 2) {
+                    // Remove the previous grades table
+                    if (gradesTable != null) {
+                        remove(gradesTable.getTableHeader());
+                        remove(gradesTable);
+                    }
 
-		initClassTable();
-	}
+                    // Add the new grades table
+                    int courseId = Integer.parseInt(classTable.getValueAt(classTable.getSelectedRow(), 0).toString());
 
-	@Override
-	public void onLayoutOpened()
-	{
-		if (gradesTableModel != null)
-		{
-			gradesTableModel.refresh();
-			gradesTableModel.fireTableDataChanged();
-		}
-	}
+                    gradesTable = new JTable(gradesTableModel = new GradeBookTableModel(courseId));
 
-	public void initClassTable()
-	{
-		classTable = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
-		classTable.setCellEditor(new DatabaseCellEditor());
+                    add(gradesTable.getTableHeader());
+                    add(gradesTable);
+                    add(printTable);
+                    
+                    validate();
+                    repaint();
+                }
+            }
+        });
 
-		classTable.addMouseListener(new MouseAdapter()
-		{
-			public void mousePressed(MouseEvent me)
-			{
-				if (me.getClickCount() == 2)
-				{
-					// Remove the previous grades table
-					if (gradesTable != null)
-					{
-						remove(gradeLabel);
-						remove(gradesTable.getTableHeader());
-						remove(gradesTable);
-					}
+        add(classTable.getTableHeader());
+        add(classTable);
+    }
 
-					// Add the new grades table
-					int courseId = Integer.parseInt(classTable.getValueAt(classTable.getSelectedRow(), 0).toString());
+    private void printTable(JTable table)
+    {
+    	MessageFormat header = new MessageFormat("Page {0,number,integer}");
+    	try {
+    	    table.print(JTable.PrintMode.FIT_WIDTH, header, null);
+    	} catch (java.awt.print.PrinterException e) {
+    	    System.err.format("Cannot print %s%n", e.getMessage());
+    	}
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent e) {
 
-					gradesTable = new JTable(gradesTableModel = new GradeBookTableModel(courseId));
+    }
 
-					add(gradeLabel);
-					add(gradesTable.getTableHeader());
-					add(gradesTable);
-					add(printTable);
-					ColumnsAutoSizer.sizeColumnsToFit(gradesTable);
-					validate();
-					repaint();
-				}
-			}
-		});
+    @Override
+    public void keyPressed(KeyEvent e) {
 
-		add(new JLabel("Select a Course"));
-		add(classTable.getTableHeader());
-		add(classTable);
-	}
+    }
 
-	private void printTable(JTable table)
-	{
-		MessageFormat header = new MessageFormat("Page {0,number,integer}");
-		try
-		{
-			table.print(JTable.PrintMode.FIT_WIDTH, header, null);
-		}
-		catch (java.awt.print.PrinterException e)
-		{
-			System.err.format("Cannot print %s%n", e.getMessage());
-		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e)
-	{
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e)
-	{
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e)
-	{
+    @Override
+    public void keyReleased(KeyEvent e) {
 
 	}
 
@@ -120,10 +100,14 @@ public class GradeBook extends InterfacePanel implements ActionListener
 	{
 		if (e.getSource().equals(printTable))
 		{
+			try {
+				gradesTable.print();
+			} catch (PrinterException e1) {
+				e1.printStackTrace();
+			}
 			new PrintTable(gradesTable);
-			
-			printTable(gradesTable);
 
+			printTable(gradesTable);
 		}
 	}
 }

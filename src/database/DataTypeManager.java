@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class DataTypeManager {
 
     public DataTypeManager() {
+
     }
 
     public static ArrayList<String> toStringArrayList(ArrayList<Object> input) {

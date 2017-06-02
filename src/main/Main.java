@@ -11,6 +11,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import database.*;
+import grading.GradeCalculator;
 import visuals.BaseInterface;
 import visuals.PasswordField;
 
@@ -19,21 +20,20 @@ import visuals.PasswordField;
  * Driver class for entire program.
  */
 
-
-
 public class Main {
 
     static PasswordField login;
 
     public static void main(String[] args)
     {
-       try {
- 			UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
- 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
- 				| UnsupportedLookAndFeelException e) {
- 			// TODO Auto-generated catch block
- 			e.printStackTrace();
- 		}
+        if (!System.getProperty("user.name").contains("Austin")) {
+            try {
+                UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                    | UnsupportedLookAndFeelException e) {
+                e.printStackTrace();
+            }
+        }
 
         if (args.length == 1)
             launchGUI(args[0]);
@@ -61,6 +61,8 @@ public class Main {
 
     	Main.setUpTables();
         new BaseInterface();
+
+        GradeCalculator.init();
     }
 
     private static void setUpTables() {

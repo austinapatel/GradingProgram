@@ -234,7 +234,7 @@ public class Table {
         return getAllFromColumn(getColumnIndex(columnName), resultSet);
     }
 
-    private static ArrayList<Object> getAllFromColumn(int columnIndex, ResultSet resultSet) {
+    public static ArrayList<Object> getAllFromColumn(int columnIndex, ResultSet resultSet) {
         ArrayList<Object> data = new ArrayList<>();
 
         columnIndex++;
@@ -272,5 +272,13 @@ public class Table {
 
     public ResultSet select(Filter filter) {
         return DatabaseManager.select(name, new Selection(), filter);
+    }
+
+    public Table join(Table otherTable, Selection selection, String table1JoinColumnName, String table2JoinColumnName, Filter filter) {
+        String sql = selection + " JOIN "
+                + otherTable.getName() + " ON " + name + "." + table1JoinColumnName + " = "
+                + otherTable.getName() + "." + table2JoinColumnName + filter;
+
+        return new Table(DatabaseManager.executeSqlStatement(sql));
     }
 }

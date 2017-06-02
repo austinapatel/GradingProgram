@@ -11,6 +11,12 @@ public class ColumnIdentifier {
         this.columnName = columnName;
     }
 
+    public ColumnIdentifier(String tableName, String columnName) {
+        this(columnName);
+
+        this.tableName = tableName;
+    }
+
     public String getTableName() {
         return tableName;
     }

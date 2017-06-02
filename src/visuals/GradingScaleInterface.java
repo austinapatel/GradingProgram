@@ -297,6 +297,7 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         open = false;
         String name = (String) listModel.getElementAt(scaleList.getSelectedIndex());
         JSONArray data = null;
+
         for (GradingScale scale : scales) {
             if (scale.getName().equals(name)) {
                 data = scale.getData();
@@ -319,7 +320,6 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
                         row, 2);
 
             } catch (JSONException e) {
-                // TODO Auto-generated catch block
 
             }
         }

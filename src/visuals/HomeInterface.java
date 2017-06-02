@@ -47,7 +47,6 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
             put("View Tables", new TableInterface());
             put("Console", new ConsolePanel());
             put("Grading Scale", new GradingScaleInterface());
-            put("View Class Grades", new GradesInterface());
             put("Add Students", new StudentInterface());
             put("Enroll Student", new EnrollmentsInterface());
             put("Test Interface", new TestInterface());
@@ -73,7 +72,6 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
         	newbutton.setBorder(compound);
         	buttons.add(newbutton);
         }
-
 
         for (JButton button : buttons) {
             button.addActionListener(this);
