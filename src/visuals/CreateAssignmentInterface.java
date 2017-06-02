@@ -55,7 +55,6 @@ public class CreateAssignmentInterface extends InterfacePanel implements ActionL
         txtName.addKeyListener(this);
         contentPanel.add(txtName);
 
-
         wrapInJPanel(new JLabel("Class"));
         coursesJTable = new DatabaseJTable(TableProperties.COURSES_TABLE_NAME);
         coursesJTable.setPreferredScrollableViewportSize(coursesJTable.getPreferredSize());
