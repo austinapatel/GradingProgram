@@ -6,6 +6,7 @@ import grading.GradingScale;
 
 import javax.swing.table.AbstractTableModel;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -156,8 +157,7 @@ public class GradeBookTableModel extends AbstractTableModel
 	}
 
 	@Override
-	public void setValueAt(Object rawValue, int rowIndex, int columnIndex)
-	{
+	public void setValueAt(Object rawValue, int rowIndex, int columnIndex) {
         int studentId = studentIds.get(rowIndex);
         int assignmentId = assignmentIds.get(columnIndex - nonGradeColumns);
 
@@ -187,7 +187,14 @@ public class GradeBookTableModel extends AbstractTableModel
                 put(TableProperties.GRADE_VALUE, finalValue);
                 put(TableProperties.ASSIGNMENT_ID, assignmentId);
             }});
-        }
+
+			try {
+				resultSet = gradesTable.getResultSet();
+				resultSet.absolute(gradesTable.getRowCount());
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
 
         try {
             data[rowIndex][columnIndex] = resultSet.getDouble(TableProperties.GRADE_VALUE) + "";
