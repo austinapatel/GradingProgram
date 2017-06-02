@@ -4,6 +4,8 @@ package visuals;
 import database.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,6 +69,7 @@ public class CreateClassInterface extends InterfacePanel {
 
         studentInterface = new StudentInterface();
         studentInterface.setStudentButtonEnabled(false);
+        studentInterface.setBorder((Border) new Insets(0, 0, 0, 0));
         add(studentInterface);
 
         add(new JLabel("Add Existing Students"));
