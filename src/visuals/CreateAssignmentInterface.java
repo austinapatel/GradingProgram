@@ -100,18 +100,16 @@ public class CreateAssignmentInterface extends InterfacePanel implements ActionL
     @Override
     public void keyPressed(KeyEvent e) 
     {
-
+   	 if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+   	 {
+   		 datePanel.setVisible(false);
+   	 }
     }
 
     @Override
     public void keyReleased(KeyEvent e)
     {
-   	 System.out.println("here");
-   	 if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-   	 {
-   		 System.out.println("my name is jeff");
-   		 datePanel.removeAll();
-   	 }
+
    	 determineIfCreateEnabled();
     }
 
