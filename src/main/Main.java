@@ -26,15 +26,16 @@ public class Main {
 
     public static void main(String[] args)
     {
-        if (!System.getProperty("user.name").contains("Austin")) {
+    	if (!System.getProperty("user.name").contains("Austin")) {
             try {
-                UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
+            
+
+            	UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
                     | UnsupportedLookAndFeelException e) {
                 e.printStackTrace();
             }
         }
-
         if (args.length == 1)
             launchGUI(args[0]);
         else if (args.length == 4) {
