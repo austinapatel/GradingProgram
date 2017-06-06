@@ -7,6 +7,9 @@
 package visuals;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -23,6 +26,7 @@ public class BaseInterface extends JFrame implements KeyListener {
     private static final String FRAME_TITLE = "Grading Program", ESCAPE = "escape";
     private static final int WIDTH = 1200, HEIGHT = 900;
     private static final Dimension SIZE = new Dimension(WIDTH, HEIGHT);
+    private JList themeList;
 
     private ArrayList<InterfacePanel> interfaces;
 
@@ -51,7 +55,10 @@ public class BaseInterface extends JFrame implements KeyListener {
     }
 
     public BaseInterface() {
-        interfaces = new ArrayList<>();
+        
+    	
+    	initTheme();
+    	interfaces = new ArrayList<>();
 
         contentPanel = new JPanel();
         add(contentPanel);
@@ -60,6 +67,64 @@ public class BaseInterface extends JFrame implements KeyListener {
         setDefaultFontSize(15);
         initContent();
         initFrame();
+       this.getContentPane().add(BorderLayout.SOUTH, themeList);
+    }
+    
+    public void initTheme()
+    {
+       themeList = new JList();
+       themeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    	if (!System.getProperty("user.name").contains("Austin")) {
+            try {
+            	themeList.setListData(com.jtattoo.plaf.graphite.GraphiteLookAndFeel.getThemes().toArray());
+
+            	UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                    | UnsupportedLookAndFeelException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        
+        ListSelectionListener themeListener = new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                            SwingUtilities.invokeLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                	com.jtattoo.plaf.graphite.GraphiteLookAndFeel.setTheme((String)themeList.getSelectedValue());
+                                    try {
+										UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
+										System.out.println("hey");
+										  Window windows[] = Window.getWindows();
+								            for (Window window : windows) {
+								                if (window.isDisplayable()) {
+								                    SwingUtilities.updateComponentTreeUI(window);
+								                }
+								            }
+									} catch (ClassNotFoundException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (InstantiationException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (IllegalAccessException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (UnsupportedLookAndFeelException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+                                }
+                            });
+                 
+        }
+        };
+        themeList.addListSelectionListener(themeListener);
+
+    
     }
 
     public void initContent() {

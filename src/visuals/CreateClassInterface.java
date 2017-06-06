@@ -17,7 +17,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
 import database.DataTypeManager;
@@ -97,7 +99,10 @@ public class CreateClassInterface extends InterfacePanel
 					TableProperties.FIRST_NAME, TableProperties.LAST_NAME);
 
 		add(studentsJTable.getTableHeader());
-		add(studentsJTable);
+		JScrollPane studentsScroll = new JScrollPane(studentsJTable);
+		studentsScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS); 
+		studentsScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		add(studentsScroll);
 
 		add(enrollButton = new JButton("Enroll Student"));
 		enrollButton.setEnabled(false);

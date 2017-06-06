@@ -37,6 +37,7 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
     private JButton newScaleButton, addRowButton, deleteScale;
     private GradingScale openScale;
     private boolean open = false;
+    private JButton  deleteRowButton;
     private GradingScaleTableModel tableModel;
     private static int minCols = 5;
     private static Object[][] template = {{"A+", 99.9}, {"A", 95}, {"A-", 90}, {"B+", 88}, {"B", 83},
@@ -129,11 +130,35 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
                         if (letterTable.getSelectedRow() == 0)
                             letterTable.changeSelection(1, letterTable.getSelectedColumn(), false, false);
 
-                        tableModel.insertRow(letterTable.getSelectedRow(), new String[]{"::::", "0", "0", "0", letterTable.getValueAt(letterTable.getSelectedRow(), letterTable.getColumnCount() - 1).toString()});
+                        
+                        
+                        
+                      
+                      //  int num1 = this.getLetterGradeIndex(letterTable.getSelec)
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        tableModel.insertRow(letterTable.getSelectedRow(), new String[]{"A", "0", "0", "0", letterTable.getValueAt(letterTable.getSelectedRow(), letterTable.getColumnCount() - 1).toString()});
                         open = true;
                         letterTable.setValueAt("0", letterTable.getRowCount() - 1, letterTable.getColumnCount() - 1);
                     }
                 }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        
+        
+        deleteRowButton = new JButton("Delete Row");
+        deleteRowButton.addActionListener(e -> {
+            try 
+            {
+                deleteRow();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -144,6 +169,7 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
         buttonPane.add(newScaleButton);
         buttonPane.add(deleteScale);
         buttonPane.add(addRowButton);
+        buttonPane.add(deleteRowButton);
     }
 
     private int getLetterGradeIndex(String grade) {
@@ -402,8 +428,7 @@ public class GradingScaleInterface extends InterfacePanel implements TableModelL
 
     @Override
     public void keyReleased(KeyEvent key) {
-        if (key.getKeyCode() == KeyEvent.VK_CONTROL && open)
-            deleteRow();
+
     }
 
     @Override
