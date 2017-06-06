@@ -37,24 +37,32 @@ public class GradeCalculator {
     }
 
     public static Grade getGrade(int studentId, int courseId) {
-        int totalPoints = GradeCalculator.getTotalPoints(courseId);
-
         // Get the students point total
         Table joined = gradesTable.join(assignmentsTable, new Selection(new ColumnIdentifier(TableProperties.GRADES_TABLE_NAME, TableProperties.GRADE_VALUE)), TableProperties.ASSIGNMENT_ID, TableProperties.ASSIGNMENT_ID, new Filter(new Search(TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENT_ID, studentId), new Search(TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.COURSE_ID, courseId)));
 
+        int totalPoints = GradeCalculator.getTotalPoints(courseId, joined);
+        
+        ArrayList<Integer> exemptAssignmentValues = DataTypeManager.toIntegerArrayList(assignmentsTable.join(gradesTable, new Selection(new ColumnIdentifier(TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.ASSIGNMENTS_VALUE)), TableProperties.ASSIGNMENT_ID, TableProperties.ASSIGNMENT_ID, new Filter(new Search(TableProperties.ASSIGNMENTS_TABLE_NAME, TableProperties.COURSE_ID, courseId), new Search(TableProperties.GRADES_TABLE_NAME, TableProperties.STUDENT_ID, studentId), new Search(TableProperties.GRADES_TABLE_NAME, TableProperties.GRADE_VALUE, -1))).getAllFromColumn(TableProperties.ASSIGNMENTS_VALUE));
+        
+        for (int i : exemptAssignmentValues)
+      	  totalPoints -= i;
+        
         ArrayList<Double> studentPoints = DataTypeManager.toDoubleArrayList(joined.getAllFromColumn(TableProperties.GRADE_VALUE));
 
         int studentPointSum = 0;
 
-        for (double d : studentPoints)
-            studentPointSum += d;
-
+        for (double d : studentPoints){
+           if(d > 0) 
+         	  studentPointSum += d;
+        }
+        
         return new Grade(totalPoints, studentPointSum);
     }
 
-    private static int getTotalPoints(int courseId) {
+    private static int getTotalPoints(int courseId, Table joined) {
         ArrayList<Integer> pointValues = DataTypeManager.toIntegerArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENTS_VALUE, new Search(TableProperties.COURSE_ID, courseId)));
-
+//        ArrayList<Integer> assignmentIds = DataTypeManager.toIntegerArrayList(assignmentsTable.getSomeFromColumn(TableProperties.ASSIGNMENT_ID,new Search(TableProperties.COURSE_ID, courseId)));
+//        ArrayList<Double> studentPoints = DataTypeManager.toDoubleArrayList(joined.getAllFromColumn(TableProperties.GRADE_VALUE));
         int sum = 0;
 
         for (int i : pointValues)
