@@ -28,8 +28,10 @@ import database.Table;
 import database.TableManager;
 import database.TableProperties;
 
-public class CreateClassInterface extends InterfacePanel
-{
+public class CreateClassInterface extends InterfacePanel {
+
+	private static final int STUDENTS_TABLE_HEIGHT = 200;
+
 	private JTextField txtClassName, txtStartYear, txtEndYear;
 	private JComboBox<Integer> periodComboBox;
 	private JCheckBox chckbxCustomYear;
@@ -100,6 +102,7 @@ public class CreateClassInterface extends InterfacePanel
 
 		add(studentsJTable.getTableHeader());
 		JScrollPane studentsScroll = new JScrollPane(studentsJTable);
+		studentsScroll.setPreferredSize(new Dimension((int) studentsJTable.getPreferredScrollableViewportSize().getWidth(), STUDENTS_TABLE_HEIGHT));
 		studentsScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS); 
 		studentsScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		add(studentsScroll);

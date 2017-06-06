@@ -58,17 +58,17 @@ public class HomeInterface extends InterfacePanel implements ActionListener {
         String[] keys = new String[0];
         keys = interfaces.keySet().toArray(keys);
         
-        Border raisedbevel = BorderFactory.createRaisedBevelBorder();
-        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-        Border compound = BorderFactory.createCompoundBorder(
-                 raisedbevel, loweredbevel);
+//        Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+//        Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+//        Border compound = BorderFactory.createCompoundBorder(
+//                 raisedbevel, loweredbevel);
 
         for (String key : keys)
         {     
         	
         	JButton newbutton = new JButton(key);
         	newbutton.setFont( new Font ("Arial", Font.BOLD , 32));
-        	newbutton.setBorder(compound);
+//        	newbutton.setBorder(compound);
         	buttons.add(newbutton);
         }
 

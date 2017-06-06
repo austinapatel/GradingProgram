@@ -20,6 +20,7 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
     private JTable gradesTable;
     private GradeBookTableModel gradesTableModel;
     private JButton printTable;
+    private int courseId = -1;
 
     public GradeBook() {
         printTable = new JButton("Print Table");
@@ -30,9 +31,13 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
 
     @Override
     public void onLayoutOpened() {
+        classTable.refreshTableContent();
+
         if (gradesTableModel != null) {
             gradesTableModel.refresh();
             gradesTableModel.fireTableDataChanged();
+
+            showCurrentTable();
         }
     }
 
@@ -43,29 +48,32 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
         classTable.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent me) {
                 if (me.getClickCount() == 2) {
-                    // Remove the previous grades table
-                    if (gradesTable != null) {
-                        remove(gradesTable.getTableHeader());
-                        remove(gradesTable);
-                    }
-
                     // Add the new grades table
-                    int courseId = Integer.parseInt(classTable.getValueAt(classTable.getSelectedRow(), 0).toString());
-
-                    gradesTable = new JTable(gradesTableModel = new GradeBookTableModel(courseId));
-
-                    add(gradesTable.getTableHeader());
-                    add(gradesTable);
-                    add(printTable);
-                    
-                    validate();
-                    repaint();
+                    courseId = Integer.parseInt(classTable.getValueAt(classTable.getSelectedRow(), 0).toString());
+                    showCurrentTable();
                 }
             }
         });
 
         add(classTable.getTableHeader());
         add(classTable);
+    }
+
+    private void showCurrentTable() {
+        // Remove the previous grades table
+        if (gradesTable != null) {
+            remove(gradesTable.getTableHeader());
+            remove(gradesTable);
+        }
+
+        gradesTable = new JTable(gradesTableModel = new GradeBookTableModel(courseId));
+
+        add(gradesTable.getTableHeader());
+        add(gradesTable);
+        add(printTable);
+
+        validate();
+        repaint();
     }
 
     private void printTable(JTable table)

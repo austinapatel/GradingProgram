@@ -67,6 +67,7 @@ public class BaseInterface extends JFrame implements KeyListener
 
 		contentPanel = new JPanel();
 		scrollPane = new JScrollPane(contentPanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
 //		scrollPane.add(contentPanel);
 
@@ -193,26 +194,16 @@ public class BaseInterface extends JFrame implements KeyListener
 	 */
 	private void initFrame()
 	{
-
-		try
-		{
-
-			if (System.getProperty("user.name").equals("jason.morris")
-						|| System.getProperty("user.name").equals("achinthya.poduval"))
-			{
-				setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
-			}
-			else
-				setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon2.png")).getImage());
+		try {
+			setIconImage(new ImageIcon(getClass().getClassLoader().getResource("icon.png")).getImage());
 		}
-		catch (Exception e)
-		{
-
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		setSize(WIDTH, HEIGHT);
 		setTitle(BaseInterface.FRAME_TITLE);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
 
