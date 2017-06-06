@@ -25,8 +25,7 @@ public class GradeBookTableModel extends AbstractTableModel
 
 	private ArrayList<Integer> studentIds, assignmentIds;
 
-	public GradeBookTableModel(int courseId)
-	{
+	public GradeBookTableModel(int courseId) {
 		this.courseId = courseId;
 
 		loadTables();

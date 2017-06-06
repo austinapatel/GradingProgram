@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.text.MessageFormat;
 
@@ -22,8 +21,7 @@ public class GradeBook extends InterfacePanel implements ActionListener  {
     private GradeBookTableModel gradesTableModel;
     private JButton printTable;
 
-    public GradeBook()
-    {
+    public GradeBook() {
         printTable = new JButton("Print Table");
         printTable.addActionListener(this);
         

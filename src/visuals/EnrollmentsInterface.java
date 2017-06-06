@@ -23,7 +23,8 @@ public class EnrollmentsInterface extends InterfacePanel {
 
     @Override
     public void onLayoutOpened() {
-
+        studentsJTable.refreshTableContent();
+        coursesJTable.refreshTableContent();
     }
 
     private void initTables() {
