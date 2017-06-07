@@ -44,7 +44,7 @@ public class GradingScale {
             if (scaleNames.get(i).equals(name))
                 table.deleteRow(name, table.getColumnIndex(TableProperties.SCALE_DESCRIPTION));
 
-//        table.addRow(newValues);
+        table.addRow(newValues);
     }
 
     public GradingScale() {
