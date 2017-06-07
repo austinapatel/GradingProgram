@@ -33,7 +33,7 @@ public class CreateAssignmentInterface extends InterfacePanel implements ActionL
 
     @Override
     public void onLayoutOpened() {
-
+    	coursesJTable.refreshTableContent();
     }
 
     private void initPanel() {
