@@ -136,7 +136,7 @@ public class Main {
         TableColumn[] gradingScaleTableColumns = new TableColumn[]{
                 new TableColumn(TableProperties.SCALE_ID, "INT NOT NULL UNIQUE", null),
                 new TableColumn(TableProperties.SCALE_DATA, "VARCHAR(500) NOT NULL", null),
-                new TableColumn(TableProperties.SCALE_DESCRIPTION, "VARCHAR(50) NOT NULL UNIQUE", null)};
+                new TableColumn(TableProperties.SCALE_DESCRIPTION, "VARCHAR(50) NOT NULL", null)};
 
         TableColumn[] counselorTableColumns = new TableColumn[]{
                 new TableColumn(TableProperties.COUNSELOR_ID, "INT NOT NULL UNIQUE", null),
